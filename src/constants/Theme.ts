@@ -1,0 +1,49 @@
+export default {
+  COLORS: {
+    DEFAULT: '#172B4D',
+    PRIMARY: '#5E72E4',
+    SECONDARY: '#F7FAFC',
+    LABEL: '#FE2472',
+    INFO: '#11CDEF',
+    ERROR: '#F5365C',
+    SUCCESS: '#2DCE89',
+    WARNING: '#FB6340',
+    /*not yet changed */
+    MUTED: '#ADB5BD',
+    INPUT: '#DCDCDC',
+    INPUT_SUCCESS: '#7BDEB2',
+    INPUT_ERROR: '#FCB3A4',
+    ACTIVE: '#5E72E4', //same as primary
+    BUTTON_COLOR: '#9C26B0', //wtf
+    PLACEHOLDER: '#9FA5AA',
+    SWITCH_ON: '#5E72E4',
+    SWITCH_OFF: '#D4D9DD',
+    GRADIENT_START: '#6B24AA',
+    GRADIENT_END: '#AC2688',
+    PRICE_COLOR: '#EAD5FB',
+    BORDER_COLOR: '#E7E7E7',
+    BLOCK: '#E7E7E7',
+    ICON: '#172B4D',
+    LOGIN_INPUT_ICON: '#8898AA',
+    HEADER: '#525F7F',
+    BORDER: '#CAD1D7',
+    WHITE: '#FFFFFF',
+    BLACK: '#000000',
+    ROYALTY: '#613CE8',
+    GRAY: '#9D9D9D',
+    DARK_GRAY: '#4B4B4B',
+    LIGHT_GRAY: '#E1E4E8',
+    GRAY_BLUE: '#30363D',
+    CHERRY_GRADIENT_END: '#EB3349',
+    RED_GRADIENT_END: '#F5317F',
+    YELLOW_GRADIENT_END: '#FF8359'
+  },
+  GRADIENT: {
+    CHERRY: ['#F45C43', '#EB3349'],
+    RED: ['#FF7C6E', '#F5317F'],
+    YELLOW: ['#FFDF40', '#FF8359'],
+    GRAY: ['#B6B6B6', '#494949'],
+    BLUE: ['#59C2FF', '#1270E3'],
+    LIGHT_BLUE: ['#17BDEA', '#6078EA']
+  }
+};
