@@ -8,7 +8,7 @@
     "eject": "expo eject"
   },
   "dependencies": {
-    "@expo/vector-icons": "^10.0.0",
+    "@expo/vector-icons": "^10.0.6",
     "@types/react-navigation": "^3.4.0",
     "@types/react-redux": "^7.1.4",
     "bad-words": "^3.0.3",
@@ -45,7 +45,8 @@
     "@types/react": "^16.9.17",
     "@types/react-native": "^0.60.26",
     "babel-preset-expo": "^8.0.0",
-    "typescript": "^3.7.4"
+    "prettier": "1.19.1",
+    "typescript": "^3.7.5"
   },
   "rnpm": {
     "assets": [
