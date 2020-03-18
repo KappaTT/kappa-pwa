@@ -13,7 +13,7 @@ import { _auth, _prefs } from '@reducers/actions';
 import { Block } from '@components';
 import { Images, theme } from '@constants';
 import AppNavigator from '@navigation/TabAppNavigator';
-import { setTopLevelNavigator } from '@navigation/NavigationService';
+import { setTopLevelNavigator, navigate } from '@navigation/NavigationService';
 
 const assetImages = [];
 
@@ -28,7 +28,8 @@ function cacheImages(images: any) {
 }
 
 const App = () => {
-  const [isLoadingComplete, setIsLoadingComplete] = React.useState(false);
+  const [isLoadingComplete, setIsLoadingComplete] = React.useState<boolean>(false);
+  const [isNavigatorReady, setIsNavigatorReady] = React.useState<boolean>(false);
 
   const loadedUser = useSelector((state: TRedux) => state.auth.loadedUser);
   const authorized = useSelector((state: TRedux) => state.auth.authorized);
@@ -75,6 +76,18 @@ const App = () => {
   }, [loadedUser]);
 
   React.useEffect(() => {
+    if (loadedUser && !authorized) {
+      dispatchShowLogin();
+    }
+  }, [loadedUser, authorized]);
+
+  React.useEffect(() => {
+    if (loginVisible) {
+      navigate('LoginStack', {});
+    }
+  }, [isNavigatorReady, loginVisible]);
+
+  React.useEffect(() => {
     if (!loadedPrefs) {
       dispatchLoadPrefs();
     }
@@ -91,7 +104,12 @@ const App = () => {
 
         <SafeAreaProvider>
           <Block flex>
-            <AppNavigator ref={navigatorRef => setTopLevelNavigator(navigatorRef)} />
+            <AppNavigator
+              ref={navigatorRef => {
+                setTopLevelNavigator(navigatorRef);
+                setIsNavigatorReady(true);
+              }}
+            />
           </Block>
         </SafeAreaProvider>
       </GalioProvider>

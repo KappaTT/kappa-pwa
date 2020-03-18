@@ -7,7 +7,7 @@ export const setTopLevelNavigator = (navigatorRef: NavigationContainerComponent)
 };
 
 export const navigate = (routeName: string, params: any) => {
-  _navigator.dispatch(
+  _navigator?.dispatch(
     NavigationActions.navigate({
       routeName,
       params
