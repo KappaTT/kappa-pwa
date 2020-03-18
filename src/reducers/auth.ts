@@ -9,6 +9,7 @@ export const HIDE_MODAL = 'HIDE_MODAL';
 
 export const RESET_BLAME = 'RESET_BLAME';
 
+export const LOADED_USER = 'LOADED_USER';
 export const SET_USER = 'SET_USER';
 
 export const SIGN_IN = 'SIGN_IN';
@@ -50,6 +51,7 @@ export interface TAuthState {
   onboardingVisible: boolean;
 
   isAuthenticating: boolean;
+  loadedUser: boolean;
   user: TUser;
   authorized: boolean;
 
@@ -87,6 +89,7 @@ const initialState: TAuthState = {
   onboardingVisible: false,
 
   isAuthenticating: false,
+  loadedUser: false,
   user: initialUser,
   authorized: false,
 
@@ -164,6 +167,11 @@ export default (state = initialState, action: any): TAuthState => {
         ...state,
         signUpBlame: {},
         signInBlame: {}
+      };
+    case LOADED_USER:
+      return {
+        ...state,
+        loadedUser: true
       };
     case SET_USER:
       return {

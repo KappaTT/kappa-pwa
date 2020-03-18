@@ -3,13 +3,18 @@ import { Image, StatusBar } from 'react-native';
 import { AppLoading } from 'expo';
 import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
+import { useSelector, useDispatch } from 'react-redux';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-import { Block, GalioProvider } from '../libs/galio';
+import { GalioProvider } from '@galio';
 
+import { TRedux } from '@reducers';
+import { _auth, _prefs } from '@reducers/actions';
+import { Block } from '@components';
 import { Images, theme } from '@constants';
 import AppNavigator from '@navigation/TabAppNavigator';
 import { setTopLevelNavigator } from '@navigation/NavigationService';
+import { loadedUser } from '@reducers/actions/auth';
 
 const assetImages = [];
 
@@ -25,6 +30,15 @@ function cacheImages(images: any) {
 
 const App = () => {
   const [isLoadingComplete, setIsLoadingComplete] = React.useState(false);
+
+  const authorized = useSelector((state: TRedux) => state.auth.authorized);
+  const loginVisible = useSelector((state: TRedux) => state.auth.visible);
+  const loadedPrefs = useSelector((state: TRedux) => state.prefs.loaded);
+
+  const dispatch = useDispatch();
+  const dispatchShowLogin = React.useCallback(() => dispatch(_auth.showModal()), [dispatch]);
+  const dispatchLoadUser = React.useCallback(() => dispatch(_auth.loadUser()), [dispatch]);
+  const dispatchLoadPrefs = React.useCallback(() => dispatch(_prefs.loadPrefs()), [dispatch]);
 
   const _loadResourcesAsync = async () => {
     await Promise.all([
@@ -53,6 +67,18 @@ const App = () => {
   const _handleFinishLoading = () => {
     setIsLoadingComplete(true);
   };
+
+  React.useEffect(() => {
+    if (!loadedUser) {
+      dispatchLoadUser();
+    }
+  }, [loadedUser]);
+
+  React.useEffect(() => {
+    if (!loadedPrefs) {
+      dispatchLoadPrefs();
+    }
+  }, [loadedPrefs]);
 
   if (!isLoadingComplete) {
     return (

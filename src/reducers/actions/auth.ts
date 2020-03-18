@@ -6,6 +6,7 @@ import {
   SHOW_MODAL,
   HIDE_MODAL,
   RESET_BLAME,
+  LOADED_USER,
   SET_USER,
   SIGN_IN,
   SIGN_IN_SUCCESS,
@@ -81,6 +82,12 @@ export const resetBlame = () => {
   };
 };
 
+export const loadedUser = () => {
+  return {
+    type: LOADED_USER
+  };
+};
+
 export const setUser = (user: TUser) => {
   return {
     type: SET_USER,
@@ -91,6 +98,8 @@ export const setUser = (user: TUser) => {
 export const loadUser = () => {
   return dispatch => {
     getBatch('user', initialUser).then((user: TUser | undefined) => {
+      dispatch(loadedUser());
+
       if (user) {
         dispatch(setUser(user));
       }
