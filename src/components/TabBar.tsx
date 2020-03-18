@@ -35,8 +35,6 @@ const TabBar: React.FC<{
           .map((route, routeIndex) => {
             const isRouteActive = routeIndex === activeRouteIndex;
             const labelText = getLabelText({ route });
-            const isMap = labelText === 'Map';
-            const isPost = labelText === 'Post';
 
             const onPress = () => onTabPress({ route });
 
