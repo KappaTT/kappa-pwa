@@ -1,22 +1,23 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity, Animated, Easing, Dimensions, KeyboardAvoidingView } from 'react-native';
+import { StyleSheet, TouchableOpacity, Animated, Easing, Dimensions, KeyboardAvoidingView, Text } from 'react-native';
 
-import { theme } from '../constants';
-import Block from './Block';
-import Text from './Text';
-import Icon from './Icon';
-import KeyboardDismissView from './KeyboardDismissView';
+import { theme } from '@constants';
+import Block from '@components/Block';
+import Icon from '@components/Icon';
+import CloseButton from '@components/CloseButton';
+import KeyboardDismissView from '@components/KeyboardDismissView';
 
 const { width, height } = Dimensions.get('screen');
 
-const PopupModal: React.SFC<{
+const PopupModal: React.FC<{
   title: string;
   subtitle?: string;
   allowClose?: boolean;
   shouldClose?: boolean;
+  showClose?: boolean;
   onPressClose(): void;
   children?: React.ReactNode;
-}> = ({ title, subtitle, allowClose = true, shouldClose = false, onPressClose, children }) => {
+}> = ({ title, subtitle, allowClose = true, shouldClose = false, showClose = false, onPressClose, children }) => {
   const heightBase = new Animated.Value(height * 0.05);
   const backgroundBase = new Animated.Value(0.2);
   const opacityBase = new Animated.Value(1);
@@ -86,6 +87,16 @@ const PopupModal: React.SFC<{
           <KeyboardDismissView>
             <Block style={styles.wrapper}>
               <Block style={styles.container}>
+                {showClose && (
+                  <Block style={styles.closeWrapper}>
+                    <CloseButton
+                      onPress={() => {
+                        allowClose && handleClose();
+                      }}
+                    />
+                  </Block>
+                )}
+
                 <Text style={styles.title}>{title}</Text>
                 {typeof subtitle === 'string' && <Text style={styles.subtitle}>{subtitle}</Text>}
                 <Block style={styles.contentWrapper}>{children}</Block>
@@ -109,7 +120,7 @@ const styles = StyleSheet.create({
     width: width - 60,
     minHeight: 80,
     borderRadius: 10,
-    backgroundColor: 'white',
+    backgroundColor: theme.COLORS.WHITE,
     shadowOffset: { width: 0, height: 4 },
     shadowRadius: 16,
     shadowColor: theme.COLORS.BLACK,
@@ -135,6 +146,11 @@ const styles = StyleSheet.create({
   },
   contentWrapper: {
     marginTop: 20
+  },
+  closeWrapper: {
+    position: 'absolute',
+    right: 0,
+    top: 0
   }
 });
 

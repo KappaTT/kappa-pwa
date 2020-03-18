@@ -1,13 +1,13 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity, ViewStyle } from 'react-native';
 
-import { theme } from '../constants';
-import Block from './Block';
-import Icon from './Icon';
-import Badge from './Badge';
-import IconBadge from './IconBadge';
+import { theme } from '@constants';
+import Block from '@components/Block';
+import Icon from '@components/Icon';
+import Badge from '@components/Badge';
+import IconBadge from '@components/IconBadge';
 
-const FAB: React.SFC<{
+const FAB: React.FC<{
   iconFamily: string;
   iconName: string;
   iconProps?: any;

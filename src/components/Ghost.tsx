@@ -1,10 +1,10 @@
 import React from 'react';
 import { ViewStyle } from 'react-native';
 
-import Block from './Block';
+import Block from '@components/Block';
 
-const Ghost: React.SFC<{
-  style?: ViewStyle;
+const Ghost: React.FC<{
+  style?: ViewStyle | Array<ViewStyle>;
   children?: React.ReactNode;
 }> = ({ style, children }) => {
   return (

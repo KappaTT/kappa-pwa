@@ -1,3 +1,3 @@
-import { Button } from '../../libs/argon';
+import { Button } from '@argon';
 
 export default Button;

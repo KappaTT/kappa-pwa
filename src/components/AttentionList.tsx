@@ -1,12 +1,12 @@
 import React from 'react';
 import { StyleSheet, FlatList, Dimensions } from 'react-native';
 
-import GradientBlobButton from './GradientBlobButton';
-import { AttentionItemTypes } from '../types';
+import GradientBlobButton from '@components/GradientBlobButton';
+import { AttentionItemTypes } from '@types';
 
 const { width, height } = Dimensions.get('screen');
 
-const AttentionItem: React.SFC<{
+const AttentionItem: React.FC<{
   item: AttentionItemTypes.ItemType;
   onPressItem(item: AttentionItemTypes.ItemType): void;
 }> = ({ item, onPressItem }) => {

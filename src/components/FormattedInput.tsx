@@ -1,13 +1,14 @@
 import React from 'react';
 import { StyleSheet, ViewStyle } from 'react-native';
 
-import { theme } from '../constants';
-import Block from './Block';
-import Input from './Input';
-import Icon from './Icon';
+import { theme } from '@constants';
+import Block from '@components/Block';
+import Input from '@components/Input';
+import Icon from '@components/Icon';
 
-const FormattedInput: React.SFC<{
+const FormattedInput: React.FC<{
   style?: ViewStyle;
+  bgColor?: string;
   width?: string | number;
   iconFamily?: string;
   iconName?: string;
@@ -29,6 +30,7 @@ const FormattedInput: React.SFC<{
   onSubmit?(text: string): void;
 }> = ({
   style,
+  bgColor,
   width = '100%',
   iconFamily,
   iconName,
@@ -62,6 +64,7 @@ const FormattedInput: React.SFC<{
       <Input
         getRef={getRef}
         style={[styles.input, style]}
+        bgColor={bgColor}
         multiline={multiline}
         numberOfLines={numberOfLines}
         maxLength={maxLength}

@@ -1,9 +1,8 @@
 import React from 'react';
-import { TouchableWithoutFeedback, View } from 'react-native';
 
-import Interceptor from './Interceptor';
+import Interceptor from '@components/Interceptor';
 
-const AuthorizedComponent: React.SFC<{
+const AuthorizedComponent: React.FC<{
   authorized: boolean;
   onPress(): void;
   children: React.ReactNode;

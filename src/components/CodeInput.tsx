@@ -1,12 +1,12 @@
 import React from 'react';
 import { TextInput, StyleSheet } from 'react-native';
 
-import Block from './Block';
-import { theme } from '../constants';
+import Block from '@components/Block';
+import { theme } from '@constants';
 
 const regex = /^[a-z0-9]+$/i;
 
-const CodeInput: React.SFC<{
+const CodeInput: React.FC<{
   length?: number;
   keyboardType?: 'default' | 'numeric';
   value?: string;

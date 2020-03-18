@@ -1,11 +1,10 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Text } from 'react-native';
 
-import { theme } from '../constants';
-import Block from './Block';
-import Text from './Text';
+import { theme } from '@constants';
+import Block from '@components/Block';
 
-const PropertyItem: React.SFC<{
+const PropertyItem: React.FC<{
   label: string;
   value: string | number;
 }> = ({ label, value }) => {

@@ -1,9 +1,9 @@
 import React from 'react';
 import { StyleSheet, Modal } from 'react-native';
 
-import KeyboardDismissView from './KeyboardDismissView';
+import KeyboardDismissView from '@components/KeyboardDismissView';
 
-const FadeModal: React.SFC<{
+const FadeModal: React.FC<{
   transparent?: boolean;
   visible: boolean;
   onRequestClose?(): void;

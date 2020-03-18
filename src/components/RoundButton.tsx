@@ -1,18 +1,17 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Text } from 'react-native';
 
-import { theme } from '../constants';
+import { theme } from '@constants';
+import Block from '@components/Block';
+import Button from '@components/Button';
 
-import Block from './Block';
-import Button from './Button';
-import Text from './Text';
-
-const RoundButton: React.SFC<{
+const RoundButton: React.FC<{
   label: string;
   icon?: React.ReactNode;
   loading?: boolean;
+  right?: boolean;
   onPress?(): void;
-}> = ({ label, icon, loading = false, onPress = () => {} }) => {
+}> = ({ label, icon, loading = false, right = false, onPress = () => {} }) => {
   return (
     <Button
       style={styles.button}
@@ -23,9 +22,11 @@ const RoundButton: React.SFC<{
       loading={loading}
     >
       <Block style={styles.buttonContent}>
-        {icon}
+        {!right && icon}
 
         <Text style={icon ? styles.buttonTextWithIcon : styles.buttonText}>{label}</Text>
+
+        {right && icon}
       </Block>
     </Button>
   );
@@ -37,9 +38,9 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: theme.COLORS.ROYALTY,
     shadowOffset: { width: 0, height: 4 },
-    shadowRadius: 16,
+    shadowRadius: 12,
     shadowColor: theme.COLORS.ROYALTY,
-    shadowOpacity: 0.6,
+    shadowOpacity: 0.4,
     elevation: 2
   },
   buttonContent: {
@@ -50,13 +51,13 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   buttonTextWithIcon: {
-    marginLeft: 10,
-    fontFamily: 'OpenSans',
+    marginHorizontal: 10,
+    fontFamily: 'OpenSans-SemiBold',
     fontSize: 18,
     color: theme.COLORS.WHITE
   },
   buttonText: {
-    fontFamily: 'OpenSans',
+    fontFamily: 'OpenSans-SemiBold',
     fontSize: 18,
     color: theme.COLORS.WHITE
   }

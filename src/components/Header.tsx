@@ -1,14 +1,14 @@
 import React from 'react';
-import { TouchableOpacity, StyleSheet, ViewStyle, TextStyle, Dimensions } from 'react-native';
+import { TouchableOpacity, StyleSheet, ViewStyle, TextStyle, Dimensions, Text } from 'react-native';
 
-import { Button, Block, Text, theme as galioTheme } from '../../libs/galio';
-import { Icon, Input, Tabs, Header as ArgonHeader } from '../../libs/argon';
-import theme from '../constants/Theme';
-import { NavigationTypes } from '../types';
+import { Button, Block, theme as galioTheme } from '@galio';
+import { Icon, Input, Tabs, Header as ArgonHeader } from '@argon';
+import theme from '@constants/Theme';
+import { NavigationTypes } from '@types';
 
 const { width } = Dimensions.get('window');
 
-const BellButton: React.SFC<{
+const BellButton: React.FC<{
   isWhite: boolean;
   style: ViewStyle;
   navigation: NavigationTypes.ParamType;
@@ -22,7 +22,7 @@ const BellButton: React.SFC<{
   </TouchableOpacity>
 );
 
-const CalendarButton: React.SFC<{
+const CalendarButton: React.FC<{
   isWhite: boolean;
   style: ViewStyle;
   navigation: NavigationTypes.ParamType;
@@ -37,7 +37,7 @@ const CalendarButton: React.SFC<{
   </TouchableOpacity>
 );
 
-const SearchButton: React.SFC<{
+const SearchButton: React.FC<{
   isWhite: boolean;
   style: ViewStyle;
   navigation: NavigationTypes.ParamType;
@@ -47,7 +47,7 @@ const SearchButton: React.SFC<{
   </TouchableOpacity>
 );
 
-const Header: React.SFC<{
+const Header: React.FC<{
   back?: boolean;
   title: string;
   white?: boolean;
@@ -103,17 +103,13 @@ const Header: React.SFC<{
         <Button shadowless style={[styles.tab, styles.divider]} onPress={() => {}}>
           <Block row middle>
             <Icon name="diamond" family="ArgonExtra" style={{ paddingRight: 8 }} color={theme.COLORS.ICON} />
-            <Text size={16} style={styles.tabTitle}>
-              {optionLeft || 'Beauty'}
-            </Text>
+            <Text style={[styles.tabTitle, { fontSize: 16 }]}>{optionLeft || 'Beauty'}</Text>
           </Block>
         </Button>
         <Button shadowless style={styles.tab} onPress={() => {}}>
           <Block row middle>
             <Icon size={16} name="bag-17" family="ArgonExtra" style={{ paddingRight: 8 }} color={theme.COLORS.ICON} />
-            <Text size={16} style={styles.tabTitle}>
-              {optionRight || 'Fashion'}
-            </Text>
+            <Text style={[styles.tabTitle, { fontSize: 16 }]}>{optionRight || 'Fashion'}</Text>
           </Block>
         </Button>
       </Block>

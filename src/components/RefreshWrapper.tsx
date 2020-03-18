@@ -1,7 +1,7 @@
 import React from 'react';
 import { ScrollView, RefreshControl } from 'react-native';
 
-const RefreshWrapper: React.SFC<{
+const RefreshWrapper: React.FC<{
   refreshing: boolean;
   onRefresh(): void;
 }> = ({ refreshing, onRefresh, children }) => {

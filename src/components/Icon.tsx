@@ -1,3 +1,3 @@
-import { Icon } from '../../libs/argon';
+import { Icon } from '@argon';
 
 export default Icon;

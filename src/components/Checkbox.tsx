@@ -1,3 +1,3 @@
-import { Checkbox } from '../../libs/galio';
+import { Checkbox } from '@galio';
 
 export default Checkbox;

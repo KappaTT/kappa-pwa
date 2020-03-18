@@ -1,12 +1,11 @@
 import React from 'react';
-import { StyleSheet, ViewStyle } from 'react-native';
+import { StyleSheet, ViewStyle, Text } from 'react-native';
 
-import { theme } from '../constants';
-import Block from './Block';
-import Text from './Text';
-import GradientView from './GradientView';
+import { theme } from '@constants';
+import Block from '@components/Block';
+import GradientView from '@components/GradientView';
 
-const HorizontalLabel: React.SFC<{
+const HorizontalLabel: React.FC<{
   index: number;
   total: number;
   units: number;
@@ -29,7 +28,7 @@ const HorizontalLabel: React.SFC<{
   );
 };
 
-const HorizontalBar: React.SFC<{
+const HorizontalBar: React.FC<{
   percent: number;
   gradient: Array<string>;
   wrapperStyle: ViewStyle;
@@ -43,7 +42,7 @@ const HorizontalBar: React.SFC<{
   );
 };
 
-const HorizontalStackedBar: React.SFC<{
+const HorizontalStackedBar: React.FC<{
   data: Array<{
     units: number;
     label: string;

@@ -1,10 +1,10 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 
-import { theme } from '../constants';
-import Block from './Block';
+import { theme } from '@constants';
+import Block from '@components/Block';
 
-const Badge: React.SFC<{
+const Badge: React.FC<{
   active: boolean;
   fab?: boolean;
   children?: React.ReactNode;

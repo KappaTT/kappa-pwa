@@ -1,8 +1,8 @@
 import React from 'react';
-import { StyleSheet, ViewStyle } from 'react-native';
+import { ViewStyle } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
-const GradientView: React.SFC<{
+const GradientView: React.FC<{
   style: ViewStyle;
   colors: Array<string>;
 }> = ({ style, colors, children }) => {

@@ -1,14 +1,12 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity, Text } from 'react-native';
 
-import { theme } from '../constants';
-import Block from './Block';
-import Text from './Text';
-import Icon from './Icon';
-import GradientView from './GradientView';
-import { AttentionItemTypes } from '../types';
+import { theme } from '@constants';
+import Block from '@components/Block';
+import Icon from '@components/Icon';
+import GradientView from '@components/GradientView';
 
-const GradientBlobButton: React.SFC<{
+const GradientBlobButton: React.FC<{
   alarmCount: number;
   title: string;
   subtitle: string;

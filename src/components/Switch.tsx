@@ -1,9 +1,9 @@
 import React from 'react';
 import { Switch as NativeSwitch, Platform } from 'react-native';
 
-import { theme } from '../constants';
+import { theme } from '@constants';
 
-const Switch: React.SFC<{
+const Switch: React.FC<{
   value?: boolean;
   thumbColor?: string;
   backgroundColor?: string;

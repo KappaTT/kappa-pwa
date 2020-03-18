@@ -1,10 +1,10 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 
-import { Icon, DrawerItem as ArgonDrawerItem } from '../../libs/argon';
-import { theme } from '../constants';
+import { Icon, DrawerItem as ArgonDrawerItem } from '@argon';
+import { theme } from '@constants';
 
-const DrawerItem: React.SFC<{
+const DrawerItem: React.FC<{
   title: string;
   focused: boolean;
   screen: string;

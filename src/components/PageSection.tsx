@@ -1,11 +1,10 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity, Text } from 'react-native';
 
-import { theme } from '../constants';
-import Block from './Block';
-import Text from './Text';
+import { theme } from '@constants';
+import Block from '@components/Block';
 
-const PageSection: React.SFC<{
+const PageSection: React.FC<{
   title: string;
   showViewAll?: boolean;
   count?: number;

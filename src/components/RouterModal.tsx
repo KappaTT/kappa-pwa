@@ -1,16 +1,14 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity, Animated, Dimensions, Easing } from 'react-native';
+import { StyleSheet, TouchableOpacity, Animated, Dimensions, Easing, Text } from 'react-native';
 
-import { theme } from '../constants';
-import Block from './Block';
-import Text from './Text';
-import Icon from './Icon';
-
-import GradientView from './GradientView';
+import { theme } from '@constants';
+import Block from '@components/Block';
+import Icon from '@components/Icon';
+import GradientView from '@components/GradientView';
 
 const { height } = Dimensions.get('screen');
 
-const BackButton: React.SFC<{
+const BackButton: React.FC<{
   onPress(): void;
 }> = ({ onPress }) => {
   return (
@@ -20,7 +18,7 @@ const BackButton: React.SFC<{
   );
 };
 
-const RouterModal: React.SFC<{
+const RouterModal: React.FC<{
   routerName: string;
   gradient: string[];
   onPress(): void;

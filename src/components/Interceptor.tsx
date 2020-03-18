@@ -1,7 +1,7 @@
 import React from 'react';
 import { TouchableWithoutFeedback, View } from 'react-native';
 
-const Interceptor: React.SFC<{
+const Interceptor: React.FC<{
   onPress(): void;
   children: React.ReactNode;
 }> = ({ onPress, children }) => {

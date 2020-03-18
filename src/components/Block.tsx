@@ -1,3 +1,3 @@
-import { Block } from '../../libs/galio';
+import { Block } from '@galio';
 
 export default Block;

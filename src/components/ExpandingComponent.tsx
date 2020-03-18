@@ -1,7 +1,7 @@
 import React from 'react';
 import { LayoutAnimation, UIManager, Easing, Dimensions } from 'react-native';
 
-import Block from './Block';
+import Block from '@components/Block';
 
 type TDimension = {
   top: number;
@@ -10,7 +10,7 @@ type TDimension = {
   height: number;
 };
 
-const ExpandingComponent: React.SFC<{
+const ExpandingComponent: React.FC<{
   small: TDimension;
   large: TDimension;
   duration: number;

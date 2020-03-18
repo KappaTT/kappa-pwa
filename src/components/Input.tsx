@@ -1,3 +1,3 @@
-import { Input } from '../../libs/argon';
+import { Input } from '@argon';
 
 export default Input;

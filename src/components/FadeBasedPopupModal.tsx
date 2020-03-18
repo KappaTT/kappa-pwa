@@ -1,17 +1,16 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity, Animated, Easing, Dimensions } from 'react-native';
+import { StyleSheet, TouchableOpacity, Animated, Easing, Dimensions, Text } from 'react-native';
 
-import { theme } from '../constants';
-import Block from './Block';
-import Text from './Text';
-import FadeModal from './FadeModal';
-import Interceptor from './Interceptor';
-import Icon from './Icon';
-import KeyboardDismissView from './KeyboardDismissView';
+import { theme } from '@constants';
+import Block from '@components/Block';
+import FadeModal from '@components/FadeModal';
+import Interceptor from '@components/Interceptor';
+import Icon from '@components/Icon';
+import KeyboardDismissView from '@components/KeyboardDismissView';
 
 const { width, height } = Dimensions.get('screen');
 
-const FadeBasedPopupModal: React.SFC<{
+const FadeBasedPopupModal: React.FC<{
   title: string;
   subtitle?: string;
   allowClose?: boolean;

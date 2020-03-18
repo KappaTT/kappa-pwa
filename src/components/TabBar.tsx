@@ -1,25 +1,24 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
+import { useSafeArea } from 'react-native-safe-area-context';
 
-import { TRedux } from '../reducers';
-import { _auth, _map } from '../reducers/actions';
+import { TRedux } from '@reducers';
+import { _auth, _map } from '@reducers/actions';
 
-import { theme } from '../constants';
-import TabBarButton from './TabBarButton';
-import { iPhoneX } from '../services/utils';
+import { theme } from '@constants';
+import TabBarButton from '@components/TabBarButton';
+import { NavigationTypes } from '@types';
 
-const TabBar = props => {
-  const {
-    renderIcon,
-    getLabelText,
-    activeTintColor,
-    inactiveTintColor,
-    onTabPress,
-    onTabLongPress,
-    navigation
-  } = props;
-
+const TabBar: React.FC<{
+  renderIcon(props: any): React.ReactNode;
+  getLabelText(route: any): string;
+  activeTintColor: string;
+  inactiveTintColor: string;
+  onTabPress(route: any): void;
+  onTabLongPress(route: any): void;
+  navigation: NavigationTypes.ParamType;
+}> = ({ renderIcon, getLabelText, activeTintColor, inactiveTintColor, onTabPress, onTabLongPress, navigation }) => {
   const { routes, index: activeRouteIndex } = navigation.state;
 
   const dispatch = useDispatch();
@@ -33,13 +32,24 @@ const TabBar = props => {
   const dispatchShowCreatePost = React.useCallback(() => dispatch(_map.showCreatePost()), [dispatch]);
   const dispatchHideCreatePost = React.useCallback(() => dispatch(_map.hideCreatePost()), [dispatch]);
 
+  const insets = useSafeArea();
+
   return (
-    <View style={[styles.floatingContainer, iPhoneX() ? styles.iosContainer : styles.androidContainer]}>
+    <View
+      style={[
+        styles.floatingContainer,
+        {
+          marginBottom: insets.bottom / 2
+        }
+      ]}
+    >
       {routes
         .filter(route => !getLabelText({ route }).endsWith('Stack'))
         .map((route, routeIndex) => {
           const isRouteActive = routeIndex === activeRouteIndex;
-          const isPost = getLabelText({ route }) === 'Post';
+          const labelText = getLabelText({ route });
+          const isMap = labelText === 'Map';
+          const isPost = labelText === 'Post';
 
           const onPress = () => {
             if (isPost) {
@@ -69,12 +79,13 @@ const TabBar = props => {
               key={routeIndex}
               route={route}
               renderIcon={renderIcon}
-              label={getLabelText({ route })}
+              label={labelText}
               isRouteActive={isActive}
               activeTintColor={activeTintColor}
               inactiveTintColor={inactiveTintColor}
               onTabPress={onPress}
               onTabLongPress={onLongPress}
+              locked={isPost && !authorized}
             />
           );
         })}
@@ -102,20 +113,12 @@ const styles = StyleSheet.create({
     borderRadius: 28,
     flexDirection: 'row',
     height: 56,
-    paddingHorizontal: 4,
     shadowColor: theme.COLORS.BLACK,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.4,
     shadowRadius: 16,
     elevation: 2,
     backgroundColor: theme.COLORS.WHITE
-  },
-  iosContainer: {
-    marginBottom: 16
-    // paddingBottom: 16
-  },
-  androidContainer: {
-    paddingBottom: 0
   }
 });
 
