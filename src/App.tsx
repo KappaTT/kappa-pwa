@@ -3,12 +3,13 @@ import { Image, StatusBar } from 'react-native';
 import { AppLoading } from 'expo';
 import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { Block, GalioProvider } from '../libs/galio';
 
-import { Images, theme } from './constants';
-import AppNavigator from './navigation/TabAppNavigator';
-import { setTopLevelNavigator } from './navigation/NavigationService';
+import { Images, theme } from '@constants';
+import AppNavigator from '@navigation/TabAppNavigator';
+import { setTopLevelNavigator } from '@navigation/NavigationService';
 
 const assetImages = [];
 
@@ -62,9 +63,11 @@ const App = () => {
       <GalioProvider theme={theme}>
         <StatusBar barStyle="dark-content" />
 
-        <Block flex>
-          <AppNavigator ref={navigatorRef => setTopLevelNavigator(navigatorRef)} />
-        </Block>
+        <SafeAreaProvider>
+          <Block flex>
+            <AppNavigator ref={navigatorRef => setTopLevelNavigator(navigatorRef)} />
+          </Block>
+        </SafeAreaProvider>
       </GalioProvider>
     );
   }
