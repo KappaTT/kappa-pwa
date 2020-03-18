@@ -1,7 +1,7 @@
-import { buildUrl, jsonRequest } from './Networking';
-import { customFetch } from './Request';
-import { setItem } from './secureStorage';
-import { log } from './logService';
+import { buildUrl, jsonRequest } from '@services/Networking';
+import { customFetch } from '@services/Request';
+import { setItem } from '@services/secureStorage';
+import { log } from '@services/logService';
 
 export const LOGIN_ENDPOINT = 'api/v1/login';
 export const GRAPHQL_ENDPOINT = 'api/v1/graphql';

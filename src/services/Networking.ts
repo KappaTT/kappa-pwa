@@ -1,6 +1,6 @@
-import { log } from './logService';
-import { TResponse } from '../backend/backend';
-import { castToString } from './secureStorage';
+import { log } from '@services/logService';
+import { TResponse } from '@backend/backend';
+import { castToString } from '@services/secureStorage';
 
 export const buildUrl = (baseUrl: string, port: string, endpoint: string, secure: boolean = true) => {
   let url = baseUrl;

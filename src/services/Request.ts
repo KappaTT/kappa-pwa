@@ -1,6 +1,7 @@
 // @ts-ignore
 import RNFetchBlob from 'rn-fetch-blob';
-import { log } from './logService';
+
+import { log } from '@services/logService';
 
 export const prod = RNFetchBlob.fetch !== undefined;
 

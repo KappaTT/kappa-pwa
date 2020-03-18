@@ -1,5 +1,6 @@
 import * as SecureStore from 'expo-secure-store';
-import { log } from './logService';
+
+import { log } from '@services/logService';
 
 export const castTo = (value: string, type: string) => {
   if (typeof value === type) {
