@@ -5,11 +5,18 @@ import { createBottomTabNavigator } from 'react-navigation-tabs';
 
 import { theme } from '@constants';
 import { Icon, TabBar } from '@components';
-import { HomeScreen, AboutScreen, LoginScreen } from '@screens';
+import {
+  AnnouncementsScreen,
+  CheckInScreen,
+  DirectoryScreen,
+  EventsScreen,
+  LoginScreen,
+  ProfileScreen
+} from '@screens';
 
 const EventsStack = createStackNavigator({
   Events: {
-    screen: AboutScreen,
+    screen: EventsScreen,
     navigationOptions: ({ navigation }) => ({
       header: null
     })
@@ -25,7 +32,7 @@ EventsStack.navigationOptions = ({ navigation }) => ({
 
 const DirectoryStack = createStackNavigator({
   Directory: {
-    screen: HomeScreen,
+    screen: DirectoryScreen,
     navigationOptions: ({ navigation }) => ({
       header: null
     })
@@ -41,7 +48,7 @@ DirectoryStack.navigationOptions = ({ navigation }) => ({
 
 const CheckInStack = createStackNavigator({
   CheckIn: {
-    screen: HomeScreen,
+    screen: CheckInScreen,
     navigationOptions: ({ navigation }) => ({
       header: null
     })
@@ -57,7 +64,7 @@ CheckInStack.navigationOptions = ({ navigation }) => ({
 
 const AnnouncementsStack = createStackNavigator({
   Announcements: {
-    screen: AboutScreen,
+    screen: AnnouncementsScreen,
     navigationOptions: ({ navigation }) => ({
       header: null
     })
@@ -73,7 +80,7 @@ AnnouncementsStack.navigationOptions = ({ navigation }) => ({
 
 const ProfileStack = createStackNavigator({
   Profile: {
-    screen: LoginScreen,
+    screen: ProfileScreen,
     navigationOptions: ({ navigation }) => ({
       header: null
     })
@@ -85,6 +92,19 @@ ProfileStack.navigationOptions = ({ navigation }) => ({
   tabBarIcon: ({ tintColor }) => (
     <Icon style={styles.iconProfile} name="user" family="Feather" color={tintColor} size={24} />
   )
+});
+
+const LoginStack = createStackNavigator({
+  Login: {
+    screen: LoginScreen,
+    navigationOptions: ({ navigation }) => ({
+      header: null
+    })
+  }
+});
+
+LoginStack.navigationOptions = ({ navigation }) => ({
+  tabBarLabel: 'LoginStack'
 });
 
 const styles = StyleSheet.create({
@@ -103,7 +123,8 @@ export default createBottomTabNavigator(
     DirectoryStack,
     CheckInStack,
     AnnouncementsStack,
-    ProfileStack
+    ProfileStack,
+    LoginStack
   },
   {
     tabBarComponent: TabBar,
