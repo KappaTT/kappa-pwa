@@ -2,7 +2,7 @@
   "expo": {
     "name": "Kappa Theta Tau",
     "slug": "kappa-theta-tau",
-    "privacy": "public",
+    "privacy": "unlisted",
     "sdkVersion": "36.0.0",
     "platforms": ["ios", "android", "web"],
     "version": "1.0.0",
