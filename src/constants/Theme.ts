@@ -12,7 +12,9 @@ export default {
     MUTED: '#ADB5BD',
     INPUT: '#DCDCDC',
     INPUT_SUCCESS: '#7BDEB2',
+    INPUT_SUCCESS_LIGHT: '#D6FFED',
     INPUT_ERROR: '#FCB3A4',
+    INPUT_ERROR_LIGHT: '#FFEDEB',
     ACTIVE: '#5E72E4', //same as primary
     BUTTON_COLOR: '#9C26B0', //wtf
     PLACEHOLDER: '#9FA5AA',
@@ -30,6 +32,8 @@ export default {
     WHITE: '#FFFFFF',
     BLACK: '#000000',
     ROYALTY: '#613CE8',
+    MAIN_GRAY: '#F3F5F9',
+    ALT_ROYAL: '#7738EB',
     GRAY: '#9D9D9D',
     DARK_GRAY: '#4B4B4B',
     LIGHT_GRAY: '#E1E4E8',
