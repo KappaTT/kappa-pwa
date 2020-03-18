@@ -2,12 +2,10 @@ import { getBatch, setItem } from '@services/secureStorage';
 
 export interface TPrefs {
   onboarded: boolean;
-  usernameVisible: boolean;
 }
 
 export const initialPrefs: TPrefs = {
-  onboarded: false,
-  usernameVisible: true
+  onboarded: false
 };
 
 export const loadPrefs = async () => {

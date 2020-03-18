@@ -14,7 +14,6 @@ import { Block } from '@components';
 import { Images, theme } from '@constants';
 import AppNavigator from '@navigation/TabAppNavigator';
 import { setTopLevelNavigator } from '@navigation/NavigationService';
-import { loadedUser } from '@reducers/actions/auth';
 
 const assetImages = [];
 
@@ -31,6 +30,7 @@ function cacheImages(images: any) {
 const App = () => {
   const [isLoadingComplete, setIsLoadingComplete] = React.useState(false);
 
+  const loadedUser = useSelector((state: TRedux) => state.auth.loadedUser);
   const authorized = useSelector((state: TRedux) => state.auth.authorized);
   const loginVisible = useSelector((state: TRedux) => state.auth.visible);
   const loadedPrefs = useSelector((state: TRedux) => state.prefs.loaded);
