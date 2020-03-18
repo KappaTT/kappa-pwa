@@ -4,15 +4,14 @@ import {
   TResponseData,
   makeRequest,
   makeAuthorizedRequest,
-  setToken,
   pass,
   fail,
   TBlame
-} from './backend';
-import { deviceId, sleep } from '../services/utils';
-import { validate, USERNAME, EMAIL, PASSWORD } from './validators';
-import { getBatch, deleteBatch } from '../services/secureStorage';
-import { log } from '../services/logService';
+} from '@backend/backend';
+import { deviceId, sleep } from '@services/utils';
+import { validate, USERNAME, EMAIL, PASSWORD } from '@backend/validators';
+import { getBatch, deleteBatch } from '@services/secureStorage';
+import { log } from '@services/logService';
 
 export interface TUserResponse {
   username: string;
@@ -141,10 +140,6 @@ export const signIn = async (payload: TSignInPayload): Promise<TSignInResponse> 
     return fail(response.data.blame.body.user, '');
   }
 
-  if (response.data.token) {
-    await setToken(response.data.token);
-  }
-
   return {
     success: true,
     data: {
@@ -207,10 +202,6 @@ export const signUp = async (payload: TSignUpPayload): Promise<TSignUpResponse> 
     }
 
     return fail(response.data.blame.body.user, '');
-  }
-
-  if (response.data.token) {
-    await setToken(response.data.token);
   }
 
   return {
@@ -309,10 +300,6 @@ export const resetPassword = async (payload: TResetPayload): Promise<TResetRespo
     return fail({}, 'problem connecting to server');
   } else if (response.code !== 200) {
     return fail({}, 'there was an issue changing your password');
-  }
-
-  if (response.data.token) {
-    await setToken(response.data.token);
   }
 
   // TODO: make sure that updated credentials are saved into storage
