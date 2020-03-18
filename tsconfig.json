@@ -5,6 +5,31 @@
     "jsx": "react-native",
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "baseUrl": "src",
+    "paths": {
+      "@backend": ["backend"],
+      "@backend/*": ["backend/*"],
+      "@components": ["components"],
+      "@components/*": ["components/*"],
+      "@constants": ["constants"],
+      "@constants/*": ["constants/*"],
+      "@navigation": ["navigation"],
+      "@navigation/*": ["navigation/*"],
+      "@pages": ["pages"],
+      "@pages/*": ["pages/*"],
+      "@reducers": ["reducers"],
+      "@reducers/*": ["reducers/*"],
+      "@screens": ["screens"],
+      "@screens/*": ["screens/*"],
+      "@services": ["services"],
+      "@services/*": ["services/*"],
+      "@types": ["types"],
+      "@types/*": ["types/*"],
+      "@argon": ["../libs/argon"],
+      "@argon/*": ["../libs/argon/*"],
+      "@galio": ["../libs/galio"],
+      "@galio/*": ["../libs/galio/*"]
+    }
   }
 }
