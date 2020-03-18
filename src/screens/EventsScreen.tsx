@@ -1,12 +1,12 @@
 import React from 'react';
 
 import { NavigationTypes } from '@types';
-import Content from '@screens/content/LoginContent';
+import Content from '@screens/content/EventsContent';
 
-const LoginScreen: React.FC<{
+const EventsScreen: React.FC<{
   navigation: NavigationTypes.ParamType;
 }> = ({ navigation }) => {
   return <Content navigation={navigation} />;
 };
 
-export default LoginScreen;
+export default EventsScreen;

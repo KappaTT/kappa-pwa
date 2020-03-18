@@ -1,12 +1,12 @@
 import React from 'react';
 
 import { NavigationTypes } from '@types';
-import Content from '@screens/content/LoginContent';
+import Content from '@screens/content/CheckInContent';
 
-const LoginScreen: React.FC<{
+const CheckInScreen: React.FC<{
   navigation: NavigationTypes.ParamType;
 }> = ({ navigation }) => {
   return <Content navigation={navigation} />;
 };
 
-export default LoginScreen;
+export default CheckInScreen;

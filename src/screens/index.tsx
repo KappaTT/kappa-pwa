@@ -1,5 +1,8 @@
-import LoginScreen from './LoginScreen';
-import HomeScreen from './HomeScreen';
-import AboutScreen from './AboutScreen';
+import AnnouncementsScreen from '@screens/AnnouncementsScreen';
+import CheckInScreen from '@screens/CheckInScreen';
+import DirectoryScreen from '@screens/DirectoryScreen';
+import EventsScreen from '@screens/EventsScreen';
+import LoginScreen from '@screens/LoginScreen';
+import ProfileScreen from '@screens/ProfileScreen';
 
-export { LoginScreen, HomeScreen, AboutScreen };
+export { AnnouncementsScreen, CheckInScreen, DirectoryScreen, EventsScreen, LoginScreen, ProfileScreen };
