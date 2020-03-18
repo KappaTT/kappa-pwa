@@ -5,7 +5,7 @@ import { theme } from '../../constants';
 import { Block, RouterModal, Text } from '../../components';
 import { NavigationTypes } from '../../types';
 
-const AboutContent: React.SFC<{
+const AboutContent: React.FC<{
   navigation: NavigationTypes.ParamType;
 }> = ({ navigation }) => {
   const origin = navigation.getParam('origin', '');

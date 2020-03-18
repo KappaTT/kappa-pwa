@@ -3,7 +3,7 @@ import React from 'react';
 import { NavigationTypes } from '../types';
 import LoginContent from './content/LoginContent';
 
-const LoginScreen: React.SFC<{
+const LoginScreen: React.FC<{
   navigation: NavigationTypes.ParamType;
 }> = ({ navigation }) => {
   return <LoginContent navigation={navigation} />;
