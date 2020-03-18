@@ -2,10 +2,9 @@ import React from 'react';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 
-import { theme } from '../../libs/galio';
-import { Icon } from '../../libs/argon';
-import { TabBar } from '../components';
-import { HomeScreen, AboutScreen, LoginScreen } from '../screens';
+import { theme } from '@constants';
+import { Icon, TabBar } from '@components';
+import { HomeScreen, AboutScreen, LoginScreen } from '@screens';
 
 // HOME
 
@@ -22,7 +21,7 @@ HomeStack.navigationOptions = ({ navigation }) => ({
   tabBarLabel: 'Home',
   activeTintColor: 'white',
   inactiveTintColor: 'black',
-  tabBarIcon: ({ tintColor }) => <Icon name="map" family="Feather" color={tintColor} size={theme.SIZES.BASE * 1.2} />
+  tabBarIcon: ({ tintColor }) => <Icon name="map" family="Feather" color={tintColor} size={18} />
 });
 
 // ABOUT
@@ -38,7 +37,7 @@ const AboutStack = createStackNavigator({
 
 AboutStack.navigationOptions = ({ navigation }) => ({
   tabBarLabel: 'About',
-  tabBarIcon: ({ tintColor }) => <Icon name="plus" family="Octicons" color={tintColor} size={theme.SIZES.BASE * 1.2} />
+  tabBarIcon: ({ tintColor }) => <Icon name="plus" family="Octicons" color={tintColor} size={18} />
 });
 
 // LOGIN
@@ -54,7 +53,7 @@ const LoginStack = createStackNavigator({
 
 LoginStack.navigationOptions = ({ navigation }) => ({
   tabBarLabel: 'Login',
-  tabBarIcon: ({ tintColor }) => <Icon name="user" family="Feather" color={tintColor} size={theme.SIZES.BASE * 1.2} />
+  tabBarIcon: ({ tintColor }) => <Icon name="user" family="Feather" color={tintColor} size={18} />
 });
 
 export default createBottomTabNavigator(
@@ -66,7 +65,7 @@ export default createBottomTabNavigator(
   {
     tabBarComponent: TabBar,
     tabBarOptions: {
-      activeTintColor: '#613CE8',
+      activeTintColor: theme.COLORS.BLACK,
       inactiveTintColor: '#B1B6C0'
     }
   }
