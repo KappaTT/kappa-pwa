@@ -1,29 +1,16 @@
 import React from 'react';
 import { StyleSheet, ScrollView } from 'react-native';
 
-import { theme } from '../../constants';
-import { Block, RouterModal, Text } from '../../components';
-import { NavigationTypes } from '../../types';
+import { theme } from '@constants';
+import { Block, Text } from '@components';
+import { NavigationTypes } from '@types';
+import { GoogleService } from '@services';
 
 const LoginContent: React.FC<{
   navigation: NavigationTypes.ParamType;
 }> = ({ navigation }) => {
-  const origin = navigation.getParam('origin', '');
-  const viewing = navigation.getParam('viewing', '');
-
-  const [selectedRouter, setSelectedRouter] = React.useState(undefined);
-
-  const onPressRouterBack = () => {
-    setSelectedRouter(undefined);
-  };
-
   React.useEffect(() => {
-    if (viewing !== '') {
-      const result = undefined; // something.find();
-      if (result) {
-        setSelectedRouter(result);
-      }
-    }
+    GoogleService.login();
   }, []);
 
   return (
@@ -31,14 +18,6 @@ const LoginContent: React.FC<{
       <Block flex middle>
         <Text>Content goes here...</Text>
       </Block>
-
-      {selectedRouter !== undefined && (
-        <RouterModal routerName={selectedRouter.title} gradient={selectedRouter.gradient} onPress={onPressRouterBack}>
-          <Block flex middle>
-            <Text>Content goes here...</Text>
-          </Block>
-        </RouterModal>
-      )}
     </Block>
   );
 };
