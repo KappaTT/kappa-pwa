@@ -12,12 +12,25 @@ import GalioTheme, { withGalio } from './theme';
 
 class Input extends React.Component {
   state = {
-    isPassword: false
+    isPassword: false,
+    focused: false
   };
 
   componentDidMount() {
     const { password } = this.props;
     this.setState({ isPassword: password });
+  }
+
+  onBlur() {
+    this.setState({
+      focused: false
+    });
+  }
+
+  onFocus() {
+    this.setState({
+      focused: true
+    });
   }
 
   render() {
@@ -54,7 +67,7 @@ class Input extends React.Component {
       styles.inputStyle,
       styles.inputContainer,
       bgColor && { backgroundColor: bgColor },
-      borderColor && { borderColor: borderColor },
+      borderColor && { borderColor: this.state.focused ? theme.COLORS.PRIMARY : borderColor },
       rounded && styles.rounded,
       borderless && styles.borderless,
       style
@@ -106,6 +119,8 @@ class Input extends React.Component {
             secureTextEntry={isPassword}
             placeholderTextColor={placeholderTextColor}
             underlineColorAndroid="transparent"
+            onFocus={this.onFocus.bind(this)}
+            onBlur={this.onBlur.bind(this)}
             {...props}
           />
           {right && iconInstance}
@@ -177,7 +192,6 @@ const styles = theme =>
       backgroundColor: theme.COLORS.WHITE,
       borderRadius: theme.SIZES.INPUT_BORDER_RADIUS,
       borderWidth: theme.SIZES.INPUT_BORDER_WIDTH,
-      borderColor: theme.COLORS.INPUT,
       height: '100%',
       paddingHorizontal: theme.SIZES.INPUT_HORIZONTAL * 0.75,
       width: '100%'
@@ -196,7 +210,7 @@ const styles = theme =>
     inputView: {
       flex: 1,
       height: '100%',
-      fontFamily: 'Montserrat-Medium'
+      fontFamily: 'OpenSans'
     },
     inputIcon: {
       marginHorizontal: theme.SIZES.BASE

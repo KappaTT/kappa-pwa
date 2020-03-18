@@ -8,7 +8,7 @@ import { theme } from '../../src/constants';
 
 class ArInput extends React.Component {
   render() {
-    const { placeholder, shadowless, border, success, error, maxLength, getRef } = this.props;
+    const { placeholder, shadowless, border, success, error, maxLength, bgColor, getRef } = this.props;
 
     const inputStyles = [
       styles.input,
@@ -19,11 +19,11 @@ class ArInput extends React.Component {
       { ...this.props.style }
     ];
 
-    const bgColor = success
+    const actualBgColor = success
       ? theme.COLORS.INPUT_SUCCESS_LIGHT
       : error
       ? theme.COLORS.INPUT_ERROR_LIGHT
-      : theme.COLORS.WHITE;
+      : bgColor || theme.COLORS.WHITE;
     const borderColor = success ? theme.COLORS.INPUT_SUCCESS : error ? theme.COLORS.INPUT_ERROR : theme.COLORS.INPUT;
 
     return (
@@ -33,7 +33,7 @@ class ArInput extends React.Component {
         placeholderTextColor={theme.COLORS.MUTED}
         style={inputStyles}
         color={theme.COLORS.HEADER}
-        bgColor={bgColor}
+        bgColor={actualBgColor}
         borderColor={borderColor}
         maxLength={maxLength}
         {...this.props}

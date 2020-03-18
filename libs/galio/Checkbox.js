@@ -127,7 +127,8 @@ const styles = theme =>
       borderColor: theme.COLORS.MUTED
     },
     textStyles: {
-      color: theme.COLORS.BLACK
+      color: theme.COLORS.BLACK,
+      fontFamily: 'OpenSans'
     },
     disabledLabel: {
       color: theme.COLORS.MUTED,
