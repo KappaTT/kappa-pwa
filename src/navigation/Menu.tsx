@@ -8,7 +8,7 @@ import Images from '../constants/Images';
 
 const { width } = Dimensions.get('screen');
 
-const Drawer: React.SFC<{}> = (props: any) => (
+const Drawer: React.FC<{}> = (props: any) => (
   <Block style={styles.container} forceInset={{ top: 'always', horizontal: 'never' }}>
     <Block flex={0.05} style={styles.header}>
       {/* <Image style={styles.logo} source={Images.Logo} /> */}
