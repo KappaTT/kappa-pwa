@@ -2,9 +2,9 @@ import Constants from 'expo-constants';
 
 const manifest = Constants.manifest;
 
-import { jsonRequest, jsonAuthorizedRequest } from '../services/Networking';
-import { setItem } from '../services/secureStorage';
-import { log } from '../services/logService';
+import { jsonRequest, jsonAuthorizedRequest } from '@services/Networking';
+import { setItem } from '@services/secureStorage';
+import { log } from '@services/logService';
 
 export const M_GET = 'GET';
 export const M_POST = 'POST';
@@ -72,14 +72,6 @@ export interface TResponse {
 export interface TBlame {
   [key: string]: string;
 }
-
-export const setToken = async (newToken: string, fromStorage?: boolean) => {
-  if (fromStorage) {
-    return;
-  }
-
-  return setItem('token', newToken);
-};
 
 export const makeRequest = async <T>(
   endpoint: string,
