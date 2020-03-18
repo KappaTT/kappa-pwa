@@ -1,4 +1,5 @@
 import React from 'react';
+import { StyleSheet } from 'react-native';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 
@@ -6,28 +7,8 @@ import { theme } from '@constants';
 import { Icon, TabBar } from '@components';
 import { HomeScreen, AboutScreen, LoginScreen } from '@screens';
 
-// HOME
-
-const HomeStack = createStackNavigator({
-  Map: {
-    screen: HomeScreen,
-    navigationOptions: ({ navigation }) => ({
-      header: null
-    })
-  }
-});
-
-HomeStack.navigationOptions = ({ navigation }) => ({
-  tabBarLabel: 'Home',
-  activeTintColor: 'white',
-  inactiveTintColor: 'black',
-  tabBarIcon: ({ tintColor }) => <Icon name="map" family="Feather" color={tintColor} size={18} />
-});
-
-// ABOUT
-
-const AboutStack = createStackNavigator({
-  Profile: {
+const EventsStack = createStackNavigator({
+  Events: {
     screen: AboutScreen,
     navigationOptions: ({ navigation }) => ({
       header: null
@@ -35,14 +16,62 @@ const AboutStack = createStackNavigator({
   }
 });
 
-AboutStack.navigationOptions = ({ navigation }) => ({
-  tabBarLabel: 'About',
-  tabBarIcon: ({ tintColor }) => <Icon name="plus" family="Octicons" color={tintColor} size={18} />
+EventsStack.navigationOptions = ({ navigation }) => ({
+  tabBarLabel: 'Events',
+  tabBarIcon: ({ tintColor }) => (
+    <Icon style={styles.iconEvents} name="calendar" family="Feather" color={tintColor} size={24} />
+  )
 });
 
-// LOGIN
+const DirectoryStack = createStackNavigator({
+  Directory: {
+    screen: HomeScreen,
+    navigationOptions: ({ navigation }) => ({
+      header: null
+    })
+  }
+});
 
-const LoginStack = createStackNavigator({
+DirectoryStack.navigationOptions = ({ navigation }) => ({
+  tabBarLabel: 'Directory',
+  tabBarIcon: ({ tintColor }) => (
+    <Icon style={styles.iconDirectory} name="contacts" family="AntDesign" color={tintColor} size={24} />
+  )
+});
+
+const CheckInStack = createStackNavigator({
+  CheckIn: {
+    screen: HomeScreen,
+    navigationOptions: ({ navigation }) => ({
+      header: null
+    })
+  }
+});
+
+CheckInStack.navigationOptions = ({ navigation }) => ({
+  tabBarLabel: 'Check In',
+  tabBarIcon: ({ tintColor }) => (
+    <Icon style={styles.iconCheckIn} name="check-square" family="Feather" color={tintColor} size={24} />
+  )
+});
+
+const AnnouncementsStack = createStackNavigator({
+  Announcements: {
+    screen: AboutScreen,
+    navigationOptions: ({ navigation }) => ({
+      header: null
+    })
+  }
+});
+
+AnnouncementsStack.navigationOptions = ({ navigation }) => ({
+  tabBarLabel: 'Announcements',
+  tabBarIcon: ({ tintColor }) => (
+    <Icon style={styles.iconAnnouncements} name="message-square" family="Feather" color={tintColor} size={24} />
+  )
+});
+
+const ProfileStack = createStackNavigator({
   Profile: {
     screen: LoginScreen,
     navigationOptions: ({ navigation }) => ({
@@ -51,16 +80,30 @@ const LoginStack = createStackNavigator({
   }
 });
 
-LoginStack.navigationOptions = ({ navigation }) => ({
-  tabBarLabel: 'Login',
-  tabBarIcon: ({ tintColor }) => <Icon name="user" family="Feather" color={tintColor} size={18} />
+ProfileStack.navigationOptions = ({ navigation }) => ({
+  tabBarLabel: 'Profile',
+  tabBarIcon: ({ tintColor }) => (
+    <Icon style={styles.iconProfile} name="user" family="Feather" color={tintColor} size={24} />
+  )
+});
+
+const styles = StyleSheet.create({
+  iconEvents: {},
+  iconDirectory: {
+    paddingTop: 4
+  },
+  iconCheckIn: {},
+  iconAnnouncements: {},
+  iconProfile: {}
 });
 
 export default createBottomTabNavigator(
   {
-    HomeStack,
-    AboutStack,
-    LoginStack
+    EventsStack,
+    DirectoryStack,
+    CheckInStack,
+    AnnouncementsStack,
+    ProfileStack
   },
   {
     tabBarComponent: TabBar,

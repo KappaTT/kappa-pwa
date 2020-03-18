@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity, Text } from 'react-native';
+import { StyleSheet, TouchableWithoutFeedback, Text } from 'react-native';
 
 import Block from '@components/Block';
 import { theme } from '@constants';
@@ -17,11 +17,11 @@ const TabBarButton: React.FC<{
   const tintColor = isRouteActive ? activeTintColor : inactiveTintColor;
 
   return (
-    <TouchableOpacity style={styles.wrapper} onPress={onTabPress} onLongPress={onTabLongPress}>
+    <TouchableWithoutFeedback style={styles.wrapper} onPress={onTabPress} onLongPress={onTabLongPress}>
       <Block style={styles.container}>
         <Block style={styles.content}>{renderIcon({ route, focused: isRouteActive, tintColor: tintColor })}</Block>
       </Block>
-    </TouchableOpacity>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -32,7 +32,11 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   container: {
-    paddingVertical: 8
+    paddingVertical: 8,
+    width: 56,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   content: {
     display: 'flex',

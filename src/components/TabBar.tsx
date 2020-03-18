@@ -66,7 +66,8 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     height: 48,
-    paddingHorizontal: 24
+    paddingHorizontal: 24,
+    justifyContent: 'center'
   }
 });
 
