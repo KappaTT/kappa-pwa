@@ -23,7 +23,7 @@ export const BASE_URL_IP =
   typeof manifest.packagerOpts === 'object' && manifest.packagerOpts.dev
     ? manifest.debuggerHost.indexOf('127.0.0.1') >= 0
       ? `http://${manifest.debuggerHost.split(':').shift()}:3000/dev/`
-      : 'http://ce6b0b48.ngrok.io/dev/'
+      : BASE_URL_DEV
     : BASE_URL;
 
 log('Built base url', BASE_URL_IP);
