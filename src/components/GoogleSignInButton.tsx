@@ -12,7 +12,7 @@ const googleLogo = {
 
 const GoogleSignInButton: React.FC<{ onPress(): void }> = ({ onPress }) => {
   return (
-    <TouchableOpacity activeOpacity={0.6} style={styles.button}>
+    <TouchableOpacity activeOpacity={0.6} style={styles.button} onPress={onPress}>
       <Block style={styles.content}>
         <Image source={googleLogo} style={styles.icon} />
         <Text style={styles.text}>Sign in with Google</Text>

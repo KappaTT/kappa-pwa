@@ -1,12 +1,19 @@
 import React from 'react';
 import { StyleSheet, Image } from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
 
+import { TRedux } from '@reducers';
+import { _auth } from '@reducers/actions';
 import { theme, Images } from '@constants';
 import { Block, Text, GoogleSignInButton } from '@components';
 
 const LoginPage: React.FC<{
   onRequestClose(): void;
 }> = ({ onRequestClose }) => {
+  const dispatch = useDispatch();
+
+  const dispatchSignInWithGoogle = React.useCallback(() => dispatch(_auth.signInWithGoogle()), [dispatch]);
+
   const renderBackground = () => {
     return <Block style={styles.bg} />;
   };
@@ -21,7 +28,7 @@ const LoginPage: React.FC<{
         </Block>
 
         <Block style={styles.bottomArea}>
-          <GoogleSignInButton onPress={() => {}} />
+          <GoogleSignInButton onPress={dispatchSignInWithGoogle} />
         </Block>
       </Block>
     );
