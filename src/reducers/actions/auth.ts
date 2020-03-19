@@ -11,10 +11,14 @@ import {
   SIGN_IN_SUCCESS,
   SIGN_IN_FAILURE,
   SIGN_OUT,
-  SHOW_SIGN_IN
+  SHOW_SIGN_IN,
+  SIGN_IN_WITH_GOOGLE,
+  SIGN_IN_WITH_GOOGLE_SUCCESS,
+  SIGN_IN_WITH_GOOGLE_FAILURE
 } from '@reducers/auth';
 import { TUser, initialUser, TUserResponse } from '@backend/auth';
 import { getBatch, setBatch } from '@services/secureStorage';
+import * as GoogleService from '@services/googleService';
 import { log } from '@services/logService';
 
 export const showOnboarding = () => {
@@ -108,6 +112,53 @@ export const authenticate = (username: string, email: string, password: string) 
         setBatch('user', { ...res.data.user, password });
       } else {
         dispatch(signInFailure(res.error));
+      }
+    });
+  };
+};
+
+const signingInWithGoogle = () => {
+  return {
+    type: SIGN_IN_WITH_GOOGLE
+  };
+};
+
+const signInWithGoogleSuccess = data => {
+  return {
+    type: SIGN_IN_WITH_GOOGLE_SUCCESS,
+    ...data
+  };
+};
+
+const signInWithGoogleFailure = err => {
+  return {
+    type: SIGN_IN_WITH_GOOGLE_FAILURE,
+    error: err
+  };
+};
+
+export const signInWithGoogle = () => {
+  return dispatch => {
+    dispatch(signingInWithGoogle());
+
+    GoogleService.login().then(res => {
+      if (res.success) {
+        if (res.data.email.endsWith('@illinois.edu')) {
+          dispatch(signInWithGoogleSuccess(res.data));
+          setBatch('user', { ...res.data });
+        } else {
+          dispatch(
+            signInWithGoogleFailure({
+              message: 'must use a valid illinois.edu email'
+            })
+          );
+        }
+      } else {
+        dispatch(
+          signInWithGoogleFailure({
+            message: 'sign in failed'
+          })
+        );
       }
     });
   };

@@ -1,5 +1,5 @@
 import { TBlame } from '@backend/backend';
-import { TUser, initialUser } from '@backend/auth';
+import { TUser, initialUser, TGoogleUser, initialGoogleUser } from '@backend/auth';
 
 export const SHOW_ONBOARDING = 'SHOW_ONBOARDING';
 export const HIDE_ONBOARDING = 'HIDE_ONBOARDING';
@@ -15,36 +15,50 @@ export const SIGN_IN_SUCCESS = 'SIGN_IN_SUCCESS';
 export const SIGN_IN_FAILURE = 'SIGN_IN_FAILURE';
 export const SIGN_OUT = 'SIGN_OUT';
 
+export const SIGN_IN_WITH_GOOGLE = 'SIGN_IN_WITH_GOOGLE';
+export const SIGN_IN_WITH_GOOGLE_SUCCESS = 'SIGN_IN_WITH_GOOGLE_SUCCESS';
+export const SIGN_IN_WITH_GOOGLE_FAILURE = 'SIGN_IN_WITH_GOOGLE_FAILURE';
+
 export const SHOW_SIGN_IN = 'SHOW_SIGN_IN';
 
 export interface TAuthState {
   visible: boolean;
   onboardingVisible: boolean;
 
+  isSigningInWithGoogle: boolean;
+  googleUser: TGoogleUser;
+  authorizedGoogle: boolean;
+  signInWithGoogleError: boolean;
+  signInWithGoogleErrorMessage: string;
+
   isAuthenticating: boolean;
   loadedUser: boolean;
   user: TUser;
   authorized: boolean;
-
-  signInVisible: boolean;
-
   signInError: boolean;
   signInErrorMessage: string;
+
+  signInVisible: boolean;
 }
 
 const initialState: TAuthState = {
   visible: false,
   onboardingVisible: false,
 
+  isSigningInWithGoogle: false,
+  googleUser: initialGoogleUser,
+  authorizedGoogle: false,
+  signInWithGoogleError: false,
+  signInWithGoogleErrorMessage: '',
+
   isAuthenticating: false,
   loadedUser: false,
   user: initialUser,
   authorized: false,
-
-  signInVisible: true,
-
   signInError: false,
-  signInErrorMessage: ''
+  signInErrorMessage: '',
+
+  signInVisible: true
 };
 
 export default (state = initialState, action: any): TAuthState => {
@@ -109,6 +123,29 @@ export default (state = initialState, action: any): TAuthState => {
         isAuthenticating: false,
         signInError: true,
         signInErrorMessage: action.error.message
+      };
+    case SIGN_IN_WITH_GOOGLE:
+      return {
+        ...state,
+        isSigningInWithGoogle: true,
+        signInWithGoogleError: false,
+        signInWithGoogleErrorMessage: ''
+      };
+    case SIGN_IN_WITH_GOOGLE_SUCCESS:
+      return {
+        ...state,
+        isSigningInWithGoogle: false,
+        googleUser: action.user,
+        authorizedGoogle: true,
+        signInWithGoogleError: false,
+        signInWithGoogleErrorMessage: ''
+      };
+    case SIGN_IN_WITH_GOOGLE_FAILURE:
+      return {
+        ...state,
+        isSigningInWithGoogle: false,
+        signInWithGoogleError: true,
+        signInWithGoogleErrorMessage: action.error.message
       };
     case SIGN_OUT:
       return {

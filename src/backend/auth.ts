@@ -30,6 +30,28 @@ export const initialUser: TUser = {
   token: ''
 };
 
+export interface TGoogleUser {
+  accessToken: string;
+  refreshToken: string;
+  idToken: string;
+  email: string;
+  familyName: string;
+  givenName: string;
+  id: string;
+  photoUrl: string;
+}
+
+export const initialGoogleUser: TGoogleUser = {
+  accessToken: '',
+  refreshToken: '',
+  idToken: '',
+  email: '',
+  familyName: '',
+  givenName: '',
+  id: '',
+  photoUrl: ''
+};
+
 export const purge = async () => {
   return deleteBatch('user', initialUser);
 };

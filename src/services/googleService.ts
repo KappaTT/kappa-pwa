@@ -11,11 +11,27 @@ export const login = async () => {
 
     if (loginResult.type === 'success') {
       log(loginResult);
-      return loginResult;
+      return {
+        success: true,
+        data: {
+          accessToken: loginResult.accessToken,
+          refreshToken: loginResult.refreshToken,
+          idToken: loginResult.idToken,
+          email: loginResult.user.email,
+          familyName: loginResult.user.familyName,
+          givenName: loginResult.user.givenName,
+          id: loginResult.user.id,
+          photoUrl: loginResult.user.photoUrl
+        }
+      };
     } else {
-      return undefined;
+      return {
+        success: false
+      };
     }
   } catch (error) {
-    return undefined;
+    return {
+      success: false
+    };
   }
 };
