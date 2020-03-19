@@ -3,7 +3,6 @@ import { StyleSheet, Dimensions } from 'react-native';
 
 import { theme } from '@constants';
 import { Block, Text } from '@components';
-import { GoogleService } from '@services';
 
 const LoginPage: React.FC<{
   onRequestClose(): void;
