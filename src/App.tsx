@@ -16,7 +16,7 @@ import AppNavigator from '@navigation/TabAppNavigator';
 import { setTopLevelNavigator, navigate } from '@navigation/NavigationService';
 import { LoginPage } from '@pages';
 
-const assetImages = [];
+const assetImages = [Images.Kappa];
 
 function cacheImages(images: any) {
   return images.map((image: any) => {
@@ -47,13 +47,13 @@ const App = () => {
       ...cacheImages(assetImages),
       Font.loadAsync({
         Montserrat: require('../assets/font/Montserrat-Regular.ttf'),
-        'Montserrat-Bold': require('../assets/font/Montserrat-Bold.ttf'),
-        'Montserrat-Light': require('../assets/font/Montserrat-Light.ttf'),
-        'Montserrat-Medium': require('../assets/font/Montserrat-Medium.ttf'),
-        'Montserrat-SemiBold': require('../assets/font/Montserrat-SemiBold.ttf'),
         OpenSans: require('../assets/font/OpenSans-Regular.ttf'),
         'OpenSans-Bold': require('../assets/font/OpenSans-Bold.ttf'),
         'OpenSans-Light': require('../assets/font/OpenSans-Light.ttf'),
+        PlayfairDisplay: require('../assets/font/PlayfairDisplay-Regular.ttf'),
+        'PlayfairDisplay-Medium': require('../assets/font/PlayfairDisplay-Medium.ttf'),
+        'PlayfairDisplay-Bold': require('../assets/font/PlayfairDisplay-Bold.ttf'),
+        'PlayfairDisplay-Black': require('../assets/font/PlayfairDisplay-Black.ttf'),
         Galio: require('../assets/font/galio.ttf'),
         ArgonExtra: require('../assets/font/argon.ttf')
       })

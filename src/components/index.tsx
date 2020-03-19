@@ -12,6 +12,7 @@ import FAB from './FAB';
 import FadeModal from './FadeModal';
 import FormattedInput from './FormattedInput';
 import Ghost from './Ghost';
+import GoogleSignInButton from './GoogleSignInButton';
 import GradientBlobButton from './GradientBlobButton';
 import GradientView from './GradientView';
 import Header from './Header';
@@ -53,6 +54,7 @@ export {
   FadeModal,
   FormattedInput,
   Ghost,
+  GoogleSignInButton,
   GradientBlobButton,
   GradientView,
   Header,

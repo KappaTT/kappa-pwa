@@ -1,5 +1,3 @@
-// local imgs
-// const Logo = require('../../assets/imgs/brand-mark.png');
-// internet imgs
+const Kappa = require('../../assets/imgs/kappa.png');
 
-export default {};
+export default { Kappa };

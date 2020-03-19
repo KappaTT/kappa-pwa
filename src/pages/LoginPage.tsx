@@ -1,8 +1,8 @@
 import React from 'react';
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet, Image } from 'react-native';
 
-import { theme } from '@constants';
-import { Block, Text } from '@components';
+import { theme, Images } from '@constants';
+import { Block, Text, GoogleSignInButton } from '@components';
 
 const LoginPage: React.FC<{
   onRequestClose(): void;
@@ -13,8 +13,16 @@ const LoginPage: React.FC<{
 
   const renderContent = () => {
     return (
-      <Block flex middle>
-        <Text>Login</Text>
+      <Block style={styles.fg}>
+        <Block style={styles.content}>
+          <Text style={styles.title}>KAPPA</Text>
+          <Image style={styles.logo} source={Images.Kappa} resizeMode="contain" />
+          <Text style={styles.subtitle}>THETA TAU</Text>
+        </Block>
+
+        <Block style={styles.bottomArea}>
+          <GoogleSignInButton onPress={() => {}} />
+        </Block>
       </Block>
     );
   };
@@ -35,6 +43,31 @@ const styles = StyleSheet.create({
   },
   fg: {
     flex: 1
+  },
+  content: {
+    height: '80%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  bottomArea: {
+    flex: 1,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-start'
+  },
+  title: {
+    fontFamily: 'PlayfairDisplay-Medium',
+    fontSize: 48
+  },
+  subtitle: {
+    fontFamily: 'PlayfairDisplay-Medium',
+    fontSize: 32
+  },
+  logo: {
+    maxWidth: '50%',
+    maxHeight: '20%',
+    marginVertical: 20
   }
 });
 
