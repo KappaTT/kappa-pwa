@@ -10,10 +10,11 @@ import { GalioProvider } from '@galio';
 
 import { TRedux } from '@reducers';
 import { _auth, _prefs } from '@reducers/actions';
-import { Block } from '@components';
+import { Block, FadeModal } from '@components';
 import { Images, theme } from '@constants';
 import AppNavigator from '@navigation/TabAppNavigator';
 import { setTopLevelNavigator, navigate } from '@navigation/NavigationService';
+import { LoginPage } from '@pages';
 
 const assetImages = [];
 
@@ -82,12 +83,6 @@ const App = () => {
   }, [loadedUser, authorized]);
 
   React.useEffect(() => {
-    if (loginVisible) {
-      navigate('LoginStack', {});
-    }
-  }, [isNavigatorReady, loginVisible]);
-
-  React.useEffect(() => {
     if (!loadedPrefs) {
       dispatchLoadPrefs();
     }
@@ -110,6 +105,10 @@ const App = () => {
                 setIsNavigatorReady(true);
               }}
             />
+
+            <FadeModal transparent={false} visible={loginVisible} onRequestClose={() => {}}>
+              <LoginPage onRequestClose={() => {}}></LoginPage>
+            </FadeModal>
           </Block>
         </SafeAreaProvider>
       </GalioProvider>

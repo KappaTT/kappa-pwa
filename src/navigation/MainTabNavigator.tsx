@@ -5,14 +5,7 @@ import { createBottomTabNavigator } from 'react-navigation-tabs';
 
 import { theme } from '@constants';
 import { Icon, TabBar } from '@components';
-import {
-  AnnouncementsScreen,
-  CheckInScreen,
-  DirectoryScreen,
-  EventsScreen,
-  LoginScreen,
-  ProfileScreen
-} from '@screens';
+import { AnnouncementsScreen, CheckInScreen, DirectoryScreen, EventsScreen, ProfileScreen } from '@screens';
 
 const EventsStack = createStackNavigator({
   Events: {
@@ -94,19 +87,6 @@ ProfileStack.navigationOptions = ({ navigation }) => ({
   )
 });
 
-const LoginStack = createStackNavigator({
-  Login: {
-    screen: LoginScreen,
-    navigationOptions: ({ navigation }) => ({
-      header: null
-    })
-  }
-});
-
-LoginStack.navigationOptions = ({ navigation }) => ({
-  tabBarLabel: 'LoginStack'
-});
-
 const styles = StyleSheet.create({
   iconEvents: {},
   iconDirectory: {
@@ -123,8 +103,7 @@ export default createBottomTabNavigator(
     DirectoryStack,
     CheckInStack,
     AnnouncementsStack,
-    ProfileStack,
-    LoginStack
+    ProfileStack
   },
   {
     tabBarComponent: TabBar,
