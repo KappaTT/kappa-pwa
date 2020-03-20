@@ -97,7 +97,7 @@ export default (state = initialState, action: any): TAuthState => {
       return {
         ...state,
         user: action.user,
-        authorized: true
+        authorized: action.authorized
       };
     case SIGN_IN:
       return {
@@ -110,7 +110,6 @@ export default (state = initialState, action: any): TAuthState => {
       return {
         ...state,
         isAuthenticating: false,
-        user: action.user,
         authorized: true,
         signInError: false,
         signInErrorMessage: ''

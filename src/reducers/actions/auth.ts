@@ -57,10 +57,11 @@ export const loadedUser = () => {
   };
 };
 
-export const setUser = (user: TUser) => {
+export const setUser = (user: TUser, authorized: boolean = true) => {
   return {
     type: SET_USER,
-    user
+    user,
+    authorized
   };
 };
 
@@ -88,10 +89,9 @@ export const signOut = () => {
   };
 };
 
-const signInSuccess = data => {
+const signInSuccess = () => {
   return {
-    type: SIGN_IN_SUCCESS,
-    user: data.user
+    type: SIGN_IN_SUCCESS
   };
 };
 
@@ -108,7 +108,11 @@ export const authenticate = (email: string, idToken: string, googleUser: TGoogle
 
     Auth.signIn({ email, idToken }).then(res => {
       if (res.success) {
-        dispatch(signInSuccess(res.data));
+        const user = { ...res.data.user, ...googleUser };
+
+        dispatch(setUser(user));
+        dispatch(signInSuccess());
+
         setBatch('user', { ...res.data.user, ...googleUser });
       } else {
         dispatch(signInFailure(res.error));
@@ -123,10 +127,9 @@ const signingInWithGoogle = () => {
   };
 };
 
-const signInWithGoogleSuccess = data => {
+const signInWithGoogleSuccess = () => {
   return {
-    type: SIGN_IN_WITH_GOOGLE_SUCCESS,
-    ...data
+    type: SIGN_IN_WITH_GOOGLE_SUCCESS
   };
 };
 
@@ -144,7 +147,7 @@ export const signInWithGoogle = () => {
     GoogleService.login().then(res => {
       if (res.success) {
         if (res.data.email.endsWith('@illinois.edu')) {
-          dispatch(signInWithGoogleSuccess(res.data));
+          dispatch(signInWithGoogleSuccess());
           dispatch(authenticate(res.data.email, res.data.idToken, res.data));
         } else {
           dispatch(
