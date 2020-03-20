@@ -10,7 +10,7 @@ import { GalioProvider } from '@galio';
 
 import { TRedux } from '@reducers';
 import { _auth, _prefs } from '@reducers/actions';
-import { incompleteUser } from '@backend/auth';
+import { incompleteUser, purge } from '@backend/auth';
 import { Block, FadeModal } from '@components';
 import { Images, theme } from '@constants';
 import AppNavigator from '@navigation/TabAppNavigator';
@@ -99,8 +99,8 @@ const App = () => {
 
     let incomplete = false;
 
-    for (const [key, value] of Object.entries(user)) {
-      if (user[key] === incompleteUser[key]) {
+    for (const key of Object.keys(incompleteUser)) {
+      if (user[key] === undefined || user[key] === incompleteUser[key]) {
         incomplete = true;
         break;
       }

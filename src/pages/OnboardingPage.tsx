@@ -22,7 +22,9 @@ const OnboardingPage: React.FC<{
     return (
       <KeyboardAvoidingView behavior="position" enabled>
         <Block style={styles.fg}>
-          <Text>Let's finish setting up</Text>
+          <Text style={styles.title}>Let's finish setting up</Text>
+          <Text style={styles.heading}>CONTACT</Text>
+          <Text style={styles.heading}>CONTACT</Text>
         </Block>
       </KeyboardAvoidingView>
     );
@@ -52,6 +54,17 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 28,
     borderTopRightRadius: 28,
     padding: 20
+  },
+  title: {
+    fontFamily: 'OpenSans-Bold',
+    fontSize: 24
+  },
+  heading: {
+    marginTop: 12,
+    marginBottom: 8,
+    fontFamily: 'OpenSans',
+    fontSize: 12,
+    color: theme.COLORS.DARK_GRAY
   }
 });
 

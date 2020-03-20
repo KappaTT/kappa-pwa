@@ -36,14 +36,14 @@ export interface TUser {
   email: string;
   familyName: string;
   givenName: string;
+  semester?: string;
   type: string;
   role?: string;
   privileged?: boolean;
 
   // ONBOARDING
-  phone: string;
-  pledgeSemester: string;
-  gradYear: string;
+  phone?: string;
+  gradYear?: string;
 }
 
 export const initialUser: TUser = {
@@ -53,13 +53,13 @@ export const initialUser: TUser = {
   email: '',
   familyName: '',
   givenName: '',
+  semester: '',
   type: '',
   role: '',
   privileged: false,
 
   // ONBOARDING
   phone: '',
-  pledgeSemester: '',
   gradYear: ''
 };
 
@@ -70,11 +70,11 @@ export const incompleteUser: TUser = {
   email: '',
   familyName: '',
   givenName: '', // TODO: REMOVE
+  semester: '',
   type: '',
 
   // ONBOARDING
   phone: '',
-  pledgeSemester: '',
   gradYear: ''
 };
 
