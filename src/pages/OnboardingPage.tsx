@@ -5,13 +5,15 @@ import { useSelector, useDispatch } from 'react-redux';
 import { TRedux } from '@reducers';
 import { _auth } from '@reducers/actions';
 import { theme } from '@constants';
-import { Block, Text } from '@components';
+import { Block, Text, ListButton } from '@components';
 
 const { width, height } = Dimensions.get('screen');
 
 const OnboardingPage: React.FC<{
   onRequestClose(): void;
 }> = ({ onRequestClose }) => {
+  const user = useSelector((state: TRedux) => state.auth.user);
+
   const dispatch = useDispatch();
 
   const renderBackground = () => {
@@ -22,9 +24,13 @@ const OnboardingPage: React.FC<{
     return (
       <KeyboardAvoidingView behavior="position" enabled>
         <Block style={styles.fg}>
+          <Text style={styles.subtitle}>Hi {user.givenName}</Text>
           <Text style={styles.title}>Let's finish setting up</Text>
           <Text style={styles.heading}>CONTACT</Text>
-          <Text style={styles.heading}>CONTACT</Text>
+          <ListButton keyText="Full Name" valueText={`${user.givenName} ${user.familyName}`} disabled={true} />
+          <ListButton keyText="Illinois Email" valueText={user.email} disabled={true} />
+          <ListButton keyText="Phone" valueText={user.phone} />
+          <Text style={styles.heading}>PROFILE</Text>
         </Block>
       </KeyboardAvoidingView>
     );
@@ -56,8 +62,15 @@ const styles = StyleSheet.create({
     padding: 20
   },
   title: {
+    fontFamily: 'OpenSans',
+    fontSize: 24,
+    marginBottom: 20
+  },
+  subtitle: {
     fontFamily: 'OpenSans-Bold',
-    fontSize: 24
+    fontSize: 12,
+    color: theme.COLORS.DARK_GRAY,
+    textTransform: 'uppercase'
   },
   heading: {
     marginTop: 12,
