@@ -13,24 +13,44 @@ const ListButton: React.FC<{
   disabled?: boolean;
   onPress?(): void;
 }> = ({ keyText, valueText = '', valueColor = theme.COLORS.ROYALTY, disabled = false, onPress = () => {} }) => {
+  const computedOpacity = disabled ? 0.5 : 1;
+
   return (
     <Block style={styles.wrapper}>
       <TouchableOpacity style={styles.button} disabled={disabled} onPress={onPress}>
-        <Text style={styles.keyText}>{keyText}</Text>
+        <Text
+          style={[
+            styles.keyText,
+            {
+              opacity: computedOpacity
+            }
+          ]}
+        >
+          {keyText}
+        </Text>
 
         <Block style={styles.activeContent}>
           <Text
             style={[
               styles.valueText,
               {
-                color: valueColor
+                color: valueColor,
+                opacity: computedOpacity
               }
             ]}
           >
             {valueText}
           </Text>
 
-          <Icon family="MaterialIcons" name="keyboard-arrow-right" size={24} color={valueColor} />
+          <Icon
+            style={{
+              opacity: computedOpacity
+            }}
+            family="MaterialIcons"
+            name="keyboard-arrow-right"
+            size={24}
+            color={valueColor}
+          />
         </Block>
       </TouchableOpacity>
     </Block>
