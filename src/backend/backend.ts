@@ -23,7 +23,7 @@ export const BASE_URL_IP =
   typeof manifest.packagerOpts === 'object' && manifest.packagerOpts.dev
     ? manifest.debuggerHost.indexOf('127.0.0.1') >= 0
       ? `http://${manifest.debuggerHost.split(':').shift()}:3000/dev/`
-      : BASE_URL_DEV
+      : `http://${manifest.debuggerHost.split(':').shift()}:3000/dev/`
     : BASE_URL;
 
 log('Built base url', BASE_URL_IP);
@@ -31,27 +31,13 @@ log('Built base url', BASE_URL_IP);
 export const ENDPOINTS: {
   [key: string]: string;
 } = {
-  SIGN_IN: 'users/login',
-  SIGN_UP: 'users/register',
-  CONFIRM_USER: 'users/confirm',
-  FORGOT_PASSWORD: 'users/forgot-password',
-  VERIFY_PASSWORD_CODE: 'users/validate-password-reset-code',
-  RESET_PASSWORD: 'users/reset-password',
-  GET_NEARBY: 'posts',
-  CREATE_POST: 'posts'
+  SIGN_IN: 'users/login'
 };
 
 export const METHODS: {
   [key: string]: TMethod;
 } = {
-  SIGN_IN: M_POST,
-  SIGN_UP: M_POST,
-  CONFIRM_USER: M_POST,
-  FORGOT_PASSWORD: M_POST,
-  VERIFY_PASSWORD_CODE: M_POST,
-  RESET_PASSWORD: M_POST,
-  GET_NEARBY: M_GET,
-  CREATE_POST: M_POST
+  SIGN_IN: M_POST
 };
 
 export interface TResponseData {
