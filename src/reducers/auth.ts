@@ -26,7 +26,6 @@ export interface TAuthState {
   onboardingVisible: boolean;
 
   isSigningInWithGoogle: boolean;
-  googleUser: TGoogleUser;
   authorizedGoogle: boolean;
   signInWithGoogleError: boolean;
   signInWithGoogleErrorMessage: string;
@@ -46,7 +45,6 @@ const initialState: TAuthState = {
   onboardingVisible: false,
 
   isSigningInWithGoogle: false,
-  googleUser: initialGoogleUser,
   authorizedGoogle: false,
   signInWithGoogleError: false,
   signInWithGoogleErrorMessage: '',
@@ -122,7 +120,10 @@ export default (state = initialState, action: any): TAuthState => {
         ...state,
         isAuthenticating: false,
         signInError: true,
-        signInErrorMessage: action.error.message
+        signInErrorMessage: action.error.message,
+        authorized: false,
+        authorizedGoogle: false,
+        user: initialUser
       };
     case SIGN_IN_WITH_GOOGLE:
       return {
@@ -135,7 +136,6 @@ export default (state = initialState, action: any): TAuthState => {
       return {
         ...state,
         isSigningInWithGoogle: false,
-        googleUser: action.user,
         authorizedGoogle: true,
         signInWithGoogleError: false,
         signInWithGoogleErrorMessage: ''

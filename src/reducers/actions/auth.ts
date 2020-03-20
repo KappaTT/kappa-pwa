@@ -16,8 +16,8 @@ import {
   SIGN_IN_WITH_GOOGLE_SUCCESS,
   SIGN_IN_WITH_GOOGLE_FAILURE
 } from '@reducers/auth';
-import { TUser, initialUser, TUserResponse } from '@backend/auth';
-import { getBatch, setBatch } from '@services/secureStorage';
+import { TUser, initialUser, TUserResponse, TGoogleUser } from '@backend/auth';
+import { getBatch, setBatch, deleteBatch } from '@services/secureStorage';
 import * as GoogleService from '@services/googleService';
 import { log } from '@services/logService';
 
@@ -102,14 +102,14 @@ const signInFailure = err => {
   };
 };
 
-export const authenticate = (username: string, email: string, password: string) => {
+export const authenticate = (email: string, idToken: string, googleUser: TGoogleUser) => {
   return dispatch => {
     dispatch(signingIn());
 
-    Auth.signIn({ username, email, password }).then(res => {
+    Auth.signIn({ email, idToken }).then(res => {
       if (res.success) {
         dispatch(signInSuccess(res.data));
-        setBatch('user', { ...res.data.user, password });
+        setBatch('user', { ...res.data.user, ...googleUser });
       } else {
         dispatch(signInFailure(res.error));
       }
@@ -145,7 +145,7 @@ export const signInWithGoogle = () => {
       if (res.success) {
         if (res.data.email.endsWith('@illinois.edu')) {
           dispatch(signInWithGoogleSuccess(res.data));
-          setBatch('user', { ...res.data });
+          dispatch(authenticate(res.data.email, res.data.idToken, res.data));
         } else {
           dispatch(
             signInWithGoogleFailure({
