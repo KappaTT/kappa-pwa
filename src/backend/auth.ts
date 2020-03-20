@@ -30,32 +30,52 @@ export const initialGoogleUser: TGoogleUser = {
 };
 
 export interface TUser {
+  // INITIAL CREATION
   _id: string;
   sessionToken: string;
   email: string;
   familyName: string;
   givenName: string;
+  type: string;
   role?: string;
   privileged?: boolean;
+
+  // ONBOARDING
+  phone: string;
+  pledgeSemester: string;
+  gradYear: string;
 }
 
 export const initialUser: TUser = {
+  // INITIAL CREATION
   _id: '',
   sessionToken: '',
+  email: '',
+  familyName: '',
+  givenName: '',
+  type: '',
   role: '',
   privileged: false,
 
-  email: '',
-  familyName: '',
-  givenName: ''
+  // ONBOARDING
+  phone: '',
+  pledgeSemester: '',
+  gradYear: ''
 };
 
 export const incompleteUser: TUser = {
+  // INITIAL CREATION
   _id: '',
   sessionToken: '',
   email: '',
   familyName: '',
-  givenName: ''
+  givenName: '', // TODO: REMOVE
+  type: '',
+
+  // ONBOARDING
+  phone: '',
+  pledgeSemester: '',
+  gradYear: ''
 };
 
 export interface TUserResponse {
@@ -64,6 +84,7 @@ export interface TUserResponse {
   email: string;
   familyName: string;
   givenName: string;
+  type: string;
   role?: string;
   privileged?: boolean;
 }
