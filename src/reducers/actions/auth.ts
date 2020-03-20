@@ -67,8 +67,8 @@ export const setUser = (user: TUser, authorized: boolean = true) => {
 
 export const loadUser = () => {
   return dispatch => {
-    getBatch('user', initialUser).then((user: TUser | undefined) => {
-      if (user) {
+    getBatch('user', initialUser, true).then((user: TUser | undefined) => {
+      if (user?.email) {
         dispatch(setUser(user));
       }
 
@@ -108,12 +108,12 @@ export const authenticate = (email: string, idToken: string, googleUser: TGoogle
 
     Auth.signIn({ email, idToken }).then(res => {
       if (res.success) {
-        const user = { ...res.data.user, ...googleUser };
+        const user = res.data.user;
 
         dispatch(setUser(user));
         dispatch(signInSuccess());
 
-        setBatch('user', { ...res.data.user, ...googleUser });
+        setBatch('user', user);
       } else {
         dispatch(signInFailure(res.error));
       }

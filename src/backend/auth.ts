@@ -13,31 +13,7 @@ import { validate, USERNAME, EMAIL, PASSWORD } from '@backend/validators';
 import { getBatch, deleteBatch } from '@services/secureStorage';
 import { log } from '@services/logService';
 
-export interface TUserResponse {
-  _id: string;
-  email: string;
-}
-
-export interface TUser extends TGoogleUser {
-  _id: string;
-}
-
-export const initialUser: TUser = {
-  _id: '',
-  accessToken: '',
-  refreshToken: '',
-  idToken: '',
-  email: '',
-  familyName: '',
-  givenName: '',
-  id: '',
-  photoUrl: ''
-};
-
 export interface TGoogleUser {
-  accessToken: string;
-  refreshToken: string;
-  idToken: string;
   email: string;
   familyName: string;
   givenName: string;
@@ -46,15 +22,51 @@ export interface TGoogleUser {
 }
 
 export const initialGoogleUser: TGoogleUser = {
-  accessToken: '',
-  refreshToken: '',
-  idToken: '',
   email: '',
   familyName: '',
   givenName: '',
   id: '',
   photoUrl: ''
 };
+
+export interface TUser {
+  _id: string;
+  sessionToken: string;
+  email: string;
+  familyName: string;
+  givenName: string;
+  role?: string;
+  privileged?: boolean;
+}
+
+export const initialUser: TUser = {
+  _id: '',
+  sessionToken: '',
+  role: '',
+  privileged: false,
+
+  email: '',
+  familyName: '',
+  givenName: ''
+};
+
+export const incompleteUser: TUser = {
+  _id: '',
+  sessionToken: '',
+  email: '',
+  familyName: '',
+  givenName: ''
+};
+
+export interface TUserResponse {
+  sessionToken: string;
+  _id: string;
+  email: string;
+  familyName: string;
+  givenName: string;
+  role?: string;
+  privileged?: boolean;
+}
 
 export const purge = async () => {
   return deleteBatch('user', initialUser);
@@ -66,7 +78,7 @@ export interface TSignInPayload {
 }
 
 interface TSignInRequestResponse {
-  token: string;
+  sessionToken: string;
   user: TUserResponse;
 }
 
@@ -109,8 +121,8 @@ export const signIn = async (payload: TSignInPayload): Promise<TSignInResponse> 
     success: true,
     data: {
       user: {
-        _id: response.data.user._id,
-        email: response.data.user.email
+        ...response.data.user,
+        sessionToken: response.data.sessionToken
       }
     }
   };
