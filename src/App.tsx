@@ -39,6 +39,7 @@ const App = () => {
 
   const dispatch = useDispatch();
   const dispatchShowLogin = React.useCallback(() => dispatch(_auth.showModal()), [dispatch]);
+  const dispatchHideLogin = React.useCallback(() => dispatch(_auth.hideModal()), [dispatch]);
   const dispatchLoadUser = React.useCallback(() => dispatch(_auth.loadUser()), [dispatch]);
   const dispatchLoadPrefs = React.useCallback(() => dispatch(_prefs.loadPrefs()), [dispatch]);
 
@@ -106,8 +107,8 @@ const App = () => {
               }}
             />
 
-            <FadeModal transparent={false} visible={loginVisible} onRequestClose={() => {}}>
-              <LoginPage onRequestClose={() => {}}></LoginPage>
+            <FadeModal transparent={false} visible={loginVisible} onRequestClose={dispatchHideLogin}>
+              <LoginPage onRequestClose={dispatchHideLogin}></LoginPage>
             </FadeModal>
           </Block>
         </SafeAreaProvider>

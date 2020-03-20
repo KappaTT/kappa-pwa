@@ -10,9 +10,16 @@ import { Block, Text, GoogleSignInButton } from '@components';
 const LoginPage: React.FC<{
   onRequestClose(): void;
 }> = ({ onRequestClose }) => {
-  const dispatch = useDispatch();
+  const authorized = useSelector((state: TRedux) => state.auth.authorized);
 
+  const dispatch = useDispatch();
   const dispatchSignInWithGoogle = React.useCallback(() => dispatch(_auth.signInWithGoogle()), [dispatch]);
+
+  React.useEffect(() => {
+    if (authorized) {
+      onRequestClose();
+    }
+  }, [authorized]);
 
   const renderBackground = () => {
     return <Block style={styles.bg} />;

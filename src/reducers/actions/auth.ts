@@ -67,11 +67,11 @@ export const setUser = (user: TUser) => {
 export const loadUser = () => {
   return dispatch => {
     getBatch('user', initialUser).then((user: TUser | undefined) => {
-      dispatch(loadedUser());
-
       if (user) {
         dispatch(setUser(user));
       }
+
+      dispatch(loadedUser());
     });
   };
 };
