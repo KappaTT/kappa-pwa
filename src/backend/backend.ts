@@ -14,16 +14,12 @@ export type TMethod = typeof M_GET | typeof M_POST | typeof M_PUT | typeof M_DEL
 
 export const BASE_URL = 'https://jerde7y95m.execute-api.us-east-1.amazonaws.com/dev/';
 export const BASE_URL_DEV = 'http://localhost:3000/dev/';
-// export const BASE_URL_IP =
-//   typeof manifest.packagerOpts === 'object' && manifest.packagerOpts.dev
-//     ? `http://${manifest.debuggerHost.split(':').shift()}:3000/dev/`
-//     : BASE_URL;
 
 export const BASE_URL_IP =
   typeof manifest.packagerOpts === 'object' && manifest.packagerOpts.dev
     ? manifest.debuggerHost.indexOf('127.0.0.1') >= 0
       ? `http://${manifest.debuggerHost.split(':').shift()}:3000/dev/`
-      : `http://${manifest.debuggerHost.split(':').shift()}:3000/dev/`
+      : `http://${manifest.debuggerHost.split(':').shift()}:3000/dev/` // replace with ngrok if necessary
     : BASE_URL;
 
 log('Built base url', BASE_URL_IP);
