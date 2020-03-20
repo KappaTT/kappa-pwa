@@ -90,6 +90,10 @@ const App = () => {
 
   React.useEffect(() => {
     if (!authorized || !user) {
+      if (onboardingVisible) {
+        dispatchHideOnboarding();
+      }
+
       return;
     }
 

@@ -12,8 +12,6 @@ const { width, height } = Dimensions.get('screen');
 const OnboardingPage: React.FC<{
   onRequestClose(): void;
 }> = ({ onRequestClose }) => {
-  const authorized = useSelector((state: TRedux) => state.auth.authorized);
-
   const dispatch = useDispatch();
 
   const renderBackground = () => {
