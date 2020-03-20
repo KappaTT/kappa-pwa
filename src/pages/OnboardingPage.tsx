@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions, KeyboardAvoidingView } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { TRedux } from '@reducers';
@@ -7,7 +7,9 @@ import { _auth } from '@reducers/actions';
 import { theme } from '@constants';
 import { Block, Text } from '@components';
 
-const LoginPage: React.FC<{
+const { width, height } = Dimensions.get('screen');
+
+const OnboardingPage: React.FC<{
   onRequestClose(): void;
 }> = ({ onRequestClose }) => {
   const authorized = useSelector((state: TRedux) => state.auth.authorized);
@@ -20,9 +22,11 @@ const LoginPage: React.FC<{
 
   const renderContent = () => {
     return (
-      <Block style={styles.fg}>
-        <Text>Let's finish setting up</Text>
-      </Block>
+      <KeyboardAvoidingView behavior="position" enabled>
+        <Block style={styles.fg}>
+          <Text>Let's finish setting up</Text>
+        </Block>
+      </KeyboardAvoidingView>
     );
   };
 
@@ -36,14 +40,21 @@ const LoginPage: React.FC<{
 
 const styles = StyleSheet.create({
   bg: {
-    position: 'absolute',
-    height: '60%',
-    bottom: 0,
-    backgroundColor: theme.COLORS.WHITE
+    width: width,
+    height: height,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)'
   },
   fg: {
-    flex: 1
+    position: 'absolute',
+    height: height * 0.67,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: theme.COLORS.WHITE,
+    borderTopLeftRadius: 28,
+    borderTopRightRadius: 28,
+    padding: 20
   }
 });
 
-export default LoginPage;
+export default OnboardingPage;

@@ -10,11 +10,12 @@ import { GalioProvider } from '@galio';
 
 import { TRedux } from '@reducers';
 import { _auth, _prefs } from '@reducers/actions';
+import { incompleteUser } from '@backend/auth';
 import { Block, FadeModal } from '@components';
 import { Images, theme } from '@constants';
 import AppNavigator from '@navigation/TabAppNavigator';
 import { setTopLevelNavigator, navigate } from '@navigation/NavigationService';
-import { LoginPage } from '@pages';
+import { LoginPage, OnboardingPage } from '@pages';
 
 const assetImages = [Images.Kappa];
 
@@ -34,12 +35,16 @@ const App = () => {
 
   const loadedUser = useSelector((state: TRedux) => state.auth.loadedUser);
   const authorized = useSelector((state: TRedux) => state.auth.authorized);
+  const user = useSelector((state: TRedux) => state.auth.user);
   const loginVisible = useSelector((state: TRedux) => state.auth.visible);
   const loadedPrefs = useSelector((state: TRedux) => state.prefs.loaded);
+  const onboardingVisible = useSelector((state: TRedux) => state.auth.onboardingVisible);
 
   const dispatch = useDispatch();
   const dispatchShowLogin = React.useCallback(() => dispatch(_auth.showModal()), [dispatch]);
   const dispatchHideLogin = React.useCallback(() => dispatch(_auth.hideModal()), [dispatch]);
+  const dispatchShowOnboarding = React.useCallback(() => dispatch(_auth.showOnboarding()), [dispatch]);
+  const dispatchHideOnboarding = React.useCallback(() => dispatch(_auth.hideOnboarding()), [dispatch]);
   const dispatchLoadUser = React.useCallback(() => dispatch(_auth.loadUser()), [dispatch]);
   const dispatchLoadPrefs = React.useCallback(() => dispatch(_prefs.loadPrefs()), [dispatch]);
 
@@ -84,6 +89,27 @@ const App = () => {
   }, [loadedUser, authorized]);
 
   React.useEffect(() => {
+    if (!authorized || !user) {
+      return;
+    }
+
+    let incomplete = false;
+
+    for (const [key, value] of Object.entries(user)) {
+      if (user[key] === incompleteUser[key]) {
+        incomplete = true;
+        break;
+      }
+    }
+
+    if (incomplete && !onboardingVisible) {
+      dispatchShowOnboarding();
+    } else if (!incomplete && onboardingVisible) {
+      dispatchHideOnboarding();
+    }
+  }, [authorized, user, onboardingVisible]);
+
+  React.useEffect(() => {
     if (!loadedPrefs) {
       dispatchLoadPrefs();
     }
@@ -109,6 +135,10 @@ const App = () => {
 
             <FadeModal transparent={false} visible={loginVisible} onRequestClose={dispatchHideLogin}>
               <LoginPage onRequestClose={dispatchHideLogin}></LoginPage>
+            </FadeModal>
+
+            <FadeModal transparent={true} visible={onboardingVisible} onRequestClose={() => {}}>
+              <OnboardingPage onRequestClose={() => {}} />
             </FadeModal>
           </Block>
         </SafeAreaProvider>
