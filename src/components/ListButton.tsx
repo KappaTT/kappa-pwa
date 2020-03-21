@@ -12,7 +12,7 @@ const ListButton: React.FC<{
   valueColor?: string;
   disabled?: boolean;
   onPress?(): void;
-}> = ({ keyText, valueText = '', valueColor = theme.COLORS.ROYALTY, disabled = false, onPress = () => {} }) => {
+}> = ({ keyText, valueText = '', valueColor = theme.COLORS.PRIMARY, disabled = false, onPress = () => {} }) => {
   const computedOpacity = disabled ? 0.5 : 1;
 
   return (
