@@ -15,13 +15,26 @@ import {
   FadeModal,
   BackButton,
   FormattedInput,
-  EndCapButton
+  EndCapButton,
+  RadioList
 } from '@components';
 
 const { width, height } = Dimensions.get('screen');
 
 const phoneFormatter = (text: string) => {
   return text.trim().replace(/\D/g, '');
+};
+
+const prettyPhone = (phone: string) => {
+  if (phone.length === 0) {
+    return '';
+  }
+
+  if (phone.length !== 10) {
+    return 'Invalid';
+  }
+
+  return `(${phone.substring(0, 3)}) ${phone.substring(3, 6)}-${phone.substring(6, 10)}`;
 };
 
 const OnboardingPage: React.FC<{
@@ -34,7 +47,23 @@ const OnboardingPage: React.FC<{
   const insets = useSafeArea();
 
   const [editing, setEditing] = React.useState<string>('');
-  const [phone, setPhone] = React.useState<string>('');
+  const [phone, setPhone] = React.useState<string>(user.phone);
+  const [gradYear, setGradYear] = React.useState<string>(user.gradYear);
+
+  const getGradYearOptions = () => {
+    let options = [];
+
+    const year = new Date().getFullYear();
+
+    options.push(`Spring ${year}`);
+
+    for (let i = 0; i < 3; i++) {
+      options.push(`Fall ${year + i}`);
+      options.push(`Spring ${year + i + 1}`);
+    }
+
+    return options;
+  };
 
   const renderMainContent = () => {
     return (
@@ -42,13 +71,18 @@ const OnboardingPage: React.FC<{
         <Text style={styles.heading}>CONTACT</Text>
         <ListButton keyText="Full Name" valueText={`${user.givenName} ${user.familyName}`} disabled={true} />
         <ListButton keyText="Illinois Email" valueText={user.email} disabled={true} />
-        <ListButton keyText="Phone" valueText={user.phone} onPress={() => setEditing('Phone')} />
+        <ListButton keyText="Phone" valueText={prettyPhone(phone)} onPress={() => setEditing('Phone')} />
 
         <Text style={styles.heading}>PROFILE</Text>
         <ListButton keyText="Member Status" valueText={user.type === 'B' ? 'Brother' : 'Unknown'} disabled={true} />
         {user.role !== '' && <ListButton keyText="Position" valueText={user.role} disabled={true} />}
         <ListButton keyText="Pledge Class" valueText={user.semester} disabled={true} />
-        <ListButton keyText="Graduation Year" valueText={user.gradYear} onPress={() => setEditing('Graduation Year')} />
+        <ListButton keyText="Graduation Year" valueText={gradYear} onPress={() => setEditing('Graduation Year')} />
+
+        <Text style={styles.description}>
+          Please fill out any missing information. Information provided by the university or our official records cannot
+          be edited at this time.
+        </Text>
       </Block>
     );
   };
@@ -70,7 +104,7 @@ const OnboardingPage: React.FC<{
         />
 
         <Text style={styles.description}>
-          Your phone number will be shared with brothers and used if anyone needs to contact you
+          Your phone number will be shared with brothers and used if anyone needs to contact you.
         </Text>
       </Block>
     );
@@ -81,9 +115,11 @@ const OnboardingPage: React.FC<{
       <Block>
         <Text style={styles.heading}>GRADUATION YEAR</Text>
 
+        <RadioList options={getGradYearOptions()} selected={gradYear} onChange={chosen => setGradYear(chosen)} />
+
         <Text style={styles.description}>
           Choose the term that you will graduate in, not by credit hours, this is used to determine your points
-          requirements and alumni status
+          requirements and alumni status.
         </Text>
       </Block>
     );
