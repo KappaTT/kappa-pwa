@@ -54,12 +54,7 @@ const FAB: React.FC<{
 
 const styles = StyleSheet.create({
   button: {
-    flex: 1,
-    shadowOffset: { width: 0, height: 6 },
-    shadowRadius: 16,
-    shadowColor: theme.COLORS.BLACK,
-    shadowOpacity: 0.4,
-    elevation: 2
+    flex: 1
   },
   container: {
     flex: 1,
