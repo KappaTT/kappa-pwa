@@ -16,6 +16,7 @@ const RoundButton: React.FC<{
     <Button
       style={styles.button}
       round
+      shadowless
       onPress={() => {
         !loading && onPress();
       }}
@@ -36,12 +37,7 @@ const styles = StyleSheet.create({
   button: {
     marginBottom: 0,
     width: '100%',
-    backgroundColor: theme.COLORS.ROYALTY,
-    shadowOffset: { width: 0, height: 4 },
-    shadowRadius: 12,
-    shadowColor: theme.COLORS.ROYALTY,
-    shadowOpacity: 0.4,
-    elevation: 2
+    backgroundColor: theme.COLORS.PRIMARY
   },
   buttonContent: {
     height: '100%',
