@@ -1,5 +1,6 @@
 import AttentionList from './AttentionList';
 import AuthorizedComponent from './AuthorizedComponent';
+import BackButton from './BackButton';
 import Badge from './Badge';
 import Block from './Block';
 import Button from './Button';
@@ -43,6 +44,7 @@ import Toast from './Toast';
 export {
   AttentionList,
   AuthorizedComponent,
+  BackButton,
   Badge,
   Block,
   Button,
