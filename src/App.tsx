@@ -142,7 +142,7 @@ const App = () => {
               <LoginPage onRequestClose={dispatchHideLogin}></LoginPage>
             </FadeModal>
 
-            <FadeModal transparent={true} visible={onboardingVisible} onRequestClose={() => {}}>
+            <FadeModal transparent={false} visible={onboardingVisible} onRequestClose={() => {}}>
               <OnboardingPage onRequestClose={() => {}} />
             </FadeModal>
           </Block>

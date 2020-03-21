@@ -6,9 +6,23 @@ import { useSafeArea } from 'react-native-safe-area-context';
 import { TRedux } from '@reducers';
 import { _auth } from '@reducers/actions';
 import { theme } from '@constants';
-import { Block, Text, ListButton, RoundButton, FAB } from '@components';
+import {
+  Block,
+  Text,
+  ListButton,
+  FAB,
+  SlideModal,
+  FadeModal,
+  BackButton,
+  FormattedInput,
+  EndCapButton
+} from '@components';
 
 const { width, height } = Dimensions.get('screen');
+
+const phoneFormatter = (text: string) => {
+  return text.trim().replace(/\D/g, '');
+};
 
 const OnboardingPage: React.FC<{
   onRequestClose(): void;
@@ -19,8 +33,100 @@ const OnboardingPage: React.FC<{
 
   const insets = useSafeArea();
 
-  const renderBackground = () => {
-    return <Block style={styles.bg} />;
+  const [editing, setEditing] = React.useState<string>('');
+  const [phone, setPhone] = React.useState<string>('');
+
+  const renderMainContent = () => {
+    return (
+      <Block style={styles.inputArea}>
+        <Text style={styles.heading}>CONTACT</Text>
+        <ListButton keyText="Full Name" valueText={`${user.givenName} ${user.familyName}`} disabled={true} />
+        <ListButton keyText="Illinois Email" valueText={user.email} disabled={true} />
+        <ListButton keyText="Phone" valueText={user.phone} onPress={() => setEditing('Phone')} />
+
+        <Text style={styles.heading}>PROFILE</Text>
+        <ListButton keyText="Member Status" valueText={user.type === 'B' ? 'Brother' : 'Unknown'} disabled={true} />
+        {user.role !== '' && <ListButton keyText="Position" valueText={user.role} disabled={true} />}
+        <ListButton keyText="Pledge Class" valueText={user.semester} disabled={true} />
+        <ListButton keyText="Graduation Year" valueText={user.gradYear} onPress={() => setEditing('Graduation Year')} />
+      </Block>
+    );
+  };
+
+  const renderPhoneContent = () => {
+    return (
+      <Block>
+        <Text style={styles.heading}>PHONE NUMBER</Text>
+
+        <FormattedInput
+          placeholderText="phone"
+          keyboardType="phone-pad"
+          textContentType="telephoneNumber"
+          maxLength={10}
+          defaultValue={phone}
+          formatter={phoneFormatter}
+          onChangeText={text => setPhone(text)}
+          onSubmit={text => setEditing('')}
+        />
+
+        <Text style={styles.description}>
+          Your phone number will be shared with brothers and used if anyone needs to contact you
+        </Text>
+      </Block>
+    );
+  };
+
+  const renderGraduationYearContent = () => {
+    return (
+      <Block>
+        <Text style={styles.heading}>GRADUATION YEAR</Text>
+
+        <Text style={styles.description}>
+          Choose the term that you will graduate in, not by credit hours, this is used to determine your points
+          requirements and alumni status
+        </Text>
+      </Block>
+    );
+  };
+
+  const renderSwitchContent = () => {
+    switch (editing) {
+      case 'Phone':
+        return renderPhoneContent();
+      case 'Graduation Year':
+        return renderGraduationYearContent();
+      default:
+        return <React.Fragment />;
+    }
+  };
+
+  const renderEditingContent = () => {
+    return (
+      <KeyboardAvoidingView behavior="padding" enabled>
+        <Block
+          style={[
+            styles.fgEditing,
+            {
+              paddingTop: insets.top
+            }
+          ]}
+        >
+          <Block style={styles.editingHeader}>
+            <BackButton onPress={() => setEditing('')} />
+
+            <Text style={styles.editingTitle}>{editing}</Text>
+
+            <EndCapButton label="Done" onPress={() => setEditing('')} />
+          </Block>
+
+          <ScrollView contentContainerStyle={styles.scrollContent}>
+            <TouchableWithoutFeedback>
+              <Block style={styles.content}>{renderSwitchContent()}</Block>
+            </TouchableWithoutFeedback>
+          </ScrollView>
+        </Block>
+      </KeyboardAvoidingView>
+    );
   };
 
   const renderContent = () => {
@@ -30,32 +136,18 @@ const OnboardingPage: React.FC<{
           style={[
             styles.fg,
             {
-              height: height - insets.top
+              paddingTop: insets.top
             }
           ]}
         >
+          <Block style={styles.header}>
+            <Text style={styles.subtitle}>Hi {user.givenName}</Text>
+            <Text style={styles.title}>Let's finish setting up</Text>
+          </Block>
+
           <ScrollView contentContainerStyle={styles.scrollContent}>
             <TouchableWithoutFeedback>
-              <Block style={styles.content}>
-                <Block style={styles.inputArea}>
-                  <Text style={styles.subtitle}>Hi {user.givenName}</Text>
-                  <Text style={styles.title}>Let's finish setting up</Text>
-                  <Text style={styles.heading}>CONTACT</Text>
-                  <ListButton keyText="Full Name" valueText={`${user.givenName} ${user.familyName}`} disabled={true} />
-                  <ListButton keyText="Illinois Email" valueText={user.email} disabled={true} />
-                  <ListButton keyText="Phone" valueText={user.phone} />
-
-                  <Text style={styles.heading}>PROFILE</Text>
-                  <ListButton
-                    keyText="Member Status"
-                    valueText={user.type === 'B' ? 'Brother' : 'Unknown'}
-                    disabled={true}
-                  />
-                  {user.role !== '' && <ListButton keyText="Position" valueText={user.role} disabled={true} />}
-                  <ListButton keyText="Pledge Class" valueText={user.semester} disabled={true} />
-                  <ListButton keyText="Graduation Year" valueText={user.gradYear} />
-                </Block>
-              </Block>
+              <Block style={styles.content}>{renderMainContent()}</Block>
             </TouchableWithoutFeedback>
           </ScrollView>
 
@@ -75,34 +167,29 @@ const OnboardingPage: React.FC<{
   };
 
   return (
-    <Block flex>
-      {renderBackground()}
-      {renderContent()}
+    <Block>
+      <Block flex>{renderContent()}</Block>
+
+      <SlideModal transparent={false} visible={editing !== ''}>
+        {renderEditingContent()}
+      </SlideModal>
     </Block>
   );
 };
 
 const styles = StyleSheet.create({
-  bg: {
-    width: width,
-    height: height,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)'
-  },
   fg: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    maxHeight: height - 40,
-    backgroundColor: theme.COLORS.WHITE,
-    borderTopLeftRadius: 28,
-    borderTopRightRadius: 28
+    width,
+    height,
+    backgroundColor: theme.COLORS.WHITE
   },
-  scrollContent: {
-    flexGrow: 1,
-    borderTopLeftRadius: 28,
-    borderTopRightRadius: 28,
-    padding: 20
+  fgEditing: {
+    width,
+    height,
+    backgroundColor: theme.COLORS.WHITE
+  },
+  header: {
+    paddingHorizontal: 20
   },
   title: {
     fontFamily: 'OpenSans',
@@ -114,12 +201,21 @@ const styles = StyleSheet.create({
     fontSize: 12,
     textTransform: 'uppercase'
   },
+  scrollContent: {
+    flexGrow: 1,
+    paddingHorizontal: 20
+  },
   heading: {
     marginTop: 32,
     marginBottom: 8,
     fontFamily: 'OpenSans',
     fontSize: 12,
     color: theme.COLORS.DARK_GRAY
+  },
+  description: {
+    marginTop: 12,
+    fontFamily: 'OpenSans',
+    fontSize: 12
   },
   content: {
     height: '100%',
@@ -134,6 +230,17 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'flex-end',
     alignItems: 'center'
+  },
+  editingHeader: {
+    height: 42,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  editingTitle: {
+    fontFamily: 'OpenSans',
+    fontSize: 15
   }
 });
 
