@@ -37,6 +37,21 @@ const prettyPhone = (phone: string) => {
   return `(${phone.substring(0, 3)}) ${phone.substring(3, 6)}-${phone.substring(6, 10)}`;
 };
 
+const getGradYearOptions = () => {
+  let options = [];
+
+  const year = new Date().getFullYear();
+
+  options.push(`Spring ${year}`);
+
+  for (let i = 0; i < 3; i++) {
+    options.push(`Fall ${year + i}`);
+    options.push(`Spring ${year + i + 1}`);
+  }
+
+  return options;
+};
+
 const OnboardingPage: React.FC<{
   onRequestClose(): void;
 }> = ({ onRequestClose }) => {
@@ -50,20 +65,15 @@ const OnboardingPage: React.FC<{
   const [phone, setPhone] = React.useState<string>(user.phone);
   const [gradYear, setGradYear] = React.useState<string>(user.gradYear);
 
-  const getGradYearOptions = () => {
-    let options = [];
+  const prettyPhoneValue = React.useMemo(() => {
+    return prettyPhone(phone);
+  }, [phone]);
 
-    const year = new Date().getFullYear();
+  const submitDisabled = React.useMemo(() => {
+    return prettyPhoneValue === '' || prettyPhoneValue === 'Invalid' || gradYear === '';
+  }, [prettyPhoneValue, gradYear]);
 
-    options.push(`Spring ${year}`);
-
-    for (let i = 0; i < 3; i++) {
-      options.push(`Fall ${year + i}`);
-      options.push(`Spring ${year + i + 1}`);
-    }
-
-    return options;
-  };
+  const onPressSubmit = React.useCallback(() => {}, [user, phone, gradYear]);
 
   const renderMainContent = () => {
     return (
@@ -71,7 +81,7 @@ const OnboardingPage: React.FC<{
         <Text style={styles.heading}>CONTACT</Text>
         <ListButton keyText="Full Name" valueText={`${user.givenName} ${user.familyName}`} disabled={true} />
         <ListButton keyText="Illinois Email" valueText={user.email} disabled={true} />
-        <ListButton keyText="Phone" valueText={prettyPhone(phone)} onPress={() => setEditing('Phone')} />
+        <ListButton keyText="Phone" valueText={prettyPhoneValue} onPress={() => setEditing('Phone')} />
 
         <Text style={styles.heading}>PROFILE</Text>
         <ListButton keyText="Member Status" valueText={user.type === 'B' ? 'Brother' : 'Unknown'} disabled={true} />
@@ -195,7 +205,12 @@ const OnboardingPage: React.FC<{
               }
             ]}
           >
-            <FAB iconFamily="Feather" iconName="arrow-right" onPress={() => {}} />
+            <FAB
+              iconFamily="Feather"
+              iconName="arrow-right"
+              bgColor={submitDisabled ? theme.COLORS.GRAY : theme.COLORS.PRIMARY}
+              onPress={() => !submitDisabled && onPressSubmit()}
+            />
           </Block>
         </Block>
       </KeyboardAvoidingView>
