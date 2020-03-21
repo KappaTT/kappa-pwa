@@ -26,7 +26,7 @@ const phoneFormatter = (text: string) => {
 };
 
 const prettyPhone = (phone: string) => {
-  if (phone.length === 0) {
+  if (!phone || phone.length === 0) {
     return '';
   }
 
@@ -62,8 +62,8 @@ const OnboardingPage: React.FC<{
   const insets = useSafeArea();
 
   const [editing, setEditing] = React.useState<string>('');
-  const [phone, setPhone] = React.useState<string>(user.phone);
-  const [gradYear, setGradYear] = React.useState<string>(user.gradYear);
+  const [phone, setPhone] = React.useState<string>(user.phone || '');
+  const [gradYear, setGradYear] = React.useState<string>(user.gradYear || '');
 
   const prettyPhoneValue = React.useMemo(() => {
     return prettyPhone(phone);
@@ -103,6 +103,7 @@ const OnboardingPage: React.FC<{
         <Text style={styles.heading}>PHONE NUMBER</Text>
 
         <FormattedInput
+          autoFocus={true}
           placeholderText="phone"
           keyboardType="phone-pad"
           textContentType="telephoneNumber"
