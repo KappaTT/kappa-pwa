@@ -22,7 +22,7 @@ const FAB: React.FC<{
   iconName,
   iconProps,
   iconColor = theme.COLORS.WHITE,
-  bgColor = theme.COLORS.ROYALTY,
+  bgColor = theme.COLORS.PRIMARY,
   size = 56,
   badge = false,
   style,
