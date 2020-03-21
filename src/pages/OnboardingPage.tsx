@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase'
   },
   heading: {
-    marginTop: 24,
+    marginTop: 32,
     marginBottom: 8,
     fontFamily: 'OpenSans',
     fontSize: 12,
