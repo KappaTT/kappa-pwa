@@ -1,12 +1,12 @@
 import React from 'react';
-import { StyleSheet, Dimensions, KeyboardAvoidingView } from 'react-native';
+import { StyleSheet, Dimensions, KeyboardAvoidingView, ScrollView, TouchableWithoutFeedback } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { useSafeArea } from 'react-native-safe-area-context';
 
 import { TRedux } from '@reducers';
 import { _auth } from '@reducers/actions';
 import { theme } from '@constants';
-import { Block, Text, ListButton, RoundButton } from '@components';
+import { Block, Text, ListButton, RoundButton, FAB } from '@components';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -34,20 +34,41 @@ const OnboardingPage: React.FC<{
             }
           ]}
         >
-          <Text style={styles.subtitle}>Hi {user.givenName}</Text>
-          <Text style={styles.title}>Let's finish setting up</Text>
-          <Text style={styles.heading}>CONTACT</Text>
-          <ListButton keyText="Full Name" valueText={`${user.givenName} ${user.familyName}`} disabled={true} />
-          <ListButton keyText="Illinois Email" valueText={user.email} disabled={true} />
-          <ListButton keyText="Phone" valueText={user.phone} />
+          <ScrollView contentContainerStyle={styles.scrollContent}>
+            <TouchableWithoutFeedback>
+              <Block style={styles.content}>
+                <Block style={styles.inputArea}>
+                  <Text style={styles.subtitle}>Hi {user.givenName}</Text>
+                  <Text style={styles.title}>Let's finish setting up</Text>
+                  <Text style={styles.heading}>CONTACT</Text>
+                  <ListButton keyText="Full Name" valueText={`${user.givenName} ${user.familyName}`} disabled={true} />
+                  <ListButton keyText="Illinois Email" valueText={user.email} disabled={true} />
+                  <ListButton keyText="Phone" valueText={user.phone} />
 
-          <Text style={styles.heading}>PROFILE</Text>
-          <ListButton keyText="Member Status" valueText={user.type === 'B' ? 'Brother' : 'Unknown'} disabled={true} />
-          {user.role !== '' && <ListButton keyText="Position" valueText={user.role} disabled={true} />}
-          <ListButton keyText="Pledge Class" valueText={user.semester} disabled={true} />
-          <ListButton keyText="Graduation Year" valueText={user.gradYear} />
+                  <Text style={styles.heading}>PROFILE</Text>
+                  <ListButton
+                    keyText="Member Status"
+                    valueText={user.type === 'B' ? 'Brother' : 'Unknown'}
+                    disabled={true}
+                  />
+                  {user.role !== '' && <ListButton keyText="Position" valueText={user.role} disabled={true} />}
+                  <ListButton keyText="Pledge Class" valueText={user.semester} disabled={true} />
+                  <ListButton keyText="Graduation Year" valueText={user.gradYear} />
+                </Block>
+              </Block>
+            </TouchableWithoutFeedback>
+          </ScrollView>
 
-          <RoundButton label="Submit" />
+          <Block
+            style={[
+              styles.buttonWrapper,
+              {
+                bottom: insets.bottom
+              }
+            ]}
+          >
+            <FAB iconFamily="Feather" iconName="arrow-right" onPress={() => {}} />
+          </Block>
         </Block>
       </KeyboardAvoidingView>
     );
@@ -72,7 +93,13 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
+    maxHeight: height - 40,
     backgroundColor: theme.COLORS.WHITE,
+    borderTopLeftRadius: 28,
+    borderTopRightRadius: 28
+  },
+  scrollContent: {
+    flexGrow: 1,
     borderTopLeftRadius: 28,
     borderTopRightRadius: 28,
     padding: 20
@@ -93,6 +120,20 @@ const styles = StyleSheet.create({
     fontFamily: 'OpenSans',
     fontSize: 12,
     color: theme.COLORS.DARK_GRAY
+  },
+  content: {
+    height: '100%',
+    display: 'flex',
+    justifyContent: 'space-between'
+  },
+  inputArea: {},
+  buttonWrapper: {
+    position: 'absolute',
+    left: 20,
+    right: 20,
+    display: 'flex',
+    justifyContent: 'flex-end',
+    alignItems: 'center'
   }
 });
 
