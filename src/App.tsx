@@ -55,6 +55,7 @@ const App = () => {
         Montserrat: require('../assets/font/Montserrat-Regular.ttf'),
         OpenSans: require('../assets/font/OpenSans-Regular.ttf'),
         'OpenSans-Bold': require('../assets/font/OpenSans-Bold.ttf'),
+        'OpenSans-SemiBold': require('../assets/font/OpenSans-SemiBold.ttf'),
         'OpenSans-Light': require('../assets/font/OpenSans-Light.ttf'),
         PlayfairDisplay: require('../assets/font/PlayfairDisplay-Regular.ttf'),
         'PlayfairDisplay-Medium': require('../assets/font/PlayfairDisplay-Medium.ttf'),
