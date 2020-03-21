@@ -3,27 +3,30 @@ import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import { theme } from '@constants';
 import Block from '@components/Block';
-import Icon from '@components/Icon';
+import Text from '@components/Text';
 
-const BackButton: React.FC<{
+const EndCapButton: React.FC<{
+  label: string;
   color?: string;
   disabled?: boolean;
   onPress?(): void;
-}> = ({ color = theme.COLORS.PRIMARY, disabled = false, onPress = () => {} }) => {
+}> = ({ label, color = theme.COLORS.PRIMARY, disabled = false, onPress = () => {} }) => {
   const computedOpacity = disabled ? 0.5 : 1;
 
   return (
     <Block style={styles.wrapper}>
       <TouchableOpacity style={styles.button} disabled={disabled} onPress={onPress}>
-        <Icon
-          style={{
-            opacity: computedOpacity
-          }}
-          family="MaterialIcons"
-          name="keyboard-arrow-left"
-          size={36}
-          color={color}
-        />
+        <Text
+          style={[
+            styles.text,
+            {
+              opacity: computedOpacity,
+              color
+            }
+          ]}
+        >
+          {label}
+        </Text>
       </TouchableOpacity>
     </Block>
   );
@@ -32,8 +35,7 @@ const BackButton: React.FC<{
 const styles = StyleSheet.create({
   wrapper: {
     position: 'absolute',
-    left: 0,
-    width: 42,
+    right: 16,
     height: 42
   },
   button: {
@@ -41,7 +43,11 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center'
+  },
+  text: {
+    fontFamily: 'OpenSans',
+    fontSize: 15
   }
 });
 
-export default BackButton;
+export default EndCapButton;

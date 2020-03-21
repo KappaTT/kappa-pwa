@@ -8,6 +8,7 @@ import Checkbox from './Checkbox';
 import CloseButton from './CloseButton';
 import CodeInput from './CodeInput';
 import DrawerItem from './DrawerItem';
+import EndCapButton from './EndCapButton';
 import ExpandingComponent from './ExpandingComponent';
 import FAB from './FAB';
 import FadeModal from './FadeModal';
@@ -52,6 +53,7 @@ export {
   CloseButton,
   CodeInput,
   DrawerItem,
+  EndCapButton,
   ExpandingComponent,
   FAB,
   FadeModal,
