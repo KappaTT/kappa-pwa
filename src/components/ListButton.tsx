@@ -60,7 +60,7 @@ const ListButton: React.FC<{
 const styles = StyleSheet.create({
   wrapper: {
     width: '100%',
-    height: 42,
+    height: 44,
     borderBottomColor: theme.COLORS.LIGHT_GRAY,
     borderBottomWidth: 1
   },
