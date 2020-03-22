@@ -25,9 +25,10 @@ export const BASE_URL_IP =
 log('Built base url', BASE_URL_IP);
 
 export const ENDPOINTS: {
-  [key: string]: string;
+  [key: string]: (config?: any) => string;
 } = {
-  SIGN_IN: 'users/login'
+  SIGN_IN: () => 'users/login',
+  UPDATE_USER: (config: any) => `users/${config.email}`
 };
 
 export const METHODS: {
