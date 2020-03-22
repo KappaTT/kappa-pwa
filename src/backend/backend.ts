@@ -9,8 +9,9 @@ import { log } from '@services/logService';
 export const M_GET = 'GET';
 export const M_POST = 'POST';
 export const M_PUT = 'PUT';
+export const M_PATCH = 'PATCH';
 export const M_DELETE = 'DELETE';
-export type TMethod = typeof M_GET | typeof M_POST | typeof M_PUT | typeof M_DELETE;
+export type TMethod = typeof M_GET | typeof M_POST | typeof M_PUT | typeof M_PATCH | typeof M_DELETE;
 
 export const BASE_URL = 'https://jerde7y95m.execute-api.us-east-1.amazonaws.com/dev/';
 export const BASE_URL_DEV = 'http://localhost:3000/dev/';
@@ -34,7 +35,8 @@ export const ENDPOINTS: {
 export const METHODS: {
   [key: string]: TMethod;
 } = {
-  SIGN_IN: M_POST
+  SIGN_IN: M_POST,
+  UPDATE_USER: M_PATCH
 };
 
 export interface TResponseData {

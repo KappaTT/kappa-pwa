@@ -100,20 +100,13 @@ interface TSignInResponse extends TResponseData {
 }
 
 export const signIn = async (payload: TSignInPayload): Promise<TSignInResponse> => {
-  const body: {
-    user: {
-      email: string;
-    };
-    idToken: string;
-  } = {
-    user: {
-      email: payload.email
-    },
-    idToken: payload.idToken
-  };
-
-  const response = await makeRequest<TSignInRequestResponse>(ENDPOINTS.SIGN_IN, METHODS.SIGN_IN, {
-    body
+  const response = await makeRequest<TSignInRequestResponse>(ENDPOINTS.SIGN_IN(), METHODS.SIGN_IN, {
+    body: {
+      user: {
+        email: payload.email
+      },
+      idToken: payload.idToken
+    }
   });
 
   log('Sign in response', response);
@@ -155,4 +148,38 @@ interface TUpdateUserResponse extends TResponseData {
   };
 }
 
-export const updateUser = (payload: TUpdateUserPayload): Promise<TUpdateUserResponse> => {};
+export const updateUser = async (payload: TUpdateUserPayload): Promise<TUpdateUserResponse> => {
+  const response = await makeAuthorizedRequest<TUpdateUserRequestResponse>(
+    ENDPOINTS.UPDATE_USER({
+      email: payload.email
+    }),
+    METHODS.UPDATE_USER,
+    {
+      body: {
+        changes: payload.changes
+      }
+    },
+    payload.token
+  );
+
+  log('Update user response', response);
+
+  if (!response.success || response.code === 500) {
+    return fail({}, 'problem connecting to server');
+  } else if (response.code !== 200) {
+    if (response.code === 401) {
+      return fail({}, 'your credentials were invalid');
+    } else if (response.code === 404) {
+      return fail({}, 'your target user was invalid');
+    }
+
+    return fail({}, '');
+  }
+
+  return {
+    success: true,
+    data: {
+      changes: response.data.changes
+    }
+  };
+};
