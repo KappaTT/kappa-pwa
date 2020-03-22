@@ -14,7 +14,11 @@ import {
   SHOW_SIGN_IN,
   SIGN_IN_WITH_GOOGLE,
   SIGN_IN_WITH_GOOGLE_SUCCESS,
-  SIGN_IN_WITH_GOOGLE_FAILURE
+  SIGN_IN_WITH_GOOGLE_FAILURE,
+  UPDATE_USER,
+  UPDATE_USER_SUCCESS,
+  UPDATE_USER_FAILURE,
+  MODIFY_USER
 } from '@reducers/auth';
 import { TUser, initialUser, TUserResponse, TGoogleUser } from '@backend/auth';
 import { getBatch, setBatch, deleteBatch } from '@services/secureStorage';
@@ -62,6 +66,13 @@ export const setUser = (user: TUser, authorized: boolean = true) => {
     type: SET_USER,
     user,
     authorized
+  };
+};
+
+export const modifyUser = (changes: Partial<TUser>) => {
+  return {
+    type: MODIFY_USER,
+    changes
   };
 };
 
@@ -162,6 +173,42 @@ export const signInWithGoogle = () => {
             message: 'sign in failed'
           })
         );
+      }
+    });
+  };
+};
+
+const updatingUser = () => {
+  return {
+    type: UPDATE_USER
+  };
+};
+
+const updateUserSuccess = () => {
+  return {
+    type: UPDATE_USER_SUCCESS
+  };
+};
+
+const updateUserFailure = err => {
+  return {
+    type: UPDATE_USER_FAILURE,
+    error: err
+  };
+};
+
+export const updateUser = (email: string, token: string, changes: Partial<TUser>) => {
+  return dispatch => {
+    dispatch(updatingUser());
+
+    Auth.updateUser({ email, token, changes }).then(res => {
+      if (res.success) {
+        dispatch(modifyUser(res.data.changes));
+        dispatch(updateUserSuccess());
+
+        setBatch('user', res.data.changes);
+      } else {
+        dispatch(updateUserFailure(res.error));
       }
     });
   };
