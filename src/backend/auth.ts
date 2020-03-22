@@ -63,17 +63,7 @@ export const initialUser: TUser = {
   gradYear: ''
 };
 
-export const incompleteUser: TUser = {
-  // INITIAL CREATION
-  _id: '',
-  sessionToken: '',
-  email: '',
-  familyName: '',
-  givenName: '', // TODO: REMOVE
-  semester: '',
-  type: '',
-
-  // ONBOARDING
+export const incompleteUser: Partial<TUser> = {
   phone: '',
   gradYear: ''
 };
@@ -148,3 +138,21 @@ export const signIn = async (payload: TSignInPayload): Promise<TSignInResponse> 
     }
   };
 };
+
+export interface TUpdateUserPayload {
+  email: string;
+  token: string;
+  changes: Partial<TUser>;
+}
+
+interface TUpdateUserRequestResponse {
+  changes: Partial<TUser>;
+}
+
+interface TUpdateUserResponse extends TResponseData {
+  data?: {
+    changes: Partial<TUser>;
+  };
+}
+
+export const updateUser = (payload: TUpdateUserPayload): Promise<TUpdateUserResponse> => {};
