@@ -90,7 +90,7 @@ const OnboardingPage: React.FC<{
         <ListButton keyText="Graduation Year" valueText={gradYear} onPress={() => setEditing('Graduation Year')} />
 
         <Text style={styles.description}>
-          Please fill out any missing information. Information provided by the university or our official records cannot
+          Please fill out all missing information. Information provided by the university or our official records cannot
           be edited at this time.
         </Text>
       </Block>
