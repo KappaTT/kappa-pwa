@@ -30,15 +30,15 @@ function cacheImages(images: any) {
 }
 
 const App = () => {
-  const [isLoadingComplete, setIsLoadingComplete] = React.useState<boolean>(false);
-  const [isNavigatorReady, setIsNavigatorReady] = React.useState<boolean>(false);
-
   const loadedUser = useSelector((state: TRedux) => state.auth.loadedUser);
   const authorized = useSelector((state: TRedux) => state.auth.authorized);
   const user = useSelector((state: TRedux) => state.auth.user);
   const loginVisible = useSelector((state: TRedux) => state.auth.visible);
   const loadedPrefs = useSelector((state: TRedux) => state.prefs.loaded);
   const onboardingVisible = useSelector((state: TRedux) => state.auth.onboardingVisible);
+
+  const [isLoadingComplete, setIsLoadingComplete] = React.useState<boolean>(false);
+  const [isNavigatorReady, setIsNavigatorReady] = React.useState<boolean>(false);
 
   const dispatch = useDispatch();
   const dispatchShowLogin = React.useCallback(() => dispatch(_auth.showModal()), [dispatch]);

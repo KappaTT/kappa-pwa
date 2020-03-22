@@ -29,7 +29,7 @@ export const ENDPOINTS: {
   [key: string]: (config?: any) => string;
 } = {
   SIGN_IN: () => 'users/login',
-  UPDATE_USER: (config: any) => `users/${config.email}`
+  UPDATE_USER: (config: any) => `users/${encodeURIComponent(config.email)}`
 };
 
 export const METHODS: {

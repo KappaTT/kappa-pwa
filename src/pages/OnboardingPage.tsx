@@ -57,13 +57,23 @@ const OnboardingPage: React.FC<{
 }> = ({ onRequestClose }) => {
   const user = useSelector((state: TRedux) => state.auth.user);
 
-  const dispatch = useDispatch();
-
-  const insets = useSafeArea();
-
   const [editing, setEditing] = React.useState<string>('');
   const [phone, setPhone] = React.useState<string>(user.phone || '');
   const [gradYear, setGradYear] = React.useState<string>(user.gradYear || '');
+
+  const dispatch = useDispatch();
+  const dispatchUpdateUser = React.useCallback(
+    () =>
+      dispatch(
+        _auth.updateUser(user.email, user.sessionToken, {
+          phone,
+          gradYear
+        })
+      ),
+    [dispatch, phone, gradYear]
+  );
+
+  const insets = useSafeArea();
 
   const prettyPhoneValue = React.useMemo(() => {
     return prettyPhone(phone);
@@ -73,7 +83,9 @@ const OnboardingPage: React.FC<{
     return prettyPhoneValue === '' || prettyPhoneValue === 'Invalid' || gradYear === '';
   }, [prettyPhoneValue, gradYear]);
 
-  const onPressSubmit = React.useCallback(() => {}, [user, phone, gradYear]);
+  const onPressSubmit = React.useCallback(() => {
+    dispatchUpdateUser();
+  }, [user, phone, gradYear]);
 
   const renderMainContent = () => {
     return (
