@@ -8,8 +8,6 @@ import {
   fail,
   TBlame
 } from '@backend/backend';
-import { deviceId, sleep } from '@services/utils';
-import { validate, USERNAME, EMAIL, PASSWORD } from '@backend/validators';
 import { getBatch, deleteBatch } from '@services/secureStorage';
 import { log } from '@services/logService';
 
