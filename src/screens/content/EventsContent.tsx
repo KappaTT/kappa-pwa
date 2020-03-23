@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, ScrollView, RefreshControl } from 'react-native';
-import { Placeholder, PlaceholderLine, ShineOverlay } from 'rn-placeholder';
+import { Placeholder, PlaceholderLine, Fade } from 'rn-placeholder';
 import { useSafeArea } from 'react-native-safe-area-context';
 
 import { theme } from '@constants';
@@ -11,7 +11,7 @@ import { TabBarHeight, HeaderHeight } from '@services/utils';
 const EventSkeleton: React.FC<{}> = ({}) => {
   return (
     <Block style={styles.skeletonWrapper}>
-      <Placeholder Animation={ShineOverlay}>
+      <Placeholder Animation={Fade}>
         <PlaceholderLine width={33} />
         <PlaceholderLine />
         <PlaceholderLine />
