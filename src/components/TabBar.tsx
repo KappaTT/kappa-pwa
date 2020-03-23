@@ -7,6 +7,7 @@ import { theme } from '@constants';
 import TabBarButton from '@components/TabBarButton';
 import { NavigationTypes } from '@types';
 import { TRedux } from '@reducers';
+import { TabBarHeight } from '@services/utils';
 
 const TabBar: React.FC<{
   renderIcon(props: any): React.ReactNode;
@@ -69,7 +70,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flexDirection: 'row',
-    height: 48,
+    height: TabBarHeight,
     paddingHorizontal: 24,
     justifyContent: 'center'
   }

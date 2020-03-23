@@ -7,9 +7,9 @@ import { theme } from '@galio';
 const { width, height } = Dimensions.get('screen');
 
 export const StatusHeight = StatusBar.currentHeight || getStatusBarHeight();
-export const HeaderHeight = theme.SIZES.BASE * 3.5 + (StatusHeight || 0);
+export const HeaderHeight = 42;
 export const iPhoneX = () => Platform.OS === 'ios' && (height === 812 || width === 812);
-export const TabBarHeight = 60;
+export const TabBarHeight = 48;
 export const NavigationHeight = iPhoneX() ? 16 : 0;
 
 export const deviceId = Constants.installationId;
