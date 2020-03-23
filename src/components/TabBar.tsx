@@ -6,6 +6,7 @@ import { useSafeArea } from 'react-native-safe-area-context';
 import { theme } from '@constants';
 import TabBarButton from '@components/TabBarButton';
 import { NavigationTypes } from '@types';
+import { TRedux } from '@reducers';
 
 const TabBar: React.FC<{
   renderIcon(props: any): React.ReactNode;
@@ -17,6 +18,8 @@ const TabBar: React.FC<{
   navigation: NavigationTypes.ParamType;
 }> = ({ renderIcon, getLabelText, activeTintColor, inactiveTintColor, onTabPress, onTabLongPress, navigation }) => {
   const { routes, index: activeRouteIndex } = navigation.state;
+
+  const user = useSelector((state: TRedux) => state.auth.user);
 
   const insets = useSafeArea();
 
@@ -51,6 +54,7 @@ const TabBar: React.FC<{
                 inactiveTintColor={inactiveTintColor}
                 onTabPress={onPress}
                 onTabLongPress={onLongPress}
+                user={user}
               />
             );
           })}
