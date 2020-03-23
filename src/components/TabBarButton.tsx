@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, TouchableWithoutFeedback, Text } from 'react-native';
 
 import Block from '@components/Block';
-import IconBadge from '@components/IconBadge';
+import Icon from '@components/Icon';
 import { theme } from '@constants';
 import { TUser } from '@backend/auth';
 
@@ -35,15 +35,10 @@ const TabBarButton: React.FC<{
     <TouchableWithoutFeedback style={styles.wrapper} onPress={onTabPress} onLongPress={onTabLongPress}>
       <Block style={styles.container}>
         <Block style={styles.content}>
-          {renderIcon({ route, focused: isRouteActive, tintColor: tintColor })}
-          {isProfile && user && user.privileged && (
-            <IconBadge
-              active={true}
-              family="MaterialIcons"
-              name="verified-user"
-              bgColor="#00000000"
-              iconColor={tintColor}
-            />
+          {isProfile && user && user.privileged ? (
+            <Icon name="user-check" family="Feather" color={tintColor} size={24} />
+          ) : (
+            renderIcon({ route, focused: isRouteActive, tintColor: tintColor })
           )}
         </Block>
       </Block>
