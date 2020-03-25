@@ -20,7 +20,7 @@ const IconBadge: React.FC<{
   name,
   family,
   size = 12,
-  bgColor = theme.COLORS.ROYALTY,
+  bgColor = theme.COLORS.PRIMARY,
   iconColor = theme.COLORS.WHITE
 }) => {
   return (

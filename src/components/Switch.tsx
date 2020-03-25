@@ -11,9 +11,9 @@ const Switch: React.FC<{
   onValueChange?(newValue: boolean): void;
 }> = ({
   value = false,
-  thumbColor = theme.COLORS.ROYALTY,
+  thumbColor = theme.COLORS.PRIMARY,
   backgroundColor = theme.COLORS.MAIN_GRAY,
-  trackColor = theme.COLORS.ROYALTY,
+  trackColor = theme.COLORS.PRIMARY,
   onValueChange = (newValue: boolean) => {}
 }) => {
   const _thumbColor =

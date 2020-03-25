@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
     borderColor: theme.COLORS.LIGHT_GRAY
   },
   inputFocus: {
-    borderColor: theme.COLORS.ROYALTY
+    borderColor: theme.COLORS.PRIMARY
   },
   inputError: {
     borderColor: theme.COLORS.ERROR
