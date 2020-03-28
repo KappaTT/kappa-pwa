@@ -50,7 +50,7 @@ export interface TResponseData {
 export interface TResponse {
   success: boolean;
   code?: number;
-  data?: TResponseData;
+  data?: any;
   error?: any;
 }
 
