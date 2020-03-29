@@ -1,8 +1,9 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity, Animated, Easing, Dimensions, Text } from 'react-native';
+import { StyleSheet, TouchableOpacity, Animated, Easing, Dimensions } from 'react-native';
 
 import { theme } from '@constants';
 import Block from '@components/Block';
+import Text from '@components/Text';
 import FadeModal from '@components/FadeModal';
 import Interceptor from '@components/Interceptor';
 import Icon from '@components/Icon';

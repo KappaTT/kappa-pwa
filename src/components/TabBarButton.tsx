@@ -1,7 +1,8 @@
 import React from 'react';
-import { StyleSheet, TouchableWithoutFeedback, Text } from 'react-native';
+import { StyleSheet, TouchableWithoutFeedback } from 'react-native';
 
 import Block from '@components/Block';
+import Text from '@components/Text';
 import Icon from '@components/Icon';
 import { theme } from '@constants';
 import { TUser } from '@backend/auth';

@@ -1,8 +1,9 @@
 import React from 'react';
-import { StyleSheet, ViewStyle, Text } from 'react-native';
+import { StyleSheet, ViewStyle } from 'react-native';
 
 import { theme } from '@constants';
 import Block from '@components/Block';
+import Text from '@components/Text';
 import GradientView from '@components/GradientView';
 
 const HorizontalLabel: React.FC<{

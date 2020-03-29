@@ -1,8 +1,9 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity, Animated, Easing, Dimensions, KeyboardAvoidingView, Text } from 'react-native';
+import { StyleSheet, TouchableOpacity, Animated, Easing, Dimensions, KeyboardAvoidingView } from 'react-native';
 
 import { theme } from '@constants';
 import Block from '@components/Block';
+import Text from '@components/Text';
 import Icon from '@components/Icon';
 import CloseButton from '@components/CloseButton';
 import KeyboardDismissView from '@components/KeyboardDismissView';

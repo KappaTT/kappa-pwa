@@ -1,8 +1,9 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity, Text } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import { theme } from '@constants';
 import Block from '@components/Block';
+import Text from '@components/Text';
 
 const TitleCard: React.FC<{
   title: string;

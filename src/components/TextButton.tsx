@@ -1,5 +1,7 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity, ViewStyle, TextStyle, Text } from 'react-native';
+import { StyleSheet, TouchableOpacity, ViewStyle, TextStyle } from 'react-native';
+
+import Text from '@components/Text';
 
 const TextButton: React.FC<{
   label: string;
