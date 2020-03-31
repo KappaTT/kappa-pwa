@@ -4,6 +4,7 @@ const manifest = Constants.manifest;
 
 import { jsonRequest, jsonAuthorizedRequest } from '@services/Networking';
 import { setItem } from '@services/secureStorage';
+import { jsonMockRequest } from '@services/mockService';
 import { log } from '@services/logService';
 
 export const M_GET = 'GET';
@@ -15,6 +16,8 @@ export type TMethod = typeof M_GET | typeof M_POST | typeof M_PUT | typeof M_PAT
 
 export const BASE_URL = 'https://jerde7y95m.execute-api.us-east-1.amazonaws.com/dev/';
 export const BASE_URL_DEV = 'http://localhost:3000/dev/';
+
+export const BASE_URL_MOCKING = true;
 
 export const BASE_URL_IP =
   typeof manifest.packagerOpts === 'object' && manifest.packagerOpts.dev
@@ -67,6 +70,10 @@ export const makeRequest = async <T>(
     body?: any;
   }
 ) => {
+  if (BASE_URL_MOCKING) {
+    return jsonMockRequest<T>(endpoint, method);
+  }
+
   return jsonRequest<T>(
     BASE_URL_IP,
     undefined,
@@ -89,6 +96,10 @@ export const makeAuthorizedRequest = async <T>(
   },
   token: string
 ) => {
+  if (BASE_URL_MOCKING) {
+    return jsonMockRequest<T>(endpoint, method);
+  }
+
   return jsonAuthorizedRequest<T>(
     BASE_URL_IP,
     undefined,
