@@ -89,9 +89,7 @@ ProfileStack.navigationOptions = ({ navigation }) => ({
 
 const styles = StyleSheet.create({
   iconEvents: {},
-  iconDirectory: {
-    paddingTop: 4
-  },
+  iconDirectory: {},
   iconCheckIn: {},
   iconAnnouncements: {},
   iconProfile: {}
