@@ -9,7 +9,7 @@ export default {
       excusable: true,
       title: 'General Meeting',
       description: 'Weekly chapter meeting for exec to provide updates to the chapter',
-      start: '2020-03-24T01:00:00.000Z',
+      start: '2020-03-24T00:00:00.000Z',
       duration: 60
     }
   ]

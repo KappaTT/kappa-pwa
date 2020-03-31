@@ -3,6 +3,7 @@ import { StyleSheet, ScrollView, RefreshControl } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { Placeholder, PlaceholderLine, Fade } from 'rn-placeholder';
 import { useSafeArea } from 'react-native-safe-area-context';
+import moment from 'moment';
 
 import { theme } from '@constants';
 import { TRedux } from '@reducers';
@@ -69,9 +70,20 @@ const EventsContent: React.FC<{
           <ScrollView refreshControl={<RefreshControl refreshing={false} onRefresh={() => {}} />}>
             <Block style={styles.container}>
               {events.map(event => (
-                <Block key={event.id}>
-                  <Text>{event.title}</Text>
-                </Block>
+                <React.Fragment key={event.id}>
+                  <Block style={styles.eventContainer}>
+                    <Block style={styles.eventHeader}>
+                      <Text style={styles.eventTitle}>{event.title}</Text>
+                      <Text style={styles.eventDate}>{moment(event.start).format('MM/DD hh:mm A')}</Text>
+                    </Block>
+
+                    <Block style={styles.eventDescriptionWrapper}>
+                      <Text style={styles.eventDescription}>{event.description}</Text>
+                    </Block>
+                  </Block>
+
+                  <Block style={styles.eventSeparator} />
+                </React.Fragment>
               ))}
             </Block>
           </ScrollView>
@@ -104,6 +116,35 @@ const styles = StyleSheet.create({
     marginHorizontal: 24,
     borderBottomColor: theme.COLORS.MAIN_GRAY,
     borderBottomWidth: 1
+  },
+  eventContainer: {
+    paddingHorizontal: 16,
+    paddingVertical: 16
+  },
+  eventHeader: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    marginBottom: 8
+  },
+  eventTitle: {
+    fontFamily: 'OpenSans-SemiBold',
+    fontSize: 14
+  },
+  eventDate: {
+    marginLeft: 8,
+    fontFamily: 'OpenSans',
+    fontSize: 14,
+    color: theme.COLORS.DARK_GRAY
+  },
+  eventDescriptionWrapper: {
+    marginTop: 8,
+    marginBottom: 12
+  },
+  eventDescription: {
+    fontFamily: 'OpenSans',
+    fontSize: 17
   }
 });
 
