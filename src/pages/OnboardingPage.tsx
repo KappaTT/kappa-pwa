@@ -65,7 +65,7 @@ const OnboardingPage: React.FC<{
   const dispatchUpdateUser = React.useCallback(
     () =>
       dispatch(
-        _auth.updateUser(user.email, user.sessionToken, {
+        _auth.updateUser(user, {
           phone,
           gradYear
         })

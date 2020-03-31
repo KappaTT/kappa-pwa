@@ -131,8 +131,7 @@ export const signIn = async (payload: TSignInPayload): Promise<TSignInResponse> 
 };
 
 export interface TUpdateUserPayload {
-  email: string;
-  token: string;
+  user: TUser;
   changes: Partial<TUser>;
 }
 
@@ -149,7 +148,7 @@ interface TUpdateUserResponse extends TResponseData {
 export const updateUser = async (payload: TUpdateUserPayload): Promise<TUpdateUserResponse> => {
   const response = await makeAuthorizedRequest<TUpdateUserRequestResponse>(
     ENDPOINTS.UPDATE_USER({
-      email: payload.email
+      email: payload.user.email
     }),
     METHODS.UPDATE_USER,
     {
@@ -157,7 +156,7 @@ export const updateUser = async (payload: TUpdateUserPayload): Promise<TUpdateUs
         changes: payload.changes
       }
     },
-    payload.token
+    payload.user.sessionToken
   );
 
   log('Update user response', response);

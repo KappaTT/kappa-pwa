@@ -197,11 +197,11 @@ const updateUserFailure = err => {
   };
 };
 
-export const updateUser = (email: string, token: string, changes: Partial<TUser>) => {
+export const updateUser = (user: TUser, changes: Partial<TUser>) => {
   return dispatch => {
     dispatch(updatingUser());
 
-    Auth.updateUser({ email, token, changes }).then(res => {
+    Auth.updateUser({ user, changes }).then(res => {
       if (res.success) {
         dispatch(modifyUser(res.data.changes));
         dispatch(updateUserSuccess());
