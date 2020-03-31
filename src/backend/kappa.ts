@@ -8,6 +8,7 @@ import {
   fail,
   TBlame
 } from '@backend/backend';
+import { TUser } from '@backend/auth';
 import { log } from '@services/logService';
 
 export interface TEvent {
@@ -40,3 +41,45 @@ export interface TPoint {
   category: string;
   count: number;
 }
+
+export interface TGetEventsPayload {
+  user: TUser;
+}
+
+interface TGetEventsRequestResponse {
+  events: Array<TEvent>;
+}
+
+interface TGetEventsResponse extends TResponseData {
+  data?: {
+    events: Array<TEvent>;
+  };
+}
+
+export const getEvents = async (payload: TGetEventsPayload): Promise<TGetEventsResponse> => {
+  const response = await makeAuthorizedRequest<TGetEventsRequestResponse>(
+    ENDPOINTS.GET_EVENTS(),
+    METHODS.GET_EVENTS,
+    {},
+    payload.user.sessionToken
+  );
+
+  log('Get events response', response);
+
+  if (!response.success || response.code === 500) {
+    return fail({}, 'problem connecting to server');
+  } else if (response.code !== 200) {
+    if (response.code === 401) {
+      return fail({}, 'your credentials were invalid');
+    }
+
+    return fail({}, '');
+  }
+
+  return {
+    success: true,
+    data: {
+      events: response.data.events
+    }
+  };
+};

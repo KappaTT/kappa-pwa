@@ -32,14 +32,16 @@ export const ENDPOINTS: {
   [key: string]: (config?: any) => string;
 } = {
   SIGN_IN: () => 'users/login',
-  UPDATE_USER: (config: any) => `users/${encodeURIComponent(config.email)}`
+  UPDATE_USER: (config: any) => `users/${encodeURIComponent(config.email)}`,
+  GET_EVENTS: () => 'events'
 };
 
 export const METHODS: {
   [key: string]: TMethod;
 } = {
   SIGN_IN: M_POST,
-  UPDATE_USER: M_PATCH
+  UPDATE_USER: M_PATCH,
+  GET_EVENTS: M_GET
 };
 
 export interface TResponseData {
