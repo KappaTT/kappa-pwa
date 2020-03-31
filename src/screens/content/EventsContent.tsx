@@ -1,12 +1,15 @@
 import React from 'react';
 import { StyleSheet, ScrollView, RefreshControl } from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
 import { Placeholder, PlaceholderLine, Fade } from 'rn-placeholder';
 import { useSafeArea } from 'react-native-safe-area-context';
 
 import { theme } from '@constants';
+import { TRedux } from '@reducers';
 import { Block, Header, Text } from '@components';
 import { NavigationTypes } from '@types';
 import { TabBarHeight, HeaderHeight } from '@services/utils';
+import { getEvents } from '@reducers/actions/kappa';
 
 const EventSkeleton: React.FC<{}> = ({}) => {
   return (
@@ -24,9 +27,19 @@ const EventSkeleton: React.FC<{}> = ({}) => {
 const EventsContent: React.FC<{
   navigation: NavigationTypes.ParamType;
 }> = ({ navigation }) => {
+  const user = useSelector((state: TRedux) => state.auth.user);
+  const gettingEvents = useSelector((state: TRedux) => state.kappa.gettingEvents);
+  const getEventsError = useSelector((state: TRedux) => state.kappa.getEventsError);
+  const events = useSelector((state: TRedux) => state.kappa.events);
+
+  const dispatch = useDispatch();
+  const dispatchGetEvents = React.useCallback(() => dispatch(getEvents(user)), [user]);
+
   const insets = useSafeArea();
 
-  const loading = true;
+  React.useEffect(() => {
+    dispatchGetEvents();
+  }, [navigation]);
 
   return (
     <Block flex>
@@ -40,7 +53,7 @@ const EventsContent: React.FC<{
           }
         ]}
       >
-        {loading ? (
+        {gettingEvents ? (
           <Block style={styles.loadingContainer}>
             <EventSkeleton />
             <Block style={styles.eventSeparator} />
@@ -54,7 +67,13 @@ const EventsContent: React.FC<{
           </Block>
         ) : (
           <ScrollView refreshControl={<RefreshControl refreshing={false} onRefresh={() => {}} />}>
-            <Block style={styles.container}></Block>
+            <Block style={styles.container}>
+              {events.map(event => (
+                <Block key={event.id}>
+                  <Text>{event.title}</Text>
+                </Block>
+              ))}
+            </Block>
           </ScrollView>
         )}
       </Block>
