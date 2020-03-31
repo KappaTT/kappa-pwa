@@ -138,7 +138,12 @@ const App = () => {
               }}
             />
 
-            <FadeModal transparent={false} visible={loginVisible} onRequestClose={dispatchHideLogin}>
+            <FadeModal
+              transparent={false}
+              visible={loginVisible}
+              disableAndroidBack={true}
+              onRequestClose={dispatchHideLogin}
+            >
               <LoginPage onRequestClose={dispatchHideLogin}></LoginPage>
             </FadeModal>
 
