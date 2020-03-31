@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, ScrollView, RefreshControl } from 'react-native';
+import { StyleSheet, ScrollView, RefreshControl, TouchableOpacity } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { Placeholder, PlaceholderLine, Fade } from 'rn-placeholder';
 import { useSafeArea } from 'react-native-safe-area-context';
@@ -11,6 +11,7 @@ import { Block, Header, Text } from '@components';
 import { NavigationTypes } from '@types';
 import { TabBarHeight, HeaderHeight } from '@services/utils';
 import { getEvents } from '@reducers/actions/kappa';
+import { log } from '@services/logService';
 
 const EventSkeleton: React.FC<{}> = ({}) => {
   return (
@@ -71,16 +72,18 @@ const EventsContent: React.FC<{
             <Block style={styles.container}>
               {events.map(event => (
                 <React.Fragment key={event.id}>
-                  <Block style={styles.eventContainer}>
-                    <Block style={styles.eventHeader}>
-                      <Text style={styles.eventTitle}>{event.title}</Text>
-                      <Text style={styles.eventDate}>{moment(event.start).format('MM/DD hh:mm A')}</Text>
-                    </Block>
+                  <TouchableOpacity onPress={() => log(event)}>
+                    <Block style={styles.eventContainer}>
+                      <Block style={styles.eventHeader}>
+                        <Text style={styles.eventTitle}>{event.title}</Text>
+                        <Text style={styles.eventDate}>{moment(event.start).format('MM/DD hh:mm A')}</Text>
+                      </Block>
 
-                    <Block style={styles.eventDescriptionWrapper}>
-                      <Text style={styles.eventDescription}>{event.description}</Text>
+                      <Block style={styles.eventDescriptionWrapper}>
+                        <Text style={styles.eventDescription}>{event.description}</Text>
+                      </Block>
                     </Block>
-                  </Block>
+                  </TouchableOpacity>
 
                   <Block style={styles.eventSeparator} />
                 </React.Fragment>

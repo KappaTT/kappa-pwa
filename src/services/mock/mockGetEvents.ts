@@ -34,7 +34,7 @@ export default {
       mandatory: false,
       excusable: true,
       title: 'Happy Hour',
-      description: 'TODO',
+      description: 'Brothers will be at Legends, stop by for some appetizers and good times',
       start: '2020-04-03T22:00:00.000Z',
       duration: 120,
       location: 'Legends'
