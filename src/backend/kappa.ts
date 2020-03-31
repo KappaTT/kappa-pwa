@@ -22,6 +22,7 @@ export interface TEvent {
   description: string;
   start: string;
   duration: number;
+  location: string;
 }
 
 export interface TAttendance {
