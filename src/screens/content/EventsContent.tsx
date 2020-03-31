@@ -67,7 +67,7 @@ const EventsContent: React.FC<{
             <EventSkeleton />
           </Block>
         ) : (
-          <ScrollView refreshControl={<RefreshControl refreshing={false} onRefresh={() => {}} />}>
+          <ScrollView refreshControl={<RefreshControl refreshing={gettingEvents} onRefresh={dispatchGetEvents} />}>
             <Block style={styles.container}>
               {events.map(event => (
                 <React.Fragment key={event.id}>
