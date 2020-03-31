@@ -6,16 +6,24 @@ import KeyboardDismissView from '@components/KeyboardDismissView';
 const FadeModal: React.FC<{
   transparent?: boolean;
   visible: boolean;
+  disableAndroidBack?: boolean;
   onRequestClose?(): void;
   onDismiss?(): void;
   children: React.ReactNode;
-}> = ({ transparent = false, visible, onRequestClose = () => {}, onDismiss = () => {}, children }) => {
+}> = ({
+  transparent = false,
+  visible,
+  disableAndroidBack = false,
+  onRequestClose = () => {},
+  onDismiss = () => {},
+  children
+}) => {
   return (
     <Modal
       animationType="fade"
       transparent={transparent}
       visible={visible}
-      onRequestClose={onRequestClose}
+      onRequestClose={!disableAndroidBack && onRequestClose}
       onDismiss={onDismiss}
     >
       <KeyboardDismissView style={styles.dismissView}>{children}</KeyboardDismissView>
