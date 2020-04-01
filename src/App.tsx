@@ -5,6 +5,7 @@ import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
 import { useSelector, useDispatch } from 'react-redux';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { enableScreens } from 'react-native-screens';
 
 import { GalioProvider } from '@galio';
 
@@ -16,6 +17,8 @@ import { Images, theme } from '@constants';
 import AppNavigator from '@navigation/TabAppNavigator';
 import { setTopLevelNavigator, navigate } from '@navigation/NavigationService';
 import { LoginPage, OnboardingPage } from '@pages';
+
+enableScreens();
 
 const assetImages = [Images.Kappa];
 
