@@ -66,7 +66,7 @@ export const getEvents = async (payload: TGetEventsPayload): Promise<TGetEventsR
       payload.user.sessionToken
     );
 
-    log('Get events response', response);
+    log('Get events response', response.code);
 
     if (!response.success || response.code === 500) {
       return fail({}, 'problem connecting to server');
