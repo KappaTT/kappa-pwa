@@ -58,29 +58,31 @@ interface TGetEventsResponse extends TResponseData {
 }
 
 export const getEvents = async (payload: TGetEventsPayload): Promise<TGetEventsResponse> => {
-  const response = await makeAuthorizedRequest<TGetEventsRequestResponse>(
-    ENDPOINTS.GET_EVENTS(),
-    METHODS.GET_EVENTS,
-    {},
-    payload.user.sessionToken
-  );
+  try {
+    const response = await makeAuthorizedRequest<TGetEventsRequestResponse>(
+      ENDPOINTS.GET_EVENTS(),
+      METHODS.GET_EVENTS,
+      {},
+      payload.user.sessionToken
+    );
 
-  log('Get events response', response);
+    log('Get events response', response);
 
-  if (!response.success || response.code === 500) {
-    return fail({}, 'problem connecting to server');
-  } else if (response.code !== 200) {
-    if (response.code === 401) {
-      return fail({}, 'your credentials were invalid');
+    if (!response.success || response.code === 500) {
+      return fail({}, 'problem connecting to server');
+    } else if (response.code !== 200) {
+      if (response.code === 401) {
+        return fail({}, 'your credentials were invalid');
+      }
+
+      return fail({}, '');
     }
 
-    return fail({}, '');
-  }
-
-  return {
-    success: true,
-    data: {
+    return pass({
       events: response.data.events
-    }
-  };
+    });
+  } catch (error) {
+    log(error);
+    return fail({}, "that wasn't supposed to happen");
+  }
 };

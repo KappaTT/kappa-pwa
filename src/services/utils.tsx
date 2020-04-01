@@ -23,5 +23,5 @@ export const sleep = (time: number) => {
 };
 
 export const isEmpty = (obj: any) => {
-  return Object.entries(obj).length === 0 && obj.constructor === Object;
+  return obj === undefined || obj === null || (Object.entries(obj).length === 0 && obj.constructor === Object);
 };

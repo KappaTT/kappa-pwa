@@ -59,8 +59,12 @@ export interface TResponse {
   error?: any;
 }
 
-export interface TBlame {
+export interface TFlatBlame {
   [key: string]: string;
+}
+
+export interface TBlame {
+  [key: string]: TFlatBlame;
 }
 
 export const makeRequest = async <T>(
@@ -115,11 +119,24 @@ export const makeAuthorizedRequest = async <T>(
   );
 };
 
+export const flattenBlame = (blameObj: TBlame): TFlatBlame => {
+  let blame = {};
+
+  for (const [key, value] of Object.entries(blameObj)) {
+    for (const [key2, value2] of Object.entries(value)) {
+      blame[key2] = value2;
+    }
+  }
+
+  return blame;
+};
+
 export const fail = (blame: TBlame, message?: string) => {
-  if (fail == undefined) {
+  if (isEmpty(blame)) {
     return {
       success: false,
       error: {
+        blame: {},
         message
       }
     };
@@ -128,14 +145,15 @@ export const fail = (blame: TBlame, message?: string) => {
   return {
     success: false,
     error: {
-      blame: blame,
+      blame: flattenBlame(blame),
       message
     }
   };
 };
 
-export const pass = () => {
+export const pass = (data?) => {
   return {
-    success: true
+    success: true,
+    data
   };
 };

@@ -98,36 +98,38 @@ interface TSignInResponse extends TResponseData {
 }
 
 export const signIn = async (payload: TSignInPayload): Promise<TSignInResponse> => {
-  const response = await makeRequest<TSignInRequestResponse>(ENDPOINTS.SIGN_IN(), METHODS.SIGN_IN, {
-    body: {
-      user: {
-        email: payload.email
-      },
-      idToken: payload.idToken
+  try {
+    const response = await makeRequest<TSignInRequestResponse>(ENDPOINTS.SIGN_IN(), METHODS.SIGN_IN, {
+      body: {
+        user: {
+          email: payload.email
+        },
+        idToken: payload.idToken
+      }
+    });
+
+    log('Sign in response', response);
+
+    if (!response.success || response.code === 500) {
+      return fail({}, 'problem connecting to server');
+    } else if (response.code !== 200) {
+      if (response.code === 401) {
+        return fail({}, 'your netid was not recognized');
+      }
+
+      return fail({}, '');
     }
-  });
 
-  log('Sign in response', response);
-
-  if (!response.success || response.code === 500) {
-    return fail({}, 'problem connecting to server');
-  } else if (response.code !== 200) {
-    if (response.code === 401) {
-      return fail({}, 'your netid was not recognized');
-    }
-
-    return fail({}, '');
-  }
-
-  return {
-    success: true,
-    data: {
+    return pass({
       user: {
         ...response.data.user,
         sessionToken: response.data.sessionToken
       }
-    }
-  };
+    });
+  } catch (error) {
+    log(error);
+    return fail({}, "that wasn't supposed to happen");
+  }
 };
 
 export interface TUpdateUserPayload {
@@ -146,37 +148,39 @@ interface TUpdateUserResponse extends TResponseData {
 }
 
 export const updateUser = async (payload: TUpdateUserPayload): Promise<TUpdateUserResponse> => {
-  const response = await makeAuthorizedRequest<TUpdateUserRequestResponse>(
-    ENDPOINTS.UPDATE_USER({
-      email: payload.user.email
-    }),
-    METHODS.UPDATE_USER,
-    {
-      body: {
-        changes: payload.changes
+  try {
+    const response = await makeAuthorizedRequest<TUpdateUserRequestResponse>(
+      ENDPOINTS.UPDATE_USER({
+        email: payload.user.email
+      }),
+      METHODS.UPDATE_USER,
+      {
+        body: {
+          changes: payload.changes
+        }
+      },
+      payload.user.sessionToken
+    );
+
+    log('Update user response', response);
+
+    if (!response.success || response.code === 500) {
+      return fail({}, 'problem connecting to server');
+    } else if (response.code !== 200) {
+      if (response.code === 401) {
+        return fail({}, 'your credentials were invalid');
+      } else if (response.code === 404) {
+        return fail({}, 'your target user was invalid');
       }
-    },
-    payload.user.sessionToken
-  );
 
-  log('Update user response', response);
-
-  if (!response.success || response.code === 500) {
-    return fail({}, 'problem connecting to server');
-  } else if (response.code !== 200) {
-    if (response.code === 401) {
-      return fail({}, 'your credentials were invalid');
-    } else if (response.code === 404) {
-      return fail({}, 'your target user was invalid');
+      return fail({}, '');
     }
 
-    return fail({}, '');
-  }
-
-  return {
-    success: true,
-    data: {
+    return pass({
       changes: response.data.changes
-    }
-  };
+    });
+  } catch (error) {
+    log(error);
+    return fail({}, "that wasn't supposed to happen");
+  }
 };
