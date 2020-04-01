@@ -6,6 +6,7 @@ import { jsonRequest, jsonAuthorizedRequest } from '@services/Networking';
 import { setItem } from '@services/secureStorage';
 import { jsonMockRequest } from '@services/mockService';
 import { log } from '@services/logService';
+import { isEmpty } from '@services/utils';
 
 export const M_GET = 'GET';
 export const M_POST = 'POST';
@@ -48,7 +49,7 @@ export interface TResponseData {
   success: boolean;
   error?: {
     message?: string;
-    blame?: TBlame;
+    blame?: TFlatBlame;
   };
 }
 
