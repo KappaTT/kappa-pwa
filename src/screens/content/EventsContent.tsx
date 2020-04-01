@@ -34,10 +34,24 @@ const EventsContent: React.FC<{
   const getEventsError = useSelector((state: TRedux) => state.kappa.getEventsError);
   const events = useSelector((state: TRedux) => state.kappa.events);
 
+  const [refreshing, setRefreshing] = React.useState<boolean>(gettingEvents);
+
   const dispatch = useDispatch();
   const dispatchGetEvents = React.useCallback(() => dispatch(getEvents(user)), [user]);
 
   const insets = useSafeArea();
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+
+    setTimeout(dispatchGetEvents, 500);
+  }, [refreshing]);
+
+  React.useEffect(() => {
+    if (!gettingEvents) {
+      setRefreshing(false);
+    }
+  }, [gettingEvents]);
 
   React.useEffect(() => {
     if (user?.sessionToken) {
@@ -57,7 +71,7 @@ const EventsContent: React.FC<{
           }
         ]}
       >
-        {gettingEvents ? (
+        {gettingEvents && events.length === 0 ? (
           <Block style={styles.loadingContainer}>
             <EventSkeleton />
             <Block style={styles.eventSeparator} />
@@ -70,7 +84,7 @@ const EventsContent: React.FC<{
             <EventSkeleton />
           </Block>
         ) : (
-          <ScrollView refreshControl={<RefreshControl refreshing={gettingEvents} onRefresh={dispatchGetEvents} />}>
+          <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
             <Block style={styles.container}>
               {events.map(event => (
                 <React.Fragment key={event.id}>
