@@ -40,8 +40,10 @@ const EventsContent: React.FC<{
   const insets = useSafeArea();
 
   React.useEffect(() => {
-    dispatchGetEvents();
-  }, [navigation]);
+    if (user?.sessionToken) {
+      dispatchGetEvents();
+    }
+  }, [user]);
 
   return (
     <Block flex>
