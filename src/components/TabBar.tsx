@@ -21,7 +21,7 @@ const TabBar: React.FC<{
   const { routes, index: activeRouteIndex } = navigation.state;
 
   const user = useSelector((state: TRedux) => state.auth.user);
-  const unreadMessages = true;
+  const unreadMessages = false;
 
   const insets = useSafeArea();
 
