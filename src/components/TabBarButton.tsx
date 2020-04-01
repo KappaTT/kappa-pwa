@@ -4,6 +4,7 @@ import { StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import Block from '@components/Block';
 import Text from '@components/Text';
 import Icon from '@components/Icon';
+import Badge from '@components/Badge';
 import { theme } from '@constants';
 import { TUser } from '@backend/auth';
 
@@ -17,6 +18,7 @@ const TabBarButton: React.FC<{
   onTabPress(): void;
   onTabLongPress(): void;
   user?: TUser;
+  badge?: boolean;
 }> = ({
   route,
   renderIcon,
@@ -26,7 +28,8 @@ const TabBarButton: React.FC<{
   inactiveTintColor,
   onTabPress,
   onTabLongPress,
-  user
+  user,
+  badge
 }) => {
   const tintColor = isRouteActive ? activeTintColor : inactiveTintColor;
 
@@ -39,7 +42,10 @@ const TabBarButton: React.FC<{
           {isProfile && user && user.privileged ? (
             <Icon name="user-check" family="Feather" color={tintColor} size={24} />
           ) : (
-            renderIcon({ route, focused: isRouteActive, tintColor: tintColor })
+            <React.Fragment>
+              {renderIcon({ route, focused: isRouteActive, tintColor: tintColor })}
+              <Badge active={badge}></Badge>
+            </React.Fragment>
           )}
         </Block>
       </Block>

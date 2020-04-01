@@ -21,6 +21,7 @@ const TabBar: React.FC<{
   const { routes, index: activeRouteIndex } = navigation.state;
 
   const user = useSelector((state: TRedux) => state.auth.user);
+  const unreadMessages = true;
 
   const insets = useSafeArea();
 
@@ -40,6 +41,8 @@ const TabBar: React.FC<{
             const isRouteActive = routeIndex === activeRouteIndex;
             const labelText = getLabelText({ route });
 
+            const isAnnouncements = labelText === 'Announcements';
+
             const onPress = () => onTabPress({ route });
 
             const onLongPress = () => onTabLongPress({ route });
@@ -56,6 +59,7 @@ const TabBar: React.FC<{
                 onTabPress={onPress}
                 onTabLongPress={onLongPress}
                 user={user}
+                badge={isAnnouncements && unreadMessages}
               />
             );
           })}

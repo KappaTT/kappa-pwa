@@ -21,19 +21,30 @@ const Badge: React.FC<{
     return <Block style={styles.fabWrapper}>{renderChildren()}</Block>;
   }
 
-  return <Block style={styles.wrapper}>{renderChildren()}</Block>;
+  return (
+    <Block style={styles.wrapper}>
+      <Block style={styles.badgeContainer}>{renderChildren()}</Block>
+    </Block>
+  );
 };
 
 const styles = StyleSheet.create({
   wrapper: {
     position: 'absolute',
     top: -2,
-    right: -2
+    right: -3
   },
   fabWrapper: {
     position: 'absolute',
     top: 2,
     right: 2
+  },
+  badgeContainer: {
+    borderColor: theme.COLORS.WHITE,
+    borderWidth: 3,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   badge: {
     width: 8,
