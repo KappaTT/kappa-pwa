@@ -34,7 +34,7 @@ export default {
       mandatory: false,
       excusable: true,
       title: 'Happy Hour',
-      description: 'Brothers will be at Legends, stop by for some appetizers and good company',
+      description: 'Brothers will be at Legends, stop by for appetizers and good company',
       start: '2020-04-03T22:00:00.000Z',
       duration: 120,
       location: 'Legends'
@@ -47,7 +47,8 @@ export default {
       mandatory: false,
       excusable: true,
       title: 'General Meeting',
-      description: 'Weekly chapter meeting for exec to provide updates to the chapter',
+      description:
+        'Day 1 of elections:\n - Regent\n - Pledge Marshall\n - Social Chair\n - Rush Chair\n - Bernays\n - Scribe',
       start: '2020-04-08T00:00:00.000Z',
       duration: 60,
       location: 'EHall 106b1'
@@ -73,7 +74,8 @@ export default {
       mandatory: false,
       excusable: true,
       title: 'General Meeting',
-      description: 'Weekly chapter meeting for exec to provide updates to the chapter',
+      description:
+        'Day 2 of elections:\n- Vice Regent\n - Treasurer\n - Fundraising Chair\n - Corresponding Secretary\n - Philanthropy Chair\n - Historian\n - Projects Chair\n - Professional Chair\n - Web Chair',
       start: '2020-04-15T00:00:00.000Z',
       duration: 60,
       location: 'EHall 106b1'
