@@ -7,7 +7,7 @@ import moment from 'moment';
 
 import { theme } from '@constants';
 import { TRedux } from '@reducers';
-import { Block, Header, Text } from '@components';
+import { Block, Header, EndCapButton, Text } from '@components';
 import { NavigationTypes } from '@types';
 import { TabBarHeight, HeaderHeight, isEmpty } from '@services/utils';
 import { getEvents } from '@reducers/actions/kappa';
@@ -99,7 +99,7 @@ const EventsContent: React.FC<{
 
   return (
     <Block flex>
-      <Header title="Upcoming Events" />
+      <Header title="Upcoming Events" rightButton={<EndCapButton label="New Event" />} />
 
       <Block
         style={[
