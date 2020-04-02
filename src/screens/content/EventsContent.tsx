@@ -34,7 +34,7 @@ const EventItem: React.FC<{ event: TEvent }> = ({ event }) => {
         <Block style={styles.eventContainer}>
           <Block style={styles.eventHeader}>
             <Text style={styles.eventTitle}>{event.title}</Text>
-            <Text style={styles.eventDate}>{moment(event.start).format('hh:mm A')}</Text>
+            <Text style={styles.eventDate}>{moment(event.start).format('h:mm A')}</Text>
           </Block>
 
           <Block style={styles.eventDescriptionWrapper}>
