@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, ScrollView, RefreshControl, TouchableOpacity } from 'react-native';
+import { StyleSheet, SectionList, RefreshControl, TouchableOpacity } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { Placeholder, PlaceholderLine, Fade } from 'rn-placeholder';
 import { useSafeArea } from 'react-native-safe-area-context';
@@ -9,9 +9,10 @@ import { theme } from '@constants';
 import { TRedux } from '@reducers';
 import { Block, Header, Text } from '@components';
 import { NavigationTypes } from '@types';
-import { TabBarHeight, HeaderHeight } from '@services/utils';
+import { TabBarHeight, HeaderHeight, isEmpty } from '@services/utils';
 import { getEvents } from '@reducers/actions/kappa';
 import { log } from '@services/logService';
+import { TEvent } from '@backend/kappa';
 
 const EventSkeleton: React.FC<{}> = ({}) => {
   return (
@@ -23,6 +24,27 @@ const EventSkeleton: React.FC<{}> = ({}) => {
         <PlaceholderLine width={67} />
       </Placeholder>
     </Block>
+  );
+};
+
+const EventItem: React.FC<{ event: TEvent }> = ({ event }) => {
+  return (
+    <React.Fragment key={event.id}>
+      <TouchableOpacity onPress={() => log(event)}>
+        <Block style={styles.eventContainer}>
+          <Block style={styles.eventHeader}>
+            <Text style={styles.eventTitle}>{event.title}</Text>
+            <Text style={styles.eventDate}>{moment(event.start).format('hh:mm A')}</Text>
+          </Block>
+
+          <Block style={styles.eventDescriptionWrapper}>
+            <Text style={styles.eventDescription}>{event.description}</Text>
+          </Block>
+        </Block>
+      </TouchableOpacity>
+
+      <Block style={styles.eventSeparator} />
+    </React.Fragment>
   );
 };
 
@@ -59,6 +81,22 @@ const EventsContent: React.FC<{
     }
   }, [user]);
 
+  const keyExtractor = (item: TEvent, index) => {
+    return `${item.id}-${index}`;
+  };
+
+  const renderSectionHeader = ({ section: { title } }) => {
+    return (
+      <Block style={styles.sectionHeaderContainer}>
+        <Text style={styles.sectionHeaderText}>{moment(title).format('ddd LL')}</Text>
+      </Block>
+    );
+  };
+
+  const renderItem = ({ item }) => {
+    return <EventItem event={item} />;
+  };
+
   return (
     <Block flex>
       <Header title="Upcoming Events" />
@@ -71,7 +109,7 @@ const EventsContent: React.FC<{
           }
         ]}
       >
-        {gettingEvents && events.length === 0 ? (
+        {gettingEvents && isEmpty(events) ? (
           <Block style={styles.loadingContainer}>
             <EventSkeleton />
             <Block style={styles.eventSeparator} />
@@ -84,28 +122,13 @@ const EventsContent: React.FC<{
             <EventSkeleton />
           </Block>
         ) : (
-          <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
-            <Block style={styles.container}>
-              {events.map(event => (
-                <React.Fragment key={event.id}>
-                  <TouchableOpacity onPress={() => log(event)}>
-                    <Block style={styles.eventContainer}>
-                      <Block style={styles.eventHeader}>
-                        <Text style={styles.eventTitle}>{event.title}</Text>
-                        <Text style={styles.eventDate}>{moment(event.start).format('MM/DD hh:mm A')}</Text>
-                      </Block>
-
-                      <Block style={styles.eventDescriptionWrapper}>
-                        <Text style={styles.eventDescription}>{event.description}</Text>
-                      </Block>
-                    </Block>
-                  </TouchableOpacity>
-
-                  <Block style={styles.eventSeparator} />
-                </React.Fragment>
-              ))}
-            </Block>
-          </ScrollView>
+          <SectionList
+            sections={Object.entries(events).map(entry => ({ title: entry[0], data: entry[1] }))}
+            keyExtractor={keyExtractor}
+            renderSectionHeader={renderSectionHeader}
+            renderItem={renderItem}
+            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+          />
         )}
       </Block>
     </Block>
@@ -131,14 +154,26 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center'
   },
+  sectionHeaderContainer: {
+    backgroundColor: theme.COLORS.WHITE
+  },
+  sectionHeaderText: {
+    marginTop: 4,
+    marginBottom: 8,
+    marginLeft: 24,
+    fontFamily: 'OpenSans-Bold',
+    fontSize: 18
+  },
   eventSeparator: {
     marginHorizontal: 24,
-    borderBottomColor: theme.COLORS.MAIN_GRAY,
+    marginBottom: 16,
+    borderBottomColor: theme.COLORS.SUPER_LIGHT_BLUE_GRAY,
     borderBottomWidth: 1
   },
   eventContainer: {
-    paddingHorizontal: 16,
-    paddingVertical: 16
+    paddingHorizontal: 24,
+    paddingTop: 8,
+    paddingBottom: 16
   },
   eventHeader: {
     display: 'flex',

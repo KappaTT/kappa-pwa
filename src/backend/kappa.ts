@@ -10,6 +10,7 @@ import {
 } from '@backend/backend';
 import { TUser } from '@backend/auth';
 import { log } from '@services/logService';
+import moment from 'moment';
 
 export interface TEvent {
   id: number;
@@ -23,6 +24,10 @@ export interface TEvent {
   start: string;
   duration: number;
   location: string;
+}
+
+export interface TEventDict {
+  [date: string]: Array<TEvent>;
 }
 
 export interface TAttendance {
@@ -53,9 +58,25 @@ interface TGetEventsRequestResponse {
 
 interface TGetEventsResponse extends TResponseData {
   data?: {
-    events: Array<TEvent>;
+    events: TEventDict;
   };
 }
+
+const separateByDate = (events: Array<TEvent>) => {
+  let separated = {};
+
+  for (const event of events) {
+    const date = moment(event.start).format('YYYY-MM-DD');
+
+    if (!separated.hasOwnProperty(date)) {
+      separated[date] = [];
+    }
+
+    separated[date].push(event);
+  }
+
+  return separated;
+};
 
 export const getEvents = async (payload: TGetEventsPayload): Promise<TGetEventsResponse> => {
   try {
@@ -79,7 +100,7 @@ export const getEvents = async (payload: TGetEventsPayload): Promise<TGetEventsR
     }
 
     return pass({
-      events: response.data.events
+      events: separateByDate(response.data.events)
     });
   } catch (error) {
     log(error);

@@ -1,4 +1,4 @@
-import { TEvent } from '@backend/kappa';
+import { TEvent, TEventDict } from '@backend/kappa';
 
 export const GET_EVENTS = 'GET_EVENTS';
 export const GET_EVENTS_SUCCESS = 'GET_EVENTS_SUCCESS';
@@ -9,7 +9,7 @@ export interface TKappaState {
   getEventsError: boolean;
   getEventsErrorMessage: string;
 
-  events: Array<TEvent>;
+  events: TEventDict;
   directory: [];
 }
 
@@ -18,7 +18,7 @@ const initialState: TKappaState = {
   getEventsError: false,
   getEventsErrorMessage: '',
 
-  events: [],
+  events: {},
   directory: []
 };
 
