@@ -85,7 +85,7 @@ const EventsContent: React.FC<{
     return `${item.id}-${index}`;
   };
 
-  const renderSectionHeader = ({ section: { title } }) => {
+  const renderSectionHeader = ({ section: { title, data } }) => {
     return (
       <Block style={styles.sectionHeaderContainer}>
         <Text style={styles.sectionHeaderText}>{moment(title).format('ddd LL')}</Text>
