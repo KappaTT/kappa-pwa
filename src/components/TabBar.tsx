@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     height: TabBarHeight,
-    paddingHorizontal: 24,
+    paddingHorizontal: 32,
     justifyContent: 'center'
   }
 });

@@ -40,7 +40,7 @@ const TabBarButton: React.FC<{
       <Block style={styles.container}>
         <Block style={styles.content}>
           {isProfile && user && user.privileged ? (
-            <Icon name="user-check" family="Feather" color={tintColor} size={24} />
+            <Icon name="user-check" family="Feather" color={tintColor} size={28} />
           ) : (
             <React.Fragment>
               {renderIcon({ route, focused: isRouteActive, tintColor: tintColor })}
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
   },
   container: {
     paddingVertical: 8,
-    width: 56,
+    flexGrow: 1,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center'

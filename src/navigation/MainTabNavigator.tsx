@@ -19,7 +19,7 @@ const EventsStack = createStackNavigator({
 EventsStack.navigationOptions = ({ navigation }) => ({
   tabBarLabel: 'Events',
   tabBarIcon: ({ tintColor }) => (
-    <Icon style={styles.iconEvents} name="calendar" family="Feather" color={tintColor} size={24} />
+    <Icon style={styles.iconEvents} name="calendar" family="Feather" color={tintColor} size={28} />
   )
 });
 
@@ -35,7 +35,7 @@ const DirectoryStack = createStackNavigator({
 DirectoryStack.navigationOptions = ({ navigation }) => ({
   tabBarLabel: 'Directory',
   tabBarIcon: ({ tintColor }) => (
-    <Icon style={styles.iconDirectory} name="contacts" family="AntDesign" color={tintColor} size={24} />
+    <Icon style={styles.iconDirectory} name="contacts" family="AntDesign" color={tintColor} size={28} />
   )
 });
 
@@ -51,7 +51,7 @@ const CheckInStack = createStackNavigator({
 CheckInStack.navigationOptions = ({ navigation }) => ({
   tabBarLabel: 'Check In',
   tabBarIcon: ({ tintColor }) => (
-    <Icon style={styles.iconCheckIn} name="check-square" family="Feather" color={tintColor} size={24} />
+    <Icon style={styles.iconCheckIn} name="check-square" family="Feather" color={tintColor} size={28} />
   )
 });
 
@@ -67,7 +67,7 @@ const AnnouncementsStack = createStackNavigator({
 AnnouncementsStack.navigationOptions = ({ navigation }) => ({
   tabBarLabel: 'Announcements',
   tabBarIcon: ({ tintColor }) => (
-    <Icon style={styles.iconAnnouncements} name="message-square" family="Feather" color={tintColor} size={24} />
+    <Icon style={styles.iconAnnouncements} name="message-square" family="Feather" color={tintColor} size={28} />
   )
 });
 
@@ -83,7 +83,7 @@ const ProfileStack = createStackNavigator({
 ProfileStack.navigationOptions = ({ navigation }) => ({
   tabBarLabel: 'Profile',
   tabBarIcon: ({ tintColor }) => (
-    <Icon style={styles.iconProfile} name="user" family="Feather" color={tintColor} size={24} />
+    <Icon style={styles.iconProfile} name="user" family="Feather" color={tintColor} size={28} />
   )
 });
 
