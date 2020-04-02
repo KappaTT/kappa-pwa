@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import { useSafeArea } from 'react-native-safe-area-context';
 
 import { theme } from '@constants';
@@ -12,8 +12,9 @@ const Header: React.FC<{
   title?: string;
   subtitle?: string;
   showBackButton?: boolean;
+  rightButton?: React.ReactElement;
   onPressBackButton?(): void;
-}> = ({ title = '', subtitle = '', showBackButton = false, onPressBackButton = () => {} }) => {
+}> = ({ title = '', subtitle = '', showBackButton = false, rightButton, onPressBackButton = () => {} }) => {
   const insets = useSafeArea();
 
   return (
@@ -33,7 +34,7 @@ const Header: React.FC<{
           {subtitle !== '' && <Text style={styles.subtitle}>{subtitle}</Text>}
         </Block>
 
-        <Block style={styles.rightButtonContainer}></Block>
+        {rightButton}
       </Block>
     </Block>
   );
