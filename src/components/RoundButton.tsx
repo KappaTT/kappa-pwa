@@ -7,17 +7,43 @@ import Text from '@components/Text';
 import Button from '@components/Button';
 
 const RoundButton: React.FC<{
+  color?: string;
   label: string;
   icon?: React.ReactNode;
   loading?: boolean;
+  disabled?: boolean;
   right?: boolean;
+  alt?: boolean;
   onPress?(): void;
-}> = ({ label, icon, loading = false, right = false, onPress = () => {} }) => {
+}> = ({
+  color = theme.COLORS.PRIMARY,
+  label,
+  icon,
+  loading = false,
+  disabled = false,
+  right = false,
+  alt = false,
+  onPress = () => {}
+}) => {
+  const buttonStyle = StyleSheet.flatten([
+    styles.button,
+    alt
+      ? {
+          backgroundColor: theme.COLORS.WHITE,
+          borderWidth: 1,
+          borderColor: color
+        }
+      : {
+          backgroundColor: color
+        }
+  ]);
+
   return (
     <Button
-      style={styles.button}
+      style={buttonStyle}
       round
       shadowless
+      disabled={disabled}
       onPress={() => {
         !loading && onPress();
       }}
@@ -26,7 +52,21 @@ const RoundButton: React.FC<{
       <Block style={styles.buttonContent}>
         {!right && icon}
 
-        <Text style={icon ? styles.buttonTextWithIcon : styles.buttonText}>{label}</Text>
+        <Text
+          style={[
+            styles.buttonText,
+            icon && styles.buttonTextWithIcon,
+            alt
+              ? {
+                  color: color
+                }
+              : {
+                  color: theme.COLORS.WHITE
+                }
+          ]}
+        >
+          {label}
+        </Text>
 
         {right && icon}
       </Block>
@@ -37,8 +77,7 @@ const RoundButton: React.FC<{
 const styles = StyleSheet.create({
   button: {
     marginBottom: 0,
-    width: '100%',
-    backgroundColor: theme.COLORS.PRIMARY
+    width: '100%'
   },
   buttonContent: {
     height: '100%',
@@ -47,16 +86,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center'
   },
-  buttonTextWithIcon: {
-    marginHorizontal: 10,
-    fontFamily: 'OpenSans-SemiBold',
-    fontSize: 18,
-    color: theme.COLORS.WHITE
-  },
   buttonText: {
     fontFamily: 'OpenSans-SemiBold',
-    fontSize: 18,
-    color: theme.COLORS.WHITE
+    fontSize: 18
+  },
+  buttonTextWithIcon: {
+    marginHorizontal: 10
   }
 });
 

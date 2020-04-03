@@ -91,6 +91,7 @@ class Button extends React.Component {
       !shadowless && styles.shadow,
       { shadowColor: shadowColor || theme.COLORS[color.toUpperCase()] },
       { zIndex: 2 },
+      disabled && { opacity: 0.5 },
       style
     ];
 
