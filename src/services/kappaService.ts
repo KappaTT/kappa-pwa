@@ -61,5 +61,5 @@ export const hasValidCheckIn = (records: TRecords, email: string, event_id: stri
 
   const excuse = getExcuse(records, email, event_id);
 
-  return excuse !== undefined && excuse.approved;
+  return excuse !== undefined && excuse.approved === 1;
 };

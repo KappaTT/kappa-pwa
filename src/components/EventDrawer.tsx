@@ -123,7 +123,7 @@ const EventDrawer: React.FC<{}> = ({}) => {
                   <Text style={styles.eventDate}>{moment(selectedEvent.start).format('ddd LL h:mm A')}</Text>
                   <Text style={styles.eventTitle}>{selectedEvent.title}</Text>
 
-                  {selectedEvent.mandatory == true && (
+                  {selectedEvent.mandatory === 1 && (
                     <Block style={styles.propertyWrapper}>
                       <Icon
                         style={styles.propertyIcon}
@@ -149,7 +149,7 @@ const EventDrawer: React.FC<{}> = ({}) => {
                       <Text style={[styles.propertyText, { color: theme.COLORS.PRIMARY_GREEN }]}>Checked In</Text>
                     </Block>
                   )}
-                  {excused !== undefined && excused.approved == true && (
+                  {excused !== undefined && excused.approved === 1 && (
                     <Block style={styles.propertyWrapper}>
                       <Icon
                         style={styles.propertyIcon}
@@ -162,7 +162,7 @@ const EventDrawer: React.FC<{}> = ({}) => {
                       <Text style={[styles.propertyText, { color: theme.COLORS.PRIMARY_GREEN }]}>Excused</Text>
                     </Block>
                   )}
-                  {excused !== undefined && excused.approved == false && (
+                  {excused !== undefined && excused.approved === 0 && (
                     <Block style={styles.propertyWrapper}>
                       <Icon
                         style={styles.propertyIcon}

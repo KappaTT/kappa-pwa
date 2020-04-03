@@ -17,8 +17,8 @@ export interface TEvent {
   creator: string;
   event_type: string;
   event_code?: string;
-  mandatory: boolean;
-  excusable: boolean;
+  mandatory: 0 | 1;
+  excusable: 0 | 1;
   title: string;
   description: string;
   start: string;
@@ -49,7 +49,7 @@ export interface TExcuse {
   event_id: number;
   netid: string;
   reason: string;
-  approved: boolean;
+  approved: 0 | 1;
 }
 
 export interface TExcuseEventDict {

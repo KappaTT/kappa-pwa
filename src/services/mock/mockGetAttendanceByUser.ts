@@ -10,13 +10,13 @@ export default {
       event_id: 2,
       netid: 'jjt4',
       reason: 'I was sick',
-      approved: true
+      approved: 1
     },
     {
       event_id: 4,
       netid: 'jjt4',
       reason: 'I was sick',
-      approved: false
+      approved: 0
     }
   ]
 };
