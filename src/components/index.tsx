@@ -10,6 +10,7 @@ import CloseButton from './CloseButton';
 import CodeInput from './CodeInput';
 import DrawerItem from './DrawerItem';
 import EndCapButton from './EndCapButton';
+import EventDrawer from './EventDrawer';
 import ExpandingComponent from './ExpandingComponent';
 import FAB from './FAB';
 import FadeModal from './FadeModal';
@@ -57,6 +58,7 @@ export {
   CodeInput,
   DrawerItem,
   EndCapButton,
+  EventDrawer,
   ExpandingComponent,
   FAB,
   FadeModal,
