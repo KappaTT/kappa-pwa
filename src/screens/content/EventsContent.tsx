@@ -32,6 +32,7 @@ const EventsContent: React.FC<{
 }> = ({ navigation }) => {
   const user = useSelector((state: TRedux) => state.auth.user);
   const gettingEvents = useSelector((state: TRedux) => state.kappa.gettingEvents);
+  const gettingAttendance = useSelector((state: TRedux) => state.kappa.gettingAttendance);
   const getEventsError = useSelector((state: TRedux) => state.kappa.getEventsError);
   const events = useSelector((state: TRedux) => state.kappa.events);
 
@@ -39,6 +40,7 @@ const EventsContent: React.FC<{
 
   const dispatch = useDispatch();
   const dispatchGetEvents = React.useCallback(() => dispatch(_kappa.getEvents(user)), [dispatch, user]);
+  const dispatchGetMyAttendance = React.useCallback(() => dispatch(_kappa.getMyAttendance(user)), [dispatch, user]);
   const dispatchSelectEvent = React.useCallback((eventId: number) => dispatch(_kappa.selectEvent(eventId)), [dispatch]);
 
   const insets = useSafeArea();
@@ -46,18 +48,22 @@ const EventsContent: React.FC<{
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
 
-    setTimeout(dispatchGetEvents, 500);
+    setTimeout(() => {
+      dispatchGetEvents();
+      dispatchGetMyAttendance();
+    }, 500);
   }, [refreshing]);
 
   React.useEffect(() => {
-    if (!gettingEvents) {
+    if (!gettingEvents && !gettingAttendance) {
       setRefreshing(false);
     }
-  }, [gettingEvents]);
+  }, [gettingEvents, gettingAttendance]);
 
   React.useEffect(() => {
     if (user?.sessionToken) {
       dispatchGetEvents();
+      dispatchGetMyAttendance();
     }
   }, [user]);
 
