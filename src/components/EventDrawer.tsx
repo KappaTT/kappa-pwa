@@ -1,9 +1,9 @@
 import React from 'react';
 import { StyleSheet, Dimensions, TouchableWithoutFeedback, ScrollView, RefreshControl } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
+import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
 import { useSafeArea } from 'react-native-safe-area-context';
-import Animated, { Easing } from 'react-native-reanimated';
 
 import { TRedux } from '@reducers';
 import { _auth, _kappa } from '@reducers/actions';
@@ -102,7 +102,7 @@ const EventDrawer: React.FC<{}> = ({}) => {
 
   return (
     <Ghost style={styles.container}>
-      {selectedEventId !== -1 && (
+      {snapPoint !== 1 && (
         <TouchableWithoutFeedback onPress={onPressClose}>
           <Animated.View
             style={[
