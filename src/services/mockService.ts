@@ -1,7 +1,8 @@
-import { TResponse } from '@backend/backend';
+import { TRequestResponse } from '@backend/backend';
 import { log } from '@services/logService';
 import mockGetEvents from '@services/mock/mockGetEvents';
 import mockGetAttendanceByUser from '@services/mock/mockGetAttendanceByUser';
+import mockGetAttendanceByEvent from '@services/mock/mockGetAttendanceByEvent';
 
 export const getMockEndpoint = (endpoint: string, method: string) => {
   const mock = `${method}|${endpoint}`;
@@ -11,6 +12,8 @@ export const getMockEndpoint = (endpoint: string, method: string) => {
       return mockGetEvents;
     case `GET|attendance/user/jjt4@illinois.edu`:
       return mockGetAttendanceByUser;
+    case `GET|attendance/event/1`:
+      return mockGetAttendanceByEvent;
   }
 
   return null;
@@ -19,7 +22,7 @@ export const getMockEndpoint = (endpoint: string, method: string) => {
 export const jsonMockRequest = async <T>(
   endpoint: string,
   method: string
-): Promise<TResponse & {
+): Promise<TRequestResponse & {
   data?: T;
 }> => {
   log(`Mocking via ${method}`, endpoint);

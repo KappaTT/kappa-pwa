@@ -33,8 +33,10 @@ export const ENDPOINTS: {
   [key: string]: (config?: any) => string;
 } = {
   SIGN_IN: () => 'users/login',
-  UPDATE_USER: (config: any) => `users/${encodeURIComponent(config.email)}`,
-  GET_EVENTS: () => 'events'
+  UPDATE_USER: (config: { email: string }) => `users/${encodeURIComponent(config.email)}`,
+  GET_EVENTS: () => 'events',
+  GET_ATTENDANCE_BY_USER: (config: { email: string }) => `attendance/user/${encodeURIComponent(config.email)}`,
+  GET_ATTENDANCE_BY_EVENT: (config: { event_id: string }) => `attendance/event/${config.event_id}`
 };
 
 export const METHODS: {
@@ -42,10 +44,12 @@ export const METHODS: {
 } = {
   SIGN_IN: M_POST,
   UPDATE_USER: M_PATCH,
-  GET_EVENTS: M_GET
+  GET_EVENTS: M_GET,
+  GET_ATTENDANCE_BY_USER: M_GET,
+  GET_ATTENDANCE_BY_EVENT: M_GET
 };
 
-export interface TResponseData {
+export interface TResponse {
   success: boolean;
   error?: {
     message?: string;
@@ -53,11 +57,14 @@ export interface TResponseData {
   };
 }
 
-export interface TResponse {
+export interface TRequestResponse {
   success: boolean;
   code?: number;
   data?: any;
-  error?: any;
+  error?: {
+    message?: string;
+    details?: string;
+  };
 }
 
 export interface TFlatBlame {

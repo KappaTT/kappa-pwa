@@ -1,7 +1,7 @@
 import {
   ENDPOINTS,
   METHODS,
-  TResponseData,
+  TResponse,
   makeRequest,
   makeAuthorizedRequest,
   pass,
@@ -91,7 +91,7 @@ interface TSignInRequestResponse {
   user: TUserResponse;
 }
 
-interface TSignInResponse extends TResponseData {
+interface TSignInResponse extends TResponse {
   data?: {
     user: TUserResponse;
   };
@@ -141,7 +141,7 @@ interface TUpdateUserRequestResponse {
   changes: Partial<TUser>;
 }
 
-interface TUpdateUserResponse extends TResponseData {
+interface TUpdateUserResponse extends TResponse {
   data?: {
     changes: Partial<TUser>;
   };

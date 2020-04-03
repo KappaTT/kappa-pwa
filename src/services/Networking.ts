@@ -1,5 +1,5 @@
 import { log } from '@services/logService';
-import { TResponse } from '@backend/backend';
+import { TRequestResponse } from '@backend/backend';
 import { castToString } from '@services/secureStorage';
 
 export const buildUrl = (baseUrl: string, port: string, endpoint: string, secure: boolean = true) => {
@@ -63,7 +63,7 @@ export const jsonRequest = async <T>(
   headers: any,
   queryParams: any,
   body: any
-): Promise<TResponse & {
+): Promise<TRequestResponse & {
   data?: T;
 }> => {
   const url = attachQueryParams(buildUrl(baseUrl, port, endpoint, secure), queryParams);
