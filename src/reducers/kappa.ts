@@ -1,8 +1,11 @@
-import { TEvent, TEventDict } from '@backend/kappa';
+import { TEvent, TEventDict, getEventById } from '@backend/kappa';
 
 export const GET_EVENTS = 'GET_EVENTS';
 export const GET_EVENTS_SUCCESS = 'GET_EVENTS_SUCCESS';
 export const GET_EVENTS_FAILURE = 'GET_EVENTS_FAILURE';
+
+export const SELECT_EVENT = 'SELECT_EVENT';
+export const UNSELECT_EVENT = 'UNSELECT_EVENT';
 
 export interface TKappaState {
   gettingEvents: boolean;
@@ -11,6 +14,9 @@ export interface TKappaState {
 
   events: TEventDict;
   directory: [];
+
+  selectedEventId: number;
+  selectedEvent: TEvent;
 }
 
 const initialState: TKappaState = {
@@ -19,7 +25,10 @@ const initialState: TKappaState = {
   getEventsErrorMessage: '',
 
   events: {},
-  directory: []
+  directory: [],
+
+  selectedEventId: -1,
+  selectedEvent: null
 };
 
 export default (state = initialState, action: any): TKappaState => {
@@ -43,6 +52,18 @@ export default (state = initialState, action: any): TKappaState => {
         gettingEvents: false,
         getEventsError: true,
         getEventsErrorMessage: action.error.message
+      };
+    case SELECT_EVENT:
+      return {
+        ...state,
+        selectedEventId: action.eventId,
+        selectedEvent: getEventById(state.events, action.eventId)
+      };
+    case UNSELECT_EVENT:
+      return {
+        ...state,
+        selectedEventId: -1,
+        selectedEvent: null
       };
     default:
       return state;

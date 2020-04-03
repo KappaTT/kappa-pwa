@@ -1,5 +1,5 @@
 import { Kappa } from '@backend';
-import { GET_EVENTS, GET_EVENTS_SUCCESS, GET_EVENTS_FAILURE } from '@reducers/kappa';
+import { GET_EVENTS, GET_EVENTS_SUCCESS, GET_EVENTS_FAILURE, SELECT_EVENT, UNSELECT_EVENT } from '@reducers/kappa';
 import { TUser } from '@backend/auth';
 
 const gettingEvents = () => {
@@ -37,3 +37,16 @@ export const getEvents = (user: TUser) => {
 };
 
 export const getDirectory = () => {};
+
+export const selectEvent = (eventId: number) => {
+  return {
+    type: SELECT_EVENT,
+    eventId
+  };
+};
+
+export const unselectEvent = () => {
+  return {
+    type: UNSELECT_EVENT
+  };
+};

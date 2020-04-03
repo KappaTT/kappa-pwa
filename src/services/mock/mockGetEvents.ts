@@ -44,7 +44,7 @@ export default {
       creator: 'jjt4',
       eventType: 'GM',
       eventCode: '647319',
-      mandatory: false,
+      mandatory: true,
       excusable: true,
       title: 'General Meeting',
       description:
@@ -71,7 +71,7 @@ export default {
       creator: 'jjt4',
       eventType: 'GM',
       eventCode: '647319',
-      mandatory: false,
+      mandatory: true,
       excusable: true,
       title: 'General Meeting',
       description:

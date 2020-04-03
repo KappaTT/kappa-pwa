@@ -107,3 +107,15 @@ export const getEvents = async (payload: TGetEventsPayload): Promise<TGetEventsR
     return fail({}, "that wasn't supposed to happen");
   }
 };
+
+export const getEventById = (eventDict: TEventDict, eventId: number) => {
+  for (const [date, events] of Object.entries(eventDict)) {
+    for (const event of events) {
+      if (event.id === eventId) {
+        return event;
+      }
+    }
+  }
+
+  return null;
+};
