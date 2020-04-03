@@ -40,7 +40,9 @@ export interface TAttendanceEventDict {
 }
 
 export interface TAttendanceUserDict {
-  [netid: string]: TAttendanceEventDict;
+  [email: string]: {
+    [event_id: string]: TAttendance;
+  };
 }
 
 export interface TExcuse {
@@ -55,7 +57,9 @@ export interface TExcuseEventDict {
 }
 
 export interface TExcuseUserDict {
-  [netid: string]: TExcuseEventDict;
+  [email: string]: {
+    [event_id: string]: TExcuse;
+  };
 }
 
 export interface TPoint {
@@ -164,7 +168,8 @@ export const getAttendanceByUser = async (
     }
 
     return pass({
-      ...response.data
+      attended: response.data.attended || [],
+      excused: response.data.excused || []
     });
   } catch (error) {
     log(error);

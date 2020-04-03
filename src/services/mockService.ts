@@ -10,7 +10,7 @@ export const getMockEndpoint = (endpoint: string, method: string) => {
   switch (mock) {
     case `GET|events`:
       return mockGetEvents;
-    case `GET|attendance/user/jjt4@illinois.edu`:
+    case `GET|attendance/user/jjt4%40illinois.edu`:
       return mockGetAttendanceByUser;
     case `GET|attendance/event/1`:
       return mockGetAttendanceByEvent;
