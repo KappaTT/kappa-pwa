@@ -196,7 +196,12 @@ const EventDrawer: React.FC<{}> = ({}) => {
               {selectedEvent.excusable && (
                 <React.Fragment>
                   <Block style={styles.excuseButton}>
-                    <RoundButton alt={true} label="Request Excuse" onPress={() => log('TODO')} />
+                    <RoundButton
+                      alt={true}
+                      label="Request Excuse"
+                      disabled={excused !== undefined || attended !== undefined}
+                      onPress={() => log('TODO')}
+                    />
                   </Block>
                   <Block style={styles.bottomDivider} />
                 </React.Fragment>
@@ -204,7 +209,7 @@ const EventDrawer: React.FC<{}> = ({}) => {
 
               <Block style={styles.attendButton}>
                 <RoundButton
-                  disabled={moment(selectedEvent.start).isBefore(moment(), 'day')}
+                  disabled={attended !== undefined || moment(selectedEvent.start).isBefore(moment(), 'day')}
                   label="Check In"
                   onPress={() => log('TODO')}
                 />

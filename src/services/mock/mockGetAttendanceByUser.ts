@@ -7,7 +7,7 @@ export default {
   ],
   excused: [
     {
-      event_id: 3,
+      event_id: 2,
       netid: 'jjt4',
       reason: 'I was sick',
       approved: true
