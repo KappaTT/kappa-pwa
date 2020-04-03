@@ -112,6 +112,61 @@ const EventDrawer: React.FC<{}> = ({}) => {
                 <Block style={styles.eventHeader}>
                   <Text style={styles.eventDate}>{moment(selectedEvent.start).format('ddd LL h:mm A')}</Text>
                   <Text style={styles.eventTitle}>{selectedEvent.title}</Text>
+
+                  {selectedEvent.mandatory && (
+                    <Block style={styles.propertyWrapper}>
+                      <Icon
+                        style={styles.propertyIcon}
+                        family="Feather"
+                        name="alert-circle"
+                        size={14}
+                        color={theme.COLORS.PRIMARY}
+                      />
+
+                      <Text style={[styles.propertyText, { color: theme.COLORS.PRIMARY }]}>Mandatory</Text>
+                    </Block>
+                  )}
+                  {true && (
+                    <Block style={styles.propertyWrapper}>
+                      <Icon
+                        style={styles.propertyIcon}
+                        family="Feather"
+                        name="check-circle"
+                        size={14}
+                        color={theme.COLORS.PRIMARY_GREEN}
+                      />
+
+                      <Text style={[styles.propertyText, { color: theme.COLORS.PRIMARY_GREEN }]}>Checked In</Text>
+                    </Block>
+                  )}
+                  {false && (
+                    <Block style={styles.propertyWrapper}>
+                      <Icon
+                        style={styles.propertyIcon}
+                        family="Feather"
+                        name="check-circle"
+                        size={14}
+                        color={theme.COLORS.PRIMARY_GREEN}
+                      />
+
+                      <Text style={[styles.propertyText, { color: theme.COLORS.PRIMARY_GREEN }]}>Excused</Text>
+                    </Block>
+                  )}
+                  {false && (
+                    <Block style={styles.propertyWrapper}>
+                      <Icon
+                        style={styles.propertyIcon}
+                        family="Feather"
+                        name="clock"
+                        size={14}
+                        color={theme.COLORS.YELLOW_GRADIENT_END}
+                      />
+
+                      <Text style={[styles.propertyText, { color: theme.COLORS.YELLOW_GRADIENT_END }]}>
+                        Excuse under review
+                      </Text>
+                    </Block>
+                  )}
                 </Block>
 
                 <Block style={styles.eventBody}>
@@ -232,6 +287,17 @@ const styles = StyleSheet.create({
   eventTitle: {
     fontFamily: 'OpenSans-Bold',
     fontSize: 24
+  },
+  propertyWrapper: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  propertyIcon: {},
+  propertyText: {
+    marginLeft: 4,
+    fontFamily: 'OpenSans-SemiBold',
+    fontSize: 13
   },
   eventBody: {
     marginTop: 24
