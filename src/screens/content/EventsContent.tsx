@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
   eventSeparator: {
     marginHorizontal: 24,
     marginBottom: 16,
-    borderBottomColor: theme.COLORS.SUPER_LIGHT_BLUE_GRAY,
+    borderBottomColor: theme.COLORS.LIGHT_BORDER,
     borderBottomWidth: 1
   },
   eventContainer: {
