@@ -7,10 +7,10 @@ import moment from 'moment';
 
 import { theme } from '@constants';
 import { TRedux } from '@reducers';
-import { Block, Header, EndCapButton, Text } from '@components';
+import { _kappa } from '@reducers/actions';
+import { Block, Header, EndCapButton, Text, Icon } from '@components';
 import { NavigationTypes } from '@types';
 import { TabBarHeight, HeaderHeight, isEmpty } from '@services/utils';
-import { getEvents } from '@reducers/actions/kappa';
 import { log } from '@services/logService';
 import { TEvent } from '@backend/kappa';
 
@@ -27,27 +27,6 @@ const EventSkeleton: React.FC<{}> = ({}) => {
   );
 };
 
-const EventItem: React.FC<{ event: TEvent }> = ({ event }) => {
-  return (
-    <React.Fragment key={event.id}>
-      <TouchableOpacity onPress={() => log(event)}>
-        <Block style={styles.eventContainer}>
-          <Block style={styles.eventHeader}>
-            <Text style={styles.eventTitle}>{event.title}</Text>
-            <Text style={styles.eventDate}>{moment(event.start).format('h:mm A')}</Text>
-          </Block>
-
-          <Block style={styles.eventDescriptionWrapper}>
-            <Text style={styles.eventDescription}>{event.description}</Text>
-          </Block>
-        </Block>
-      </TouchableOpacity>
-
-      <Block style={styles.eventSeparator} />
-    </React.Fragment>
-  );
-};
-
 const EventsContent: React.FC<{
   navigation: NavigationTypes.ParamType;
 }> = ({ navigation }) => {
@@ -59,7 +38,8 @@ const EventsContent: React.FC<{
   const [refreshing, setRefreshing] = React.useState<boolean>(gettingEvents);
 
   const dispatch = useDispatch();
-  const dispatchGetEvents = React.useCallback(() => dispatch(getEvents(user)), [user]);
+  const dispatchGetEvents = React.useCallback(() => dispatch(_kappa.getEvents(user)), [dispatch, user]);
+  const dispatchSelectEvent = React.useCallback((eventId: number) => dispatch(_kappa.selectEvent(eventId)), [dispatch]);
 
   const insets = useSafeArea();
 
@@ -93,8 +73,35 @@ const EventsContent: React.FC<{
     );
   };
 
-  const renderItem = ({ item }) => {
-    return <EventItem event={item} />;
+  const renderItem = ({ item }: { item: TEvent }) => {
+    return (
+      <React.Fragment key={item.id}>
+        <TouchableOpacity onPress={() => dispatchSelectEvent(item.id)}>
+          <Block style={styles.eventContainer}>
+            <Block style={styles.eventHeader}>
+              <Text style={styles.eventTitle}>{item.title}</Text>
+              <Text style={styles.eventDate}>{moment(item.start).format('h:mm A')}</Text>
+
+              {item.mandatory && (
+                <Icon
+                  style={styles.mandatoryIcon}
+                  family="Feather"
+                  name="alert-circle"
+                  size={16}
+                  color={theme.COLORS.PRIMARY}
+                />
+              )}
+            </Block>
+
+            <Block style={styles.eventDescriptionWrapper}>
+              <Text style={styles.eventDescription}>{item.description}</Text>
+            </Block>
+          </Block>
+        </TouchableOpacity>
+
+        <Block style={styles.eventSeparator} />
+      </React.Fragment>
+    );
   };
 
   return (
@@ -191,6 +198,9 @@ const styles = StyleSheet.create({
     fontFamily: 'OpenSans',
     fontSize: 14,
     color: theme.COLORS.DARK_GRAY
+  },
+  mandatoryIcon: {
+    marginLeft: 8
   },
   eventDescriptionWrapper: {
     marginTop: 8,

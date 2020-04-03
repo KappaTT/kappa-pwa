@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, StatusBar } from 'react-native';
+import { StyleSheet, Image, StatusBar } from 'react-native';
 import { AppLoading } from 'expo';
 import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
@@ -12,7 +12,7 @@ import { GalioProvider } from '@galio';
 import { TRedux } from '@reducers';
 import { _auth, _prefs } from '@reducers/actions';
 import { incompleteUser, purge } from '@backend/auth';
-import { Block, FadeModal } from '@components';
+import { Block, Ghost, FadeModal, EventDrawer } from '@components';
 import { Images, theme } from '@constants';
 import AppNavigator from '@navigation/TabAppNavigator';
 import { setTopLevelNavigator, navigate } from '@navigation/NavigationService';
@@ -142,6 +142,10 @@ const App = () => {
               }}
             />
 
+            <Ghost style={styles.overlay}>
+              <EventDrawer />
+            </Ghost>
+
             <FadeModal
               transparent={false}
               visible={loginVisible}
@@ -160,5 +164,15 @@ const App = () => {
     );
   }
 };
+
+const styles = StyleSheet.create({
+  overlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0
+  }
+});
 
 export default App;
