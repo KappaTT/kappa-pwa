@@ -15,7 +15,7 @@ export const M_PATCH = 'PATCH';
 export const M_DELETE = 'DELETE';
 export type TMethod = typeof M_GET | typeof M_POST | typeof M_PUT | typeof M_PATCH | typeof M_DELETE;
 
-export const BASE_URL = 'https://jerde7y95m.execute-api.us-east-1.amazonaws.com/dev/';
+export const BASE_URL = '';
 export const BASE_URL_DEV = 'http://localhost:3000/dev/';
 
 export const BASE_URL_MOCKING = true;
