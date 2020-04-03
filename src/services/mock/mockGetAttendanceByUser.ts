@@ -5,5 +5,18 @@ export default {
       netid: 'jjt4'
     }
   ],
-  excused: []
+  excused: [
+    {
+      event_id: 3,
+      netid: 'jjt4',
+      reason: 'I was sick',
+      approved: true
+    },
+    {
+      event_id: 4,
+      netid: 'jjt4',
+      reason: 'I was sick',
+      approved: false
+    }
+  ]
 };

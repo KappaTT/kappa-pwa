@@ -62,6 +62,11 @@ export interface TExcuseUserDict {
   };
 }
 
+export interface TRecords {
+  attended: TAttendanceUserDict;
+  excused: TExcuseUserDict;
+}
+
 export interface TPoint {
   event_id: number;
   category: string;

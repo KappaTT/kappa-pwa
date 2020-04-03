@@ -1,5 +1,5 @@
-import { TEvent, TEventDict, getEventById, TAttendanceUserDict, TExcuseUserDict } from '@backend/kappa';
-import { incorporateAttendance } from '@services/kappaService';
+import { TEvent, TEventDict, getEventById, TAttendanceUserDict, TExcuseUserDict, TRecords } from '@backend/kappa';
+import { mergeRecords } from '@services/kappaService';
 
 export const GET_EVENTS = 'GET_EVENTS';
 export const GET_EVENTS_SUCCESS = 'GET_EVENTS_SUCCESS';
@@ -22,10 +22,7 @@ export interface TKappaState {
   getAttendanceErrorMessage: string;
 
   events: TEventDict;
-  attendance: {
-    attended: TAttendanceUserDict;
-    excused: TExcuseUserDict;
-  };
+  records: TRecords;
   directory: [];
 
   selectedEventId: number;
@@ -42,7 +39,7 @@ const initialState: TKappaState = {
   getAttendanceErrorMessage: '',
 
   events: {},
-  attendance: {
+  records: {
     attended: {},
     excused: {}
   },
@@ -85,7 +82,7 @@ export default (state = initialState, action: any): TKappaState => {
       return {
         ...state,
         gettingAttendance: false,
-        attendance: incorporateAttendance(state.attendance, {
+        records: mergeRecords(state.records, {
           attended: action.attended,
           excused: action.excused
         })
