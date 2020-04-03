@@ -10,9 +10,10 @@ import { TRedux } from '@reducers';
 import { _kappa } from '@reducers/actions';
 import { Block, Header, EndCapButton, Text, Icon } from '@components';
 import { NavigationTypes } from '@types';
-import { TabBarHeight, HeaderHeight, isEmpty } from '@services/utils';
+import { HeaderHeight, isEmpty } from '@services/utils';
 import { log } from '@services/logService';
 import { TEvent } from '@backend/kappa';
+import { hasValidCheckIn } from '@services/kappaService';
 
 const EventSkeleton: React.FC<{}> = ({}) => {
   return (
@@ -31,6 +32,7 @@ const EventsContent: React.FC<{
   navigation: NavigationTypes.ParamType;
 }> = ({ navigation }) => {
   const user = useSelector((state: TRedux) => state.auth.user);
+  const records = useSelector((state: TRedux) => state.kappa.records);
   const gettingEvents = useSelector((state: TRedux) => state.kappa.gettingEvents);
   const gettingAttendance = useSelector((state: TRedux) => state.kappa.gettingAttendance);
   const getEventsError = useSelector((state: TRedux) => state.kappa.getEventsError);
@@ -95,6 +97,16 @@ const EventsContent: React.FC<{
                   name="alert-circle"
                   size={16}
                   color={theme.COLORS.PRIMARY}
+                />
+              )}
+
+              {hasValidCheckIn(records, user.email, item.id.toString()) && (
+                <Icon
+                  style={styles.checkIcon}
+                  family="Feather"
+                  name="check-circle"
+                  size={16}
+                  color={theme.COLORS.PRIMARY_GREEN}
                 />
               )}
             </Block>
@@ -206,6 +218,9 @@ const styles = StyleSheet.create({
     color: theme.COLORS.DARK_GRAY
   },
   mandatoryIcon: {
+    marginLeft: 8
+  },
+  checkIcon: {
     marginLeft: 8
   },
   eventDescriptionWrapper: {
