@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
 import { useSafeArea } from 'react-native-safe-area-context';
+import moment from 'moment';
 
 import { TRedux } from '@reducers';
 import { _auth, _kappa } from '@reducers/actions';
@@ -58,13 +59,17 @@ const EventDrawer: React.FC<{}> = ({}) => {
     setSnapPoint(0);
   };
 
-  const onOpenEnd = () => {};
+  const onOpenEnd = () => {
+    setSnapPoint(0);
+  };
 
   const onCloseStart = () => {
     setSnapPoint(1);
   };
 
   const onCloseEnd = () => {
+    setSnapPoint(1);
+
     dispatchUnselectEvent();
   };
 
@@ -79,7 +84,6 @@ const EventDrawer: React.FC<{}> = ({}) => {
   const renderHeader = () => {
     return (
       <Block style={styles.header}>
-        <Ghost style={styles.headerCap} />
         <Block style={styles.panelHeader}>
           <Block style={styles.panelHandle} />
         </Block>
@@ -93,27 +97,60 @@ const EventDrawer: React.FC<{}> = ({}) => {
         style={[
           styles.contentWrapper,
           {
-            height: sheetHeight
+            height: sheetHeight - 48
           }
         ]}
-      ></Block>
+      >
+        {selectedEvent && (
+          <React.Fragment>
+            <ScrollView
+              ref={ref => (scrollRef.current = ref)}
+              refreshControl={<RefreshControl refreshing={false} onRefresh={() => {}} />}
+              scrollIndicatorInsets={{ right: 1 }}
+            >
+              <Block style={styles.eventWrapper}>
+                <Block style={styles.eventHeader}>
+                  <Text style={styles.eventDate}>{moment(selectedEvent.start).format('ddd LL h:mm A')}</Text>
+                  <Text style={styles.eventTitle}>{selectedEvent.title}</Text>
+                </Block>
+              </Block>
+            </ScrollView>
+
+            <Block
+              style={[
+                styles.bottomBar,
+                {
+                  marginBottom: insets.bottom
+                }
+              ]}
+            >
+              <Block style={styles.excuseButton}>
+                <RoundButton alt={true} label="Request Excuse" />
+              </Block>
+              <Block style={styles.bottomDivider} />
+              <Block style={styles.attendButton}>
+                <RoundButton disabled={moment(selectedEvent.start).isBefore(moment(), 'day')} label="Check In" />
+              </Block>
+            </Block>
+          </React.Fragment>
+        )}
+      </Block>
     );
   };
 
   return (
     <Ghost style={styles.container}>
-      {snapPoint !== 1 && (
-        <TouchableWithoutFeedback onPress={onPressClose}>
-          <Animated.View
-            style={[
-              styles.background,
-              {
-                opacity: backgroundOpacity
-              }
-            ]}
-          />
-        </TouchableWithoutFeedback>
-      )}
+      <TouchableWithoutFeedback onPress={onPressClose}>
+        <Animated.View
+          pointerEvents={selectedEventId === -1 ? 'none' : 'auto'}
+          style={[
+            styles.background,
+            {
+              opacity: backgroundOpacity
+            }
+          ]}
+        />
+      </TouchableWithoutFeedback>
 
       <BottomSheet
         ref={ref => (sheetRef.current = ref)}
@@ -141,12 +178,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: theme.COLORS.BLACK
   },
-  headerCap: {
-    position: 'absolute',
-    top: -68
-  },
   header: {
-    height: TabBarHeight,
+    height: 48,
     paddingTop: 8,
     paddingBottom: 8,
     borderTopLeftRadius: 20,
@@ -172,6 +205,39 @@ const styles = StyleSheet.create({
   },
   contentWrapper: {
     backgroundColor: theme.COLORS.WHITE
+  },
+  eventWrapper: {
+    paddingHorizontal: 24
+  },
+  eventHeader: {},
+  eventDate: {
+    fontFamily: 'OpenSans-Bold',
+    color: theme.COLORS.GRAY,
+    fontSize: 14,
+    textTransform: 'uppercase'
+  },
+  eventTitle: {
+    fontFamily: 'OpenSans-Bold',
+    fontSize: 24
+  },
+  bottomBar: {
+    width: '100%',
+    height: 64,
+    backgroundColor: theme.COLORS.WHITE,
+    paddingHorizontal: 24,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  excuseButton: {
+    flex: 1
+  },
+  bottomDivider: {
+    width: 8
+  },
+  attendButton: {
+    flex: 1
   }
 });
 
