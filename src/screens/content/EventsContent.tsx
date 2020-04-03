@@ -104,7 +104,7 @@ const EventsContent: React.FC<{
                 <Icon
                   style={styles.checkIcon}
                   family="Feather"
-                  name="check-circle"
+                  name="check"
                   size={16}
                   color={theme.COLORS.PRIMARY_GREEN}
                 />

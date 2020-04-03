@@ -17,11 +17,13 @@ import Ghost from '@components/Ghost';
 import Text from '@components/Text';
 import RoundButton from '@components/RoundButton';
 import Icon from '@components/Icon';
+import { getAttendance, getExcuse } from '@services/kappaService';
 
 const { width, height } = Dimensions.get('screen');
 
 const EventDrawer: React.FC<{}> = ({}) => {
   const user = useSelector((state: TRedux) => state.auth.user);
+  const records = useSelector((state: TRedux) => state.kappa.records);
   const selectedEventId = useSelector((state: TRedux) => state.kappa.selectedEventId);
   const selectedEvent = useSelector((state: TRedux) => state.kappa.selectedEvent);
 
@@ -54,6 +56,14 @@ const EventDrawer: React.FC<{}> = ({}) => {
   const onPressClose = React.useCallback(() => {
     snapTo(1);
   }, []);
+
+  const attended = React.useMemo(() => {
+    return getAttendance(records, user.email, selectedEventId.toString());
+  }, [records, user, selectedEventId]);
+
+  const excused = React.useMemo(() => {
+    return getExcuse(records, user.email, selectedEventId.toString());
+  }, [records, user, selectedEventId]);
 
   const onOpenStart = () => {
     setSnapPoint(0);
@@ -126,12 +136,12 @@ const EventDrawer: React.FC<{}> = ({}) => {
                       <Text style={[styles.propertyText, { color: theme.COLORS.PRIMARY }]}>Mandatory</Text>
                     </Block>
                   )}
-                  {true && (
+                  {attended !== undefined && (
                     <Block style={styles.propertyWrapper}>
                       <Icon
                         style={styles.propertyIcon}
                         family="Feather"
-                        name="check-circle"
+                        name="check"
                         size={14}
                         color={theme.COLORS.PRIMARY_GREEN}
                       />
@@ -139,12 +149,12 @@ const EventDrawer: React.FC<{}> = ({}) => {
                       <Text style={[styles.propertyText, { color: theme.COLORS.PRIMARY_GREEN }]}>Checked In</Text>
                     </Block>
                   )}
-                  {false && (
+                  {excused !== undefined && excused.approved && (
                     <Block style={styles.propertyWrapper}>
                       <Icon
                         style={styles.propertyIcon}
                         family="Feather"
-                        name="check-circle"
+                        name="check"
                         size={14}
                         color={theme.COLORS.PRIMARY_GREEN}
                       />
@@ -152,7 +162,7 @@ const EventDrawer: React.FC<{}> = ({}) => {
                       <Text style={[styles.propertyText, { color: theme.COLORS.PRIMARY_GREEN }]}>Excused</Text>
                     </Block>
                   )}
-                  {false && (
+                  {excused !== undefined && !excused.approved && (
                     <Block style={styles.propertyWrapper}>
                       <Icon
                         style={styles.propertyIcon}
