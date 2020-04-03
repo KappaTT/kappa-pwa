@@ -15,8 +15,8 @@ import moment from 'moment';
 export interface TEvent {
   id: number;
   creator: string;
-  eventType: string;
-  eventCode?: string;
+  event_type: string;
+  event_code?: string;
   mandatory: boolean;
   excusable: boolean;
   title: string;
@@ -31,19 +31,19 @@ export interface TEventDict {
 }
 
 export interface TAttendance {
-  eventId: number;
+  event_id: number;
   netid: string;
 }
 
 export interface TExcuse {
-  eventId: number;
+  event_id: number;
   netid: string;
   reason: string;
   approved: boolean;
 }
 
 export interface TPoint {
-  eventId: number;
+  event_id: number;
   category: string;
   count: number;
 }

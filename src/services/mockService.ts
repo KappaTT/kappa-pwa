@@ -1,6 +1,7 @@
 import { TResponse } from '@backend/backend';
 import { log } from '@services/logService';
 import mockGetEvents from '@services/mock/mockGetEvents';
+import mockGetAttendanceByUser from '@services/mock/mockGetAttendanceByUser';
 
 export const getMockEndpoint = (endpoint: string, method: string) => {
   const mock = `${method}|${endpoint}`;
@@ -8,6 +9,8 @@ export const getMockEndpoint = (endpoint: string, method: string) => {
   switch (mock) {
     case `GET|events`:
       return mockGetEvents;
+    case `GET|attendance/user/jjt4@illinois.edu`:
+      return mockGetAttendanceByUser;
   }
 
   return null;
