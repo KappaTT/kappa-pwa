@@ -113,6 +113,10 @@ const EventDrawer: React.FC<{}> = ({}) => {
                   <Text style={styles.eventDate}>{moment(selectedEvent.start).format('ddd LL h:mm A')}</Text>
                   <Text style={styles.eventTitle}>{selectedEvent.title}</Text>
                 </Block>
+
+                <Block style={styles.eventBody}>
+                  <Text style={styles.eventDescription}>{selectedEvent.description}</Text>
+                </Block>
               </Block>
             </ScrollView>
 
@@ -124,12 +128,21 @@ const EventDrawer: React.FC<{}> = ({}) => {
                 }
               ]}
             >
-              <Block style={styles.excuseButton}>
-                <RoundButton alt={true} label="Request Excuse" />
-              </Block>
-              <Block style={styles.bottomDivider} />
+              {selectedEvent.excusable && (
+                <React.Fragment>
+                  <Block style={styles.excuseButton}>
+                    <RoundButton alt={true} label="Request Excuse" onPress={() => log('TODO')} />
+                  </Block>
+                  <Block style={styles.bottomDivider} />
+                </React.Fragment>
+              )}
+
               <Block style={styles.attendButton}>
-                <RoundButton disabled={moment(selectedEvent.start).isBefore(moment(), 'day')} label="Check In" />
+                <RoundButton
+                  disabled={moment(selectedEvent.start).isBefore(moment(), 'day')}
+                  label="Check In"
+                  onPress={() => log('TODO')}
+                />
               </Block>
             </Block>
           </React.Fragment>
@@ -219,6 +232,13 @@ const styles = StyleSheet.create({
   eventTitle: {
     fontFamily: 'OpenSans-Bold',
     fontSize: 24
+  },
+  eventBody: {
+    marginTop: 24
+  },
+  eventDescription: {
+    fontFamily: 'OpenSans',
+    fontSize: 17
   },
   bottomBar: {
     width: '100%',
