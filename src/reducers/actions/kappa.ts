@@ -1,5 +1,14 @@
 import { Kappa } from '@backend';
-import { GET_EVENTS, GET_EVENTS_SUCCESS, GET_EVENTS_FAILURE, SELECT_EVENT, UNSELECT_EVENT } from '@reducers/kappa';
+import {
+  GET_EVENTS,
+  GET_EVENTS_SUCCESS,
+  GET_EVENTS_FAILURE,
+  SELECT_EVENT,
+  UNSELECT_EVENT,
+  GET_ATTENDANCE,
+  GET_ATTENDANCE_SUCCESS,
+  GET_ATTENDANCE_FAILURE
+} from '@reducers/kappa';
 import { TUser } from '@backend/auth';
 
 const gettingEvents = () => {
@@ -31,6 +40,41 @@ export const getEvents = (user: TUser) => {
         dispatch(getEventsSuccess(res.data));
       } else {
         dispatch(getEventsFailure(res.error));
+      }
+    });
+  };
+};
+
+const gettingMyAttendance = () => {
+  return {
+    type: GET_ATTENDANCE
+  };
+};
+
+const getAttendanceSuccess = data => {
+  return {
+    type: GET_ATTENDANCE_SUCCESS,
+    attended: data.attended,
+    excused: data.excused
+  };
+};
+
+const getAttendanceFailure = err => {
+  return {
+    type: GET_ATTENDANCE_FAILURE,
+    error: err
+  };
+};
+
+export const getMyAttendance = (user: TUser) => {
+  return dispatch => {
+    dispatch(gettingMyAttendance());
+
+    Kappa.getAttendanceByUser({ user }).then(res => {
+      if (res.success) {
+        dispatch(getAttendanceSuccess(res.data));
+      } else {
+        dispatch(getAttendanceFailure(res.error));
       }
     });
   };

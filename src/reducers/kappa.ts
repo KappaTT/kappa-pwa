@@ -1,8 +1,13 @@
-import { TEvent, TEventDict, getEventById } from '@backend/kappa';
+import { TEvent, TEventDict, getEventById, TAttendanceUserDict, TExcuseUserDict } from '@backend/kappa';
+import { incorporateAttendance } from '@services/kappaService';
 
 export const GET_EVENTS = 'GET_EVENTS';
 export const GET_EVENTS_SUCCESS = 'GET_EVENTS_SUCCESS';
 export const GET_EVENTS_FAILURE = 'GET_EVENTS_FAILURE';
+
+export const GET_ATTENDANCE = 'GET_ATTENDANCE';
+export const GET_ATTENDANCE_SUCCESS = 'GET_ATTENDANCE_SUCCESS';
+export const GET_ATTENDANCE_FAILURE = 'GET_ATTENDANCE_FAILURE';
 
 export const SELECT_EVENT = 'SELECT_EVENT';
 export const UNSELECT_EVENT = 'UNSELECT_EVENT';
@@ -12,7 +17,15 @@ export interface TKappaState {
   getEventsError: boolean;
   getEventsErrorMessage: string;
 
+  gettingAttendance: boolean;
+  getAttendanceError: boolean;
+  getAttendanceErrorMessage: string;
+
   events: TEventDict;
+  attendance: {
+    attended: TAttendanceUserDict;
+    excused: TExcuseUserDict;
+  };
   directory: [];
 
   selectedEventId: number;
@@ -24,7 +37,15 @@ const initialState: TKappaState = {
   getEventsError: false,
   getEventsErrorMessage: '',
 
+  gettingAttendance: false,
+  getAttendanceError: false,
+  getAttendanceErrorMessage: '',
+
   events: {},
+  attendance: {
+    attended: {},
+    excused: {}
+  },
   directory: [],
 
   selectedEventId: -1,
@@ -52,6 +73,28 @@ export default (state = initialState, action: any): TKappaState => {
         gettingEvents: false,
         getEventsError: true,
         getEventsErrorMessage: action.error.message
+      };
+    case GET_ATTENDANCE:
+      return {
+        ...state,
+        gettingAttendance: true,
+        getAttendanceError: false,
+        getAttendanceErrorMessage: ''
+      };
+    case GET_ATTENDANCE_SUCCESS:
+      return {
+        ...state,
+        gettingAttendance: false,
+        attendance: incorporateAttendance(state.attendance, {
+          attended: action.attended,
+          excused: action.excused
+        })
+      };
+    case GET_ATTENDANCE_FAILURE:
+      return {
+        ...state,
+        getAttendanceError: true,
+        getAttendanceErrorMessage: action.error.message
       };
     case SELECT_EVENT:
       return {

@@ -1,7 +1,7 @@
 import {
   ENDPOINTS,
   METHODS,
-  TResponseData,
+  TResponse,
   makeRequest,
   makeAuthorizedRequest,
   pass,
@@ -35,11 +35,27 @@ export interface TAttendance {
   netid: string;
 }
 
+export interface TAttendanceEventDict {
+  [event_id: number]: Array<TAttendance>;
+}
+
+export interface TAttendanceUserDict {
+  [netid: string]: TAttendanceEventDict;
+}
+
 export interface TExcuse {
   event_id: number;
   netid: string;
   reason: string;
   approved: boolean;
+}
+
+export interface TExcuseEventDict {
+  [event_id: number]: Array<TExcuse>;
+}
+
+export interface TExcuseUserDict {
+  [netid: string]: TExcuseEventDict;
 }
 
 export interface TPoint {
@@ -56,7 +72,7 @@ interface TGetEventsRequestResponse {
   events: Array<TEvent>;
 }
 
-interface TGetEventsResponse extends TResponseData {
+interface TGetEventsResponse extends TResponse {
   data?: {
     events: TEventDict;
   };
@@ -96,11 +112,59 @@ export const getEvents = async (payload: TGetEventsPayload): Promise<TGetEventsR
         return fail({}, 'your credentials were invalid');
       }
 
-      return fail({}, '');
+      return fail({}, response.error?.message);
     }
 
     return pass({
       events: separateByDate(response.data.events)
+    });
+  } catch (error) {
+    log(error);
+    return fail({}, "that wasn't supposed to happen");
+  }
+};
+
+export interface TGetAttendanceByUserPayload {
+  user: TUser;
+}
+
+interface TGetAttendanceByUserRequestResponse {
+  attended: Array<TAttendance>;
+  excused: Array<TExcuse>;
+}
+
+interface TGetAttendanceByUserResponse extends TResponse {
+  data?: {
+    attended: Array<TAttendance>;
+    excused: Array<TExcuse>;
+  };
+}
+
+export const getAttendanceByUser = async (
+  payload: TGetAttendanceByUserPayload
+): Promise<TGetAttendanceByUserResponse> => {
+  try {
+    const response = await makeAuthorizedRequest<TGetAttendanceByUserRequestResponse>(
+      ENDPOINTS.GET_ATTENDANCE_BY_USER(payload.user),
+      METHODS.GET_ATTENDANCE_BY_USER,
+      {},
+      payload.user.sessionToken
+    );
+
+    log('Get attendance response', response.code);
+
+    if (!response.success || response.code === 500) {
+      return fail({}, 'problem connecting to server');
+    } else if (response.code !== 200) {
+      if (response.code === 401) {
+        return fail({}, 'your credentials were invalid');
+      }
+
+      return fail({}, response.error?.message);
+    }
+
+    return pass({
+      ...response.data
     });
   } catch (error) {
     log(error);
