@@ -18,17 +18,26 @@ import Ghost from '@components/Ghost';
 import Text from '@components/Text';
 import RoundButton from '@components/RoundButton';
 import Icon from '@components/Icon';
-import { getAttendance, getExcuse } from '@services/kappaService';
+import { getAttendance, getExcuse, getEventRecordCounts } from '@services/kappaService';
 
 const { width, height } = Dimensions.get('screen');
 
 const EventDrawer: React.FC<{}> = ({}) => {
   const user = useSelector((state: TRedux) => state.auth.user);
+  const directorySize = useSelector((state: TRedux) => state.kappa.directorySize);
   const records = useSelector((state: TRedux) => state.kappa.records);
+  const gettingAttendance = useSelector((state: TRedux) => state.kappa.gettingAttendance);
   const selectedEventId = useSelector((state: TRedux) => state.kappa.selectedEventId);
   const selectedEvent = useSelector((state: TRedux) => state.kappa.selectedEvent);
 
+  const [refreshing, setRefreshing] = React.useState<boolean>(gettingAttendance);
+
   const dispatch = useDispatch();
+  const dispatchGetAttendance = React.useCallback(
+    () => dispatch(_kappa.getEventAttendance(user, selectedEventId.toString())),
+    [dispatch, user, selectedEventId]
+  );
+  const dispatchGetMyAttendance = React.useCallback(() => dispatch(_kappa.getMyAttendance(user)), [dispatch, user]);
   const dispatchUnselectEvent = React.useCallback(() => dispatch(_kappa.unselectEvent()), [dispatch]);
 
   const insets = useSafeArea();
@@ -45,6 +54,20 @@ const EventDrawer: React.FC<{}> = ({}) => {
     inputRange: [0, 1],
     outputRange: [0.5, 0]
   });
+
+  const loadData = () => {
+    if (user.privileged) {
+      dispatchGetAttendance();
+    } else {
+      dispatchGetMyAttendance();
+    }
+  };
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+
+    setTimeout(loadData, 500);
+  }, [refreshing]);
 
   const snapTo = React.useCallback(
     newSnap => {
@@ -66,6 +89,19 @@ const EventDrawer: React.FC<{}> = ({}) => {
     return getExcuse(records, user.email, selectedEventId.toString());
   }, [records, user, selectedEventId]);
 
+  const recordCounts = React.useMemo(() => {
+    return getEventRecordCounts(records, selectedEventId.toString());
+  }, [records, selectedEventId]);
+
+  const recordStats = React.useMemo(() => {
+    const fraction = directorySize === 0 ? 0 : recordCounts.sum / directorySize;
+
+    return {
+      raw: fraction,
+      percent: `${Math.round(fraction * 100)}%`
+    };
+  }, [recordCounts, directorySize]);
+
   const onOpenStart = () => {
     setSnapPoint(0);
   };
@@ -85,10 +121,18 @@ const EventDrawer: React.FC<{}> = ({}) => {
   };
 
   React.useEffect(() => {
+    if (!gettingAttendance) {
+      setRefreshing(false);
+    }
+  }, [gettingAttendance]);
+
+  React.useEffect(() => {
     if (selectedEventId === -1) {
       snapTo(1);
     } else {
       snapTo(0);
+
+      loadData();
     }
   }, [selectedEventId]);
 
@@ -116,7 +160,7 @@ const EventDrawer: React.FC<{}> = ({}) => {
           <React.Fragment>
             <ScrollView
               ref={ref => (scrollRef.current = ref)}
-              refreshControl={<RefreshControl refreshing={false} onRefresh={() => {}} />}
+              refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
               scrollIndicatorInsets={{ right: 1 }}
             >
               <Block style={styles.eventWrapper}>
@@ -193,7 +237,7 @@ const EventDrawer: React.FC<{}> = ({}) => {
                     </Block>
                     <Block style={styles.splitProperty}>
                       <Text style={styles.propertyHeader}>Points</Text>
-                      <Text style={styles.propertyValue}>TODO</Text>
+                      <Text style={styles.propertyValue}>N/A</Text>
                     </Block>
                   </Block>
 
@@ -202,29 +246,29 @@ const EventDrawer: React.FC<{}> = ({}) => {
                       <Block style={styles.circleChartContainer}>
                         <ProgressCircle
                           style={styles.circleChart}
-                          progress={0.7}
+                          progress={recordStats.raw}
                           progressColor={theme.COLORS.PRIMARY}
                           startAngle={-Math.PI * 0.8}
                           endAngle={Math.PI * 0.8}
                         />
                         <Block style={styles.circleChartLabels}>
-                          <Text style={styles.circleChartValue}>70%</Text>
+                          <Text style={styles.circleChartValue}>{recordStats.percent}</Text>
                           <Text style={styles.circleChartTitle}>Headcount</Text>
                         </Block>
                       </Block>
 
                       <Block style={styles.chartPropertyContainer}>
                         <Block style={styles.chartProperty}>
-                          <Text style={styles.chartPropertyLabel}>Checked-In</Text>
-                          <Text style={styles.chartPropertyValue}>60</Text>
+                          <Text style={styles.chartPropertyLabel}>Attended</Text>
+                          <Text style={styles.chartPropertyValue}>{recordCounts.attended}</Text>
                         </Block>
                         <Block style={styles.chartProperty}>
                           <Text style={styles.chartPropertyLabel}>Excused</Text>
-                          <Text style={styles.chartPropertyValue}>10</Text>
+                          <Text style={styles.chartPropertyValue}>{recordCounts.excused}</Text>
                         </Block>
                         <Block style={styles.chartProperty}>
                           <Text style={styles.chartPropertyLabel}>Pending</Text>
-                          <Text style={styles.chartPropertyValue}>5</Text>
+                          <Text style={styles.chartPropertyValue}>{recordCounts.pending}</Text>
                         </Block>
                       </Block>
                     </Block>

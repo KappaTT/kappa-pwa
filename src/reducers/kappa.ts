@@ -33,6 +33,8 @@ export interface TKappaState {
   records: TRecords;
   directory: TDirectory;
 
+  directorySize: number;
+
   selectedEventId: number;
   selectedEvent: TEvent;
 }
@@ -56,6 +58,8 @@ const initialState: TKappaState = {
     excused: {}
   },
   directory: {},
+
+  directorySize: 0,
 
   selectedEventId: -1,
   selectedEvent: null
@@ -94,7 +98,8 @@ export default (state = initialState, action: any): TKappaState => {
       return {
         ...state,
         gettingDirectory: false,
-        directory: separateByEmail(action.users)
+        directory: separateByEmail(action.users),
+        directorySize: action.users.length
       };
     case GET_DIRECTORY_FAILURE:
       return {

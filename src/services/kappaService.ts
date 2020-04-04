@@ -95,6 +95,39 @@ export const getExcuse = (records: TRecords, email: string, event_id: string) =>
   return records.excused[email][event_id];
 };
 
+export const getEventRecordCounts = (records: TRecords, event_id: string) => {
+  let attended = 0;
+  let excused = 0;
+  let pending = 0;
+  let sum = 0;
+
+  for (const record of Object.values(records.attended)) {
+    if (record.hasOwnProperty(event_id)) {
+      attended++;
+      sum++;
+    }
+  }
+
+  for (const record of Object.values(records.excused)) {
+    if (record.hasOwnProperty(event_id)) {
+      if (record[event_id].approved) {
+        excused++;
+      } else {
+        pending++;
+      }
+
+      sum++;
+    }
+  }
+
+  return {
+    attended,
+    excused,
+    pending,
+    sum
+  };
+};
+
 export const hasValidCheckIn = (records: TRecords, email: string, event_id: string) => {
   const attend = getAttendance(records, email, event_id);
 

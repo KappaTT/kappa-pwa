@@ -32,13 +32,15 @@ const EventsContent: React.FC<{
   navigation: NavigationTypes.ParamType;
 }> = ({ navigation }) => {
   const user = useSelector((state: TRedux) => state.auth.user);
+  const directory = useSelector((state: TRedux) => state.kappa.directory);
   const records = useSelector((state: TRedux) => state.kappa.records);
   const gettingEvents = useSelector((state: TRedux) => state.kappa.gettingEvents);
+  const gettingDirectory = useSelector((state: TRedux) => state.kappa.gettingDirectory);
   const gettingAttendance = useSelector((state: TRedux) => state.kappa.gettingAttendance);
   const getEventsError = useSelector((state: TRedux) => state.kappa.getEventsError);
   const events = useSelector((state: TRedux) => state.kappa.events);
 
-  const [refreshing, setRefreshing] = React.useState<boolean>(gettingEvents);
+  const [refreshing, setRefreshing] = React.useState<boolean>(gettingEvents || gettingDirectory || gettingAttendance);
 
   const dispatch = useDispatch();
   const dispatchGetEvents = React.useCallback(() => dispatch(_kappa.getEvents(user)), [dispatch, user]);
@@ -57,16 +59,14 @@ const EventsContent: React.FC<{
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
 
-    setTimeout(() => {
-      loadData();
-    }, 500);
+    setTimeout(loadData, 500);
   }, [refreshing]);
 
   React.useEffect(() => {
-    if (!gettingEvents && !gettingAttendance) {
+    if (!gettingEvents && !gettingDirectory && !gettingAttendance) {
       setRefreshing(false);
     }
-  }, [gettingEvents, gettingAttendance]);
+  }, [gettingEvents, gettingDirectory, gettingAttendance]);
 
   React.useEffect(() => {
     if (user?.sessionToken) {
