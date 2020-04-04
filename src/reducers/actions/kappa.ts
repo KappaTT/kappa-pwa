@@ -98,7 +98,9 @@ export const getEventAttendance = (user: TUser, target: string) => {
   };
 };
 
-export const getDirectory = (user: TUser) => {};
+export const getDirectory = (user: TUser) => {
+  return dispatch => {};
+};
 
 export const selectEvent = (eventId: number) => {
   return {

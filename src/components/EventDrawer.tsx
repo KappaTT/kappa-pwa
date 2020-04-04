@@ -5,6 +5,7 @@ import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
 import { useSafeArea } from 'react-native-safe-area-context';
 import moment from 'moment';
+import { ProgressCircle } from 'react-native-svg-charts';
 
 import { TRedux } from '@reducers';
 import { _auth, _kappa } from '@reducers/actions';
@@ -111,7 +112,7 @@ const EventDrawer: React.FC<{}> = ({}) => {
           }
         ]}
       >
-        {selectedEvent && (
+        {selectedEvent !== null && (
           <React.Fragment>
             <ScrollView
               ref={ref => (scrollRef.current = ref)}
@@ -181,6 +182,53 @@ const EventDrawer: React.FC<{}> = ({}) => {
 
                 <Block style={styles.eventBody}>
                   <Text style={styles.eventDescription}>{selectedEvent.description}</Text>
+
+                  <Text style={styles.propertyHeader}>Location</Text>
+                  <Text style={styles.propertyValue}>{selectedEvent.location}</Text>
+
+                  <Block style={styles.splitPropertyRow}>
+                    <Block style={styles.splitProperty}>
+                      <Text style={styles.propertyHeader}>Duration</Text>
+                      <Text style={styles.propertyValue}>{selectedEvent.duration} mins</Text>
+                    </Block>
+                    <Block style={styles.splitProperty}>
+                      <Text style={styles.propertyHeader}>Points</Text>
+                      <Text style={styles.propertyValue}>TODO</Text>
+                    </Block>
+                  </Block>
+
+                  {user.privileged && (
+                    <Block style={styles.adminContainer}>
+                      <Block style={styles.circleChartContainer}>
+                        <ProgressCircle
+                          style={styles.circleChart}
+                          progress={0.7}
+                          progressColor={theme.COLORS.PRIMARY}
+                          startAngle={-Math.PI * 0.8}
+                          endAngle={Math.PI * 0.8}
+                        />
+                        <Block style={styles.circleChartLabels}>
+                          <Text style={styles.circleChartValue}>70%</Text>
+                          <Text style={styles.circleChartTitle}>Headcount</Text>
+                        </Block>
+                      </Block>
+
+                      <Block style={styles.chartPropertyContainer}>
+                        <Block style={styles.chartProperty}>
+                          <Text style={styles.chartPropertyLabel}>Checked-In</Text>
+                          <Text style={styles.chartPropertyValue}>60</Text>
+                        </Block>
+                        <Block style={styles.chartProperty}>
+                          <Text style={styles.chartPropertyLabel}>Excused</Text>
+                          <Text style={styles.chartPropertyValue}>10</Text>
+                        </Block>
+                        <Block style={styles.chartProperty}>
+                          <Text style={styles.chartPropertyLabel}>Pending</Text>
+                          <Text style={styles.chartPropertyValue}>5</Text>
+                        </Block>
+                      </Block>
+                    </Block>
+                  )}
                 </Block>
               </Block>
             </ScrollView>
@@ -193,7 +241,7 @@ const EventDrawer: React.FC<{}> = ({}) => {
                 }
               ]}
             >
-              {selectedEvent.excusable && (
+              {selectedEvent.excusable === 1 && (
                 <React.Fragment>
                   <Block style={styles.excuseButton}>
                     <RoundButton
@@ -318,8 +366,85 @@ const styles = StyleSheet.create({
     marginTop: 24
   },
   eventDescription: {
+    marginBottom: 8,
     fontFamily: 'OpenSans',
     fontSize: 17
+  },
+  propertyHeader: {
+    marginTop: 16,
+    fontFamily: 'OpenSans-SemiBold',
+    fontSize: 13,
+    textTransform: 'uppercase',
+    color: theme.COLORS.GRAY
+  },
+  propertyValue: {
+    marginTop: 4,
+    fontFamily: 'OpenSans',
+    fontSize: 17
+  },
+  splitPropertyRow: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  splitProperty: {
+    width: '50%'
+  },
+  adminContainer: {
+    marginTop: 24,
+    marginBottom: 24,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  circleChartContainer: {
+    width: 144,
+    height: 144
+  },
+  circleChart: {
+    height: '100%'
+  },
+  circleChartLabels: {
+    position: 'absolute',
+    width: 144,
+    height: 144,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  circleChartValue: {
+    fontFamily: 'OpenSans',
+    fontSize: 17
+  },
+  circleChartTitle: {
+    fontFamily: 'OpenSans-SemiBold',
+    fontSize: 13,
+    textTransform: 'uppercase',
+    color: theme.COLORS.GRAY
+  },
+  chartPropertyContainer: {
+    flexGrow: 1,
+    paddingLeft: 24,
+    justifyContent: 'center'
+  },
+  chartProperty: {
+    height: 42,
+    borderBottomWidth: 1,
+    borderBottomColor: theme.COLORS.LIGHT_BORDER,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
+  chartPropertyLabel: {
+    fontFamily: 'OpenSans-SemiBold',
+    fontSize: 15,
+    color: theme.COLORS.GRAY,
+    textTransform: 'uppercase'
+  },
+  chartPropertyValue: {
+    fontFamily: 'OpenSans',
+    fontSize: 15
   },
   bottomBar: {
     width: '100%',

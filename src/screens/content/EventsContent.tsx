@@ -43,16 +43,22 @@ const EventsContent: React.FC<{
   const dispatch = useDispatch();
   const dispatchGetEvents = React.useCallback(() => dispatch(_kappa.getEvents(user)), [dispatch, user]);
   const dispatchGetMyAttendance = React.useCallback(() => dispatch(_kappa.getMyAttendance(user)), [dispatch, user]);
+  const dispatchGetDirectory = React.useCallback(() => dispatch(_kappa.getDirectory(user)), [dispatch, user]);
   const dispatchSelectEvent = React.useCallback((eventId: number) => dispatch(_kappa.selectEvent(eventId)), [dispatch]);
 
   const insets = useSafeArea();
+
+  const loadData = () => {
+    dispatchGetEvents();
+    dispatchGetMyAttendance();
+    dispatchGetDirectory();
+  };
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
 
     setTimeout(() => {
-      dispatchGetEvents();
-      dispatchGetMyAttendance();
+      loadData();
     }, 500);
   }, [refreshing]);
 
@@ -64,8 +70,7 @@ const EventsContent: React.FC<{
 
   React.useEffect(() => {
     if (user?.sessionToken) {
-      dispatchGetEvents();
-      dispatchGetMyAttendance();
+      loadData();
     }
   }, [user]);
 
