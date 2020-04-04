@@ -126,10 +126,10 @@ const BrotherDrawer: React.FC<{}> = ({}) => {
   const mandatory = React.useMemo(() => {
     if (!user.privileged) return [];
 
-    if (isEmpty(missedMandatory[user.email])) return [];
+    if (isEmpty(missedMandatory[selectedUserEmail])) return [];
 
-    return Object.values(missedMandatory[user.email]).sort(sortEventByDate);
-  }, [user, missedMandatory]);
+    return Object.values(missedMandatory[selectedUserEmail]).sort(sortEventByDate);
+  }, [user, missedMandatory, selectedUserEmail]);
 
   const onOpenStart = () => {
     setSnapPoint(0);

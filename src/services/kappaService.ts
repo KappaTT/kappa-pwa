@@ -9,7 +9,8 @@ import {
   TDirectory,
   TEventDict,
   TAttendanceEventDict,
-  TExcuseEventDict
+  TExcuseEventDict,
+  TUserEventDict
 } from '@backend/kappa';
 import { TUser } from '@backend/auth';
 
@@ -243,7 +244,7 @@ export const getMandatoryEvents = (events: TEventDict) => {
 
   for (const event of Object.values(events)) {
     if (event.mandatory) {
-      if (moment(event.start).isBefore(now) || true) {
+      if (moment(event.start).isBefore(now)) {
         mandatory[event.id] = event;
       }
     }
@@ -274,6 +275,18 @@ export const getMissedMandatory = (records: TRecords, mandatoryEvents: TEventDic
   return missed;
 };
 
+export const getMissedMandatoryByEvent = (missedMandatory: TUserEventDict, directory: TDirectory, event_id: string) => {
+  let missed = {};
+
+  for (const [email, events] of Object.entries(missedMandatory)) {
+    if (events.hasOwnProperty(event_id)) {
+      missed[email] = directory[email];
+    }
+  }
+
+  return missed;
+};
+
 export const prettyPhone = (phone: string) => {
   if (!phone || phone.length === 0) {
     return '';
@@ -287,3 +300,10 @@ export const prettyPhone = (phone: string) => {
 };
 
 export const sortEventByDate = (a: TEvent, b: TEvent) => (moment(a.start).isBefore(moment(b.start)) ? -1 : 1);
+
+export const sortUserByName = (a: TUser, b: TUser) => {
+  const nameA = `${a.familyName}, ${b.givenName}`;
+  const nameB = `${b.familyName}, ${b.givenName}`;
+
+  return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
+};

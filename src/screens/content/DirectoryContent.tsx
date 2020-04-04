@@ -13,7 +13,7 @@ import { NavigationTypes } from '@types';
 import { HeaderHeight, isEmpty } from '@services/utils';
 import { log } from '@services/logService';
 import { TUser } from '@backend/auth';
-import { hasValidCheckIn } from '@services/kappaService';
+import { hasValidCheckIn, sortUserByName } from '@services/kappaService';
 
 const UserSkeleton: React.FC<{}> = ({}) => {
   return (
@@ -138,12 +138,7 @@ const DirectoryContent: React.FC<{
         ) : (
           <FlatList
             ref={ref => (scrollRef.current = ref)}
-            data={Object.values(directory).sort((a, b) => {
-              const nameA = `${a.familyName}, ${b.givenName}`;
-              const nameB = `${b.familyName}, ${b.givenName}`;
-
-              return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
-            })}
+            data={Object.values(directory).sort(sortUserByName)}
             keyExtractor={keyExtractor}
             renderItem={renderItem}
             refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}

@@ -10,10 +10,17 @@ import { ProgressCircle } from 'react-native-svg-charts';
 import { TRedux } from '@reducers';
 import { _auth, _kappa } from '@reducers/actions';
 import { log } from '@services/logService';
-import { getAttendance, getExcuse, getEventRecordCounts } from '@services/kappaService';
+import {
+  getAttendance,
+  getExcuse,
+  getEventRecordCounts,
+  getMissedMandatoryByEvent,
+  sortUserByName
+} from '@services/kappaService';
 import { theme } from '@constants';
 import { TabBarHeight, isEmpty } from '@services/utils';
 import { TEvent } from '@backend/kappa';
+import { TUser } from '@backend/auth';
 import Block from '@components/Block';
 import Ghost from '@components/Ghost';
 import Text from '@components/Text';
@@ -24,8 +31,10 @@ const { width, height } = Dimensions.get('screen');
 
 const EventDrawer: React.FC<{}> = ({}) => {
   const user = useSelector((state: TRedux) => state.auth.user);
+  const directory = useSelector((state: TRedux) => state.kappa.directory);
   const directorySize = useSelector((state: TRedux) => state.kappa.directorySize);
   const records = useSelector((state: TRedux) => state.kappa.records);
+  const missedMandatory = useSelector((state: TRedux) => state.kappa.missedMandatory);
   const gettingAttendance = useSelector((state: TRedux) => state.kappa.gettingAttendance);
   const selectedEventId = useSelector((state: TRedux) => state.kappa.selectedEventId);
   const selectedEvent = useSelector((state: TRedux) => state.kappa.selectedEvent);
@@ -102,6 +111,16 @@ const EventDrawer: React.FC<{}> = ({}) => {
     };
   }, [recordCounts, directorySize]);
 
+  const mandatory = React.useMemo(() => {
+    if (!user.privileged) return [];
+
+    if (selectedEventId === -1) return [];
+
+    return Object.values(getMissedMandatoryByEvent(missedMandatory, directory, selectedEventId.toString())).sort(
+      sortUserByName
+    );
+  }, [user, missedMandatory, directory, selectedEventId]);
+
   const onOpenStart = () => {
     setSnapPoint(0);
   };
@@ -146,36 +165,66 @@ const EventDrawer: React.FC<{}> = ({}) => {
     );
   };
 
+  const renderUser = (mandatoryUser: TUser) => {
+    return (
+      <Block key={mandatoryUser.email} style={styles.userContainer}>
+        <Text style={styles.userTitle}>
+          {mandatoryUser.familyName}, {mandatoryUser.givenName}
+        </Text>
+      </Block>
+    );
+  };
+
   const renderAdmin = () => {
     return (
       <Block style={styles.adminContainer}>
-        <Block style={styles.circleChartContainer}>
-          <ProgressCircle
-            style={styles.circleChart}
-            progress={recordStats.raw}
-            progressColor={theme.COLORS.PRIMARY}
-            startAngle={-Math.PI * 0.8}
-            endAngle={Math.PI * 0.8}
-          />
-          <Block style={styles.circleChartLabels}>
-            <Text style={styles.circleChartValue}>{recordStats.percent}</Text>
-            <Text style={styles.circleChartTitle}>Headcount</Text>
+        <Block style={styles.adminChartsContainer}>
+          <Block style={styles.circleChartContainer}>
+            <ProgressCircle
+              style={styles.circleChart}
+              progress={recordStats.raw}
+              progressColor={theme.COLORS.PRIMARY}
+              startAngle={-Math.PI * 0.8}
+              endAngle={Math.PI * 0.8}
+            />
+            <Block style={styles.circleChartLabels}>
+              <Text style={styles.circleChartValue}>{recordStats.percent}</Text>
+              <Text style={styles.circleChartTitle}>Headcount</Text>
+            </Block>
+          </Block>
+
+          <Block style={styles.chartPropertyContainer}>
+            <Block style={styles.chartProperty}>
+              <Text style={styles.chartPropertyLabel}>Attended</Text>
+              <Text style={styles.chartPropertyValue}>{recordCounts.attended}</Text>
+            </Block>
+            <Block style={styles.chartProperty}>
+              <Text style={styles.chartPropertyLabel}>Excused</Text>
+              <Text style={styles.chartPropertyValue}>{recordCounts.excused}</Text>
+            </Block>
+            <Block style={styles.chartProperty}>
+              <Text style={styles.chartPropertyLabel}>Pending</Text>
+              <Text style={styles.chartPropertyValue}>{recordCounts.pending}</Text>
+            </Block>
           </Block>
         </Block>
 
-        <Block style={styles.chartPropertyContainer}>
-          <Block style={styles.chartProperty}>
-            <Text style={styles.chartPropertyLabel}>Attended</Text>
-            <Text style={styles.chartPropertyValue}>{recordCounts.attended}</Text>
-          </Block>
-          <Block style={styles.chartProperty}>
-            <Text style={styles.chartPropertyLabel}>Excused</Text>
-            <Text style={styles.chartPropertyValue}>{recordCounts.excused}</Text>
-          </Block>
-          <Block style={styles.chartProperty}>
-            <Text style={styles.chartPropertyLabel}>Pending</Text>
-            <Text style={styles.chartPropertyValue}>{recordCounts.pending}</Text>
-          </Block>
+        <Block style={styles.userList}>
+          {mandatory.length > 0 && (
+            <React.Fragment>
+              <Text
+                style={[
+                  styles.chartPropertyLabel,
+                  {
+                    color: theme.COLORS.PRIMARY
+                  }
+                ]}
+              >
+                Missed Mandatory
+              </Text>
+              {mandatory.map((mandatoryUser: TUser) => renderUser(mandatoryUser))}
+            </React.Fragment>
+          )}
         </Block>
       </Block>
     );
@@ -438,7 +487,8 @@ const styles = StyleSheet.create({
   splitProperty: {
     width: '50%'
   },
-  adminContainer: {
+  adminContainer: {},
+  adminChartsContainer: {
     marginTop: 24,
     marginBottom: 24,
     display: 'flex',
@@ -512,6 +562,26 @@ const styles = StyleSheet.create({
   },
   attendButton: {
     flex: 1
+  },
+  userList: {},
+  userContainer: {
+    height: 48,
+    borderBottomWidth: 1,
+    borderBottomColor: theme.COLORS.LIGHT_BORDER,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
+  userTitle: {
+    fontFamily: 'OpenSans',
+    fontSize: 16
+  },
+  userDate: {
+    fontFamily: 'OpenSans-Bold',
+    fontSize: 13,
+    color: theme.COLORS.GRAY,
+    textTransform: 'uppercase'
   }
 });
 
