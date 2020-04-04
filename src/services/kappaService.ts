@@ -192,29 +192,52 @@ export const getUserRecordCounts = (records: TRecords, email: string) => {
   };
 };
 
-export const getTypeCount = (
+export const getTypeCount = (events: TEventDict, type: string, allowFuture: boolean = false) => {
+  let count = 0;
+
+  const now = moment();
+
+  for (const event of Object.values(events)) {
+    if (event.event_type === type) {
+      if (allowFuture || moment(event.start).isSameOrBefore(now)) {
+        count++;
+      }
+    }
+  }
+
+  return count;
+};
+
+export const getTypeCounts = (
   events: TEventDict,
   attended: TAttendanceEventDict,
   excused: TExcuseEventDict,
-  type: string
+  type: string,
+  allowFuture: boolean = false
 ) => {
   let attendedCount = 0;
   let excusedCount = 0;
   let pendingCount = 0;
   let sum = 0;
 
+  const now = moment();
+
   for (const event_id of Object.keys(attended)) {
     if (events[event_id].event_type === type) {
-      attendedCount++;
+      if (allowFuture || moment(events[event_id].start).isSameOrBefore(now)) {
+        attendedCount++;
+      }
     }
   }
 
   for (const [event_id, excuse] of Object.entries(excused)) {
     if (events[event_id].event_type === type) {
-      if (excuse.approved) {
-        excusedCount++;
-      } else {
-        pendingCount++;
+      if (allowFuture || moment(events[event_id].start).isSameOrBefore(now)) {
+        if (excuse.approved) {
+          excusedCount++;
+        } else {
+          pendingCount++;
+        }
       }
     }
   }

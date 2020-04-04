@@ -155,7 +155,9 @@ const EventsContent: React.FC<{
         ) : (
           <SectionList
             ref={ref => (scrollRef.current = ref)}
-            sections={Object.entries(eventsByDate).map(entry => ({ title: entry[0], data: entry[1] }))}
+            sections={Object.entries(eventsByDate)
+              .sort((a, b) => (moment(a[0]).isBefore(moment(b[0])) ? -1 : 1))
+              .map(entry => ({ title: entry[0], data: entry[1] }))}
             keyExtractor={keyExtractor}
             renderSectionHeader={renderSectionHeader}
             renderItem={renderItem}

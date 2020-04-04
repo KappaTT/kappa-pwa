@@ -16,7 +16,8 @@ import {
   getUserByEmail,
   separateByEventId,
   getMandatoryEvents,
-  getMissedMandatory
+  getMissedMandatory,
+  getTypeCount
 } from '@services/kappaService';
 import { TUser } from '@backend/auth';
 
@@ -122,7 +123,7 @@ export default (state = initialState, action: any): TKappaState => {
         missedMandatory: getMissedMandatory(state.records, mandatoryEvents, state.directory),
         eventsByDate: separateByDate(action.events),
         eventsSize: action.events.length,
-        gmCount: action.events.filter((event: TEvent) => event.event_type === 'GM').length
+        gmCount: getTypeCount(events, 'GM')
       };
     case GET_EVENTS_FAILURE:
       return {

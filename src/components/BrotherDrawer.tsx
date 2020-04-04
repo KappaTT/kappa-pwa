@@ -14,7 +14,7 @@ import {
   getAttendedEvents,
   getExcusedEvents,
   getUserRecordCounts,
-  getTypeCount,
+  getTypeCounts,
   prettyPhone,
   sortEventByDate
 } from '@services/kappaService';
@@ -101,7 +101,7 @@ const BrotherDrawer: React.FC<{}> = ({}) => {
   }, [user, records, selectedUserEmail]);
 
   const gmCounts = React.useMemo(() => {
-    return getTypeCount(events, attended, excused, 'GM');
+    return getTypeCounts(events, attended, excused, 'GM');
   }, [events, attended, excused]);
 
   const gmStats = React.useMemo(() => {
