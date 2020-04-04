@@ -6,6 +6,7 @@ import { useSafeArea } from 'react-native-safe-area-context';
 import { TRedux } from '@reducers';
 import { _auth } from '@reducers/actions';
 import { theme } from '@constants';
+import { prettyPhone } from '@services/kappaService';
 import {
   Block,
   Text,
@@ -23,18 +24,6 @@ const { width, height } = Dimensions.get('screen');
 
 const phoneFormatter = (text: string) => {
   return text.trim().replace(/\D/g, '');
-};
-
-const prettyPhone = (phone: string) => {
-  if (!phone || phone.length === 0) {
-    return '';
-  }
-
-  if (phone.length !== 10) {
-    return 'Invalid';
-  }
-
-  return `(${phone.substring(0, 3)}) ${phone.substring(3, 6)}-${phone.substring(6, 10)}`;
 };
 
 const getGradYearOptions = () => {

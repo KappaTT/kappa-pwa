@@ -235,3 +235,15 @@ export const hasValidCheckIn = (records: TRecords, email: string, event_id: stri
 
   return excuse !== undefined && excuse.approved === 1;
 };
+
+export const prettyPhone = (phone: string) => {
+  if (!phone || phone.length === 0) {
+    return '';
+  }
+
+  if (phone.length !== 10) {
+    return 'Invalid';
+  }
+
+  return `(${phone.substring(0, 3)}) ${phone.substring(3, 6)}-${phone.substring(6, 10)}`;
+};
