@@ -10,6 +10,13 @@ import { ProgressCircle } from 'react-native-svg-charts';
 import { TRedux } from '@reducers';
 import { _auth, _kappa } from '@reducers/actions';
 import { log } from '@services/logService';
+import {
+  getAttendedEvents,
+  getExcusedEvents,
+  getUserRecordCounts,
+  getTypeCount,
+  prettyPhone
+} from '@services/kappaService';
 import { theme } from '@constants';
 import { TabBarHeight, isEmpty } from '@services/utils';
 import { TEvent } from '@backend/kappa';
@@ -18,7 +25,6 @@ import Ghost from '@components/Ghost';
 import Text from '@components/Text';
 import RoundButton from '@components/RoundButton';
 import Icon from '@components/Icon';
-import { getAttendedEvents, getExcusedEvents, getUserRecordCounts, getTypeCount } from '@services/kappaService';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -186,6 +192,29 @@ const BrotherDrawer: React.FC<{}> = ({}) => {
                 </Block>
 
                 <Block style={styles.userBody}>
+                  <Block style={styles.splitPropertyRow}>
+                    <Block style={styles.splitProperty}>
+                      <Text style={styles.propertyHeader}>Grad Year</Text>
+                      <Text style={styles.propertyValue}>{selectedUser.gradYear}</Text>
+                    </Block>
+                    <Block style={styles.splitProperty}>
+                      <Text style={styles.propertyHeader}>Pledge Class</Text>
+                      <Text style={styles.propertyValue}>{selectedUser.semester}</Text>
+                    </Block>
+                  </Block>
+                  <Block style={styles.splitPropertyRow}>
+                    <Block style={styles.splitProperty}>
+                      <Text style={styles.propertyHeader}>Email</Text>
+                      <Text style={styles.propertyValue}>{selectedUser.email}</Text>
+                    </Block>
+                    <Block style={styles.splitProperty}>
+                      <Text style={styles.propertyHeader}>Phone</Text>
+                      <Text style={styles.propertyValue}>
+                        {selectedUser.phone ? prettyPhone(selectedUser.phone) : ''}
+                      </Text>
+                    </Block>
+                  </Block>
+
                   {user.privileged && (
                     <Block style={styles.adminContainer}>
                       <Block style={styles.circleChartContainer}>

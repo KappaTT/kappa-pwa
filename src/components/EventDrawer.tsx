@@ -10,6 +10,7 @@ import { ProgressCircle } from 'react-native-svg-charts';
 import { TRedux } from '@reducers';
 import { _auth, _kappa } from '@reducers/actions';
 import { log } from '@services/logService';
+import { getAttendance, getExcuse, getEventRecordCounts } from '@services/kappaService';
 import { theme } from '@constants';
 import { TabBarHeight, isEmpty } from '@services/utils';
 import { TEvent } from '@backend/kappa';
@@ -18,7 +19,6 @@ import Ghost from '@components/Ghost';
 import Text from '@components/Text';
 import RoundButton from '@components/RoundButton';
 import Icon from '@components/Icon';
-import { getAttendance, getExcuse, getEventRecordCounts } from '@services/kappaService';
 
 const { width, height } = Dimensions.get('screen');
 
