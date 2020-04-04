@@ -236,6 +236,40 @@ export const hasValidCheckIn = (records: TRecords, email: string, event_id: stri
   return excuse !== undefined && excuse.approved === 1;
 };
 
+export const getMandatoryEvents = (events: TEventDict) => {
+  let mandatory = {};
+
+  for (const event of Object.values(events)) {
+    if (event.mandatory) {
+      mandatory[event.id] = event;
+    }
+  }
+
+  return mandatory;
+};
+
+export const getMissedMandatoryByUser = (records: TRecords, mandatoryEvents: TEventDict, email: string) => {
+  let missed = {};
+
+  for (const event of Object.values(mandatoryEvents)) {
+    if (!hasValidCheckIn(records, email, event.id.toString())) {
+      missed[event.id] = event;
+    }
+  }
+
+  return missed;
+};
+
+export const getMissedMandatory = (records: TRecords, mandatoryEvents: TEventDict, directory: TDirectory) => {
+  let missed = {};
+
+  for (const user of Object.values(directory)) {
+    missed[user.email] = getMissedMandatoryByUser(records, mandatoryEvents, user.email);
+  }
+
+  return missed;
+};
+
 export const prettyPhone = (phone: string) => {
   if (!phone || phone.length === 0) {
     return '';

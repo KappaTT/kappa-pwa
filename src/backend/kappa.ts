@@ -34,6 +34,10 @@ export interface TEventDateDict {
   [date: string]: Array<TEvent>;
 }
 
+export interface TUserEventDict {
+  [email: string]: TEventDict;
+}
+
 export interface TDirectory {
   [email: string]: TUser;
 }

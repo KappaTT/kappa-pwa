@@ -5,7 +5,8 @@ import {
   TRecords,
   TDirectory,
   TEventDateDict,
-  TEventDict
+  TEventDict,
+  TUserEventDict
 } from '@backend/kappa';
 import {
   getEventById,
@@ -13,7 +14,9 @@ import {
   separateByDate,
   separateByEmail,
   getUserByEmail,
-  separateByEventId
+  separateByEventId,
+  getMandatoryEvents,
+  getMissedMandatory
 } from '@services/kappaService';
 import { TUser } from '@backend/auth';
 
@@ -50,6 +53,8 @@ export interface TKappaState {
 
   events: TEventDict;
   eventsByDate: TEventDateDict;
+  mandatoryEvents: TEventDict;
+  missedMandatory: TUserEventDict;
   records: TRecords;
   directory: TDirectory;
 
@@ -78,6 +83,8 @@ const initialState: TKappaState = {
 
   events: {},
   eventsByDate: {},
+  mandatoryEvents: {},
+  missedMandatory: {},
   records: {
     attended: {},
     excused: {}
@@ -104,10 +111,15 @@ export default (state = initialState, action: any): TKappaState => {
         getEventsErrorMessage: ''
       };
     case GET_EVENTS_SUCCESS:
+      const events = separateByEventId(action.events);
+      const mandatoryEvents = getMandatoryEvents(events);
+
       return {
         ...state,
         gettingEvents: false,
-        events: separateByEventId(action.events),
+        events,
+        mandatoryEvents,
+        missedMandatory: getMissedMandatory(state.records, mandatoryEvents, state.directory),
         eventsByDate: separateByDate(action.events),
         eventsSize: action.events.length,
         gmCount: action.events.filter((event: TEvent) => event.event_type === 'GM').length
@@ -127,10 +139,13 @@ export default (state = initialState, action: any): TKappaState => {
         getDirectoryErrorMessage: ''
       };
     case GET_DIRECTORY_SUCCESS:
+      const directory = separateByEmail(action.users);
+
       return {
         ...state,
         gettingDirectory: false,
-        directory: separateByEmail(action.users),
+        directory,
+        missedMandatory: getMissedMandatory(state.records, state.mandatoryEvents, directory),
         directorySize: action.users.length
       };
     case GET_DIRECTORY_FAILURE:
@@ -148,13 +163,16 @@ export default (state = initialState, action: any): TKappaState => {
         getAttendanceErrorMessage: ''
       };
     case GET_ATTENDANCE_SUCCESS:
+      const records = mergeRecords(state.records, {
+        attended: action.attended,
+        excused: action.excused
+      });
+
       return {
         ...state,
         gettingAttendance: false,
-        records: mergeRecords(state.records, {
-          attended: action.attended,
-          excused: action.excused
-        })
+        records,
+        missedMandatory: getMissedMandatory(records, state.mandatoryEvents, state.directory)
       };
     case GET_ATTENDANCE_FAILURE:
       return {
