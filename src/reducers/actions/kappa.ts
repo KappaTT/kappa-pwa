@@ -10,7 +10,9 @@ import {
   GET_ATTENDANCE_FAILURE,
   GET_DIRECTORY,
   GET_DIRECTORY_SUCCESS,
-  GET_DIRECTORY_FAILURE
+  GET_DIRECTORY_FAILURE,
+  SELECT_USER,
+  UNSELECT_USER
 } from '@reducers/kappa';
 import { TUser } from '@backend/auth';
 
@@ -145,5 +147,18 @@ export const selectEvent = (eventId: number) => {
 export const unselectEvent = () => {
   return {
     type: UNSELECT_EVENT
+  };
+};
+
+export const selectUser = (email: string) => {
+  return {
+    type: SELECT_USER,
+    email
+  };
+};
+
+export const unselectUser = () => {
+  return {
+    type: UNSELECT_USER
   };
 };

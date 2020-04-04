@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-import { TAttendance, TExcuse, TRecords, TEvent, TEventDict } from '@backend/kappa';
+import { TAttendance, TExcuse, TRecords, TEvent, TEventDict, TDirectory } from '@backend/kappa';
 import { TUser } from '@backend/auth';
 
 export const netidToEmail = (netid: string) => `${netid}@illinois.edu`;
@@ -38,6 +38,14 @@ export const getEventById = (eventDict: TEventDict, eventId: number) => {
         return event;
       }
     }
+  }
+
+  return null;
+};
+
+export const getUserByEmail = (directory: TDirectory, email: string) => {
+  if (directory.hasOwnProperty(email)) {
+    return directory[email];
   }
 
   return null;

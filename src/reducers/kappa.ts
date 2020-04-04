@@ -1,5 +1,6 @@
 import { TEvent, TEventDict, TAttendanceUserDict, TExcuseUserDict, TRecords, TDirectory } from '@backend/kappa';
-import { getEventById, mergeRecords, separateByDate, separateByEmail } from '@services/kappaService';
+import { getEventById, mergeRecords, separateByDate, separateByEmail, getUserByEmail } from '@services/kappaService';
+import { TUser } from '@backend/auth';
 
 export const GET_EVENTS = 'GET_EVENTS';
 export const GET_EVENTS_SUCCESS = 'GET_EVENTS_SUCCESS';
@@ -15,6 +16,9 @@ export const GET_ATTENDANCE_FAILURE = 'GET_ATTENDANCE_FAILURE';
 
 export const SELECT_EVENT = 'SELECT_EVENT';
 export const UNSELECT_EVENT = 'UNSELECT_EVENT';
+
+export const SELECT_USER = 'SELECT_USER';
+export const UNSELECT_USER = 'UNSELECT_USER';
 
 export interface TKappaState {
   gettingEvents: boolean;
@@ -33,10 +37,12 @@ export interface TKappaState {
   records: TRecords;
   directory: TDirectory;
 
-  directorySize: number;
-
   selectedEventId: number;
   selectedEvent: TEvent;
+
+  directorySize: number;
+  selectedUserEmail: string;
+  selectedUser: TUser;
 }
 
 const initialState: TKappaState = {
@@ -59,10 +65,12 @@ const initialState: TKappaState = {
   },
   directory: {},
 
-  directorySize: 0,
-
   selectedEventId: -1,
-  selectedEvent: null
+  selectedEvent: null,
+
+  directorySize: 0,
+  selectedUserEmail: '',
+  selectedUser: null
 };
 
 export default (state = initialState, action: any): TKappaState => {
@@ -141,6 +149,18 @@ export default (state = initialState, action: any): TKappaState => {
         ...state,
         selectedEventId: -1,
         selectedEvent: null
+      };
+    case SELECT_USER:
+      return {
+        ...state,
+        selectedUserEmail: action.email,
+        selectedUser: getUserByEmail(state.directory, action.email)
+      };
+    case UNSELECT_USER:
+      return {
+        ...state,
+        selectedUserEmail: '',
+        selectedUser: null
       };
     default:
       return state;
