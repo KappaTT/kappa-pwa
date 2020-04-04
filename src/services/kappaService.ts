@@ -1,6 +1,47 @@
-import { TAttendance, TExcuse, TAttendanceUserDict, TExcuseUserDict, TRecords } from '@backend/kappa';
+import moment from 'moment';
+
+import { TAttendance, TExcuse, TRecords, TEvent, TEventDict } from '@backend/kappa';
+import { TUser } from '@backend/auth';
 
 export const netidToEmail = (netid: string) => `${netid}@illinois.edu`;
+
+export const separateByDate = (events: Array<TEvent>) => {
+  let separated = {};
+
+  for (const event of events) {
+    const date = moment(event.start).format('YYYY-MM-DD');
+
+    if (!separated.hasOwnProperty(date)) {
+      separated[date] = [];
+    }
+
+    separated[date].push(event);
+  }
+
+  return separated;
+};
+
+export const separateByEmail = (users: Array<TUser>) => {
+  let separated = {};
+
+  for (const user of users) {
+    separated[user.email] = user;
+  }
+
+  return separated;
+};
+
+export const getEventById = (eventDict: TEventDict, eventId: number) => {
+  for (const [date, events] of Object.entries(eventDict)) {
+    for (const event of events) {
+      if (event.id === eventId) {
+        return event;
+      }
+    }
+  }
+
+  return null;
+};
 
 export const mergeRecords = (
   records: TRecords,

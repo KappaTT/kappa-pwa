@@ -7,7 +7,10 @@ import {
   UNSELECT_EVENT,
   GET_ATTENDANCE,
   GET_ATTENDANCE_SUCCESS,
-  GET_ATTENDANCE_FAILURE
+  GET_ATTENDANCE_FAILURE,
+  GET_DIRECTORY,
+  GET_DIRECTORY_SUCCESS,
+  GET_DIRECTORY_FAILURE
 } from '@reducers/kappa';
 import { TUser } from '@backend/auth';
 
@@ -40,6 +43,40 @@ export const getEvents = (user: TUser) => {
         dispatch(getEventsSuccess(res.data));
       } else {
         dispatch(getEventsFailure(res.error));
+      }
+    });
+  };
+};
+
+const gettingDirectory = () => {
+  return {
+    type: GET_DIRECTORY
+  };
+};
+
+const getDirectorySuccess = data => {
+  return {
+    type: GET_DIRECTORY_SUCCESS,
+    users: data.users
+  };
+};
+
+const getDirectoryFailure = err => {
+  return {
+    type: GET_DIRECTORY_FAILURE,
+    error: err
+  };
+};
+
+export const getDirectory = (user: TUser) => {
+  return dispatch => {
+    dispatch(gettingDirectory());
+
+    Kappa.getUsers({ user }).then(res => {
+      if (res.success) {
+        dispatch(getDirectorySuccess(res.data));
+      } else {
+        dispatch(getDirectoryFailure(res.error));
       }
     });
   };
@@ -96,10 +133,6 @@ export const getEventAttendance = (user: TUser, target: string) => {
       }
     });
   };
-};
-
-export const getDirectory = (user: TUser) => {
-  return dispatch => {};
 };
 
 export const selectEvent = (eventId: number) => {

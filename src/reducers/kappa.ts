@@ -1,9 +1,13 @@
-import { TEvent, TEventDict, getEventById, TAttendanceUserDict, TExcuseUserDict, TRecords } from '@backend/kappa';
-import { mergeRecords } from '@services/kappaService';
+import { TEvent, TEventDict, TAttendanceUserDict, TExcuseUserDict, TRecords, TDirectory } from '@backend/kappa';
+import { getEventById, mergeRecords, separateByDate, separateByEmail } from '@services/kappaService';
 
 export const GET_EVENTS = 'GET_EVENTS';
 export const GET_EVENTS_SUCCESS = 'GET_EVENTS_SUCCESS';
 export const GET_EVENTS_FAILURE = 'GET_EVENTS_FAILURE';
+
+export const GET_DIRECTORY = 'GET_DIRECTORY';
+export const GET_DIRECTORY_SUCCESS = 'GET_DIRECTORY_SUCCESS';
+export const GET_DIRECTORY_FAILURE = 'GET_DIRECTORY_FAILURE';
 
 export const GET_ATTENDANCE = 'GET_ATTENDANCE';
 export const GET_ATTENDANCE_SUCCESS = 'GET_ATTENDANCE_SUCCESS';
@@ -17,13 +21,17 @@ export interface TKappaState {
   getEventsError: boolean;
   getEventsErrorMessage: string;
 
+  gettingDirectory: boolean;
+  getDirectoryError: boolean;
+  getDirectoryErrorMessage: string;
+
   gettingAttendance: boolean;
   getAttendanceError: boolean;
   getAttendanceErrorMessage: string;
 
   events: TEventDict;
   records: TRecords;
-  directory: [];
+  directory: TDirectory;
 
   selectedEventId: number;
   selectedEvent: TEvent;
@@ -34,6 +42,10 @@ const initialState: TKappaState = {
   getEventsError: false,
   getEventsErrorMessage: '',
 
+  gettingDirectory: false,
+  getDirectoryError: false,
+  getDirectoryErrorMessage: '',
+
   gettingAttendance: false,
   getAttendanceError: false,
   getAttendanceErrorMessage: '',
@@ -43,7 +55,7 @@ const initialState: TKappaState = {
     attended: {},
     excused: {}
   },
-  directory: [],
+  directory: {},
 
   selectedEventId: -1,
   selectedEvent: null
@@ -62,7 +74,7 @@ export default (state = initialState, action: any): TKappaState => {
       return {
         ...state,
         gettingEvents: false,
-        events: action.events
+        events: separateByDate(action.events)
       };
     case GET_EVENTS_FAILURE:
       return {
@@ -70,6 +82,26 @@ export default (state = initialState, action: any): TKappaState => {
         gettingEvents: false,
         getEventsError: true,
         getEventsErrorMessage: action.error.message
+      };
+    case GET_DIRECTORY:
+      return {
+        ...state,
+        gettingDirectory: true,
+        getDirectoryError: false,
+        getDirectoryErrorMessage: ''
+      };
+    case GET_DIRECTORY_SUCCESS:
+      return {
+        ...state,
+        gettingDirectory: false,
+        directory: separateByEmail(action.users)
+      };
+    case GET_DIRECTORY_FAILURE:
+      return {
+        ...state,
+        gettingDirectory: false,
+        getDirectoryError: true,
+        getDirectoryErrorMessage: action.error.message
       };
     case GET_ATTENDANCE:
       return {

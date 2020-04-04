@@ -30,7 +30,7 @@ export const initialGoogleUser: TGoogleUser = {
 export interface TUser {
   // INITIAL CREATION
   _id: string;
-  sessionToken: string;
+  sessionToken?: string;
   email: string;
   familyName: string;
   givenName: string;
@@ -75,6 +75,8 @@ export interface TUserResponse {
   type: string;
   role?: string;
   privileged?: boolean;
+  phone?: string;
+  gradYear?: string;
 }
 
 export const purge = async () => {

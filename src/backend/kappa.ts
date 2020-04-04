@@ -30,6 +30,10 @@ export interface TEventDict {
   [date: string]: Array<TEvent>;
 }
 
+export interface TDirectory {
+  [email: string]: TUser;
+}
+
 export interface TAttendance {
   event_id: number;
   netid: string;
@@ -83,25 +87,9 @@ interface TGetEventsRequestResponse {
 
 interface TGetEventsResponse extends TResponse {
   data?: {
-    events: TEventDict;
+    events: Array<TEvent>;
   };
 }
-
-const separateByDate = (events: Array<TEvent>) => {
-  let separated = {};
-
-  for (const event of events) {
-    const date = moment(event.start).format('YYYY-MM-DD');
-
-    if (!separated.hasOwnProperty(date)) {
-      separated[date] = [];
-    }
-
-    separated[date].push(event);
-  }
-
-  return separated;
-};
 
 export const getEvents = async (payload: TGetEventsPayload): Promise<TGetEventsResponse> => {
   try {
@@ -125,7 +113,51 @@ export const getEvents = async (payload: TGetEventsPayload): Promise<TGetEventsR
     }
 
     return pass({
-      events: separateByDate(response.data.events)
+      events: response.data.events
+    });
+  } catch (error) {
+    log(error);
+    return fail({}, "that wasn't supposed to happen");
+  }
+};
+
+export interface TGetUsersPayload {
+  user: TUser;
+}
+
+interface TGetUsersRequestResponse {
+  users: Array<TUser>;
+}
+
+interface TGetUsersResponse extends TResponse {
+  data?: {
+    users: Array<TUser>;
+  };
+}
+
+export const getUsers = async (payload: TGetUsersPayload): Promise<TGetUsersResponse> => {
+  try {
+    const response = await makeAuthorizedRequest<TGetUsersRequestResponse>(
+      ENDPOINTS.GET_USERS(),
+      METHODS.GET_USERS,
+      {},
+      payload.user.sessionToken
+    );
+
+    log('Get users response', response.code);
+
+    if (!response.success || response.code === 500) {
+      return fail({}, 'problem connecting to server');
+    } else if (response.code !== 200) {
+      if (response.code === 401) {
+        return fail({}, 'your credentials were invalid');
+      }
+
+      return fail({}, response.error?.message);
+    }
+
+    return pass({
+      users: response.data.users
     });
   } catch (error) {
     log(error);
@@ -210,16 +242,4 @@ export const getAttendanceByEvent = async (payload: TGetAttendancePayload): Prom
     log(error);
     return fail({}, "that wasn't supposed to happen");
   }
-};
-
-export const getEventById = (eventDict: TEventDict, eventId: number) => {
-  for (const [date, events] of Object.entries(eventDict)) {
-    for (const event of events) {
-      if (event.id === eventId) {
-        return event;
-      }
-    }
-  }
-
-  return null;
 };
