@@ -1,5 +1,20 @@
-import { TEvent, TEventDict, TAttendanceUserDict, TExcuseUserDict, TRecords, TDirectory } from '@backend/kappa';
-import { getEventById, mergeRecords, separateByDate, separateByEmail, getUserByEmail } from '@services/kappaService';
+import {
+  TEvent,
+  TAttendanceUserDict,
+  TExcuseUserDict,
+  TRecords,
+  TDirectory,
+  TEventDateDict,
+  TEventDict
+} from '@backend/kappa';
+import {
+  getEventById,
+  mergeRecords,
+  separateByDate,
+  separateByEmail,
+  getUserByEmail,
+  separateByEventId
+} from '@services/kappaService';
 import { TUser } from '@backend/auth';
 
 export const GET_EVENTS = 'GET_EVENTS';
@@ -34,10 +49,12 @@ export interface TKappaState {
   getAttendanceErrorMessage: string;
 
   events: TEventDict;
+  eventsByDate: TEventDateDict;
   records: TRecords;
   directory: TDirectory;
 
   eventsSize: number;
+  gmCount: number;
   selectedEventId: number;
   selectedEvent: TEvent;
 
@@ -60,6 +77,7 @@ const initialState: TKappaState = {
   getAttendanceErrorMessage: '',
 
   events: {},
+  eventsByDate: {},
   records: {
     attended: {},
     excused: {}
@@ -67,6 +85,7 @@ const initialState: TKappaState = {
   directory: {},
 
   eventsSize: 0,
+  gmCount: 0,
   selectedEventId: -1,
   selectedEvent: null,
 
@@ -88,8 +107,10 @@ export default (state = initialState, action: any): TKappaState => {
       return {
         ...state,
         gettingEvents: false,
-        events: separateByDate(action.events),
-        eventsSize: action.events.length
+        events: separateByEventId(action.events),
+        eventsByDate: separateByDate(action.events),
+        eventsSize: action.events.length,
+        gmCount: action.events.filter((event: TEvent) => event.event_type === 'GM').length
       };
     case GET_EVENTS_FAILURE:
       return {

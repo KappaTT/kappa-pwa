@@ -27,6 +27,10 @@ export interface TEvent {
 }
 
 export interface TEventDict {
+  [event_id: string]: TEvent;
+}
+
+export interface TEventDateDict {
   [date: string]: Array<TEvent>;
 }
 

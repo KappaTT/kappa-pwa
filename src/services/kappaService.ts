@@ -1,9 +1,19 @@
 import moment from 'moment';
 
-import { TAttendance, TExcuse, TRecords, TEvent, TEventDict, TDirectory } from '@backend/kappa';
+import { TAttendance, TExcuse, TRecords, TEvent, TEventDateDict, TDirectory, TEventDict } from '@backend/kappa';
 import { TUser } from '@backend/auth';
 
 export const netidToEmail = (netid: string) => `${netid}@illinois.edu`;
+
+export const separateByEventId = (events: Array<TEvent>) => {
+  let separated = {};
+
+  for (const event of events) {
+    separated[event.id] = event;
+  }
+
+  return separated;
+};
 
 export const separateByDate = (events: Array<TEvent>) => {
   let separated = {};
@@ -31,13 +41,9 @@ export const separateByEmail = (users: Array<TUser>) => {
   return separated;
 };
 
-export const getEventById = (eventDict: TEventDict, eventId: number) => {
-  for (const [date, events] of Object.entries(eventDict)) {
-    for (const event of events) {
-      if (event.id === eventId) {
-        return event;
-      }
-    }
+export const getEventById = (events: TEventDict, eventId: string) => {
+  if (events.hasOwnProperty(eventId)) {
+    return events[eventId];
   }
 
   return null;

@@ -37,7 +37,7 @@ const EventsContent: React.FC<{
   const gettingDirectory = useSelector((state: TRedux) => state.kappa.gettingDirectory);
   const gettingAttendance = useSelector((state: TRedux) => state.kappa.gettingAttendance);
   const getEventsError = useSelector((state: TRedux) => state.kappa.getEventsError);
-  const events = useSelector((state: TRedux) => state.kappa.events);
+  const eventsByDate = useSelector((state: TRedux) => state.kappa.eventsByDate);
 
   const [refreshing, setRefreshing] = React.useState<boolean>(gettingEvents || gettingDirectory || gettingAttendance);
 
@@ -140,7 +140,7 @@ const EventsContent: React.FC<{
           }
         ]}
       >
-        {gettingEvents && isEmpty(events) ? (
+        {gettingEvents && isEmpty(eventsByDate) ? (
           <Block style={styles.loadingContainer}>
             <EventSkeleton />
             <Block style={styles.separator} />
@@ -155,7 +155,7 @@ const EventsContent: React.FC<{
         ) : (
           <SectionList
             ref={ref => (scrollRef.current = ref)}
-            sections={Object.entries(events).map(entry => ({ title: entry[0], data: entry[1] }))}
+            sections={Object.entries(eventsByDate).map(entry => ({ title: entry[0], data: entry[1] }))}
             keyExtractor={keyExtractor}
             renderSectionHeader={renderSectionHeader}
             renderItem={renderItem}

@@ -31,7 +31,9 @@ const { width, height } = Dimensions.get('screen');
 
 const BrotherDrawer: React.FC<{}> = ({}) => {
   const user = useSelector((state: TRedux) => state.auth.user);
+  const events = useSelector((state: TRedux) => state.kappa.events);
   const eventsSize = useSelector((state: TRedux) => state.kappa.eventsSize);
+  const gmCount = useSelector((state: TRedux) => state.kappa.gmCount);
   const records = useSelector((state: TRedux) => state.kappa.records);
   const gettingAttendance = useSelector((state: TRedux) => state.kappa.gettingAttendance);
   const selectedUserEmail = useSelector((state: TRedux) => state.kappa.selectedUserEmail);
@@ -87,12 +89,45 @@ const BrotherDrawer: React.FC<{}> = ({}) => {
   }, []);
 
   const attended = React.useMemo(() => {
-    return getAttendedEvents(records, user.email);
-  }, [records, user]);
+    if (!user.privileged) return [];
+
+    return getAttendedEvents(records, selectedUserEmail);
+  }, [user, records, selectedUserEmail]);
 
   const excused = React.useMemo(() => {
-    return getExcusedEvents(records, user.email);
-  }, [records, user]);
+    if (!user.privileged) return [];
+
+    return getExcusedEvents(records, selectedUserEmail);
+  }, [user, records, selectedUserEmail]);
+
+  const gmRate = React.useMemo(() => {
+    if (!user.privileged)
+      return {
+        raw: 0,
+        percent: '0%'
+      };
+
+    let count = 0;
+
+    for (const event_id of Object.keys(attended)) {
+      if (events[event_id].event_type === 'GM') {
+        count++;
+      }
+    }
+
+    for (const [event_id, excuse] of Object.entries(excused)) {
+      if (events[event_id].event_type === 'GM' && excuse.approved) {
+        count++;
+      }
+    }
+
+    const fraction = count / gmCount;
+
+    return {
+      raw: fraction,
+      pretty: `${Math.round(fraction * 100)}%`
+    };
+  }, [user, events, gmCount, attended, excused]);
 
   const recordCounts = React.useMemo(() => {
     return getUserRecordCounts(records, selectedUserEmail);
