@@ -45,7 +45,7 @@ export const getEvents = (user: TUser) => {
   };
 };
 
-const gettingMyAttendance = () => {
+const gettingAttendance = () => {
   return {
     type: GET_ATTENDANCE
   };
@@ -67,10 +67,14 @@ const getAttendanceFailure = err => {
 };
 
 export const getMyAttendance = (user: TUser) => {
-  return dispatch => {
-    dispatch(gettingMyAttendance());
+  return getUserAttendance(user, user.email);
+};
 
-    Kappa.getAttendanceByUser({ user }).then(res => {
+export const getUserAttendance = (user: TUser, target: string) => {
+  return dispatch => {
+    dispatch(gettingAttendance());
+
+    Kappa.getAttendanceByUser({ user, target }).then(res => {
       if (res.success) {
         dispatch(getAttendanceSuccess(res.data));
       } else {
@@ -80,7 +84,21 @@ export const getMyAttendance = (user: TUser) => {
   };
 };
 
-export const getDirectory = () => {};
+export const getEventAttendance = (user: TUser, target: string) => {
+  return dispatch => {
+    dispatch(gettingAttendance());
+
+    Kappa.getAttendanceByEvent({ user, target }).then(res => {
+      if (res.success) {
+        dispatch(getAttendanceSuccess(res.data));
+      } else {
+        dispatch(getAttendanceFailure(res.error));
+      }
+    });
+  };
+};
+
+export const getDirectory = (user: TUser) => {};
 
 export const selectEvent = (eventId: number) => {
   return {

@@ -133,29 +133,59 @@ export const getEvents = async (payload: TGetEventsPayload): Promise<TGetEventsR
   }
 };
 
-export interface TGetAttendanceByUserPayload {
+export interface TGetAttendancePayload {
   user: TUser;
+  target: string;
 }
 
-interface TGetAttendanceByUserRequestResponse {
+interface TGetAttendanceRequestResponse {
   attended: Array<TAttendance>;
   excused: Array<TExcuse>;
 }
 
-interface TGetAttendanceByUserResponse extends TResponse {
+interface TGetAttendanceResponse extends TResponse {
   data?: {
     attended: Array<TAttendance>;
     excused: Array<TExcuse>;
   };
 }
 
-export const getAttendanceByUser = async (
-  payload: TGetAttendanceByUserPayload
-): Promise<TGetAttendanceByUserResponse> => {
+export const getAttendanceByUser = async (payload: TGetAttendancePayload): Promise<TGetAttendanceResponse> => {
   try {
-    const response = await makeAuthorizedRequest<TGetAttendanceByUserRequestResponse>(
-      ENDPOINTS.GET_ATTENDANCE_BY_USER(payload.user),
+    const response = await makeAuthorizedRequest<TGetAttendanceRequestResponse>(
+      ENDPOINTS.GET_ATTENDANCE_BY_USER({ email: payload.target }),
       METHODS.GET_ATTENDANCE_BY_USER,
+      {},
+      payload.user.sessionToken
+    );
+
+    log('Get attendance response', response.code);
+
+    if (!response.success || response.code === 500) {
+      return fail({}, 'problem connecting to server');
+    } else if (response.code !== 200) {
+      if (response.code === 401) {
+        return fail({}, 'your credentials were invalid');
+      }
+
+      return fail({}, response.error?.message);
+    }
+
+    return pass({
+      attended: response.data.attended || [],
+      excused: response.data.excused || []
+    });
+  } catch (error) {
+    log(error);
+    return fail({}, "that wasn't supposed to happen");
+  }
+};
+
+export const getAttendanceByEvent = async (payload: TGetAttendancePayload): Promise<TGetAttendanceResponse> => {
+  try {
+    const response = await makeAuthorizedRequest<TGetAttendanceRequestResponse>(
+      ENDPOINTS.GET_ATTENDANCE_BY_EVENT({ event_id: payload.target }),
+      METHODS.GET_ATTENDANCE_BY_EVENT,
       {},
       payload.user.sessionToken
     );
