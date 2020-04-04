@@ -37,6 +37,7 @@ export interface TKappaState {
   records: TRecords;
   directory: TDirectory;
 
+  eventsSize: number;
   selectedEventId: number;
   selectedEvent: TEvent;
 
@@ -65,6 +66,7 @@ const initialState: TKappaState = {
   },
   directory: {},
 
+  eventsSize: 0,
   selectedEventId: -1,
   selectedEvent: null,
 
@@ -86,7 +88,8 @@ export default (state = initialState, action: any): TKappaState => {
       return {
         ...state,
         gettingEvents: false,
-        events: separateByDate(action.events)
+        events: separateByDate(action.events),
+        eventsSize: action.events.length
       };
     case GET_EVENTS_FAILURE:
       return {

@@ -103,16 +103,30 @@ export const getExcuse = (records: TRecords, email: string, event_id: string) =>
   return records.excused[email][event_id];
 };
 
+export const getAttendedEvents = (records: TRecords, email: string) => {
+  if (!records.attended.hasOwnProperty(email)) {
+    return {};
+  }
+
+  return records.attended[email];
+};
+
+export const getExcusedEvents = (records: TRecords, email: string) => {
+  if (!records.excused.hasOwnProperty(email)) {
+    return {};
+  }
+
+  return records.excused[email];
+};
+
 export const getEventRecordCounts = (records: TRecords, event_id: string) => {
   let attended = 0;
   let excused = 0;
   let pending = 0;
-  let sum = 0;
 
   for (const record of Object.values(records.attended)) {
     if (record.hasOwnProperty(event_id)) {
       attended++;
-      sum++;
     }
   }
 
@@ -123,8 +137,6 @@ export const getEventRecordCounts = (records: TRecords, event_id: string) => {
       } else {
         pending++;
       }
-
-      sum++;
     }
   }
 
@@ -132,7 +144,34 @@ export const getEventRecordCounts = (records: TRecords, event_id: string) => {
     attended,
     excused,
     pending,
-    sum
+    sum: attended + excused + pending
+  };
+};
+
+export const getUserRecordCounts = (records: TRecords, email: string) => {
+  let attended = 0;
+  let excused = 0;
+  let pending = 0;
+
+  const attendedEvents = getAttendedEvents(records, email);
+
+  attended = Object.keys(attendedEvents).length;
+
+  const excusedEvents = getExcusedEvents(records, email);
+
+  for (const excuse of Object.values(excusedEvents)) {
+    if (excuse.approved) {
+      excused++;
+    } else {
+      pending++;
+    }
+  }
+
+  return {
+    attended,
+    excused,
+    pending,
+    sum: attended + excused + pending
   };
 };
 

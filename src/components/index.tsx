@@ -4,6 +4,7 @@ import BackButton from './BackButton';
 import Badge from './Badge';
 import Block from './Block';
 import Button from './Button';
+import BrotherDrawer from './BrotherDrawer';
 import Checkbox from './Checkbox';
 import CheckListButton from './CheckListButton';
 import CloseButton from './CloseButton';
@@ -52,6 +53,7 @@ export {
   Badge,
   Block,
   Button,
+  BrotherDrawer,
   Checkbox,
   CheckListButton,
   CloseButton,
