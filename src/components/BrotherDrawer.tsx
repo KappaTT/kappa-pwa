@@ -15,7 +15,8 @@ import {
   getExcusedEvents,
   getUserRecordCounts,
   getTypeCount,
-  prettyPhone
+  prettyPhone,
+  sortEventByDate
 } from '@services/kappaService';
 import { theme } from '@constants';
 import { TabBarHeight, isEmpty } from '@services/utils';
@@ -31,9 +32,9 @@ const { width, height } = Dimensions.get('screen');
 const BrotherDrawer: React.FC<{}> = ({}) => {
   const user = useSelector((state: TRedux) => state.auth.user);
   const events = useSelector((state: TRedux) => state.kappa.events);
-  const eventsSize = useSelector((state: TRedux) => state.kappa.eventsSize);
   const gmCount = useSelector((state: TRedux) => state.kappa.gmCount);
   const records = useSelector((state: TRedux) => state.kappa.records);
+  const missedMandatory = useSelector((state: TRedux) => state.kappa.missedMandatory);
   const gettingAttendance = useSelector((state: TRedux) => state.kappa.gettingAttendance);
   const selectedUserEmail = useSelector((state: TRedux) => state.kappa.selectedUserEmail);
   const selectedUser = useSelector((state: TRedux) => state.kappa.selectedUser);
@@ -122,6 +123,14 @@ const BrotherDrawer: React.FC<{}> = ({}) => {
     return getUserRecordCounts(records, selectedUserEmail);
   }, [records, selectedUserEmail]);
 
+  const mandatory = React.useMemo(() => {
+    if (!user.privileged) return [];
+
+    if (isEmpty(missedMandatory[user.email])) return [];
+
+    return Object.values(missedMandatory[user.email]).sort(sortEventByDate);
+  }, [user, missedMandatory]);
+
   const onOpenStart = () => {
     setSnapPoint(0);
   };
@@ -161,6 +170,82 @@ const BrotherDrawer: React.FC<{}> = ({}) => {
       <Block style={styles.header}>
         <Block style={styles.panelHeader}>
           <Block style={styles.panelHandle} />
+        </Block>
+      </Block>
+    );
+  };
+
+  const renderEvent = (event: TEvent) => {
+    return (
+      <Block key={event.id} style={styles.eventContainer}>
+        <Text style={styles.eventTitle}>{event.title}</Text>
+        <Text style={styles.eventDate}>{moment(event.start).format('M/D/Y')}</Text>
+      </Block>
+    );
+  };
+
+  const renderAdmin = () => {
+    return (
+      <Block style={styles.adminContainer}>
+        <Block style={styles.adminChartsContainer}>
+          <Block style={styles.circleChartContainer}>
+            <ProgressCircle
+              style={styles.circleChart}
+              progress={gmStats.raw}
+              progressColor={theme.COLORS.PRIMARY}
+              startAngle={-Math.PI * 0.8}
+              endAngle={Math.PI * 0.8}
+            />
+            <Block style={styles.circleChartLabels}>
+              <Text style={styles.circleChartValue}>{gmStats.percent}</Text>
+              <Text style={styles.circleChartTitle}>GM</Text>
+            </Block>
+          </Block>
+
+          <Block style={styles.chartPropertyContainer}>
+            <Block style={styles.chartProperty}>
+              <Text style={styles.chartPropertyLabel}>Attended</Text>
+              <Text style={styles.chartPropertyValue}>{gmCounts.attended}</Text>
+            </Block>
+            <Block style={styles.chartProperty}>
+              <Text style={styles.chartPropertyLabel}>Excused</Text>
+              <Text style={styles.chartPropertyValue}>{gmCounts.excused}</Text>
+            </Block>
+            <Block style={styles.chartProperty}>
+              <Text style={styles.chartPropertyLabel}>Pending</Text>
+              <Text style={styles.chartPropertyValue}>{gmCounts.pending}</Text>
+            </Block>
+          </Block>
+        </Block>
+
+        <Block style={styles.eventList}>
+          {mandatory.length > 0 && (
+            <React.Fragment>
+              <Text
+                style={[
+                  styles.chartPropertyLabel,
+                  {
+                    color: theme.COLORS.PRIMARY
+                  }
+                ]}
+              >
+                Missed Mandatory
+              </Text>
+              {mandatory.map((event: TEvent) => renderEvent(event))}
+            </React.Fragment>
+          )}
+
+          {/* <Text style={styles.chartPropertyLabel}>Attended</Text>
+          {Object.keys(attended)
+            .map(attend => events[attend])
+            .sort(sortEventByDate)
+            .map((event: TEvent) => renderEvent(event))}
+
+          <Text style={styles.chartPropertyLabel}>Excused</Text>
+          {Object.keys(excused)
+            .map(attend => events[attend])
+            .sort(sortEventByDate)
+            .map((event: TEvent) => renderEvent(event))} */}
         </Block>
       </Block>
     );
@@ -215,38 +300,7 @@ const BrotherDrawer: React.FC<{}> = ({}) => {
                     </Block>
                   </Block>
 
-                  {user.privileged && (
-                    <Block style={styles.adminContainer}>
-                      <Block style={styles.circleChartContainer}>
-                        <ProgressCircle
-                          style={styles.circleChart}
-                          progress={gmStats.raw}
-                          progressColor={theme.COLORS.PRIMARY}
-                          startAngle={-Math.PI * 0.8}
-                          endAngle={Math.PI * 0.8}
-                        />
-                        <Block style={styles.circleChartLabels}>
-                          <Text style={styles.circleChartValue}>{gmStats.percent}</Text>
-                          <Text style={styles.circleChartTitle}>GM</Text>
-                        </Block>
-                      </Block>
-
-                      <Block style={styles.chartPropertyContainer}>
-                        <Block style={styles.chartProperty}>
-                          <Text style={styles.chartPropertyLabel}>Attended</Text>
-                          <Text style={styles.chartPropertyValue}>{gmCounts.attended}</Text>
-                        </Block>
-                        <Block style={styles.chartProperty}>
-                          <Text style={styles.chartPropertyLabel}>Excused</Text>
-                          <Text style={styles.chartPropertyValue}>{gmCounts.excused}</Text>
-                        </Block>
-                        <Block style={styles.chartProperty}>
-                          <Text style={styles.chartPropertyLabel}>Pending</Text>
-                          <Text style={styles.chartPropertyValue}>{gmCounts.pending}</Text>
-                        </Block>
-                      </Block>
-                    </Block>
-                  )}
+                  {user.privileged && renderAdmin()}
                 </Block>
               </Block>
             </ScrollView>
@@ -377,7 +431,8 @@ const styles = StyleSheet.create({
   splitProperty: {
     width: '50%'
   },
-  adminContainer: {
+  adminContainer: {},
+  adminChartsContainer: {
     marginTop: 24,
     marginBottom: 24,
     display: 'flex',
@@ -433,24 +488,25 @@ const styles = StyleSheet.create({
     fontFamily: 'OpenSans',
     fontSize: 15
   },
-  bottomBar: {
-    width: '100%',
-    height: 64,
-    backgroundColor: theme.COLORS.WHITE,
-    paddingHorizontal: 24,
+  eventList: {},
+  eventContainer: {
+    height: 48,
+    borderBottomWidth: 1,
+    borderBottomColor: theme.COLORS.LIGHT_BORDER,
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center'
   },
-  excuseButton: {
-    flex: 1
+  eventTitle: {
+    fontFamily: 'OpenSans',
+    fontSize: 16
   },
-  bottomDivider: {
-    width: 8
-  },
-  attendButton: {
-    flex: 1
+  eventDate: {
+    fontFamily: 'OpenSans-Bold',
+    fontSize: 13,
+    color: theme.COLORS.GRAY,
+    textTransform: 'uppercase'
   }
 });
 

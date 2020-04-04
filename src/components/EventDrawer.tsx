@@ -146,6 +146,41 @@ const EventDrawer: React.FC<{}> = ({}) => {
     );
   };
 
+  const renderAdmin = () => {
+    return (
+      <Block style={styles.adminContainer}>
+        <Block style={styles.circleChartContainer}>
+          <ProgressCircle
+            style={styles.circleChart}
+            progress={recordStats.raw}
+            progressColor={theme.COLORS.PRIMARY}
+            startAngle={-Math.PI * 0.8}
+            endAngle={Math.PI * 0.8}
+          />
+          <Block style={styles.circleChartLabels}>
+            <Text style={styles.circleChartValue}>{recordStats.percent}</Text>
+            <Text style={styles.circleChartTitle}>Headcount</Text>
+          </Block>
+        </Block>
+
+        <Block style={styles.chartPropertyContainer}>
+          <Block style={styles.chartProperty}>
+            <Text style={styles.chartPropertyLabel}>Attended</Text>
+            <Text style={styles.chartPropertyValue}>{recordCounts.attended}</Text>
+          </Block>
+          <Block style={styles.chartProperty}>
+            <Text style={styles.chartPropertyLabel}>Excused</Text>
+            <Text style={styles.chartPropertyValue}>{recordCounts.excused}</Text>
+          </Block>
+          <Block style={styles.chartProperty}>
+            <Text style={styles.chartPropertyLabel}>Pending</Text>
+            <Text style={styles.chartPropertyValue}>{recordCounts.pending}</Text>
+          </Block>
+        </Block>
+      </Block>
+    );
+  };
+
   const renderContent = () => {
     return (
       <Block
@@ -241,38 +276,7 @@ const EventDrawer: React.FC<{}> = ({}) => {
                     </Block>
                   </Block>
 
-                  {user.privileged && (
-                    <Block style={styles.adminContainer}>
-                      <Block style={styles.circleChartContainer}>
-                        <ProgressCircle
-                          style={styles.circleChart}
-                          progress={recordStats.raw}
-                          progressColor={theme.COLORS.PRIMARY}
-                          startAngle={-Math.PI * 0.8}
-                          endAngle={Math.PI * 0.8}
-                        />
-                        <Block style={styles.circleChartLabels}>
-                          <Text style={styles.circleChartValue}>{recordStats.percent}</Text>
-                          <Text style={styles.circleChartTitle}>Headcount</Text>
-                        </Block>
-                      </Block>
-
-                      <Block style={styles.chartPropertyContainer}>
-                        <Block style={styles.chartProperty}>
-                          <Text style={styles.chartPropertyLabel}>Attended</Text>
-                          <Text style={styles.chartPropertyValue}>{recordCounts.attended}</Text>
-                        </Block>
-                        <Block style={styles.chartProperty}>
-                          <Text style={styles.chartPropertyLabel}>Excused</Text>
-                          <Text style={styles.chartPropertyValue}>{recordCounts.excused}</Text>
-                        </Block>
-                        <Block style={styles.chartProperty}>
-                          <Text style={styles.chartPropertyLabel}>Pending</Text>
-                          <Text style={styles.chartPropertyValue}>{recordCounts.pending}</Text>
-                        </Block>
-                      </Block>
-                    </Block>
-                  )}
+                  {user.privileged && renderAdmin()}
                 </Block>
               </Block>
             </ScrollView>

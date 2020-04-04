@@ -239,9 +239,13 @@ export const hasValidCheckIn = (records: TRecords, email: string, event_id: stri
 export const getMandatoryEvents = (events: TEventDict) => {
   let mandatory = {};
 
+  const now = moment();
+
   for (const event of Object.values(events)) {
     if (event.mandatory) {
-      mandatory[event.id] = event;
+      if (moment(event.start).isBefore(now)) {
+        mandatory[event.id] = event;
+      }
     }
   }
 
@@ -281,3 +285,5 @@ export const prettyPhone = (phone: string) => {
 
   return `(${phone.substring(0, 3)}) ${phone.substring(3, 6)}-${phone.substring(6, 10)}`;
 };
+
+export const sortEventByDate = (a: TEvent, b: TEvent) => (moment(a.start).isBefore(moment(b.start)) ? -1 : 1);
