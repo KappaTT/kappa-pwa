@@ -24,7 +24,8 @@ import {
   getEventRecordCounts,
   getAttendedEvents,
   getExcusedEvents,
-  getUserRecordCounts
+  getUserRecordCounts,
+  getTypeCount
 } from '@services/kappaService';
 
 const { width, height } = Dimensions.get('screen');
@@ -107,21 +108,7 @@ const BrotherDrawer: React.FC<{}> = ({}) => {
         percent: '0%'
       };
 
-    let count = 0;
-
-    for (const event_id of Object.keys(attended)) {
-      if (events[event_id].event_type === 'GM') {
-        count++;
-      }
-    }
-
-    for (const [event_id, excuse] of Object.entries(excused)) {
-      if (events[event_id].event_type === 'GM' && excuse.approved) {
-        count++;
-      }
-    }
-
-    const fraction = count / gmCount;
+    const fraction = getTypeCount(events, attended, excused, 'GM') / gmCount;
 
     return {
       raw: fraction,

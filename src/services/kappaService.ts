@@ -1,6 +1,16 @@
 import moment from 'moment';
 
-import { TAttendance, TExcuse, TRecords, TEvent, TEventDateDict, TDirectory, TEventDict } from '@backend/kappa';
+import {
+  TAttendance,
+  TExcuse,
+  TRecords,
+  TEvent,
+  TEventDateDict,
+  TDirectory,
+  TEventDict,
+  TAttendanceEventDict,
+  TExcuseEventDict
+} from '@backend/kappa';
 import { TUser } from '@backend/auth';
 
 export const netidToEmail = (netid: string) => `${netid}@illinois.edu`;
@@ -179,6 +189,29 @@ export const getUserRecordCounts = (records: TRecords, email: string) => {
     pending,
     sum: attended + excused + pending
   };
+};
+
+export const getTypeCount = (
+  events: TEventDict,
+  attended: TAttendanceEventDict,
+  excused: TExcuseEventDict,
+  type: string
+) => {
+  let count = 0;
+
+  for (const event_id of Object.keys(attended)) {
+    if (events[event_id].event_type === type) {
+      count++;
+    }
+  }
+
+  for (const [event_id, excuse] of Object.entries(excused)) {
+    if (events[event_id].event_type === type && excuse.approved) {
+      count++;
+    }
+  }
+
+  return count;
 };
 
 export const hasValidCheckIn = (records: TRecords, email: string, event_id: string) => {

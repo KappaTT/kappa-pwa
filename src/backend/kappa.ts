@@ -44,13 +44,11 @@ export interface TAttendance {
 }
 
 export interface TAttendanceEventDict {
-  [event_id: number]: Array<TAttendance>;
+  [event_id: number]: TAttendance;
 }
 
 export interface TAttendanceUserDict {
-  [email: string]: {
-    [event_id: string]: TAttendance;
-  };
+  [email: string]: TAttendanceEventDict;
 }
 
 export interface TExcuse {
@@ -61,13 +59,11 @@ export interface TExcuse {
 }
 
 export interface TExcuseEventDict {
-  [event_id: number]: Array<TExcuse>;
+  [event_id: number]: TExcuse;
 }
 
 export interface TExcuseUserDict {
-  [email: string]: {
-    [event_id: string]: TExcuse;
-  };
+  [email: string]: TExcuseEventDict;
 }
 
 export interface TRecords {
