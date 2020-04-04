@@ -18,15 +18,7 @@ import Ghost from '@components/Ghost';
 import Text from '@components/Text';
 import RoundButton from '@components/RoundButton';
 import Icon from '@components/Icon';
-import {
-  getAttendance,
-  getExcuse,
-  getEventRecordCounts,
-  getAttendedEvents,
-  getExcusedEvents,
-  getUserRecordCounts,
-  getTypeCount
-} from '@services/kappaService';
+import { getAttendedEvents, getExcusedEvents, getUserRecordCounts, getTypeCount } from '@services/kappaService';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -101,33 +93,28 @@ const BrotherDrawer: React.FC<{}> = ({}) => {
     return getExcusedEvents(records, selectedUserEmail);
   }, [user, records, selectedUserEmail]);
 
-  const gmRate = React.useMemo(() => {
+  const gmCounts = React.useMemo(() => {
+    return getTypeCount(events, attended, excused, 'GM');
+  }, [events, attended, excused]);
+
+  const gmStats = React.useMemo(() => {
     if (!user.privileged)
       return {
         raw: 0,
         percent: '0%'
       };
 
-    const fraction = getTypeCount(events, attended, excused, 'GM') / gmCount;
-
-    return {
-      raw: fraction,
-      pretty: `${Math.round(fraction * 100)}%`
-    };
-  }, [user, events, gmCount, attended, excused]);
-
-  const recordCounts = React.useMemo(() => {
-    return getUserRecordCounts(records, selectedUserEmail);
-  }, [records, selectedUserEmail]);
-
-  const recordStats = React.useMemo(() => {
-    const fraction = eventsSize === 0 ? 0 : recordCounts.sum / eventsSize;
+    const fraction = gmCount === 0 ? 0 : gmCounts.sum / gmCount;
 
     return {
       raw: fraction,
       percent: `${Math.round(fraction * 100)}%`
     };
-  }, [recordCounts, eventsSize]);
+  }, [user, gmCount, gmCounts]);
+
+  const recordCounts = React.useMemo(() => {
+    return getUserRecordCounts(records, selectedUserEmail);
+  }, [records, selectedUserEmail]);
 
   const onOpenStart = () => {
     setSnapPoint(0);
@@ -204,29 +191,29 @@ const BrotherDrawer: React.FC<{}> = ({}) => {
                       <Block style={styles.circleChartContainer}>
                         <ProgressCircle
                           style={styles.circleChart}
-                          progress={recordStats.raw}
+                          progress={gmStats.raw}
                           progressColor={theme.COLORS.PRIMARY}
                           startAngle={-Math.PI * 0.8}
                           endAngle={Math.PI * 0.8}
                         />
                         <Block style={styles.circleChartLabels}>
-                          <Text style={styles.circleChartValue}>{recordStats.percent}</Text>
-                          <Text style={styles.circleChartTitle}>Events</Text>
+                          <Text style={styles.circleChartValue}>{gmStats.percent}</Text>
+                          <Text style={styles.circleChartTitle}>GM</Text>
                         </Block>
                       </Block>
 
                       <Block style={styles.chartPropertyContainer}>
                         <Block style={styles.chartProperty}>
                           <Text style={styles.chartPropertyLabel}>Attended</Text>
-                          <Text style={styles.chartPropertyValue}>{recordCounts.attended}</Text>
+                          <Text style={styles.chartPropertyValue}>{gmCounts.attended}</Text>
                         </Block>
                         <Block style={styles.chartProperty}>
                           <Text style={styles.chartPropertyLabel}>Excused</Text>
-                          <Text style={styles.chartPropertyValue}>{recordCounts.excused}</Text>
+                          <Text style={styles.chartPropertyValue}>{gmCounts.excused}</Text>
                         </Block>
                         <Block style={styles.chartProperty}>
                           <Text style={styles.chartPropertyLabel}>Pending</Text>
-                          <Text style={styles.chartPropertyValue}>{recordCounts.pending}</Text>
+                          <Text style={styles.chartPropertyValue}>{gmCounts.pending}</Text>
                         </Block>
                       </Block>
                     </Block>

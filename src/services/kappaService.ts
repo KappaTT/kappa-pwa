@@ -197,21 +197,33 @@ export const getTypeCount = (
   excused: TExcuseEventDict,
   type: string
 ) => {
-  let count = 0;
+  let attendedCount = 0;
+  let excusedCount = 0;
+  let pendingCount = 0;
+  let sum = 0;
 
   for (const event_id of Object.keys(attended)) {
     if (events[event_id].event_type === type) {
-      count++;
+      attendedCount++;
     }
   }
 
   for (const [event_id, excuse] of Object.entries(excused)) {
-    if (events[event_id].event_type === type && excuse.approved) {
-      count++;
+    if (events[event_id].event_type === type) {
+      if (excuse.approved) {
+        excusedCount++;
+      } else {
+        pendingCount++;
+      }
     }
   }
 
-  return count;
+  return {
+    attended: attendedCount,
+    excused: excusedCount,
+    pending: pendingCount,
+    sum: attendedCount + excusedCount + pendingCount
+  };
 };
 
 export const hasValidCheckIn = (records: TRecords, email: string, event_id: string) => {
