@@ -32,7 +32,6 @@ const EventsContent: React.FC<{
   navigation: NavigationTypes.ParamType;
 }> = ({ navigation }) => {
   const user = useSelector((state: TRedux) => state.auth.user);
-  const directory = useSelector((state: TRedux) => state.kappa.directory);
   const records = useSelector((state: TRedux) => state.kappa.records);
   const gettingEvents = useSelector((state: TRedux) => state.kappa.gettingEvents);
   const gettingDirectory = useSelector((state: TRedux) => state.kappa.gettingDirectory);
@@ -49,6 +48,8 @@ const EventsContent: React.FC<{
   const dispatchSelectEvent = React.useCallback((eventId: number) => dispatch(_kappa.selectEvent(eventId)), [dispatch]);
 
   const insets = useSafeArea();
+
+  const scrollRef = React.useRef(undefined);
 
   const loadData = () => {
     dispatchGetEvents();
@@ -88,7 +89,7 @@ const EventsContent: React.FC<{
 
   const renderItem = ({ item }: { item: TEvent }) => {
     return (
-      <React.Fragment key={item.id}>
+      <React.Fragment>
         <TouchableOpacity onPress={() => dispatchSelectEvent(item.id)}>
           <Block style={styles.eventContainer}>
             <Block style={styles.eventHeader}>
@@ -122,7 +123,7 @@ const EventsContent: React.FC<{
           </Block>
         </TouchableOpacity>
 
-        <Block style={styles.eventSeparator} />
+        <Block style={styles.separator} />
       </React.Fragment>
     );
   };
@@ -142,17 +143,18 @@ const EventsContent: React.FC<{
         {gettingEvents && isEmpty(events) ? (
           <Block style={styles.loadingContainer}>
             <EventSkeleton />
-            <Block style={styles.eventSeparator} />
+            <Block style={styles.separator} />
             <EventSkeleton />
-            <Block style={styles.eventSeparator} />
+            <Block style={styles.separator} />
             <EventSkeleton />
-            <Block style={styles.eventSeparator} />
+            <Block style={styles.separator} />
             <EventSkeleton />
-            <Block style={styles.eventSeparator} />
+            <Block style={styles.separator} />
             <EventSkeleton />
           </Block>
         ) : (
           <SectionList
+            ref={ref => (scrollRef.current = ref)}
             sections={Object.entries(events).map(entry => ({ title: entry[0], data: entry[1] }))}
             keyExtractor={keyExtractor}
             renderSectionHeader={renderSectionHeader}
@@ -194,7 +196,7 @@ const styles = StyleSheet.create({
     fontFamily: 'OpenSans-Bold',
     fontSize: 18
   },
-  eventSeparator: {
+  separator: {
     marginHorizontal: 24,
     marginBottom: 16,
     borderBottomColor: theme.COLORS.LIGHT_BORDER,
