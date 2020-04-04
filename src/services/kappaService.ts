@@ -227,14 +227,14 @@ export const getTypeCount = (
   };
 };
 
-export const hasValidCheckIn = (records: TRecords, email: string, event_id: string) => {
+export const hasValidCheckIn = (records: TRecords, email: string, event_id: string, allowPending: boolean = false) => {
   const attend = getAttendance(records, email, event_id);
 
   if (attend) return true;
 
   const excuse = getExcuse(records, email, event_id);
 
-  return excuse !== undefined && excuse.approved === 1;
+  return excuse !== undefined && (allowPending || excuse.approved === 1);
 };
 
 export const getMandatoryEvents = (events: TEventDict) => {
@@ -257,7 +257,7 @@ export const getMissedMandatoryByUser = (records: TRecords, mandatoryEvents: TEv
   let missed = {};
 
   for (const event of Object.values(mandatoryEvents)) {
-    if (!hasValidCheckIn(records, email, event.id.toString())) {
+    if (!hasValidCheckIn(records, email, event.id.toString(), true)) {
       missed[event.id] = event;
     }
   }
