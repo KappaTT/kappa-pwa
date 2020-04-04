@@ -243,7 +243,7 @@ export const getMandatoryEvents = (events: TEventDict) => {
 
   for (const event of Object.values(events)) {
     if (event.mandatory) {
-      if (moment(event.start).isBefore(now)) {
+      if (moment(event.start).isBefore(now) || true) {
         mandatory[event.id] = event;
       }
     }

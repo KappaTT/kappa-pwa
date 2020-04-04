@@ -276,7 +276,7 @@ const EventDrawer: React.FC<{}> = ({}) => {
                     </Block>
                   </Block>
 
-                  {user.privileged && renderAdmin()}
+                  {user.privileged === true && renderAdmin()}
                 </Block>
               </Block>
             </ScrollView>

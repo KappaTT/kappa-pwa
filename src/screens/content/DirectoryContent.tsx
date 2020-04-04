@@ -33,7 +33,7 @@ const DirectoryContent: React.FC<{
 }> = ({ navigation }) => {
   const user = useSelector((state: TRedux) => state.auth.user);
   const directory = useSelector((state: TRedux) => state.kappa.directory);
-  const records = useSelector((state: TRedux) => state.kappa.records);
+  const missedMandatory = useSelector((state: TRedux) => state.kappa.missedMandatory);
   const gettingEvents = useSelector((state: TRedux) => state.kappa.gettingEvents);
   const gettingDirectory = useSelector((state: TRedux) => state.kappa.gettingDirectory);
   const gettingAttendance = useSelector((state: TRedux) => state.kappa.gettingAttendance);
@@ -84,9 +84,21 @@ const DirectoryContent: React.FC<{
         <TouchableOpacity onPress={() => dispatchSelectUser(item.email)}>
           <Block style={styles.userContainer}>
             <Block style={styles.userHeader}>
-              <Text style={styles.userName}>
-                {item.familyName}, {item.givenName}
-              </Text>
+              <Block style={styles.userNameContainer}>
+                <Text style={styles.userName}>
+                  {item.familyName}, {item.givenName}
+                </Text>
+
+                {user.privileged === true && !isEmpty(missedMandatory[item.email]) && (
+                  <Icon
+                    style={styles.mandatoryIcon}
+                    family="Feather"
+                    name="alert-circle"
+                    size={14}
+                    color={theme.COLORS.PRIMARY}
+                  />
+                )}
+              </Block>
 
               <Block style={styles.selectIcon}>
                 <Text style={styles.userRole}>{item.role}</Text>
@@ -185,16 +197,24 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: theme.COLORS.BLACK
   },
-  selectIcon: {
+  userNameContainer: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center'
+  },
+  mandatoryIcon: {
+    marginLeft: 4
   },
   userRole: {
     fontFamily: 'OpenSans-Bold',
     fontSize: 13,
     color: theme.COLORS.GRAY,
     textTransform: 'uppercase'
+  },
+  selectIcon: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center'
   }
 });
 
