@@ -24,6 +24,7 @@ export interface TEvent {
   start: string;
   duration: number;
   location: string;
+  points: string;
 }
 
 export interface TEventDict {
