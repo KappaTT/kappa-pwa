@@ -17,7 +17,9 @@ import {
   separateByEventId,
   getMandatoryEvents,
   getMissedMandatory,
-  getTypeCount
+  getTypeCount,
+  mergeEvents,
+  mergeEventDates
 } from '@services/kappaService';
 import { TUser } from '@backend/auth';
 
@@ -38,6 +40,13 @@ export const UNSELECT_EVENT = 'UNSELECT_EVENT';
 
 export const SELECT_USER = 'SELECT_USER';
 export const UNSELECT_USER = 'UNSELECT_USER';
+
+export const CREATE_EVENT = 'CREATE_EVENT';
+export const EDIT_EVENT = 'EDIT_EVENT';
+export const CANCEL_EDIT_EVENT = 'CANCEL_EDIT_EVENT';
+export const SAVE_EDIT_EVENT = 'SAVE_EDIT_EVENT';
+export const SAVE_EDIT_EVENT_SUCCESS = 'SAVE_EDIT_EVENT_SUCCESS';
+export const SAVE_EDIT_EVENT_FAILURE = 'SAVE_EDIT_EVENT_FAILURE';
 
 export interface TKappaState {
   gettingEvents: boolean;
@@ -67,6 +76,11 @@ export interface TKappaState {
   directorySize: number;
   selectedUserEmail: string;
   selectedUser: TUser;
+
+  editingEventId: string;
+  savingEvent: boolean;
+  saveEventError: boolean;
+  saveEventErrorMessage: string;
 }
 
 const initialState: TKappaState = {
@@ -99,7 +113,12 @@ const initialState: TKappaState = {
 
   directorySize: 0,
   selectedUserEmail: '',
-  selectedUser: null
+  selectedUser: null,
+
+  editingEventId: '',
+  savingEvent: false,
+  saveEventError: false,
+  saveEventErrorMessage: ''
 };
 
 export default (state = initialState, action: any): TKappaState => {
@@ -184,8 +203,8 @@ export default (state = initialState, action: any): TKappaState => {
     case SELECT_EVENT:
       return {
         ...state,
-        selectedEventId: action.eventId,
-        selectedEvent: getEventById(state.events, action.eventId)
+        selectedEventId: action.event_id,
+        selectedEvent: getEventById(state.events, action.event_id)
       };
     case UNSELECT_EVENT:
       return {
@@ -204,6 +223,46 @@ export default (state = initialState, action: any): TKappaState => {
         ...state,
         selectedUserEmail: '',
         selectedUser: null
+      };
+    case CREATE_EVENT:
+      return {
+        ...state,
+        editingEventId: 'NEW'
+      };
+    case EDIT_EVENT:
+      return {
+        ...state,
+        editingEventId: action.event_id,
+        saveEventError: false,
+        saveEventErrorMessage: ''
+      };
+    case CANCEL_EDIT_EVENT:
+      return {
+        ...state,
+        editingEventId: ''
+      };
+    case SAVE_EDIT_EVENT:
+      return {
+        ...state,
+        saveEventError: false,
+        saveEventErrorMessage: ''
+      };
+    case SAVE_EDIT_EVENT_SUCCESS:
+      const mergedEvents = mergeEvents(state.events, [action.event]);
+      const mergedEventDates = mergeEventDates(state.eventsByDate, [action.event]);
+
+      return {
+        ...state,
+        savingEvent: false,
+        events: mergedEvents,
+        eventsByDate: mergedEventDates
+      };
+    case SAVE_EDIT_EVENT_FAILURE:
+      return {
+        ...state,
+        savingEvent: false,
+        saveEventError: true,
+        saveEventErrorMessage: action.error.message
       };
     default:
       return state;

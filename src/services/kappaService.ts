@@ -68,6 +68,32 @@ export const getUserByEmail = (directory: TDirectory, email: string) => {
   return null;
 };
 
+export const mergeEvents = (events: TEventDict, newEvents: Array<TEvent>) => {
+  let mergedEvents = events;
+
+  for (const event of newEvents) {
+    mergedEvents[event.id] = event;
+  }
+
+  return mergedEvents;
+};
+
+export const mergeEventDates = (eventDateDict: TEventDateDict, newEvents: Array<TEvent>) => {
+  let separated = eventDateDict;
+
+  for (const event of newEvents) {
+    const date = moment(event.start).format('YYYY-MM-DD');
+
+    if (!separated.hasOwnProperty(date)) {
+      separated[date] = [];
+    }
+
+    separated[date].push(event);
+  }
+
+  return separated;
+};
+
 export const mergeRecords = (
   records: TRecords,
   newRecords: {
@@ -75,9 +101,7 @@ export const mergeRecords = (
     excused: Array<TExcuse>;
   }
 ) => {
-  let mergedRecords = {
-    ...records
-  };
+  let mergedRecords = records;
 
   for (const attend of newRecords.attended) {
     const email = netidToEmail(attend.netid);
@@ -267,7 +291,7 @@ export const getMandatoryEvents = (events: TEventDict) => {
 
   for (const event of Object.values(events)) {
     if (event.mandatory) {
-      if (moment(event.start).isBefore(now)) {
+      if (moment(event.start).isBefore(now) || true) {
         mandatory[event.id] = event;
       }
     }
