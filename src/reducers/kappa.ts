@@ -41,8 +41,8 @@ export const UNSELECT_EVENT = 'UNSELECT_EVENT';
 export const SELECT_USER = 'SELECT_USER';
 export const UNSELECT_USER = 'UNSELECT_USER';
 
-export const CREATE_EVENT = 'CREATE_EVENT';
-export const EDIT_EVENT = 'EDIT_EVENT';
+export const EDIT_NEW_EVENT = 'EDIT_NEW_EVENT';
+export const EDIT_EXISTING_EVENT = 'EDIT_EXISTING_EVENT';
 export const CANCEL_EDIT_EVENT = 'CANCEL_EDIT_EVENT';
 export const SAVE_EDIT_EVENT = 'SAVE_EDIT_EVENT';
 export const SAVE_EDIT_EVENT_SUCCESS = 'SAVE_EDIT_EVENT_SUCCESS';
@@ -224,12 +224,12 @@ export default (state = initialState, action: any): TKappaState => {
         selectedUserEmail: '',
         selectedUser: null
       };
-    case CREATE_EVENT:
+    case EDIT_NEW_EVENT:
       return {
         ...state,
         editingEventId: 'NEW'
       };
-    case EDIT_EVENT:
+    case EDIT_EXISTING_EVENT:
       return {
         ...state,
         editingEventId: action.event_id,

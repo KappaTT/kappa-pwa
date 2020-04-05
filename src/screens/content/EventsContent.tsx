@@ -8,7 +8,8 @@ import moment from 'moment';
 import { theme } from '@constants';
 import { TRedux } from '@reducers';
 import { _kappa } from '@reducers/actions';
-import { Block, Header, EndCapButton, Text, Icon } from '@components';
+import { Block, Header, EndCapButton, Text, Icon, SlideModal } from '@components';
+import { EditEventPage } from '@pages';
 import { NavigationTypes } from '@types';
 import { HeaderHeight, isEmpty } from '@services/utils';
 import { log } from '@services/logService';
@@ -38,6 +39,7 @@ const EventsContent: React.FC<{
   const gettingAttendance = useSelector((state: TRedux) => state.kappa.gettingAttendance);
   const getEventsError = useSelector((state: TRedux) => state.kappa.getEventsError);
   const eventsByDate = useSelector((state: TRedux) => state.kappa.eventsByDate);
+  const editingEventId = useSelector((state: TRedux) => state.kappa.editingEventId);
 
   const [refreshing, setRefreshing] = React.useState<boolean>(gettingEvents || gettingDirectory || gettingAttendance);
 
@@ -46,6 +48,12 @@ const EventsContent: React.FC<{
   const dispatchGetMyAttendance = React.useCallback(() => dispatch(_kappa.getMyAttendance(user)), [dispatch, user]);
   const dispatchGetDirectory = React.useCallback(() => dispatch(_kappa.getDirectory(user)), [dispatch, user]);
   const dispatchSelectEvent = React.useCallback((eventId: string) => dispatch(_kappa.selectEvent(eventId)), [dispatch]);
+  const dispatchEditNewEvent = React.useCallback(() => dispatch(_kappa.editNewEvent()), [dispatch]);
+  const dispatchSaveEditEvent = React.useCallback((event: TEvent) => dispatch(_kappa.saveEditEvent(user, event)), [
+    dispatch,
+    user
+  ]);
+  const dispatchCancelEditEvent = React.useCallback(() => dispatch(_kappa.cancelEditEvent()), [dispatch]);
 
   const insets = useSafeArea();
 
@@ -130,7 +138,7 @@ const EventsContent: React.FC<{
 
   return (
     <Block flex>
-      <Header title="Upcoming Events" rightButton={<EndCapButton label="New Event" />} />
+      <Header title="Upcoming Events" rightButton={<EndCapButton label="New Event" onPress={dispatchEditNewEvent} />} />
 
       <Block
         style={[
@@ -165,6 +173,10 @@ const EventsContent: React.FC<{
           />
         )}
       </Block>
+
+      <SlideModal visible={editingEventId === 'NEW'}>
+        <EditEventPage initialEvent={null} onPressBack={dispatchCancelEditEvent} onPressSave={() => {}} />
+      </SlideModal>
     </Block>
   );
 };

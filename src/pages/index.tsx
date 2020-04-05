@@ -1,4 +1,5 @@
+import EditEventPage from './EditEventPage';
 import LoginPage from './LoginPage';
 import OnboardingPage from './OnboardingPage';
 
-export { LoginPage, OnboardingPage };
+export { EditEventPage, LoginPage, OnboardingPage };

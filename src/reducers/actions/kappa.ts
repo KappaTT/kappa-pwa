@@ -12,9 +12,16 @@ import {
   GET_DIRECTORY_SUCCESS,
   GET_DIRECTORY_FAILURE,
   SELECT_USER,
-  UNSELECT_USER
+  UNSELECT_USER,
+  EDIT_NEW_EVENT,
+  EDIT_EXISTING_EVENT,
+  CANCEL_EDIT_EVENT,
+  SAVE_EDIT_EVENT,
+  SAVE_EDIT_EVENT_SUCCESS,
+  SAVE_EDIT_EVENT_FAILURE
 } from '@reducers/kappa';
 import { TUser } from '@backend/auth';
+import { TEvent } from '@backend/kappa';
 
 const gettingEvents = () => {
   return {
@@ -160,5 +167,51 @@ export const selectUser = (email: string) => {
 export const unselectUser = () => {
   return {
     type: UNSELECT_USER
+  };
+};
+
+export const editNewEvent = () => {
+  return {
+    type: EDIT_NEW_EVENT
+  };
+};
+
+export const editExistingEvent = (event_id: string) => {
+  return {
+    type: EDIT_EXISTING_EVENT,
+    event_id
+  };
+};
+
+export const cancelEditEvent = () => {
+  return {
+    type: CANCEL_EDIT_EVENT
+  };
+};
+
+const savingEditEvent = () => {
+  return {
+    type: SAVE_EDIT_EVENT
+  };
+};
+
+const saveEditEventSuccess = data => {
+  return {
+    type: SAVE_EDIT_EVENT_SUCCESS,
+    event: data.event
+  };
+};
+
+const saveEditFailure = err => {
+  return {
+    type: SAVE_EDIT_EVENT_FAILURE,
+    error: err
+  };
+};
+
+export const saveEditEvent = (user: TUser, event: TEvent) => {
+  return dispatch => {
+    dispatch(savingEditEvent());
+    // TODO
   };
 };
