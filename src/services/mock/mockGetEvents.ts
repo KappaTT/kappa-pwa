@@ -1,7 +1,7 @@
 export default {
   events: [
     {
-      id: 1,
+      id: '1',
       creator: 'jjt4',
       event_type: 'GM',
       event_code: '647319',
@@ -14,7 +14,7 @@ export default {
       location: 'EHall 106b1'
     },
     {
-      id: 2,
+      id: '2',
       creator: 'jjt4',
       event_type: 'GM',
       event_code: '647319',
@@ -27,7 +27,7 @@ export default {
       location: 'EHall 106b1'
     },
     {
-      id: 3,
+      id: '3',
       creator: 'jjt4',
       event_type: 'Brotherhood',
       event_code: '647319',
@@ -40,7 +40,7 @@ export default {
       location: 'Legends'
     },
     {
-      id: 4,
+      id: '4',
       creator: 'jjt4',
       event_type: 'GM',
       event_code: '647319',
@@ -54,7 +54,7 @@ export default {
       location: 'EHall 106b1'
     },
     {
-      id: 5,
+      id: '5',
       creator: 'jjt4',
       event_type: 'Brotherhood',
       event_code: '647319',
@@ -67,7 +67,7 @@ export default {
       location: 'EHall 106b1'
     },
     {
-      id: 6,
+      id: '6',
       creator: 'jjt4',
       event_type: 'GM',
       event_code: '647319',

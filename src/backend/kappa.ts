@@ -13,7 +13,7 @@ import { log } from '@services/logService';
 import moment from 'moment';
 
 export interface TEvent {
-  id: number;
+  id: string;
   creator: string;
   event_type: string;
   event_code?: string;
@@ -43,12 +43,12 @@ export interface TDirectory {
 }
 
 export interface TAttendance {
-  event_id: number;
+  event_id: string;
   netid: string;
 }
 
 export interface TAttendanceEventDict {
-  [event_id: number]: TAttendance;
+  [event_id: string]: TAttendance;
 }
 
 export interface TAttendanceUserDict {
@@ -56,14 +56,14 @@ export interface TAttendanceUserDict {
 }
 
 export interface TExcuse {
-  event_id: number;
+  event_id: string;
   netid: string;
   reason: string;
   approved: 0 | 1;
 }
 
 export interface TExcuseEventDict {
-  [event_id: number]: TExcuse;
+  [event_id: string]: TExcuse;
 }
 
 export interface TExcuseUserDict {
@@ -76,7 +76,7 @@ export interface TRecords {
 }
 
 export interface TPoint {
-  event_id: number;
+  event_id: string;
   category: string;
   count: number;
 }

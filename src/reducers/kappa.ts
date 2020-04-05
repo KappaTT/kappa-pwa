@@ -61,7 +61,7 @@ export interface TKappaState {
 
   eventsSize: number;
   gmCount: number;
-  selectedEventId: number;
+  selectedEventId: string;
   selectedEvent: TEvent;
 
   directorySize: number;
@@ -94,7 +94,7 @@ const initialState: TKappaState = {
 
   eventsSize: 0,
   gmCount: 0,
-  selectedEventId: -1,
+  selectedEventId: '',
   selectedEvent: null,
 
   directorySize: 0,
@@ -190,7 +190,7 @@ export default (state = initialState, action: any): TKappaState => {
     case UNSELECT_EVENT:
       return {
         ...state,
-        selectedEventId: -1,
+        selectedEventId: '',
         selectedEvent: null
       };
     case SELECT_USER:

@@ -280,7 +280,7 @@ export const getMissedMandatoryByUser = (records: TRecords, mandatoryEvents: TEv
   let missed = {};
 
   for (const event of Object.values(mandatoryEvents)) {
-    if (!hasValidCheckIn(records, email, event.id.toString(), true)) {
+    if (!hasValidCheckIn(records, email, event.id, true)) {
       missed[event.id] = event;
     }
   }

@@ -42,10 +42,11 @@ const EventDrawer: React.FC<{}> = ({}) => {
   const [refreshing, setRefreshing] = React.useState<boolean>(gettingAttendance);
 
   const dispatch = useDispatch();
-  const dispatchGetAttendance = React.useCallback(
-    () => dispatch(_kappa.getEventAttendance(user, selectedEventId.toString())),
-    [dispatch, user, selectedEventId]
-  );
+  const dispatchGetAttendance = React.useCallback(() => dispatch(_kappa.getEventAttendance(user, selectedEventId)), [
+    dispatch,
+    user,
+    selectedEventId
+  ]);
   const dispatchGetMyAttendance = React.useCallback(() => dispatch(_kappa.getMyAttendance(user)), [dispatch, user]);
   const dispatchUnselectEvent = React.useCallback(() => dispatch(_kappa.unselectEvent()), [dispatch]);
 
@@ -91,15 +92,15 @@ const EventDrawer: React.FC<{}> = ({}) => {
   }, []);
 
   const attended = React.useMemo(() => {
-    return getAttendance(records, user.email, selectedEventId.toString());
+    return getAttendance(records, user.email, selectedEventId);
   }, [records, user, selectedEventId]);
 
   const excused = React.useMemo(() => {
-    return getExcuse(records, user.email, selectedEventId.toString());
+    return getExcuse(records, user.email, selectedEventId);
   }, [records, user, selectedEventId]);
 
   const recordCounts = React.useMemo(() => {
-    return getEventRecordCounts(records, selectedEventId.toString());
+    return getEventRecordCounts(records, selectedEventId);
   }, [records, selectedEventId]);
 
   const recordStats = React.useMemo(() => {
@@ -114,11 +115,9 @@ const EventDrawer: React.FC<{}> = ({}) => {
   const mandatory = React.useMemo(() => {
     if (!user.privileged) return [];
 
-    if (selectedEventId === -1) return [];
+    if (selectedEventId === '') return [];
 
-    return Object.values(getMissedMandatoryByEvent(missedMandatory, directory, selectedEventId.toString())).sort(
-      sortUserByName
-    );
+    return Object.values(getMissedMandatoryByEvent(missedMandatory, directory, selectedEventId)).sort(sortUserByName);
   }, [user, missedMandatory, directory, selectedEventId]);
 
   const onOpenStart = () => {
@@ -146,7 +145,7 @@ const EventDrawer: React.FC<{}> = ({}) => {
   }, [gettingAttendance]);
 
   React.useEffect(() => {
-    if (selectedEventId === -1) {
+    if (selectedEventId === '') {
       snapTo(1);
     } else {
       snapTo(0);
@@ -370,7 +369,7 @@ const EventDrawer: React.FC<{}> = ({}) => {
     <Ghost style={styles.container}>
       <TouchableWithoutFeedback onPress={onPressClose}>
         <Animated.View
-          pointerEvents={selectedEventId === -1 ? 'none' : 'auto'}
+          pointerEvents={selectedEventId === '' ? 'none' : 'auto'}
           style={[
             styles.background,
             {

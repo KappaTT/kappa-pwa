@@ -137,7 +137,7 @@ export const getEventAttendance = (user: TUser, target: string) => {
   };
 };
 
-export const selectEvent = (eventId: number) => {
+export const selectEvent = (eventId: string) => {
   return {
     type: SELECT_EVENT,
     eventId

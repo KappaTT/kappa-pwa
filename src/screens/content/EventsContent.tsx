@@ -45,7 +45,7 @@ const EventsContent: React.FC<{
   const dispatchGetEvents = React.useCallback(() => dispatch(_kappa.getEvents(user)), [dispatch, user]);
   const dispatchGetMyAttendance = React.useCallback(() => dispatch(_kappa.getMyAttendance(user)), [dispatch, user]);
   const dispatchGetDirectory = React.useCallback(() => dispatch(_kappa.getDirectory(user)), [dispatch, user]);
-  const dispatchSelectEvent = React.useCallback((eventId: number) => dispatch(_kappa.selectEvent(eventId)), [dispatch]);
+  const dispatchSelectEvent = React.useCallback((eventId: string) => dispatch(_kappa.selectEvent(eventId)), [dispatch]);
 
   const insets = useSafeArea();
 
@@ -106,7 +106,7 @@ const EventsContent: React.FC<{
                 />
               )}
 
-              {hasValidCheckIn(records, user.email, item.id.toString()) && (
+              {hasValidCheckIn(records, user.email, item.id) && (
                 <Icon
                   style={styles.checkIcon}
                   family="Feather"
