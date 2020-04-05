@@ -89,13 +89,13 @@ const BrotherDrawer: React.FC<{}> = ({}) => {
   }, []);
 
   const attended = React.useMemo(() => {
-    if (!user.privileged) return [];
+    if (!user.privileged) return {};
 
     return getAttendedEvents(records, selectedUserEmail);
   }, [user, records, selectedUserEmail]);
 
   const excused = React.useMemo(() => {
-    if (!user.privileged) return [];
+    if (!user.privileged) return {};
 
     return getExcusedEvents(records, selectedUserEmail);
   }, [user, records, selectedUserEmail]);
