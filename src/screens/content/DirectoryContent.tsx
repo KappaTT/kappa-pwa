@@ -88,8 +88,7 @@ const DirectoryContent: React.FC<{
                 <Text style={styles.userName}>
                   {item.familyName}, {item.givenName}
                 </Text>
-
-                {user.privileged === true && !isEmpty(missedMandatory[item.email]) && (
+                {/* {user.privileged === true && !isEmpty(missedMandatory[item.email]) && (
                   <Icon
                     style={styles.mandatoryIcon}
                     family="Feather"
@@ -97,7 +96,7 @@ const DirectoryContent: React.FC<{
                     size={14}
                     color={theme.COLORS.PRIMARY}
                   />
-                )}
+                )} */}
               </Block>
 
               <Block style={styles.selectIcon}>
