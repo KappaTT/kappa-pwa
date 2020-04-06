@@ -6,7 +6,17 @@ import { useSafeArea } from 'react-native-safe-area-context';
 import { TRedux } from '@reducers';
 import { TEvent, TPoint } from '@backend/kappa';
 import { theme } from '@constants';
-import { Block, Text, Header, EndCapButton, RadioList, FormattedInput, Switch, ListButton } from '@components';
+import {
+  Block,
+  Text,
+  Header,
+  EndCapButton,
+  RadioList,
+  FormattedInput,
+  Switch,
+  ListButton,
+  SlideModal
+} from '@components';
 import { HeaderHeight } from '@services/utils';
 
 const EditEventPage: React.FC<{
@@ -25,14 +35,59 @@ const EditEventPage: React.FC<{
     onPressSave(event);
   }, []);
 
+  const onPressBackButton = React.useCallback(() => {
+    if (choosingType) {
+      setChoosingType(false);
+    } else {
+      onPressBack();
+    }
+  }, [choosingType]);
+
+  const renderChoosingType = () => {
+    return (
+      <Block flex>
+        <Header title="Event Type" showBackButton={true} onPressBackButton={onPressBackButton} />
+
+        <Block
+          style={[
+            styles.wrapper,
+            {
+              top: insets.top + HeaderHeight
+            }
+          ]}
+        >
+          <Block style={styles.content}>
+            <Block style={styles.propertyHeaderContainer}>
+              <Text style={styles.propertyHeader}>Event Type</Text>
+            </Block>
+
+            <RadioList
+              options={['GM', 'Custom']}
+              selected={type}
+              onChange={chosen => {
+                setType(chosen);
+                setChoosingType(false);
+              }}
+            />
+
+            <Text style={styles.description}>
+              The type of event affects GM counts and automatically configures certain settings with defaults. If an
+              event is not marked as a GM, it will not count towards the GM attendance rate.
+            </Text>
+          </Block>
+        </Block>
+      </Block>
+    );
+  };
+
   return (
     <Block flex>
       <Header
         title={initialEvent ? 'Editing Event' : 'New Event'}
-        subtitle={initialEvent ? initialEvent.title : choosingType ? 'Choosing Type' : type}
+        subtitle={initialEvent ? initialEvent.title : ''}
         showBackButton={true}
-        onPressBackButton={onPressBack}
-        rightButton={<EndCapButton label="Save" onPress={onPressSaveButton} />}
+        onPressBackButton={onPressBackButton}
+        rightButton={<EndCapButton label="Save" onPress={onPressSaveButton} disabled={false} />}
       />
 
       <Block
@@ -118,6 +173,8 @@ const EditEventPage: React.FC<{
           )}
         </Block>
       </Block>
+
+      <SlideModal visible={choosingType}>{renderChoosingType()}</SlideModal>
     </Block>
   );
 };
@@ -167,6 +224,11 @@ const styles = StyleSheet.create({
   },
   checkboxContainer: {
     marginTop: 16
+  },
+  description: {
+    marginTop: 12,
+    fontFamily: 'OpenSans',
+    fontSize: 12
   }
 });
 
