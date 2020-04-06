@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, KeyboardAvoidingView } from 'react-native';
+import { StyleSheet, ScrollView, TouchableWithoutFeedback, KeyboardAvoidingView } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { useSafeArea } from 'react-native-safe-area-context';
 
@@ -98,91 +98,144 @@ const EditEventPage: React.FC<{
           }
         ]}
       >
-        <Block style={styles.content}>
-          <Block style={styles.eventTypeContainer}>
-            <ListButton
-              keyText="Event Type"
-              valueText={type === '' ? 'choose one' : type}
-              onPress={() => setChoosingType(true)}
-            />
-          </Block>
-
-          {type !== '' && (
-            <React.Fragment>
-              <Block style={styles.propertyHeaderContainer}>
-                <Text style={styles.propertyHeader}>Title</Text>
-                <Text style={styles.propertyHeaderRequired}>*</Text>
+        <ScrollView
+          contentContainerStyle={[
+            styles.scrollContent,
+            {
+              paddingBottom: insets.bottom
+            }
+          ]}
+        >
+          <TouchableWithoutFeedback>
+            <Block style={styles.content}>
+              <Block style={styles.eventTypeContainer}>
+                <ListButton
+                  keyText="Event Type"
+                  valueText={type === '' ? 'choose one' : type}
+                  onPress={() => setChoosingType(true)}
+                />
               </Block>
-              <FormattedInput placeholderText="ex: General Meeting" maxLength={32} />
 
-              <Block style={styles.propertyHeaderContainer}>
-                <Text style={styles.propertyHeader}>Short Description</Text>
-              </Block>
-              <FormattedInput
-                style={{ height: 128 }}
-                placeholderText="short description"
-                multiline={true}
-                numberOfLines={6}
-                maxLength={256}
-              />
-
-              <Block style={styles.doubleColumn}>
-                <Block style={styles.column}>
+              {type !== '' && (
+                <React.Fragment>
                   <Block style={styles.propertyHeaderContainer}>
-                    <Text style={styles.propertyHeader}>Start</Text>
+                    <Text style={styles.propertyHeader}>Title</Text>
                     <Text style={styles.propertyHeaderRequired}>*</Text>
                   </Block>
+                  <FormattedInput placeholderText="ex: General Meeting" maxLength={32} />
 
-                  <FormattedInput placeholderText="start" maxLength={5} />
-                </Block>
-
-                <Block style={styles.separator} />
-
-                <Block style={styles.column}>
                   <Block style={styles.propertyHeaderContainer}>
-                    <Text style={styles.propertyHeader}>End</Text>
-                    <Text style={styles.propertyHeaderRequired}>*</Text>
+                    <Text style={styles.propertyHeader}>Short Description</Text>
+                  </Block>
+                  <FormattedInput
+                    style={{ height: 128 }}
+                    placeholderText="short description"
+                    multiline={true}
+                    numberOfLines={6}
+                    maxLength={256}
+                  />
+
+                  <Block style={styles.doubleColumn}>
+                    <Block style={styles.column}>
+                      <Block style={styles.propertyHeaderContainer}>
+                        <Text style={styles.propertyHeader}>Start</Text>
+                        <Text style={styles.propertyHeaderRequired}>*</Text>
+                      </Block>
+
+                      <FormattedInput placeholderText="start" maxLength={5} />
+                    </Block>
+
+                    <Block style={styles.separator} />
+
+                    <Block style={styles.column}>
+                      <Block style={styles.propertyHeaderContainer}>
+                        <Text style={styles.propertyHeader}>End</Text>
+                        <Text style={styles.propertyHeaderRequired}>*</Text>
+                      </Block>
+
+                      <FormattedInput placeholderText="end" maxLength={5} />
+                    </Block>
                   </Block>
 
-                  <FormattedInput placeholderText="end" maxLength={5} />
-                </Block>
-              </Block>
-
-              <Block style={styles.propertyHeaderContainer}>
-                <Text style={styles.propertyHeader}>Location</Text>
-              </Block>
-              <FormattedInput placeholderText="ex: EHall 106b1" maxLength={64} />
-
-              <Block style={styles.doubleColumn}>
-                <Block style={styles.column}>
                   <Block style={styles.propertyHeaderContainer}>
-                    <Text style={styles.propertyHeader}>Mandatory</Text>
+                    <Text style={styles.propertyHeader}>Location</Text>
+                  </Block>
+                  <FormattedInput placeholderText="ex: EHall 106b1" maxLength={64} />
+
+                  <Block style={styles.doubleColumn}>
+                    <Block style={styles.column}>
+                      <Block style={styles.propertyHeaderContainer}>
+                        <Text style={styles.propertyHeader}>Mandatory</Text>
+                      </Block>
+
+                      <Block style={styles.switchContainer}>
+                        <Switch value={false} onValueChange={(newValue: boolean) => {}} />
+                        <Text style={styles.description}>
+                          Choose if unexcused absence results in security deposit loss (ex: voting)
+                        </Text>
+                      </Block>
+                    </Block>
+
+                    <Block style={styles.separator} />
+
+                    <Block style={styles.column}>
+                      <Block style={styles.propertyHeaderContainer}>
+                        <Text style={styles.propertyHeader}>Excusable</Text>
+                      </Block>
+
+                      <Block style={styles.switchContainer}>
+                        <Switch value={true} onValueChange={(newValue: boolean) => {}} />
+                        <Text style={styles.description}>
+                          Allow a valid excuse to count as attending (for instance GM). Do not choose this if there are
+                          points
+                        </Text>
+                      </Block>
+                    </Block>
                   </Block>
 
-                  <Block style={styles.switchContainer}>
-                    <Switch value={false} onValueChange={(newValue: boolean) => {}} />
-                    <Text style={styles.description}>
-                      Choose if unexcused absence results in security deposit loss (ex: voting)
-                    </Text>
-                  </Block>
-                </Block>
-                <Block style={styles.column}>
-                  <Block style={styles.propertyHeaderContainer}>
-                    <Text style={styles.propertyHeader}>Excusable</Text>
-                  </Block>
+                  <Block style={styles.doubleColumn}>
+                    <Block style={styles.column}>
+                      <Block style={styles.propertyHeaderContainer}>
+                        <Text style={styles.propertyHeader}>Professional</Text>
+                      </Block>
 
-                  <Block style={styles.switchContainer}>
-                    <Switch value={true} onValueChange={(newValue: boolean) => {}} />
-                    <Text style={styles.description}>
-                      Allow a valid excuse to count as attending (for instance GM). Do not choose this if there are
-                      points
-                    </Text>
+                      <FormattedInput placeholderText="points" maxLength={1} keyboardType="number-pad" />
+                    </Block>
+
+                    <Block style={styles.separator} />
+
+                    <Block style={styles.column}>
+                      <Block style={styles.propertyHeaderContainer}>
+                        <Text style={styles.propertyHeader}>Philanthropy</Text>
+                      </Block>
+
+                      <FormattedInput placeholderText="points" maxLength={1} keyboardType="number-pad" />
+                    </Block>
                   </Block>
-                </Block>
-              </Block>
-            </React.Fragment>
-          )}
-        </Block>
+                  <Block style={styles.doubleColumn}>
+                    <Block style={styles.column}>
+                      <Block style={styles.propertyHeaderContainer}>
+                        <Text style={styles.propertyHeader}>Brother</Text>
+                      </Block>
+
+                      <FormattedInput placeholderText="points" maxLength={1} keyboardType="number-pad" />
+                    </Block>
+
+                    <Block style={styles.separator} />
+
+                    <Block style={styles.column}>
+                      <Block style={styles.propertyHeaderContainer}>
+                        <Text style={styles.propertyHeader}>Rush</Text>
+                      </Block>
+
+                      <FormattedInput placeholderText="points" maxLength={1} keyboardType="number-pad" />
+                    </Block>
+                  </Block>
+                </React.Fragment>
+              )}
+            </Block>
+          </TouchableWithoutFeedback>
+        </ScrollView>
       </Block>
 
       <SlideModal visible={choosingType}>{renderChoosingType()}</SlideModal>
@@ -200,6 +253,9 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     marginHorizontal: 24
+  },
+  scrollContent: {
+    flexGrow: 1
   },
   eventTypeContainer: {
     marginVertical: 16
