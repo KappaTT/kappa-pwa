@@ -113,7 +113,7 @@ const EditEventPage: React.FC<{
                 <Text style={styles.propertyHeader}>Title</Text>
                 <Text style={styles.propertyHeaderRequired}>*</Text>
               </Block>
-              <FormattedInput placeholderText="title" maxLength={32} />
+              <FormattedInput placeholderText="ex: General Meeting" maxLength={32} />
 
               <Block style={styles.propertyHeaderContainer}>
                 <Text style={styles.propertyHeader}>Short Description</Text>
@@ -151,7 +151,7 @@ const EditEventPage: React.FC<{
               <Block style={styles.propertyHeaderContainer}>
                 <Text style={styles.propertyHeader}>Location</Text>
               </Block>
-              <FormattedInput placeholderText="address or building/room" maxLength={64} />
+              <FormattedInput placeholderText="ex: EHall 106b1" maxLength={64} />
 
               <Block style={styles.doubleColumn}>
                 <Block style={styles.column}>
@@ -159,14 +159,25 @@ const EditEventPage: React.FC<{
                     <Text style={styles.propertyHeader}>Mandatory</Text>
                   </Block>
 
-                  <Switch value={false} onValueChange={(newValue: boolean) => {}} />
+                  <Block style={styles.switchContainer}>
+                    <Switch value={false} onValueChange={(newValue: boolean) => {}} />
+                    <Text style={styles.description}>
+                      Choose if unexcused absence results in security deposit loss (ex: voting)
+                    </Text>
+                  </Block>
                 </Block>
                 <Block style={styles.column}>
                   <Block style={styles.propertyHeaderContainer}>
                     <Text style={styles.propertyHeader}>Excusable</Text>
                   </Block>
 
-                  <Switch value={true} onValueChange={(newValue: boolean) => {}} />
+                  <Block style={styles.switchContainer}>
+                    <Switch value={true} onValueChange={(newValue: boolean) => {}} />
+                    <Text style={styles.description}>
+                      Allow a valid excuse to count as attending (for instance GM). Do not choose this if there are
+                      points
+                    </Text>
+                  </Block>
                 </Block>
               </Block>
             </React.Fragment>
@@ -222,8 +233,8 @@ const styles = StyleSheet.create({
   separator: {
     width: 16
   },
-  checkboxContainer: {
-    marginTop: 16
+  switchContainer: {
+    marginTop: 8
   },
   description: {
     marginTop: 12,
