@@ -66,6 +66,7 @@ const FormattedInput: React.FC<{
         style={[styles.input, style]}
         bgColor={bgColor}
         multiline={multiline}
+        textAlignVertical={multiline && 'top'}
         numberOfLines={numberOfLines}
         maxLength={maxLength}
         shadowless
