@@ -126,6 +126,42 @@ export const getEvents = async (payload: TGetEventsPayload): Promise<TGetEventsR
   }
 };
 
+export interface TCreateEventPayload {
+  user: TUser;
+  event: Partial<TEvent>;
+  points: Array<Partial<TPoint>>;
+}
+
+interface TCreateEventRequestResponse {
+  event: TEvent;
+}
+
+interface TCreateEventResponse extends TResponse {
+  data?: {
+    event: TEvent;
+  };
+}
+
+export const createEvent = async (payload: TCreateEventPayload) => {};
+
+export interface TUpdateEventPayload {
+  user: TUser;
+  event: Partial<TEvent>;
+  points: Array<Partial<TPoint>>;
+}
+
+interface TUpdateEventRequestResponse {
+  event: TEvent;
+}
+
+interface TUpdateEventResponse extends TResponse {
+  data?: {
+    event: TEvent;
+  };
+}
+
+export const updateEvent = async (payload: TUpdateEventPayload) => {};
+
 export interface TGetUsersPayload {
   user: TUser;
 }

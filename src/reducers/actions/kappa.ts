@@ -212,6 +212,23 @@ const saveEditFailure = err => {
 export const saveEditEvent = (user: TUser, event: Partial<TEvent>, points: Array<Partial<TPoint>>) => {
   return dispatch => {
     dispatch(savingEditEvent());
-    // TODO
+
+    if (event.id) {
+      Kappa.updateEvent({ user, event, points }).then(res => {
+        if (res.success) {
+          dispatch(saveEditEventSuccess(res.data));
+        } else {
+          dispatch(saveEditFailure(res.error));
+        }
+      });
+    } else {
+      Kappa.createEvent({ user, event, points }).then(res => {
+        if (res.success) {
+          dispatch(saveEditEventSuccess(res.data));
+        } else {
+          dispatch(saveEditFailure(res.error));
+        }
+      });
+    }
   };
 };
