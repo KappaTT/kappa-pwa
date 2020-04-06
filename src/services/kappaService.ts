@@ -373,6 +373,10 @@ export const getCategoryLongName = (category: string) => {
 };
 
 export const prettyPoints = (points: string) => {
+  if (!points) {
+    return 'N/A';
+  }
+
   const pointsPieces = points.split(',');
 
   let pretty = '';
