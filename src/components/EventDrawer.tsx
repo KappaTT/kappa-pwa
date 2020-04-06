@@ -15,7 +15,8 @@ import {
   getExcuse,
   getEventRecordCounts,
   getMissedMandatoryByEvent,
-  sortUserByName
+  sortUserByName,
+  prettyPoints
 } from '@services/kappaService';
 import { theme } from '@constants';
 import { TabBarHeight, isEmpty } from '@services/utils';
@@ -320,7 +321,7 @@ const EventDrawer: React.FC<{}> = ({}) => {
                     </Block>
                     <Block style={styles.splitProperty}>
                       <Text style={styles.propertyHeader}>Points</Text>
-                      <Text style={styles.propertyValue}>N/A</Text>
+                      <Text style={styles.propertyValue}>{prettyPoints(selectedEvent.points)}</Text>
                     </Block>
                   </Block>
 

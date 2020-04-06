@@ -355,6 +355,41 @@ export const sortUserByName = (a: TUser, b: TUser) => {
   return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
 };
 
+export const getCategoryLongName = (category: string) => {
+  switch (category) {
+    case 'ANY':
+      return 'Any';
+    case 'BRO':
+      return 'Brotherhood';
+    case 'PHIL':
+      return 'Philanthropy';
+    case 'PROF':
+      return 'Professional';
+    case 'RUSH':
+      return 'Rush';
+    default:
+      return '';
+  }
+};
+
+export const prettyPoints = (points: string) => {
+  const pointsPieces = points.split(',');
+
+  let pretty = '';
+
+  for (const piece of pointsPieces) {
+    const pointPieces = piece.split(':');
+
+    if (pretty !== '') {
+      pretty += '\n';
+    }
+
+    pretty += `${pointPieces[1]} ${getCategoryLongName(pointPieces[0])}`;
+  }
+
+  return pretty;
+};
+
 export const extractPoints = (points: string, type: string) => {
   const index = points.indexOf(type);
 
