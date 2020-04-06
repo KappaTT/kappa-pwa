@@ -1,7 +1,15 @@
 import React from 'react';
-import { StyleSheet, Dimensions, ScrollView, TouchableWithoutFeedback, KeyboardAvoidingView } from 'react-native';
+import {
+  StyleSheet,
+  Dimensions,
+  ScrollView,
+  TouchableWithoutFeedback,
+  TouchableOpacity,
+  KeyboardAvoidingView
+} from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { useSafeArea } from 'react-native-safe-area-context';
+import moment from 'moment';
 
 import { TRedux } from '@reducers';
 import { TEvent, TPoint } from '@backend/kappa';
@@ -30,6 +38,9 @@ const EditEventPage: React.FC<{
 
   const [choosingType, setChoosingType] = React.useState<boolean>(false);
   const [type, setType] = React.useState<string>('');
+
+  const [startDate, setStartDate] = React.useState(moment(new Date()).startOf('hour'));
+  const [duration, setDuration] = React.useState<number>();
 
   const onPressSaveButton = React.useCallback(() => {
     const event = null;
@@ -125,13 +136,13 @@ const EditEventPage: React.FC<{
                       <Text style={styles.propertyHeader}>Title</Text>
                       <Text style={styles.propertyHeaderRequired}>*</Text>
                     </Block>
-                    <FormattedInput placeholderText="ex: General Meeting" maxLength={32} />
+                    <FormattedInput style={styles.input} placeholderText="ex: General Meeting" maxLength={32} />
 
                     <Block style={styles.propertyHeaderContainer}>
                       <Text style={styles.propertyHeader}>Short Description</Text>
                     </Block>
                     <FormattedInput
-                      style={{ height: 128 }}
+                      style={styles.multiInput}
                       placeholderText="short description"
                       multiline={true}
                       numberOfLines={6}
@@ -145,25 +156,41 @@ const EditEventPage: React.FC<{
                           <Text style={styles.propertyHeaderRequired}>*</Text>
                         </Block>
 
-                        <FormattedInput placeholderText="start" maxLength={5} />
+                        <TouchableOpacity>
+                          <Block style={styles.fakeInput}>
+                            <Text style={styles.fakeInputTextHeading}>Date</Text>
+                            <Text style={styles.fakeInputText}>{startDate.format('ddd LL')}</Text>
+                          </Block>
+                        </TouchableOpacity>
+                        <TouchableOpacity>
+                          <Block style={styles.fakeInput}>
+                            <Text style={styles.fakeInputTextHeading}>Time</Text>
+                            <Text style={styles.fakeInputText}>{startDate.format('hh:mm A')}</Text>
+                          </Block>
+                        </TouchableOpacity>
                       </Block>
 
                       <Block style={styles.separator} />
 
                       <Block style={styles.column}>
                         <Block style={styles.propertyHeaderContainer}>
-                          <Text style={styles.propertyHeader}>End</Text>
+                          <Text style={styles.propertyHeader}>Duration (minutes)</Text>
                           <Text style={styles.propertyHeaderRequired}>*</Text>
                         </Block>
 
-                        <FormattedInput placeholderText="end" maxLength={5} />
+                        <FormattedInput
+                          style={styles.input}
+                          placeholderText="ex: 60"
+                          maxLength={4}
+                          keyboardType="number-pad"
+                        />
                       </Block>
                     </Block>
 
                     <Block style={styles.propertyHeaderContainer}>
                       <Text style={styles.propertyHeader}>Location</Text>
                     </Block>
-                    <FormattedInput placeholderText="ex: EHall 106b1" maxLength={64} />
+                    <FormattedInput style={styles.input} placeholderText="ex: EHall 106b1" maxLength={64} />
 
                     <Block style={styles.doubleColumn}>
                       <Block style={styles.column}>
@@ -202,7 +229,12 @@ const EditEventPage: React.FC<{
                           <Text style={styles.propertyHeader}>Professional</Text>
                         </Block>
 
-                        <FormattedInput placeholderText="points" maxLength={1} keyboardType="number-pad" />
+                        <FormattedInput
+                          style={styles.input}
+                          placeholderText="points"
+                          maxLength={1}
+                          keyboardType="number-pad"
+                        />
                       </Block>
 
                       <Block style={styles.separator} />
@@ -212,7 +244,12 @@ const EditEventPage: React.FC<{
                           <Text style={styles.propertyHeader}>Philanthropy</Text>
                         </Block>
 
-                        <FormattedInput placeholderText="points" maxLength={1} keyboardType="number-pad" />
+                        <FormattedInput
+                          style={styles.input}
+                          placeholderText="points"
+                          maxLength={1}
+                          keyboardType="number-pad"
+                        />
                       </Block>
                     </Block>
                     <Block style={styles.doubleColumn}>
@@ -221,7 +258,12 @@ const EditEventPage: React.FC<{
                           <Text style={styles.propertyHeader}>Brother</Text>
                         </Block>
 
-                        <FormattedInput placeholderText="points" maxLength={1} keyboardType="number-pad" />
+                        <FormattedInput
+                          style={styles.input}
+                          placeholderText="points"
+                          maxLength={1}
+                          keyboardType="number-pad"
+                        />
                       </Block>
 
                       <Block style={styles.separator} />
@@ -231,7 +273,12 @@ const EditEventPage: React.FC<{
                           <Text style={styles.propertyHeader}>Rush</Text>
                         </Block>
 
-                        <FormattedInput placeholderText="points" maxLength={1} keyboardType="number-pad" />
+                        <FormattedInput
+                          style={styles.input}
+                          placeholderText="points"
+                          maxLength={1}
+                          keyboardType="number-pad"
+                        />
                       </Block>
                     </Block>
                     <Block style={styles.doubleColumn}>
@@ -240,7 +287,12 @@ const EditEventPage: React.FC<{
                           <Text style={styles.propertyHeader}>Any</Text>
                         </Block>
 
-                        <FormattedInput placeholderText="points" maxLength={1} keyboardType="number-pad" />
+                        <FormattedInput
+                          style={styles.input}
+                          placeholderText="points"
+                          maxLength={1}
+                          keyboardType="number-pad"
+                        />
                       </Block>
 
                       <Block style={styles.separator} />
@@ -302,6 +354,13 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
     color: theme.COLORS.PRIMARY
   },
+  input: {
+    backgroundColor: theme.COLORS.SUPER_LIGHT_BLUE_GRAY
+  },
+  multiInput: {
+    backgroundColor: theme.COLORS.SUPER_LIGHT_BLUE_GRAY,
+    height: 128
+  },
   doubleColumn: {
     display: 'flex',
     flexDirection: 'row',
@@ -320,6 +379,22 @@ const styles = StyleSheet.create({
     marginTop: 12,
     fontFamily: 'OpenSans',
     fontSize: 12
+  },
+  fakeInput: {
+    paddingVertical: 4,
+    display: 'flex',
+    justifyContent: 'center'
+  },
+  fakeInputTextHeading: {
+    fontFamily: 'OpenSans-Bold',
+    fontSize: 13,
+    textTransform: 'uppercase',
+    color: theme.COLORS.PRIMARY
+  },
+  fakeInputText: {
+    fontFamily: 'OpenSans',
+    fontSize: 15,
+    color: theme.COLORS.PRIMARY
   }
 });
 

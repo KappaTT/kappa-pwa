@@ -104,6 +104,7 @@ const OnboardingPage: React.FC<{
         <Text style={styles.heading}>PHONE NUMBER</Text>
 
         <FormattedInput
+          style={styles.input}
           autoFocus={true}
           placeholderText="phone"
           keyboardType="phone-pad"
@@ -294,6 +295,9 @@ const styles = StyleSheet.create({
   editingTitle: {
     fontFamily: 'OpenSans',
     fontSize: 15
+  },
+  input: {
+    backgroundColor: theme.COLORS.SUPER_LIGHT_BLUE_GRAY
   }
 });
 
