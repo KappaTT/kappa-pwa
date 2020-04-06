@@ -13,7 +13,7 @@ import { EditEventPage } from '@pages';
 import { NavigationTypes } from '@types';
 import { HeaderHeight, isEmpty } from '@services/utils';
 import { log } from '@services/logService';
-import { TEvent } from '@backend/kappa';
+import { TEvent, TPoint } from '@backend/kappa';
 import { hasValidCheckIn } from '@services/kappaService';
 
 const EventSkeleton: React.FC<{}> = ({}) => {
@@ -49,10 +49,10 @@ const EventsContent: React.FC<{
   const dispatchGetDirectory = React.useCallback(() => dispatch(_kappa.getDirectory(user)), [dispatch, user]);
   const dispatchSelectEvent = React.useCallback((eventId: string) => dispatch(_kappa.selectEvent(eventId)), [dispatch]);
   const dispatchEditNewEvent = React.useCallback(() => dispatch(_kappa.editNewEvent()), [dispatch]);
-  const dispatchSaveEditEvent = React.useCallback((event: TEvent) => dispatch(_kappa.saveEditEvent(user, event)), [
-    dispatch,
-    user
-  ]);
+  const dispatchSaveEditEvent = React.useCallback(
+    (event: Partial<TEvent>, points: Array<Partial<TPoint>>) => dispatch(_kappa.saveEditEvent(user, event, points)),
+    [dispatch, user]
+  );
   const dispatchCancelEditEvent = React.useCallback(() => dispatch(_kappa.cancelEditEvent()), [dispatch]);
 
   const insets = useSafeArea();
@@ -175,7 +175,7 @@ const EventsContent: React.FC<{
       </Block>
 
       <SlideModal visible={editingEventId === 'NEW'}>
-        <EditEventPage initialEvent={null} onPressBack={dispatchCancelEditEvent} onPressSave={() => {}} />
+        <EditEventPage initialEvent={null} onPressBack={dispatchCancelEditEvent} onPressSave={dispatchSaveEditEvent} />
       </SlideModal>
     </Block>
   );

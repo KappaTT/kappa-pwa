@@ -21,7 +21,7 @@ import {
   SAVE_EDIT_EVENT_FAILURE
 } from '@reducers/kappa';
 import { TUser } from '@backend/auth';
-import { TEvent } from '@backend/kappa';
+import { TEvent, TPoint } from '@backend/kappa';
 
 const gettingEvents = () => {
   return {
@@ -209,7 +209,7 @@ const saveEditFailure = err => {
   };
 };
 
-export const saveEditEvent = (user: TUser, event: TEvent) => {
+export const saveEditEvent = (user: TUser, event: Partial<TEvent>, points: Array<Partial<TPoint>>) => {
   return dispatch => {
     dispatch(savingEditEvent());
     // TODO
