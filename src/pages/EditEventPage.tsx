@@ -47,6 +47,12 @@ const EditEventPage: React.FC<{
   const [startDate, setStartDate] = React.useState(moment(new Date()).startOf('hour'));
   const [duration, setDuration] = React.useState<number>();
 
+  const timezone = React.useMemo(() => {
+    const date = new Date().toString();
+
+    return date.substring(date.indexOf('(') + 1, date.lastIndexOf(')'));
+  }, []);
+
   const onPressSaveButton = React.useCallback(() => {
     const event = null;
 
@@ -206,19 +212,24 @@ const EditEventPage: React.FC<{
                       maxLength={256}
                     />
 
+                    <Block style={styles.propertyHeaderContainer}>
+                      <Text style={styles.propertyHeader}>Start (Time Zone: {timezone})</Text>
+                      <Text style={styles.propertyHeaderRequired}>*</Text>
+                    </Block>
+
                     <Block style={styles.doubleColumn}>
                       <Block style={styles.column}>
-                        <Block style={styles.propertyHeaderContainer}>
-                          <Text style={styles.propertyHeader}>Start</Text>
-                          <Text style={styles.propertyHeaderRequired}>*</Text>
-                        </Block>
-
                         <TouchableOpacity onPress={onPressStartDate}>
                           <Block style={styles.fakeInput}>
                             <Text style={styles.fakeInputTextHeading}>Date</Text>
                             <Text style={styles.fakeInputText}>{startDate.format('ddd LL')}</Text>
                           </Block>
                         </TouchableOpacity>
+                      </Block>
+
+                      <Block style={styles.separator} />
+
+                      <Block style={styles.column}>
                         <TouchableOpacity onPress={onPressStartTime}>
                           <Block style={styles.fakeInput}>
                             <Text style={styles.fakeInputTextHeading}>Time</Text>
@@ -226,9 +237,9 @@ const EditEventPage: React.FC<{
                           </Block>
                         </TouchableOpacity>
                       </Block>
+                    </Block>
 
-                      <Block style={styles.separator} />
-
+                    <Block style={styles.doubleColumn}>
                       <Block style={styles.column}>
                         <Block style={styles.propertyHeaderContainer}>
                           <Text style={styles.propertyHeader}>Duration (minutes)</Text>
@@ -242,6 +253,10 @@ const EditEventPage: React.FC<{
                           keyboardType="number-pad"
                         />
                       </Block>
+
+                      <Block style={styles.separator} />
+
+                      <Block style={styles.column}></Block>
                     </Block>
 
                     <Block style={styles.propertyHeaderContainer}>
