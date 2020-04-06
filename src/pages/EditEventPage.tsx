@@ -6,7 +6,8 @@ import {
   TouchableWithoutFeedback,
   TouchableOpacity,
   KeyboardAvoidingView,
-  Platform
+  Platform,
+  Alert
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useSelector, useDispatch } from 'react-redux';
@@ -30,22 +31,46 @@ import {
   TextButton
 } from '@components';
 import { HeaderHeight } from '@services/utils';
+import { extractPoints } from '@services/kappaService';
 
 const { width, height } = Dimensions.get('screen');
 
 const EditEventPage: React.FC<{
   initialEvent: TEvent;
   onPressBack(): void;
-  onPressSave(event: TEvent): void;
+  onPressSave(event: Partial<TEvent>, points: Array<Partial<TPoint>>): void;
 }> = ({ initialEvent, onPressBack, onPressSave }) => {
   const insets = useSafeArea();
 
   const [choosingType, setChoosingType] = React.useState<boolean>(false);
-  const [type, setType] = React.useState<string>('');
+  const [type, setType] = React.useState<string>(initialEvent ? initialEvent.event_type : '');
 
+  const [showErrors, setShowErrors] = React.useState<boolean>(false);
+  const [title, setTitle] = React.useState<string>(initialEvent ? initialEvent.title : '');
+  const [description, setDescription] = React.useState<string>(initialEvent ? initialEvent.description : '');
   const [pickerMode, setPickerMode] = React.useState<'date' | 'time'>(null);
-  const [startDate, setStartDate] = React.useState(moment(new Date()).startOf('hour'));
-  const [duration, setDuration] = React.useState<number>();
+  const [startDate, setStartDate] = React.useState(
+    initialEvent ? moment(initialEvent.start) : moment(new Date()).startOf('hour')
+  );
+  const [duration, setDuration] = React.useState<string>(initialEvent ? initialEvent.duration.toString() : '');
+  const [location, setLocation] = React.useState<string>(initialEvent ? initialEvent.location : '');
+  const [mandatory, setMandatory] = React.useState<boolean>(initialEvent ? initialEvent.mandatory === 1 : false);
+  const [excusable, setExcusable] = React.useState<boolean>(initialEvent ? initialEvent.excusable === 1 : true);
+  const [profPoints, setProfPoints] = React.useState<string>(
+    initialEvent ? extractPoints(initialEvent.points, 'PROF') : ''
+  );
+  const [philPoints, setPhilPoints] = React.useState<string>(
+    initialEvent ? extractPoints(initialEvent.points, 'PHIL') : ''
+  );
+  const [broPoints, setBroPoints] = React.useState<string>(
+    initialEvent ? extractPoints(initialEvent.points, 'BRO') : ''
+  );
+  const [rushPoints, setRushPoints] = React.useState<string>(
+    initialEvent ? extractPoints(initialEvent.points, 'RUSH') : ''
+  );
+  const [anyPoints, setAnyPoints] = React.useState<string>(
+    initialEvent ? extractPoints(initialEvent.points, 'ANY') : ''
+  );
 
   const timezone = React.useMemo(() => {
     const date = new Date().toString();
@@ -54,10 +79,61 @@ const EditEventPage: React.FC<{
   }, []);
 
   const onPressSaveButton = React.useCallback(() => {
-    const event = null;
+    const event: Partial<TEvent> = {
+      event_type: type,
+      mandatory: mandatory ? 1 : 0,
+      excusable: excusable ? 1 : 0,
+      title,
+      description,
+      start: startDate.toDate().toString(),
+      duration: parseInt(duration || '0'),
+      location
+    };
 
-    onPressSave(event);
-  }, []);
+    if (event.title === '' || event.duration === 0) {
+      setShowErrors(true);
+      Alert.alert('One or more fields is invalid');
+      return;
+    }
+
+    const points: Array<Partial<TPoint>> = [
+      {
+        category: 'PROF',
+        count: parseInt(profPoints || '0')
+      },
+      {
+        category: 'PHIL',
+        count: parseInt(philPoints || '0')
+      },
+      {
+        category: 'BRO',
+        count: parseInt(broPoints || '0')
+      },
+      {
+        category: 'RUSH',
+        count: parseInt(rushPoints || '0')
+      },
+      {
+        category: 'ANY',
+        count: parseInt(anyPoints || '0')
+      }
+    ];
+
+    onPressSave(event, points);
+  }, [
+    title,
+    description,
+    startDate,
+    duration,
+    location,
+    mandatory,
+    excusable,
+    profPoints,
+    philPoints,
+    broPoints,
+    rushPoints,
+    anyPoints
+  ]);
 
   const onPressBackButton = React.useCallback(() => {
     if (choosingType) {
@@ -77,6 +153,10 @@ const EditEventPage: React.FC<{
 
   const onPressClosePicker = () => {
     setPickerMode(null);
+  };
+
+  const numberFormatter = (text: string) => {
+    return text !== undefined ? text.replace(/\D/g, '') : '';
   };
 
   const onChangeDate = React.useCallback(
@@ -163,7 +243,7 @@ const EditEventPage: React.FC<{
         subtitle={initialEvent ? initialEvent.title : ''}
         showBackButton={true}
         onPressBackButton={onPressBackButton}
-        rightButton={<EndCapButton label="Save" onPress={onPressSaveButton} disabled={false} />}
+        rightButton={type !== '' && <EndCapButton label="Save" onPress={onPressSaveButton} disabled={false} />}
       />
 
       <Block
@@ -199,7 +279,14 @@ const EditEventPage: React.FC<{
                       <Text style={styles.propertyHeader}>Title</Text>
                       <Text style={styles.propertyHeaderRequired}>*</Text>
                     </Block>
-                    <FormattedInput style={styles.input} placeholderText="ex: General Meeting" maxLength={32} />
+                    <FormattedInput
+                      style={styles.input}
+                      placeholderText="ex: General Meeting"
+                      maxLength={32}
+                      error={showErrors && title.trim() === ''}
+                      defaultValue={title}
+                      onChangeText={(text: string) => setTitle(text)}
+                    />
 
                     <Block style={styles.propertyHeaderContainer}>
                       <Text style={styles.propertyHeader}>Short Description</Text>
@@ -210,6 +297,8 @@ const EditEventPage: React.FC<{
                       multiline={true}
                       numberOfLines={6}
                       maxLength={256}
+                      defaultValue={description}
+                      onChangeText={(text: string) => setDescription(text)}
                     />
 
                     <Block style={styles.propertyHeaderContainer}>
@@ -251,6 +340,10 @@ const EditEventPage: React.FC<{
                           placeholderText="ex: 60"
                           maxLength={4}
                           keyboardType="number-pad"
+                          error={showErrors && (duration === '' || duration === '0')}
+                          defaultValue={duration}
+                          formatter={numberFormatter}
+                          onChangeText={(text: string) => setDuration(text)}
                         />
                       </Block>
 
@@ -271,7 +364,7 @@ const EditEventPage: React.FC<{
                         </Block>
 
                         <Block style={styles.switchContainer}>
-                          <Switch value={false} onValueChange={(newValue: boolean) => {}} />
+                          <Switch value={mandatory} onValueChange={(newValue: boolean) => setMandatory(newValue)} />
                           <Text style={styles.description}>
                             Choose if unexcused absence results in security deposit loss (ex: voting)
                           </Text>
@@ -286,7 +379,7 @@ const EditEventPage: React.FC<{
                         </Block>
 
                         <Block style={styles.switchContainer}>
-                          <Switch value={true} onValueChange={(newValue: boolean) => {}} />
+                          <Switch value={excusable} onValueChange={(newValue: boolean) => setExcusable(newValue)} />
                           <Text style={styles.description}>
                             Allow a valid excuse to count as attending (for instance GM). Do not choose this if there
                             are points
@@ -306,6 +399,9 @@ const EditEventPage: React.FC<{
                           placeholderText="points"
                           maxLength={1}
                           keyboardType="number-pad"
+                          defaultValue={profPoints}
+                          formatter={numberFormatter}
+                          onChangeText={(text: string) => setProfPoints(text)}
                         />
                       </Block>
 
@@ -321,6 +417,9 @@ const EditEventPage: React.FC<{
                           placeholderText="points"
                           maxLength={1}
                           keyboardType="number-pad"
+                          defaultValue={philPoints}
+                          formatter={numberFormatter}
+                          onChangeText={(text: string) => setPhilPoints(text)}
                         />
                       </Block>
                     </Block>
@@ -335,6 +434,9 @@ const EditEventPage: React.FC<{
                           placeholderText="points"
                           maxLength={1}
                           keyboardType="number-pad"
+                          defaultValue={broPoints}
+                          formatter={numberFormatter}
+                          onChangeText={(text: string) => setBroPoints(text)}
                         />
                       </Block>
 
@@ -350,6 +452,9 @@ const EditEventPage: React.FC<{
                           placeholderText="points"
                           maxLength={1}
                           keyboardType="number-pad"
+                          defaultValue={rushPoints}
+                          formatter={numberFormatter}
+                          onChangeText={(text: string) => setRushPoints(text)}
                         />
                       </Block>
                     </Block>
@@ -364,6 +469,9 @@ const EditEventPage: React.FC<{
                           placeholderText="points"
                           maxLength={1}
                           keyboardType="number-pad"
+                          defaultValue={anyPoints}
+                          formatter={numberFormatter}
+                          onChangeText={(text: string) => setAnyPoints(text)}
                         />
                       </Block>
 

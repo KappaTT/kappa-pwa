@@ -354,3 +354,23 @@ export const sortUserByName = (a: TUser, b: TUser) => {
 
   return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
 };
+
+export const extractPoints = (points: string, type: string) => {
+  const index = points.indexOf(type);
+
+  if (index === -1) {
+    return '0';
+  }
+
+  const startIndex = index + type.length + 1;
+
+  let cutPoints = points.substring(startIndex);
+
+  const commaIndex = cutPoints.indexOf(',');
+
+  if (commaIndex > 0) {
+    cutPoints = cutPoints.substring(0, commaIndex);
+  }
+
+  return cutPoints;
+};
