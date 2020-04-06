@@ -64,7 +64,7 @@ const EditEventPage: React.FC<{
             </Block>
 
             <RadioList
-              options={['GM', 'Custom']}
+              options={['GM', 'Philanthropy', 'Professional', 'Rush', 'Social', 'Misc']}
               selected={type}
               onChange={chosen => {
                 setType(chosen);
@@ -73,8 +73,8 @@ const EditEventPage: React.FC<{
             />
 
             <Text style={styles.description}>
-              The type of event affects GM counts and automatically configures certain settings with defaults. If an
-              event is not marked as a GM, it will not count towards the GM attendance rate.
+              The type of event affects GM counts. If an event is not marked as a GM, it will not count towards the GM
+              attendance rate. These categories do not determine points, points are chosen separately per-event.
             </Text>
           </Block>
         </Block>
