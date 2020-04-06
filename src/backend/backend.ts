@@ -37,7 +37,10 @@ export const ENDPOINTS: {
   GET_EVENTS: () => 'events',
   GET_USERS: () => 'users',
   GET_ATTENDANCE_BY_USER: (config: { email: string }) => `attendance/user/${encodeURIComponent(config.email)}`,
-  GET_ATTENDANCE_BY_EVENT: (config: { event_id: string }) => `attendance/event/${config.event_id}`
+  GET_ATTENDANCE_BY_EVENT: (config: { event_id: string }) => `attendance/event/${config.event_id}`,
+  CREATE_EVENT: () => 'events',
+  UPDATE_EVENT: (config: { event_id: string }) => `events/${config.event_id}`,
+  DELETE_EVENT: (config: { event_id: string }) => `events/${config.event_id}`
 };
 
 export const METHODS: {
@@ -48,7 +51,10 @@ export const METHODS: {
   GET_EVENTS: M_GET,
   GET_USERS: M_GET,
   GET_ATTENDANCE_BY_USER: M_GET,
-  GET_ATTENDANCE_BY_EVENT: M_GET
+  GET_ATTENDANCE_BY_EVENT: M_GET,
+  CREATE_EVENT: M_POST,
+  UPDATE_EVENT: M_POST,
+  DELETE_EVENT: M_DELETE
 };
 
 export interface TResponse {

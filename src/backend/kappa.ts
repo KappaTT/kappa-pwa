@@ -142,7 +142,40 @@ interface TCreateEventResponse extends TResponse {
   };
 }
 
-export const createEvent = async (payload: TCreateEventPayload) => {};
+export const createEvent = async (payload: TCreateEventPayload): Promise<TCreateEventResponse> => {
+  try {
+    const response = await makeAuthorizedRequest<TCreateEventRequestResponse>(
+      ENDPOINTS.CREATE_EVENT(),
+      METHODS.CREATE_EVENT,
+      {
+        body: {
+          event: payload.event,
+          points: payload.points
+        }
+      },
+      payload.user.sessionToken
+    );
+
+    log('Get create event response', response.code);
+
+    if (!response.success || response.code === 500) {
+      return fail({}, 'problem connecting to server');
+    } else if (response.code !== 200) {
+      if (response.code === 401) {
+        return fail({}, 'your credentials were invalid');
+      }
+
+      return fail({}, response.error?.message);
+    }
+
+    return pass({
+      event: response.data.event
+    });
+  } catch (error) {
+    log(error);
+    return fail({}, "that wasn't supposed to happen");
+  }
+};
 
 export interface TUpdateEventPayload {
   user: TUser;
@@ -160,7 +193,40 @@ interface TUpdateEventResponse extends TResponse {
   };
 }
 
-export const updateEvent = async (payload: TUpdateEventPayload) => {};
+export const updateEvent = async (payload: TUpdateEventPayload): Promise<TUpdateEventResponse> => {
+  try {
+    const response = await makeAuthorizedRequest<TUpdateEventRequestResponse>(
+      ENDPOINTS.UPDATE_EVENT({ event_id: payload.event.id }),
+      METHODS.UPDATE_EVENT,
+      {
+        body: {
+          event: payload.event,
+          points: payload.points
+        }
+      },
+      payload.user.sessionToken
+    );
+
+    log('Get create event response', response.code);
+
+    if (!response.success || response.code === 500) {
+      return fail({}, 'problem connecting to server');
+    } else if (response.code !== 200) {
+      if (response.code === 401) {
+        return fail({}, 'your credentials were invalid');
+      }
+
+      return fail({}, response.error?.message);
+    }
+
+    return pass({
+      event: response.data.event
+    });
+  } catch (error) {
+    log(error);
+    return fail({}, "that wasn't supposed to happen");
+  }
+};
 
 export interface TGetUsersPayload {
   user: TUser;

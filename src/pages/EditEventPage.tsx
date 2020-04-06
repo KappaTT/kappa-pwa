@@ -87,7 +87,11 @@ const EditEventPage: React.FC<{
       description,
       start: startDate.toDate().toString(),
       duration: parseInt(duration || '0'),
-      location
+      location,
+
+      id: initialEvent ? initialEvent.id : '',
+      creator: initialEvent ? initialEvent.creator : '',
+      event_code: initialEvent ? initialEvent.event_code : ''
     };
 
     if (event.title === '' || event.duration === 0) {
