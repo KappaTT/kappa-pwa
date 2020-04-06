@@ -5,8 +5,10 @@ import {
   ScrollView,
   TouchableWithoutFeedback,
   TouchableOpacity,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  Platform
 } from 'react-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { useSelector, useDispatch } from 'react-redux';
 import { useSafeArea } from 'react-native-safe-area-context';
 import moment from 'moment';
@@ -23,7 +25,9 @@ import {
   FormattedInput,
   Switch,
   ListButton,
-  SlideModal
+  SlideModal,
+  FadeModal,
+  TextButton
 } from '@components';
 import { HeaderHeight } from '@services/utils';
 
@@ -39,6 +43,7 @@ const EditEventPage: React.FC<{
   const [choosingType, setChoosingType] = React.useState<boolean>(false);
   const [type, setType] = React.useState<string>('');
 
+  const [pickerMode, setPickerMode] = React.useState<'date' | 'time'>(null);
   const [startDate, setStartDate] = React.useState(moment(new Date()).startOf('hour'));
   const [duration, setDuration] = React.useState<number>();
 
@@ -55,6 +60,29 @@ const EditEventPage: React.FC<{
       onPressBack();
     }
   }, [choosingType]);
+
+  const onPressStartDate = () => {
+    setPickerMode('date');
+  };
+
+  const onPressStartTime = () => {
+    setPickerMode('time');
+  };
+
+  const onPressClosePicker = () => {
+    setPickerMode(null);
+  };
+
+  const onChangeDate = React.useCallback(
+    (e, selectedDate) => {
+      if (Platform.OS === 'android') {
+        setPickerMode(null);
+      }
+
+      setStartDate(moment(selectedDate || startDate));
+    },
+    [startDate]
+  );
 
   const renderChoosingType = () => {
     return (
@@ -87,6 +115,35 @@ const EditEventPage: React.FC<{
               The type of event affects GM counts. If an event is not marked as a GM, it will not count towards the GM
               attendance rate. These categories do not determine points, points are chosen separately per-event.
             </Text>
+          </Block>
+        </Block>
+      </Block>
+    );
+  };
+
+  const renderDatePicker = () => {
+    return <DateTimePicker value={startDate.toDate()} mode={pickerMode} is24Hour={false} onChange={onChangeDate} />;
+  };
+
+  const renderDatePickerModal = () => {
+    return (
+      <Block style={styles.pickerModalContainer}>
+        <Block style={styles.pickerModalBackground}>
+          <TouchableWithoutFeedback onPress={onPressClosePicker}>
+            <Block style={styles.backgroundButton} />
+          </TouchableWithoutFeedback>
+          <Block
+            style={[
+              styles.pickerModalContent,
+              {
+                paddingBottom: insets.bottom
+              }
+            ]}
+          >
+            <Block style={styles.pickerBar}>
+              <TextButton label="Done" textStyle={styles.pickerDoneButton} onPress={onPressClosePicker} />
+            </Block>
+            {renderDatePicker()}
           </Block>
         </Block>
       </Block>
@@ -156,13 +213,13 @@ const EditEventPage: React.FC<{
                           <Text style={styles.propertyHeaderRequired}>*</Text>
                         </Block>
 
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={onPressStartDate}>
                           <Block style={styles.fakeInput}>
                             <Text style={styles.fakeInputTextHeading}>Date</Text>
                             <Text style={styles.fakeInputText}>{startDate.format('ddd LL')}</Text>
                           </Block>
                         </TouchableOpacity>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={onPressStartTime}>
                           <Block style={styles.fakeInput}>
                             <Text style={styles.fakeInputTextHeading}>Time</Text>
                             <Text style={styles.fakeInputText}>{startDate.format('hh:mm A')}</Text>
@@ -315,6 +372,11 @@ const EditEventPage: React.FC<{
       </Block>
 
       <SlideModal visible={choosingType}>{renderChoosingType()}</SlideModal>
+
+      {Platform.OS === 'android' && pickerMode !== null && renderDatePicker()}
+      <FadeModal visible={Platform.OS === 'ios' && pickerMode !== null} transparent={true}>
+        {renderDatePickerModal()}
+      </FadeModal>
     </Block>
   );
 };
@@ -394,6 +456,37 @@ const styles = StyleSheet.create({
   fakeInputText: {
     fontFamily: 'OpenSans',
     fontSize: 15,
+    color: theme.COLORS.PRIMARY
+  },
+  pickerModalContainer: {
+    flex: 1
+  },
+  pickerModalBackground: {
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    justifyContent: 'flex-end',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)'
+  },
+  backgroundButton: {
+    flex: 1
+  },
+  pickerModalContent: {
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    backgroundColor: theme.COLORS.WHITE
+  },
+  pickerBar: {
+    height: 48,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center'
+  },
+  pickerDoneButton: {
+    paddingHorizontal: 20,
+    fontFamily: 'OpenSans-SemiBold',
+    fontSize: 16,
     color: theme.COLORS.PRIMARY
   }
 });
