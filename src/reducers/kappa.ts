@@ -297,13 +297,12 @@ export default (state = initialState, action: any): TKappaState => {
         deleteEventErrorMessage: ''
       };
     case DELETE_EVENT_SUCCESS:
-      const deletedEvent = state.events[action.event.id];
-
       const remainingEvents = state.events;
       delete remainingEvents[action.event.id];
 
       return {
         ...state,
+        deletingEvent: false,
         selectedEventId: '',
         selectedEvent: null,
         ...recomputeKappaState({
@@ -315,6 +314,7 @@ export default (state = initialState, action: any): TKappaState => {
     case DELETE_EVENT_FAILURE:
       return {
         ...state,
+        deletingEvent: false,
         deleteEventError: true,
         deleteEventErrorMessage: action.error.message
       };
