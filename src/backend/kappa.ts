@@ -12,6 +12,10 @@ import { TUser } from '@backend/auth';
 import { log } from '@services/logService';
 import moment from 'moment';
 
+export interface TLoadHistory {
+  [key: string]: moment.Moment;
+}
+
 export interface TEvent {
   id: string;
   creator: string;
@@ -234,18 +238,22 @@ export interface TDeleteEventPayload {
 }
 
 interface TDeleteEventRequestResponse {
-  event: {};
+  event: {
+    id: string;
+  };
 }
 
 interface TDeleteEventResponse extends TResponse {
   data?: {
-    event: {};
+    event: {
+      id: string;
+    };
   };
 }
 
 export const deleteEvent = async (payload: TDeleteEventPayload): Promise<TDeleteEventResponse> => {
   try {
-    const response = await makeAuthorizedRequest<TUpdateEventRequestResponse>(
+    const response = await makeAuthorizedRequest<TDeleteEventRequestResponse>(
       ENDPOINTS.DELETE_EVENT({ event_id: payload.event.id }),
       METHODS.DELETE_EVENT,
       {},
@@ -265,7 +273,9 @@ export const deleteEvent = async (payload: TDeleteEventPayload): Promise<TDelete
     }
 
     return pass({
-      event: {}
+      event: {
+        id: response.data.event.id
+      }
     });
   } catch (error) {
     log(error);

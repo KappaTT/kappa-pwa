@@ -6,7 +6,8 @@ import {
   TDirectory,
   TEventDateDict,
   TEventDict,
-  TUserEventDict
+  TUserEventDict,
+  TLoadHistory
 } from '@backend/kappa';
 import {
   getEventById,
@@ -19,9 +20,11 @@ import {
   getMissedMandatory,
   getTypeCount,
   mergeEvents,
-  mergeEventDates
+  mergeEventDates,
+  recomputeKappaState
 } from '@services/kappaService';
 import { TUser } from '@backend/auth';
+import moment from 'moment';
 
 export const GET_EVENTS = 'GET_EVENTS';
 export const GET_EVENTS_SUCCESS = 'GET_EVENTS_SUCCESS';
@@ -47,6 +50,9 @@ export const CANCEL_EDIT_EVENT = 'CANCEL_EDIT_EVENT';
 export const SAVE_EDIT_EVENT = 'SAVE_EDIT_EVENT';
 export const SAVE_EDIT_EVENT_SUCCESS = 'SAVE_EDIT_EVENT_SUCCESS';
 export const SAVE_EDIT_EVENT_FAILURE = 'SAVE_EDIT_EVENT_FAILURE';
+export const DELETE_EVENT = 'DELETE_EVENT';
+export const DELETE_EVENT_SUCCESS = 'DELETE_EVENT_SUCCESS';
+export const DELETE_EVENT_FAILURE = 'DELETE_EVENT_FAILURE';
 
 export interface TKappaState {
   gettingEvents: boolean;
@@ -61,6 +67,7 @@ export interface TKappaState {
   getAttendanceError: boolean;
   getAttendanceErrorMessage: string;
 
+  loadHistory: TLoadHistory;
   events: TEventDict;
   eventsByDate: TEventDateDict;
   mandatoryEvents: TEventDict;
@@ -81,6 +88,10 @@ export interface TKappaState {
   savingEvent: boolean;
   saveEventError: boolean;
   saveEventErrorMessage: string;
+
+  deletingEvent: boolean;
+  deleteEventError: boolean;
+  deleteEventErrorMessage: string;
 }
 
 const initialState: TKappaState = {
@@ -96,6 +107,7 @@ const initialState: TKappaState = {
   getAttendanceError: false,
   getAttendanceErrorMessage: '',
 
+  loadHistory: {},
   events: {},
   eventsByDate: {},
   mandatoryEvents: {},
@@ -118,7 +130,11 @@ const initialState: TKappaState = {
   editingEventId: '',
   savingEvent: false,
   saveEventError: false,
-  saveEventErrorMessage: ''
+  saveEventErrorMessage: '',
+
+  deletingEvent: false,
+  deleteEventError: false,
+  deleteEventErrorMessage: ''
 };
 
 export default (state = initialState, action: any): TKappaState => {
@@ -131,18 +147,14 @@ export default (state = initialState, action: any): TKappaState => {
         getEventsErrorMessage: ''
       };
     case GET_EVENTS_SUCCESS:
-      const events = separateByEventId(action.events);
-      const mandatoryEvents = getMandatoryEvents(events);
-
       return {
         ...state,
         gettingEvents: false,
-        events,
-        mandatoryEvents,
-        missedMandatory: getMissedMandatory(state.records, mandatoryEvents, state.directory),
-        eventsByDate: separateByDate(action.events),
-        eventsSize: action.events.length,
-        gmCount: getTypeCount(events, 'GM')
+        ...recomputeKappaState({
+          events: separateByEventId(action.events),
+          records: state.records,
+          directory: state.directory
+        })
       };
     case GET_EVENTS_FAILURE:
       return {
@@ -159,14 +171,14 @@ export default (state = initialState, action: any): TKappaState => {
         getDirectoryErrorMessage: ''
       };
     case GET_DIRECTORY_SUCCESS:
-      const directory = separateByEmail(action.users);
-
       return {
         ...state,
         gettingDirectory: false,
-        directory,
-        missedMandatory: getMissedMandatory(state.records, state.mandatoryEvents, directory),
-        directorySize: action.users.length
+        ...recomputeKappaState({
+          events: state.events,
+          records: state.records,
+          directory: separateByEmail(action.users)
+        })
       };
     case GET_DIRECTORY_FAILURE:
       return {
@@ -183,16 +195,24 @@ export default (state = initialState, action: any): TKappaState => {
         getAttendanceErrorMessage: ''
       };
     case GET_ATTENDANCE_SUCCESS:
-      const records = mergeRecords(state.records, {
-        attended: action.attended,
-        excused: action.excused
-      });
+      const loadHistory = state.loadHistory;
+
+      if (action.loadKey) {
+        loadHistory[action.loadKey] = moment();
+      }
 
       return {
         ...state,
         gettingAttendance: false,
-        records,
-        missedMandatory: getMissedMandatory(records, state.mandatoryEvents, state.directory)
+        loadHistory,
+        ...recomputeKappaState({
+          events: state.events,
+          records: mergeRecords(state.records, {
+            attended: action.attended,
+            excused: action.excused
+          }),
+          directory: state.directory
+        })
       };
     case GET_ATTENDANCE_FAILURE:
       return {
@@ -250,22 +270,17 @@ export default (state = initialState, action: any): TKappaState => {
         saveEventErrorMessage: ''
       };
     case SAVE_EDIT_EVENT_SUCCESS:
-      const mergedEvents = mergeEvents(state.events, [action.event]);
-      const mergedEventDates = mergeEventDates(state.eventsByDate, [action.event]);
-
-      const mergedMandatoryEvents = getMandatoryEvents(mergedEvents);
-      const mergedMissedMandatory = getMissedMandatory(state.records, mergedMandatoryEvents, state.directory);
-
       return {
         ...state,
         savingEvent: false,
-        events: mergedEvents,
-        eventsByDate: mergedEventDates,
-        mandatoryEvents: mergedMandatoryEvents,
-        missedMandatory: mergedMissedMandatory,
         selectedEventId: '',
         selectedEvent: null,
-        editingEventId: ''
+        editingEventId: '',
+        ...recomputeKappaState({
+          events: mergeEvents(state.events, [action.event]),
+          records: state.records,
+          directory: state.directory
+        })
       };
     case SAVE_EDIT_EVENT_FAILURE:
       return {
@@ -273,6 +288,35 @@ export default (state = initialState, action: any): TKappaState => {
         savingEvent: false,
         saveEventError: true,
         saveEventErrorMessage: action.error.message
+      };
+    case DELETE_EVENT:
+      return {
+        ...state,
+        deletingEvent: true,
+        deleteEventError: false,
+        deleteEventErrorMessage: ''
+      };
+    case DELETE_EVENT_SUCCESS:
+      const deletedEvent = state.events[action.event.id];
+
+      const remainingEvents = state.events;
+      delete remainingEvents[action.event.id];
+
+      return {
+        ...state,
+        selectedEventId: '',
+        selectedEvent: null,
+        ...recomputeKappaState({
+          events: remainingEvents,
+          records: state.records,
+          directory: state.directory
+        })
+      };
+    case DELETE_EVENT_FAILURE:
+      return {
+        ...state,
+        deleteEventError: true,
+        deleteEventErrorMessage: action.error.message
       };
     default:
       return state;

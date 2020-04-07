@@ -18,7 +18,10 @@ import {
   CANCEL_EDIT_EVENT,
   SAVE_EDIT_EVENT,
   SAVE_EDIT_EVENT_SUCCESS,
-  SAVE_EDIT_EVENT_FAILURE
+  SAVE_EDIT_EVENT_FAILURE,
+  DELETE_EVENT,
+  DELETE_EVENT_SUCCESS,
+  DELETE_EVENT_FAILURE
 } from '@reducers/kappa';
 import { TUser } from '@backend/auth';
 import { TEvent, TPoint } from '@backend/kappa';
@@ -97,11 +100,12 @@ const gettingAttendance = () => {
   };
 };
 
-const getAttendanceSuccess = data => {
+const getAttendanceSuccess = (data, loadKey?: string) => {
   return {
     type: GET_ATTENDANCE_SUCCESS,
     attended: data.attended,
-    excused: data.excused
+    excused: data.excused,
+    loadKey
   };
 };
 
@@ -122,7 +126,7 @@ export const getUserAttendance = (user: TUser, target: string) => {
 
     Kappa.getAttendanceByUser({ user, target }).then(res => {
       if (res.success) {
-        dispatch(getAttendanceSuccess(res.data));
+        dispatch(getAttendanceSuccess(res.data, target));
       } else {
         dispatch(getAttendanceFailure(res.error));
       }
@@ -136,7 +140,7 @@ export const getEventAttendance = (user: TUser, target: string) => {
 
     Kappa.getAttendanceByEvent({ user, target }).then(res => {
       if (res.success) {
-        dispatch(getAttendanceSuccess(res.data));
+        dispatch(getAttendanceSuccess(res.data, target));
       } else {
         dispatch(getAttendanceFailure(res.error));
       }
@@ -202,7 +206,7 @@ const saveEditEventSuccess = data => {
   };
 };
 
-const saveEditFailure = err => {
+const saveEditEventFailure = err => {
   return {
     type: SAVE_EDIT_EVENT_FAILURE,
     error: err
@@ -218,7 +222,7 @@ export const saveEditEvent = (user: TUser, event: Partial<TEvent>, points: Array
         if (res.success) {
           dispatch(saveEditEventSuccess(res.data));
         } else {
-          dispatch(saveEditFailure(res.error));
+          dispatch(saveEditEventFailure(res.error));
         }
       });
     } else {
@@ -226,9 +230,43 @@ export const saveEditEvent = (user: TUser, event: Partial<TEvent>, points: Array
         if (res.success) {
           dispatch(saveEditEventSuccess(res.data));
         } else {
-          dispatch(saveEditFailure(res.error));
+          dispatch(saveEditEventFailure(res.error));
         }
       });
     }
+  };
+};
+
+const deletingEvent = () => {
+  return {
+    type: DELETE_EVENT
+  };
+};
+
+const deleteEventSuccess = data => {
+  return {
+    type: DELETE_EVENT_SUCCESS,
+    event: data.event
+  };
+};
+
+const deleteEventFailure = err => {
+  return {
+    type: DELETE_EVENT_FAILURE,
+    error: err
+  };
+};
+
+export const deleteEvent = (user: TUser, event: TEvent) => {
+  return dispatch => {
+    dispatch(deletingEvent());
+
+    Kappa.deleteEvent({ user, event }).then(res => {
+      if (res.success) {
+        dispatch(deleteEventSuccess(res.data));
+      } else {
+        dispatch(deleteEventFailure(res.error));
+      }
+    });
   };
 };

@@ -10,9 +10,11 @@ import {
   TEventDict,
   TAttendanceEventDict,
   TExcuseEventDict,
-  TUserEventDict
+  TUserEventDict,
+  TLoadHistory
 } from '@backend/kappa';
 import { TUser } from '@backend/auth';
+import { log } from '@services/logService';
 
 export const netidToEmail = (netid: string) => `${netid}@illinois.edu`;
 
@@ -247,7 +249,7 @@ export const getTypeCounts = (
   const now = moment();
 
   for (const event_id of Object.keys(attended)) {
-    if (events[event_id].event_type === type) {
+    if (events.hasOwnProperty(event_id) && events[event_id].event_type === type) {
       if (allowFuture || moment(events[event_id].start).isSameOrBefore(now)) {
         attendedCount++;
       }
@@ -255,7 +257,7 @@ export const getTypeCounts = (
   }
 
   for (const [event_id, excuse] of Object.entries(excused)) {
-    if (events[event_id].event_type === type) {
+    if (events.hasOwnProperty(event_id) && events[event_id].event_type === type) {
       if (allowFuture || moment(events[event_id].start).isSameOrBefore(now)) {
         if (excuse.approved) {
           excusedCount++;
@@ -416,4 +418,46 @@ export const extractPoints = (points: string, type: string) => {
   }
 
   return cutPoints;
+};
+
+export const shouldLoad = (loadHistory: TLoadHistory, key: string) => {
+  if (!loadHistory.hasOwnProperty(key)) {
+    return true;
+  }
+
+  if (loadHistory[key].diff(moment(), 'minutes') > 5) {
+    return true;
+  } else {
+    log('Using cache: ', key);
+    return false;
+  }
+};
+
+export const recomputeKappaState = ({
+  events,
+  records,
+  directory
+}: {
+  events: TEventDict;
+  records: TRecords;
+  directory: TDirectory;
+}) => {
+  const eventsSize = Object.keys(events).length;
+  const directorySize = Object.keys(directory).length;
+  const eventsByDate = separateByDate(Object.values(events));
+  const mandatoryEvents = getMandatoryEvents(events);
+  const missedMandatory = getMissedMandatory(records, mandatoryEvents, directory);
+  const gmCount = getTypeCount(events, 'GM');
+
+  return {
+    events,
+    eventsSize,
+    records,
+    directory,
+    directorySize,
+    eventsByDate,
+    mandatoryEvents,
+    missedMandatory,
+    gmCount
+  };
 };

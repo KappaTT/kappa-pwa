@@ -16,7 +16,8 @@ import {
   getUserRecordCounts,
   getTypeCounts,
   prettyPhone,
-  sortEventByDate
+  sortEventByDate,
+  shouldLoad
 } from '@services/kappaService';
 import { theme } from '@constants';
 import { TabBarHeight, isEmpty } from '@services/utils';
@@ -31,6 +32,7 @@ const { width, height } = Dimensions.get('screen');
 
 const BrotherDrawer: React.FC<{}> = ({}) => {
   const user = useSelector((state: TRedux) => state.auth.user);
+  const loadHistory = useSelector((state: TRedux) => state.kappa.loadHistory);
   const events = useSelector((state: TRedux) => state.kappa.events);
   const gmCount = useSelector((state: TRedux) => state.kappa.gmCount);
   const records = useSelector((state: TRedux) => state.kappa.records);
@@ -64,16 +66,21 @@ const BrotherDrawer: React.FC<{}> = ({}) => {
     outputRange: [0.5, 0]
   });
 
-  const loadData = () => {
-    if (user.privileged) {
-      dispatchGetAttendance();
-    }
-  };
+  const loadData = React.useCallback(
+    (force: boolean) => {
+      if (user.privileged) {
+        if (force || shouldLoad(loadHistory, selectedUserEmail)) {
+          dispatchGetAttendance();
+        }
+      }
+    },
+    [user, loadHistory, selectedUserEmail]
+  );
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
 
-    setTimeout(loadData, 500);
+    setTimeout(() => loadData(true), 500);
   }, [refreshing]);
 
   const snapTo = React.useCallback(
@@ -161,7 +168,7 @@ const BrotherDrawer: React.FC<{}> = ({}) => {
     } else {
       snapTo(0);
 
-      loadData();
+      loadData(false);
     }
   }, [selectedUserEmail]);
 

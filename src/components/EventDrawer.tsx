@@ -23,7 +23,8 @@ import {
   getEventRecordCounts,
   getMissedMandatoryByEvent,
   sortUserByName,
-  prettyPoints
+  prettyPoints,
+  shouldLoad
 } from '@services/kappaService';
 import { theme } from '@constants';
 import { TabBarHeight, isEmpty } from '@services/utils';
@@ -40,6 +41,7 @@ const { width, height } = Dimensions.get('screen');
 
 const EventDrawer: React.FC<{}> = ({}) => {
   const user = useSelector((state: TRedux) => state.auth.user);
+  const loadHistory = useSelector((state: TRedux) => state.kappa.loadHistory);
   const directory = useSelector((state: TRedux) => state.kappa.directory);
   const directorySize = useSelector((state: TRedux) => state.kappa.directorySize);
   const records = useSelector((state: TRedux) => state.kappa.records);
@@ -63,6 +65,11 @@ const EventDrawer: React.FC<{}> = ({}) => {
     dispatch,
     selectedEventId
   ]);
+  const dispatchDeleteEvent = React.useCallback(() => dispatch(_kappa.deleteEvent(user, selectedEvent)), [
+    dispatch,
+    user,
+    selectedEvent
+  ]);
 
   const insets = useSafeArea();
 
@@ -79,20 +86,27 @@ const EventDrawer: React.FC<{}> = ({}) => {
     outputRange: [0.5, 0]
   });
 
-  const loadData = () => {
-    if (user.privileged) {
-      dispatchGetAttendance();
+  const loadData = React.useCallback(
+    (force: boolean) => {
+      if (user.privileged) {
+        if (force || shouldLoad(loadHistory, selectedEventId)) {
+          dispatchGetAttendance();
+        }
 
-      setReadyToDelete(false);
-    } else {
-      dispatchGetMyAttendance();
-    }
-  };
+        setReadyToDelete(false);
+      } else {
+        if (force || shouldLoad(loadHistory, user.email)) {
+          dispatchGetMyAttendance();
+        }
+      }
+    },
+    [user, loadHistory, selectedEventId]
+  );
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
 
-    setTimeout(loadData, 500);
+    setTimeout(() => loadData(true), 500);
   }, [refreshing]);
 
   const snapTo = React.useCallback(
@@ -166,7 +180,7 @@ const EventDrawer: React.FC<{}> = ({}) => {
     } else {
       snapTo(0);
 
-      loadData();
+      loadData(false);
     }
   }, [selectedEventId]);
 
@@ -252,7 +266,11 @@ const EventDrawer: React.FC<{}> = ({}) => {
               </Block>
             </Block>
 
-            <TouchableOpacity style={!readyToDelete && styles.disabledButton} disabled={!readyToDelete}>
+            <TouchableOpacity
+              style={!readyToDelete && styles.disabledButton}
+              disabled={!readyToDelete}
+              onPress={dispatchDeleteEvent}
+            >
               <Icon style={styles.zoneIcon} family="Feather" name="trash-2" size={32} color={theme.COLORS.PRIMARY} />
             </TouchableOpacity>
           </Block>
@@ -265,6 +283,7 @@ const EventDrawer: React.FC<{}> = ({}) => {
                 style={[
                   styles.chartPropertyLabel,
                   {
+                    marginTop: 8,
                     color: theme.COLORS.PRIMARY
                   }
                 ]}
