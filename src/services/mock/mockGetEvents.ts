@@ -9,7 +9,7 @@ export default {
       excusable: 1,
       title: 'General Meeting',
       description: 'Weekly chapter meeting for exec to provide updates to the chapter',
-      start: '2020-03-25T00:00:00.000Z',
+      start: '2020-03-18T00:00:00.000Z',
       duration: 60,
       location: 'EHall 106b1',
       points: null
@@ -23,13 +23,27 @@ export default {
       excusable: 1,
       title: 'General Meeting',
       description: 'Weekly chapter meeting for exec to provide updates to the chapter',
-      start: '2020-04-01T00:00:00.000Z',
+      start: '2020-03-25T00:00:00.000Z',
       duration: 60,
       location: 'EHall 106b1',
       points: null
     },
     {
       id: '3',
+      creator: 'jjt4',
+      event_type: 'GM',
+      event_code: '647319',
+      mandatory: 0,
+      excusable: 1,
+      title: 'General Meeting',
+      description: 'Weekly chapter meeting for exec to provide updates to the chapter',
+      start: '2020-04-01T00:00:00.000Z',
+      duration: 60,
+      location: 'EHall 106b1',
+      points: null
+    },
+    {
+      id: '4',
       creator: 'jjt4',
       event_type: 'Brotherhood',
       event_code: '647319',
@@ -43,7 +57,7 @@ export default {
       points: 'BRO:1,RUSH:1'
     },
     {
-      id: '4',
+      id: '5',
       creator: 'jjt4',
       event_type: 'GM',
       event_code: '647319',
@@ -58,7 +72,7 @@ export default {
       points: null
     },
     {
-      id: '5',
+      id: '6',
       creator: 'jjt4',
       event_type: 'Brotherhood',
       event_code: '647319',
@@ -72,7 +86,7 @@ export default {
       points: 'BRO:1'
     },
     {
-      id: '6',
+      id: '7',
       creator: 'jjt4',
       event_type: 'GM',
       event_code: '647319',
