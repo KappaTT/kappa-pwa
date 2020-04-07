@@ -28,6 +28,7 @@ import {
 } from '@services/kappaService';
 import { theme } from '@constants';
 import { TabBarHeight, isEmpty } from '@services/utils';
+import { navigate } from '@navigation/NavigationService';
 import { TEvent } from '@backend/kappa';
 import { TUser } from '@backend/auth';
 import Block from '@components/Block';
@@ -70,6 +71,10 @@ const EventDrawer: React.FC<{}> = ({}) => {
     user,
     selectedEvent
   ]);
+  const dispatchCheckIn = React.useCallback(
+    (excuse: boolean) => dispatch(_kappa.setCheckInEvent(selectedEventId, excuse)),
+    [dispatch, selectedEventId]
+  );
 
   const insets = useSafeArea();
 
@@ -120,6 +125,20 @@ const EventDrawer: React.FC<{}> = ({}) => {
   const onPressClose = React.useCallback(() => {
     snapTo(1);
   }, []);
+
+  const onPressExcuse = React.useCallback(() => {
+    dispatchCheckIn(true);
+    navigate('CheckInStack', {});
+
+    onPressClose();
+  }, [selectedEventId]);
+
+  const onPressCheckIn = React.useCallback(() => {
+    dispatchCheckIn(false);
+    navigate('CheckInStack', {});
+
+    onPressClose();
+  }, [selectedEventId]);
 
   const attended = React.useMemo(() => {
     return getAttendance(records, user.email, selectedEventId);
@@ -423,7 +442,7 @@ const EventDrawer: React.FC<{}> = ({}) => {
                       alt={true}
                       label="Request Excuse"
                       disabled={excused !== undefined || attended !== undefined}
-                      onPress={() => log('TODO')}
+                      onPress={onPressExcuse}
                     />
                   </Block>
                   <Block style={styles.bottomDivider} />
@@ -434,7 +453,7 @@ const EventDrawer: React.FC<{}> = ({}) => {
                 <RoundButton
                   disabled={attended !== undefined || moment(selectedEvent.start).isBefore(moment(), 'day')}
                   label="Check In"
-                  onPress={() => log('TODO')}
+                  onPress={onPressCheckIn}
                 />
               </Block>
             </Block>

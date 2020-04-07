@@ -54,6 +54,8 @@ export const DELETE_EVENT = 'DELETE_EVENT';
 export const DELETE_EVENT_SUCCESS = 'DELETE_EVENT_SUCCESS';
 export const DELETE_EVENT_FAILURE = 'DELETE_EVENT_FAILURE';
 
+export const SET_CHECK_IN_EVENT = 'SET_CHECK_IN_EVENT';
+
 export interface TKappaState {
   gettingEvents: boolean;
   getEventsError: boolean;
@@ -92,6 +94,9 @@ export interface TKappaState {
   deletingEvent: boolean;
   deleteEventError: boolean;
   deleteEventErrorMessage: string;
+
+  checkInEventId: string;
+  checkInExcuse: boolean;
 }
 
 const initialState: TKappaState = {
@@ -134,7 +139,10 @@ const initialState: TKappaState = {
 
   deletingEvent: false,
   deleteEventError: false,
-  deleteEventErrorMessage: ''
+  deleteEventErrorMessage: '',
+
+  checkInEventId: '',
+  checkInExcuse: false
 };
 
 export default (state = initialState, action: any): TKappaState => {
@@ -317,6 +325,12 @@ export default (state = initialState, action: any): TKappaState => {
         deletingEvent: false,
         deleteEventError: true,
         deleteEventErrorMessage: action.error.message
+      };
+    case SET_CHECK_IN_EVENT:
+      return {
+        ...state,
+        checkInEventId: action.event_id,
+        checkInExcuse: action.excuse
       };
     default:
       return state;

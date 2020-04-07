@@ -21,7 +21,8 @@ import {
   SAVE_EDIT_EVENT_FAILURE,
   DELETE_EVENT,
   DELETE_EVENT_SUCCESS,
-  DELETE_EVENT_FAILURE
+  DELETE_EVENT_FAILURE,
+  SET_CHECK_IN_EVENT
 } from '@reducers/kappa';
 import { TUser } from '@backend/auth';
 import { TEvent, TPoint } from '@backend/kappa';
@@ -268,5 +269,13 @@ export const deleteEvent = (user: TUser, event: TEvent) => {
         dispatch(deleteEventFailure(res.error));
       }
     });
+  };
+};
+
+export const setCheckInEvent = (event_id: string, excuse: boolean) => {
+  return {
+    type: SET_CHECK_IN_EVENT,
+    event_id,
+    excuse
   };
 };

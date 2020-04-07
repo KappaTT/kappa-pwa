@@ -10,7 +10,6 @@ import {
   Alert
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { useSelector, useDispatch } from 'react-redux';
 import { useSafeArea } from 'react-native-safe-area-context';
 import { useColorScheme } from 'react-native-appearance';
 import moment from 'moment';
