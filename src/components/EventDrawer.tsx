@@ -379,8 +379,18 @@ const EventDrawer: React.FC<{}> = ({}) => {
                 <Block style={styles.eventBody}>
                   <Text style={styles.eventDescription}>{selectedEvent.description}</Text>
 
-                  <Text style={styles.propertyHeader}>Location</Text>
-                  <Text style={styles.propertyValue}>{selectedEvent.location}</Text>
+                  <Block style={styles.splitPropertyRow}>
+                    <Block style={styles.splitProperty}>
+                      <Text style={styles.propertyHeader}>Location</Text>
+                      <Text style={styles.propertyValue}>{selectedEvent.location}</Text>
+                    </Block>
+                    {user.privileged === true && (
+                      <Block style={styles.splitProperty}>
+                        <Text style={styles.propertyHeader}>Check-In Code</Text>
+                        <Text style={styles.propertyValue}>{selectedEvent.event_code}</Text>
+                      </Block>
+                    )}
+                  </Block>
 
                   <Block style={styles.splitPropertyRow}>
                     <Block style={styles.splitProperty}>
