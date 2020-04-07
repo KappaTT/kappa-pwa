@@ -251,11 +251,16 @@ export default (state = initialState, action: any): TKappaState => {
       const mergedEvents = mergeEvents(state.events, [action.event]);
       const mergedEventDates = mergeEventDates(state.eventsByDate, [action.event]);
 
+      const mergedMandatoryEvents = getMandatoryEvents(mergedEvents);
+      const mergedMissedMandatory = getMissedMandatory(state.records, mergedMandatoryEvents, state.directory);
+
       return {
         ...state,
         savingEvent: false,
         events: mergedEvents,
         eventsByDate: mergedEventDates,
+        mandatoryEvents: mergedMandatoryEvents,
+        missedMandatory: mergedMissedMandatory,
         editingEventId: ''
       };
     case SAVE_EDIT_EVENT_FAILURE:
