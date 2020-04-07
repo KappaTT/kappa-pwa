@@ -255,7 +255,8 @@ export default (state = initialState, action: any): TKappaState => {
         ...state,
         savingEvent: false,
         events: mergedEvents,
-        eventsByDate: mergedEventDates
+        eventsByDate: mergedEventDates,
+        editingEventId: ''
       };
     case SAVE_EDIT_EVENT_FAILURE:
       return {

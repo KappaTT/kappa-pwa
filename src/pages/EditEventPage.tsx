@@ -359,7 +359,13 @@ const EditEventPage: React.FC<{
                     <Block style={styles.propertyHeaderContainer}>
                       <Text style={styles.propertyHeader}>Location</Text>
                     </Block>
-                    <FormattedInput style={styles.input} placeholderText="ex: EHall 106b1" maxLength={64} />
+                    <FormattedInput
+                      style={styles.input}
+                      placeholderText="ex: EHall 106b1"
+                      maxLength={64}
+                      defaultValue={location}
+                      onChangeText={(text: string) => setLocation(text)}
+                    />
 
                     <Block style={styles.doubleColumn}>
                       <Block style={styles.column}>
