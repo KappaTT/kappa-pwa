@@ -156,7 +156,7 @@ export const createEvent = async (payload: TCreateEventPayload): Promise<TCreate
       payload.user.sessionToken
     );
 
-    log('Get create event response', response.code);
+    log('Create event response', response.code);
 
     if (!response.success || response.code === 500) {
       return fail({}, 'problem connecting to server');
@@ -207,7 +207,7 @@ export const updateEvent = async (payload: TUpdateEventPayload): Promise<TUpdate
       payload.user.sessionToken
     );
 
-    log('Get create event response', response.code);
+    log('Update event response', response.code);
 
     if (!response.success || response.code === 500) {
       return fail({}, 'problem connecting to server');
@@ -221,6 +221,51 @@ export const updateEvent = async (payload: TUpdateEventPayload): Promise<TUpdate
 
     return pass({
       event: response.data.event
+    });
+  } catch (error) {
+    log(error);
+    return fail({}, "that wasn't supposed to happen");
+  }
+};
+
+export interface TDeleteEventPayload {
+  user: TUser;
+  event: TEvent;
+}
+
+interface TDeleteEventRequestResponse {
+  event: {};
+}
+
+interface TDeleteEventResponse extends TResponse {
+  data?: {
+    event: {};
+  };
+}
+
+export const deleteEvent = async (payload: TDeleteEventPayload): Promise<TDeleteEventResponse> => {
+  try {
+    const response = await makeAuthorizedRequest<TUpdateEventRequestResponse>(
+      ENDPOINTS.DELETE_EVENT({ event_id: payload.event.id }),
+      METHODS.DELETE_EVENT,
+      {},
+      payload.user.sessionToken
+    );
+
+    log('Delete event response', response.code);
+
+    if (!response.success || response.code === 500) {
+      return fail({}, 'problem connecting to server');
+    } else if (response.code !== 200) {
+      if (response.code === 401) {
+        return fail({}, 'your credentials were invalid');
+      }
+
+      return fail({}, response.error?.message);
+    }
+
+    return pass({
+      event: {}
     });
   } catch (error) {
     log(error);
