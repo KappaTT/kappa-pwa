@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, ScrollView, TouchableWithoutFeedback } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { useSafeArea } from 'react-native-safe-area-context';
 import moment from 'moment';
@@ -8,9 +8,9 @@ import { theme } from '@constants';
 import { TRedux } from '@reducers';
 import { _kappa } from '@reducers/actions';
 import { NavigationTypes } from '@types';
-import { Block, Text, Header, Icon, ListButton, RoundButton } from '@components';
+import { Block, Text, Header, Icon, ListButton, RoundButton, SlideModal, RadioList } from '@components';
 import { HeaderHeight } from '@services/utils';
-import { getEventById, hasValidCheckIn, shouldLoad } from '@services/kappaService';
+import { getEventById, hasValidCheckIn, shouldLoad, sortEventByDate } from '@services/kappaService';
 
 const CheckInContent: React.FC<{
   navigation: NavigationTypes.ParamType;
@@ -48,6 +48,29 @@ const CheckInContent: React.FC<{
     return shouldLoad(loadHistory, user.email);
   }, [user, loadHistory]);
 
+  const eventOptions = React.useMemo(() => {
+    return Object.values(events)
+      .filter(event => !hasValidCheckIn(records, user.email, event.id, true))
+      .sort(sortEventByDate)
+      .map(event => ({
+        id: event.id,
+        title: event.title,
+        subtitle: moment(event.start).format('ddd LLL')
+      }));
+  }, [user, records, events]);
+
+  const onPressBackButton = () => {
+    setChoosingEvent(false);
+  };
+
+  const onChangeEventList = React.useCallback(
+    (chosen: string) => {
+      dispatchSetCheckInEvent(chosen, checkInExcuse);
+      setChoosingEvent(false);
+    },
+    [checkInExcuse]
+  );
+
   React.useEffect(() => {
     if (shouldLoad(loadHistory, user.email) && !gettingAttendance) {
       dispatchGetMyAttendance();
@@ -59,6 +82,42 @@ const CheckInContent: React.FC<{
       dispatchSetCheckInEvent('', checkInExcuse);
     }
   }, [selectedEvent, checkInEventId, checkInExcuse]);
+
+  const renderChoosingEvent = () => {
+    return (
+      <Block flex>
+        <Header title="Choose an Event" showBackButton={true} onPressBackButton={onPressBackButton} />
+
+        <Block
+          style={[
+            styles.wrapper,
+            {
+              top: insets.top + HeaderHeight
+            }
+          ]}
+        >
+          <ScrollView contentContainerStyle={styles.scrollContent}>
+            <TouchableWithoutFeedback>
+              <Block
+                style={[
+                  styles.content,
+                  {
+                    paddingBottom: insets.bottom
+                  }
+                ]}
+              >
+                <Block style={styles.propertyHeaderContainer}>
+                  <Text style={styles.propertyHeader}>Event</Text>
+                </Block>
+
+                <RadioList options={eventOptions} selected={checkInEventId} onChange={onChangeEventList} />
+              </Block>
+            </TouchableWithoutFeedback>
+          </ScrollView>
+        </Block>
+      </Block>
+    );
+  };
 
   return (
     <Block flex>
@@ -83,7 +142,7 @@ const CheckInContent: React.FC<{
         </Block>
 
         <Block style={styles.bottomBar}>
-          {!alreadyCheckedIn ? (
+          {alreadyCheckedIn ? (
             <React.Fragment>
               <Icon family="Feather" name="check" size={24} color={theme.COLORS.PRIMARY_GREEN} />
               <Text style={styles.alreadyCheckedIn}>Checked In</Text>
@@ -116,6 +175,8 @@ const CheckInContent: React.FC<{
           )}
         </Block>
       </Block>
+
+      <SlideModal visible={choosingEvent}>{renderChoosingEvent()}</SlideModal>
     </Block>
   );
 };
@@ -127,12 +188,31 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0
   },
+  scrollContent: {
+    flexGrow: 1
+  },
   content: {
     flexGrow: 1,
     paddingHorizontal: 24
   },
   eventIdContainer: {
     marginTop: 16
+  },
+  propertyHeaderContainer: {
+    marginTop: 16,
+    display: 'flex',
+    flexDirection: 'row'
+  },
+  propertyHeader: {
+    fontFamily: 'OpenSans-SemiBold',
+    fontSize: 13,
+    textTransform: 'uppercase',
+    color: theme.COLORS.GRAY
+  },
+  description: {
+    marginTop: 12,
+    fontFamily: 'OpenSans',
+    fontSize: 12
   },
   bottomBar: {
     width: '100%',

@@ -34,8 +34,17 @@ const getGradYearOptions = () => {
   options.push(`Spring ${year}`);
 
   for (let i = 0; i < 3; i++) {
-    options.push(`Fall ${year + i}`);
-    options.push(`Spring ${year + i + 1}`);
+    const fall = `Fall ${year + i}`;
+    const spring = `Spring ${year + i + 1}`;
+
+    options.push({
+      id: fall,
+      title: fall
+    });
+    options.push({
+      id: spring,
+      title: spring
+    });
   }
 
   return options;

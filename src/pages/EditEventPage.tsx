@@ -194,7 +194,14 @@ const EditEventPage: React.FC<{
             </Block>
 
             <RadioList
-              options={['GM', 'Philanthropy', 'Professional', 'Rush', 'Social', 'Misc']}
+              options={[
+                { id: 'GM', title: 'GM' },
+                { id: 'Philanthropy', title: 'Philanthropy' },
+                { id: 'Professional', title: 'Professional' },
+                { id: 'Rush', title: 'Rush' },
+                { id: 'Social', title: 'Social' },
+                { id: 'Misc', title: 'Misc' }
+              ]}
               selected={type}
               onChange={chosen => {
                 setType(chosen);
