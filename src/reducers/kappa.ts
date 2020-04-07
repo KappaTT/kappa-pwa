@@ -227,7 +227,9 @@ export default (state = initialState, action: any): TKappaState => {
     case EDIT_NEW_EVENT:
       return {
         ...state,
-        editingEventId: 'NEW'
+        editingEventId: 'NEW',
+        saveEventError: false,
+        saveEventErrorMessage: ''
       };
     case EDIT_EXISTING_EVENT:
       return {
