@@ -165,7 +165,7 @@ const CheckInContent: React.FC<{
                     selectedEvent === null ||
                     needsLoading ||
                     alreadyCheckedIn ||
-                    moment(selectedEvent.start).isBefore(moment(), 'day')
+                    moment(selectedEvent.start).isSame(moment(), 'day')
                   }
                   label="Check In"
                   onPress={() => {}}

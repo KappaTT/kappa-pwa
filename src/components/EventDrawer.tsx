@@ -451,7 +451,7 @@ const EventDrawer: React.FC<{}> = ({}) => {
 
               <Block style={styles.attendButton}>
                 <RoundButton
-                  disabled={attended !== undefined || moment(selectedEvent.start).isBefore(moment(), 'day')}
+                  disabled={attended !== undefined || !moment(selectedEvent.start).isSame(moment(), 'day')}
                   label="Check In"
                   onPress={onPressCheckIn}
                 />
