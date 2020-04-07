@@ -52,9 +52,9 @@ export default {
       title: 'Happy Hour',
       description: 'Brothers will be at Legends, stop by for appetizers and good company',
       start: '2020-04-03T22:00:00.000Z',
-      duration: 120,
+      duration: 60,
       location: 'Legends',
-      points: 'BRO:1,RUSH:1'
+      points: 'BRO:1'
     },
     {
       id: '5',
@@ -80,13 +80,27 @@ export default {
       excusable: 0,
       title: 'Talent Show',
       description: 'Come see your brothers display their talents for a good cause',
-      start: '2020-04-10T22:00:00.000Z',
+      start: '2020-04-09T22:00:00.000Z',
       duration: 180,
       location: 'EHall 106b1',
       points: 'BRO:1'
     },
     {
       id: '7',
+      creator: 'jjt4',
+      event_type: 'Brotherhood',
+      event_code: '6473',
+      mandatory: 0,
+      excusable: 0,
+      title: 'Happy Hour Bar Crawl',
+      description: "Red Lion, Joe's, and KAMS. See you there",
+      start: '2020-04-10T22:00:00.000Z',
+      duration: 180,
+      location: 'Legends',
+      points: 'BRO:1'
+    },
+    {
+      id: '8',
       creator: 'jjt4',
       event_type: 'GM',
       event_code: '6473',

@@ -196,7 +196,7 @@ const EditEventPage: React.FC<{
             <RadioList
               options={[
                 { id: 'GM', title: 'GM' },
-                { id: 'Happy Hour', title: 'Happy Hour' },
+                { id: 'Weekly Happy Hour', title: 'Happy Hour' },
                 { id: 'Misc Philanthropy', title: 'Philanthropy' },
                 { id: 'Misc Professional', title: 'Professional' },
                 { id: 'Misc Rush', title: 'Rush' },
@@ -212,8 +212,8 @@ const EditEventPage: React.FC<{
 
             <Text style={styles.description}>
               The type of event affects GM counts. If an event is not marked as a GM, it will not count towards the GM
-              attendance rate. Happy Hour events can only count for 1 Brother point per semester. Points must be set
-              per-event as well.
+              attendance rate. Weekly Happy Hour events can only count for 1 Brother point per semester. Points must be
+              set per-event as well.
             </Text>
           </Block>
         </Block>

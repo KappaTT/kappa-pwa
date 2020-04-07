@@ -414,7 +414,11 @@ const EventDrawer: React.FC<{}> = ({}) => {
                   <Block style={styles.splitPropertyRow}>
                     <Block style={styles.splitProperty}>
                       <Text style={styles.propertyHeader}>Duration</Text>
-                      <Text style={styles.propertyValue}>{selectedEvent.duration} mins</Text>
+                      <Text style={styles.propertyValue}>
+                        {selectedEvent.duration < 60
+                          ? `${selectedEvent.duration} minutes`
+                          : moment.duration(selectedEvent.duration, 'minutes').humanize()}
+                      </Text>
                     </Block>
                     <Block style={styles.splitProperty}>
                       <Text style={styles.propertyHeader}>Points</Text>
