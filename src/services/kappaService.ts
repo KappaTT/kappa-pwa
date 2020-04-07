@@ -395,6 +395,10 @@ export const prettyPoints = (points: string) => {
 };
 
 export const extractPoints = (points: string, type: string) => {
+  if (!points) {
+    return '0';
+  }
+
   const index = points.indexOf(type);
 
   if (index === -1) {

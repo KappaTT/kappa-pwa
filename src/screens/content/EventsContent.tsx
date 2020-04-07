@@ -14,7 +14,7 @@ import { NavigationTypes } from '@types';
 import { HeaderHeight, isEmpty } from '@services/utils';
 import { log } from '@services/logService';
 import { TEvent, TPoint } from '@backend/kappa';
-import { hasValidCheckIn } from '@services/kappaService';
+import { hasValidCheckIn, getEventById } from '@services/kappaService';
 
 const EventSkeleton: React.FC<{}> = ({}) => {
   return (
@@ -38,6 +38,7 @@ const EventsContent: React.FC<{
   const gettingDirectory = useSelector((state: TRedux) => state.kappa.gettingDirectory);
   const gettingAttendance = useSelector((state: TRedux) => state.kappa.gettingAttendance);
   const getEventsError = useSelector((state: TRedux) => state.kappa.getEventsError);
+  const events = useSelector((state: TRedux) => state.kappa.events);
   const eventsByDate = useSelector((state: TRedux) => state.kappa.eventsByDate);
   const editingEventId = useSelector((state: TRedux) => state.kappa.editingEventId);
 
@@ -177,8 +178,12 @@ const EventsContent: React.FC<{
         )}
       </Block>
 
-      <SlideModal visible={editingEventId === 'NEW'}>
-        <EditEventPage initialEvent={null} onPressBack={dispatchCancelEditEvent} onPressSave={dispatchSaveEditEvent} />
+      <SlideModal visible={editingEventId !== ''}>
+        <EditEventPage
+          initialEvent={editingEventId === 'NEW' ? null : getEventById(events, editingEventId)}
+          onPressBack={dispatchCancelEditEvent}
+          onPressSave={dispatchSaveEditEvent}
+        />
       </SlideModal>
     </Block>
   );

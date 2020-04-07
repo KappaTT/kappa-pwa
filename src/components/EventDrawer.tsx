@@ -59,6 +59,10 @@ const EventDrawer: React.FC<{}> = ({}) => {
   ]);
   const dispatchGetMyAttendance = React.useCallback(() => dispatch(_kappa.getMyAttendance(user)), [dispatch, user]);
   const dispatchUnselectEvent = React.useCallback(() => dispatch(_kappa.unselectEvent()), [dispatch]);
+  const dispatchEditEvent = React.useCallback(() => dispatch(_kappa.editExistingEvent(selectedEventId)), [
+    dispatch,
+    selectedEventId
+  ]);
 
   const insets = useSafeArea();
 
@@ -230,7 +234,7 @@ const EventDrawer: React.FC<{}> = ({}) => {
               </Text>
             </Block>
 
-            <TouchableOpacity>
+            <TouchableOpacity onPress={dispatchEditEvent}>
               <Icon style={styles.zoneIcon} family="Feather" name="edit" size={32} color={theme.COLORS.PRIMARY} />
             </TouchableOpacity>
           </Block>
