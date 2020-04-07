@@ -263,6 +263,8 @@ export default (state = initialState, action: any): TKappaState => {
         eventsByDate: mergedEventDates,
         mandatoryEvents: mergedMandatoryEvents,
         missedMandatory: mergedMissedMandatory,
+        selectedEventId: '',
+        selectedEvent: null,
         editingEventId: ''
       };
     case SAVE_EDIT_EVENT_FAILURE:

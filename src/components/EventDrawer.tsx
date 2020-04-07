@@ -1,5 +1,12 @@
 import React from 'react';
-import { StyleSheet, Dimensions, TouchableWithoutFeedback, ScrollView, RefreshControl } from 'react-native';
+import {
+  StyleSheet,
+  Dimensions,
+  TouchableWithoutFeedback,
+  ScrollView,
+  RefreshControl,
+  TouchableOpacity
+} from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
@@ -27,6 +34,7 @@ import Ghost from '@components/Ghost';
 import Text from '@components/Text';
 import RoundButton from '@components/RoundButton';
 import Icon from '@components/Icon';
+import Switch from '@components/Switch';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -41,6 +49,7 @@ const EventDrawer: React.FC<{}> = ({}) => {
   const selectedEvent = useSelector((state: TRedux) => state.kappa.selectedEvent);
 
   const [refreshing, setRefreshing] = React.useState<boolean>(gettingAttendance);
+  const [readyToDelete, setReadyToDelete] = React.useState<boolean>(false);
 
   const dispatch = useDispatch();
   const dispatchGetAttendance = React.useCallback(() => dispatch(_kappa.getEventAttendance(user, selectedEventId)), [
@@ -69,6 +78,8 @@ const EventDrawer: React.FC<{}> = ({}) => {
   const loadData = () => {
     if (user.privileged) {
       dispatchGetAttendance();
+
+      setReadyToDelete(false);
     } else {
       dispatchGetMyAttendance();
     }
@@ -206,6 +217,40 @@ const EventDrawer: React.FC<{}> = ({}) => {
               <Text style={styles.chartPropertyLabel}>Pending</Text>
               <Text style={styles.chartPropertyValue}>{recordCounts.pending}</Text>
             </Block>
+          </Block>
+        </Block>
+
+        <Block style={styles.dangerZone}>
+          <Block style={styles.editZone}>
+            <Block style={styles.warning}>
+              <Text style={styles.zoneLabel}>Edit this event</Text>
+              <Text style={styles.description}>
+                Edits to events will only show up when users refresh. Please make sure you have refreshed the latest
+                event details before editing.
+              </Text>
+            </Block>
+
+            <TouchableOpacity>
+              <Icon style={styles.zoneIcon} family="Feather" name="edit" size={32} color={theme.COLORS.PRIMARY} />
+            </TouchableOpacity>
+          </Block>
+          <Block style={styles.deleteZone}>
+            <Block style={styles.warning}>
+              <Text style={styles.zoneLabel}>Delete this event</Text>
+              <Text style={styles.description}>
+                Deleting an event will delete all associated points, attendance and excuse records. Please double check
+                and be certain this is the event you want to delete.
+              </Text>
+
+              <Block style={styles.enableDeleteContainer}>
+                <Switch value={readyToDelete} onValueChange={(newValue: boolean) => setReadyToDelete(newValue)} />
+                <Text style={styles.readyToDelete}>I am ready to delete this event</Text>
+              </Block>
+            </Block>
+
+            <TouchableOpacity style={!readyToDelete && styles.disabledButton} disabled={!readyToDelete}>
+              <Icon style={styles.zoneIcon} family="Feather" name="trash-2" size={32} color={theme.COLORS.PRIMARY} />
+            </TouchableOpacity>
           </Block>
         </Block>
 
@@ -582,6 +627,53 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: theme.COLORS.GRAY,
     textTransform: 'uppercase'
+  },
+  dangerZone: {
+    padding: 20,
+    borderRadius: 20,
+    backgroundColor: theme.COLORS.INPUT_ERROR_LIGHT
+  },
+  editZone: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
+  deleteZone: {
+    marginTop: 16,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
+  warning: {
+    flex: 1,
+    marginRight: 8
+  },
+  zoneLabel: {
+    fontFamily: 'OpenSans-Bold',
+    fontSize: 14
+  },
+  description: {
+    marginTop: 2,
+    fontFamily: 'OpenSans',
+    fontSize: 12
+  },
+  zoneIcon: {},
+  enableDeleteContainer: {
+    marginTop: 8,
+    marginLeft: 16,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  readyToDelete: {
+    marginLeft: 8,
+    fontFamily: 'OpenSans-SemiBold',
+    fontSize: 13
+  },
+  disabledButton: {
+    opacity: 0.4
   }
 });
 
