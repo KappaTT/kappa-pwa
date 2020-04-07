@@ -12,6 +12,7 @@ import {
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useSelector, useDispatch } from 'react-redux';
 import { useSafeArea } from 'react-native-safe-area-context';
+import { useColorScheme } from 'react-native-appearance';
 import moment from 'moment';
 
 import { TRedux } from '@reducers';
@@ -41,6 +42,7 @@ const EditEventPage: React.FC<{
   onPressSave(event: Partial<TEvent>, points: Array<Partial<TPoint>>): void;
 }> = ({ initialEvent, onPressBack, onPressSave }) => {
   const insets = useSafeArea();
+  const colorScheme = useColorScheme();
 
   const [choosingType, setChoosingType] = React.useState<boolean>(false);
   const [type, setType] = React.useState<string>(initialEvent ? initialEvent.event_type : '');
@@ -226,7 +228,8 @@ const EditEventPage: React.FC<{
             style={[
               styles.pickerModalContent,
               {
-                paddingBottom: insets.bottom
+                paddingBottom: insets.bottom,
+                backgroundColor: colorScheme === 'dark' ? theme.COLORS.BLACK : theme.COLORS.WHITE
               }
             ]}
           >
@@ -311,7 +314,7 @@ const EditEventPage: React.FC<{
                     </Block>
 
                     <Block style={styles.doubleColumn}>
-                      <Block style={styles.column}>
+                      <Block style={styles.wideColumn}>
                         <TouchableOpacity onPress={onPressStartDate}>
                           <Block style={styles.fakeInput}>
                             <Text style={styles.fakeInputTextHeading}>Date</Text>
@@ -563,6 +566,9 @@ const styles = StyleSheet.create({
   },
   column: {
     flex: 1
+  },
+  wideColumn: {
+    width: '60%'
   },
   separator: {
     width: 16

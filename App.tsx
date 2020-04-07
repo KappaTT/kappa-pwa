@@ -1,5 +1,6 @@
 import React from 'react';
 import { Provider } from 'react-redux';
+import { AppearanceProvider } from 'react-native-appearance';
 
 import App from './src/App';
 import store from '@reducers';
@@ -7,7 +8,9 @@ import store from '@reducers';
 const AppWrapper = () => {
   return (
     <Provider store={store}>
-      <App />
+      <AppearanceProvider>
+        <App />
+      </AppearanceProvider>
     </Provider>
   );
 };
