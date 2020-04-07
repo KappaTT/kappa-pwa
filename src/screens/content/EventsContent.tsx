@@ -138,7 +138,10 @@ const EventsContent: React.FC<{
 
   return (
     <Block flex>
-      <Header title="Upcoming Events" rightButton={<EndCapButton label="New Event" onPress={dispatchEditNewEvent} />} />
+      <Header
+        title="Upcoming Events"
+        rightButton={user.privileged === true && <EndCapButton label="New Event" onPress={dispatchEditNewEvent} />}
+      />
 
       <Block
         style={[
