@@ -7,7 +7,10 @@ import Icon from '@components/Icon';
 import Text from '@components/Text';
 
 const CheckListButton: React.FC<{
-  label: string;
+  label: {
+    title: string;
+    subtitle?: string;
+  };
   selected: boolean;
   valueColor?: string;
   disabled?: boolean;
@@ -17,30 +20,23 @@ const CheckListButton: React.FC<{
 
   return (
     <Block style={styles.wrapper}>
-      <TouchableOpacity style={styles.button} disabled={disabled} onPress={onPress}>
-        <Text
-          style={[
-            styles.label,
-            {
-              opacity: computedOpacity
-            }
-          ]}
-        >
-          {label}
-        </Text>
+      <TouchableOpacity
+        style={[
+          styles.button,
+          {
+            opacity: computedOpacity
+          }
+        ]}
+        disabled={disabled}
+        onPress={onPress}
+      >
+        <Block>
+          <Text style={styles.label}>{label.title}</Text>
+          {label.subtitle !== undefined && <Text style={styles.sublabel}>{label.subtitle}</Text>}
+        </Block>
 
         <Block style={styles.activeContent}>
-          {selected && (
-            <Icon
-              style={{
-                opacity: computedOpacity
-              }}
-              family="Feather"
-              name="check"
-              size={24}
-              color={valueColor}
-            />
-          )}
+          {selected && <Icon family="Feather" name="check" size={24} color={valueColor} />}
         </Block>
       </TouchableOpacity>
     </Block>
@@ -65,6 +61,11 @@ const styles = StyleSheet.create({
     fontFamily: 'OpenSans',
     fontSize: 15,
     color: theme.COLORS.BLACK
+  },
+  sublabel: {
+    fontFamily: 'OpenSans',
+    fontSize: 12,
+    color: theme.COLORS.DARK_GRAY
   },
   activeContent: {
     display: 'flex',
