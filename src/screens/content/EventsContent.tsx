@@ -63,11 +63,13 @@ const EventsContent: React.FC<{
 
   const loadData = React.useCallback(
     (force: boolean) => {
-      dispatchGetEvents();
-      dispatchGetDirectory();
+      if (user.sessionToken) {
+        dispatchGetEvents();
+        dispatchGetDirectory();
 
-      if (force || shouldLoad(loadHistory, user.email)) {
-        dispatchGetMyAttendance();
+        if (force || shouldLoad(loadHistory, user.email)) {
+          dispatchGetMyAttendance();
+        }
       }
     },
     [user, loadHistory]

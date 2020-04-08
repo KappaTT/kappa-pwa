@@ -69,10 +69,7 @@ const CheckInContent: React.FC<{
 
   const eventOptions = React.useMemo(() => {
     return futureEventArray
-      .filter(
-        event =>
-          !hasValidCheckIn(records, user.email, event.id, true) && moment(event.start).isSameOrBefore(moment(), 'day')
-      )
+      .filter(event => !hasValidCheckIn(records, user.email, event.id, true))
       .sort(sortEventByDate)
       .map(event => ({
         id: event.id,
@@ -187,6 +184,7 @@ const CheckInContent: React.FC<{
       }
 
       dispatchSetCheckInEvent('', false);
+      setCode('');
     }
   }, [checkInEventId, eventOptions]);
 
