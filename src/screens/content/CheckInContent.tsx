@@ -67,7 +67,8 @@ const CheckInContent: React.FC<{
   }, [user, records, selectedEvent]);
 
   const needsLoading = React.useMemo(() => {
-    return shouldLoad(loadHistory, user.email);
+    const a = shouldLoad(loadHistory, user.email);
+    return a;
   }, [user, loadHistory]);
 
   const eventOptions = React.useMemo(() => {
@@ -350,7 +351,7 @@ const CheckInContent: React.FC<{
                       selectedEvent === null ||
                       needsLoading ||
                       alreadyCheckedIn ||
-                      moment(selectedEvent.start).isSame(moment(), 'day')
+                      !moment(selectedEvent.start).isSame(moment(), 'day')
                     }
                     label="Check In"
                     onPress={() => {}}
