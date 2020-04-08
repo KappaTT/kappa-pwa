@@ -126,6 +126,7 @@ const EditEventPage: React.FC<{
 
     onPressSave(event, points);
   }, [
+    type,
     title,
     description,
     startDate,
