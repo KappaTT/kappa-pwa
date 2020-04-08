@@ -40,7 +40,8 @@ export const ENDPOINTS: {
   GET_ATTENDANCE_BY_EVENT: (config: { event_id: string }) => `attendance/event/${config.event_id}`,
   CREATE_EVENT: () => 'events',
   UPDATE_EVENT: (config: { event_id: string }) => `events/${config.event_id}`,
-  DELETE_EVENT: (config: { event_id: string }) => `events/${config.event_id}`
+  DELETE_EVENT: (config: { event_id: string }) => `events/${config.event_id}`,
+  CREATE_ATTENDANCE: () => 'attendance'
 };
 
 export const METHODS: {
@@ -54,7 +55,8 @@ export const METHODS: {
   GET_ATTENDANCE_BY_EVENT: M_GET,
   CREATE_EVENT: M_POST,
   UPDATE_EVENT: M_PATCH,
-  DELETE_EVENT: M_DELETE
+  DELETE_EVENT: M_DELETE,
+  CREATE_ATTENDANCE: M_POST
 };
 
 export interface TResponse {

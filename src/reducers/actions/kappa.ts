@@ -22,7 +22,10 @@ import {
   DELETE_EVENT,
   DELETE_EVENT_SUCCESS,
   DELETE_EVENT_FAILURE,
-  SET_CHECK_IN_EVENT
+  SET_CHECK_IN_EVENT,
+  CHECK_IN,
+  CHECK_IN_SUCCESS,
+  CHECK_IN_FAILURE
 } from '@reducers/kappa';
 import { TUser } from '@backend/auth';
 import { TEvent, TPoint } from '@backend/kappa';
@@ -277,5 +280,39 @@ export const setCheckInEvent = (event_id: string, excuse: boolean) => {
     type: SET_CHECK_IN_EVENT,
     event_id,
     excuse
+  };
+};
+
+const checkingIn = () => {
+  return {
+    type: CHECK_IN
+  };
+};
+
+const checkInSuccess = data => {
+  return {
+    type: CHECK_IN_SUCCESS,
+    attended: data.attended
+  };
+};
+
+const checkInFailure = err => {
+  return {
+    type: CHECK_IN_FAILURE,
+    error: err
+  };
+};
+
+export const checkIn = (user: TUser, event_id: string, event_code: string) => {
+  return dispatch => {
+    dispatch(checkingIn());
+
+    Kappa.createAttendance({ user, event_id, event_code }).then(res => {
+      if (res.success) {
+        dispatch(checkInSuccess(res.data));
+      } else {
+        dispatch(checkInFailure(res.error));
+      }
+    });
   };
 };

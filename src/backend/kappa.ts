@@ -405,3 +405,54 @@ export const getAttendanceByEvent = async (payload: TGetAttendancePayload): Prom
     return fail({}, "that wasn't supposed to happen");
   }
 };
+
+export interface TCreateAttendancePayload {
+  user: TUser;
+  event_id: string;
+  event_code: string;
+}
+
+interface TCreateAttendanceRequestResponse {
+  attended: Array<TAttendance>;
+}
+
+interface TCreateAttendanceResponse extends TResponse {
+  data?: {
+    attended: Array<TAttendance>;
+  };
+}
+
+export const createAttendance = async (payload: TCreateAttendancePayload): Promise<TCreateAttendanceResponse> => {
+  try {
+    const response = await makeAuthorizedRequest<TCreateAttendanceRequestResponse>(
+      ENDPOINTS.CREATE_ATTENDANCE(),
+      METHODS.CREATE_ATTENDANCE,
+      {
+        body: {
+          event_id: payload.event_id,
+          event_code: payload.event_code
+        }
+      },
+      payload.user.sessionToken
+    );
+
+    log('Get attendance response', response.code);
+
+    if (!response.success || response.code === 500) {
+      return fail({}, 'problem connecting to server');
+    } else if (response.code !== 200) {
+      if (response.code === 401) {
+        return fail({}, 'your credentials were invalid');
+      }
+
+      return fail({}, response.error?.message);
+    }
+
+    return pass({
+      attended: response.data.attended || []
+    });
+  } catch (error) {
+    log(error);
+    return fail({}, "that wasn't supposed to happen");
+  }
+};

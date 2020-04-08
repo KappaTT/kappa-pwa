@@ -55,6 +55,9 @@ export const DELETE_EVENT_SUCCESS = 'DELETE_EVENT_SUCCESS';
 export const DELETE_EVENT_FAILURE = 'DELETE_EVENT_FAILURE';
 
 export const SET_CHECK_IN_EVENT = 'SET_CHECK_IN_EVENT';
+export const CHECK_IN = 'CHECK_IN';
+export const CHECK_IN_SUCCESS = 'CHECK_IN_SUCCESS';
+export const CHECK_IN_FAILURE = 'CHECK_IN_FAILURE';
 
 export interface TKappaState {
   gettingEvents: boolean;
@@ -97,6 +100,10 @@ export interface TKappaState {
 
   checkInEventId: string;
   checkInExcuse: boolean;
+
+  checkingIn: boolean;
+  checkInError: boolean;
+  checkInErrorMessage: string;
 }
 
 const initialState: TKappaState = {
@@ -142,7 +149,11 @@ const initialState: TKappaState = {
   deleteEventErrorMessage: '',
 
   checkInEventId: '',
-  checkInExcuse: false
+  checkInExcuse: false,
+
+  checkingIn: false,
+  checkInError: false,
+  checkInErrorMessage: ''
 };
 
 export default (state = initialState, action: any): TKappaState => {
@@ -331,6 +342,33 @@ export default (state = initialState, action: any): TKappaState => {
         ...state,
         checkInEventId: action.event_id,
         checkInExcuse: action.excuse
+      };
+    case CHECK_IN:
+      return {
+        ...state,
+        checkingIn: true,
+        checkInError: false,
+        checkInErrorMessage: ''
+      };
+    case CHECK_IN_SUCCESS:
+      return {
+        ...state,
+        checkingIn: false,
+        ...recomputeKappaState({
+          events: state.events,
+          records: mergeRecords(state.records, {
+            attended: action.attended,
+            excused: []
+          }),
+          directory: state.directory
+        })
+      };
+    case CHECK_IN_FAILURE:
+      return {
+        ...state,
+        checkingIn: false,
+        checkInError: true,
+        checkInErrorMessage: action.error.message
       };
     default:
       return state;
