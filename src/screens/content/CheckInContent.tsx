@@ -1,5 +1,12 @@
 import React from 'react';
-import { StyleSheet, ScrollView, TouchableWithoutFeedback, TouchableOpacity, Keyboard } from 'react-native';
+import {
+  StyleSheet,
+  ScrollView,
+  TouchableWithoutFeedback,
+  TouchableOpacity,
+  Keyboard,
+  ActivityIndicator
+} from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { useSafeArea } from 'react-native-safe-area-context';
 import moment from 'moment';
@@ -19,9 +26,10 @@ import {
   SlideModal,
   RadioList,
   FormattedInput,
-  KeyboardDismissView
+  KeyboardDismissView,
+  FadeModal
 } from '@components';
-import { HeaderHeight } from '@services/utils';
+import { HeaderHeight, TabBarHeight } from '@services/utils';
 import { getEventById, hasValidCheckIn, shouldLoad, sortEventByDate } from '@services/kappaService';
 
 const CheckInContent: React.FC<{
@@ -35,6 +43,8 @@ const CheckInContent: React.FC<{
   const records = useSelector((state: TRedux) => state.kappa.records);
   const checkInEventId = useSelector((state: TRedux) => state.kappa.checkInEventId);
   const checkInExcuse = useSelector((state: TRedux) => state.kappa.checkInExcuse);
+  const checkingIn = useSelector((state: TRedux) => state.kappa.checkingIn);
+  const checkinErrorMessage = useSelector((state: TRedux) => state.kappa.checkInErrorMessage);
 
   const [choosingEvent, setChoosingEvent] = React.useState<boolean>(false);
   const [code, setCode] = React.useState<string>('');
@@ -43,6 +53,8 @@ const CheckInContent: React.FC<{
   const [hasPermission, setHasPermission] = React.useState<boolean>(false);
   const [scanned, setScanned] = React.useState<boolean>(false);
   const [scanning, setScanning] = React.useState<boolean>(false);
+  const [waitingForCheckIn, setWaitingForCheckIn] = React.useState<boolean>(false);
+  const [showCheckedInStatus, setShowCheckedInStatus] = React.useState<boolean>(false);
 
   const dispatch = useDispatch();
   const dispatchSetCheckInEvent = React.useCallback(
@@ -186,7 +198,18 @@ const CheckInContent: React.FC<{
       dispatchSetCheckInEvent('', false);
       setCode('');
     }
-  }, [checkInEventId, eventOptions]);
+  }, [checkInEventId, code, eventOptions]);
+
+  React.useEffect(() => {
+    if (checkingIn) {
+      setWaitingForCheckIn(true);
+    } else if (waitingForCheckIn) {
+      setWaitingForCheckIn(false);
+      setShowCheckedInStatus(true);
+
+      setTimeout(() => setShowCheckedInStatus(false), 1000);
+    }
+  }, [checkingIn, waitingForCheckIn]);
 
   const renderChoosingEvent = () => {
     return (
@@ -248,6 +271,37 @@ const CheckInContent: React.FC<{
               />
             </Block>
           </TouchableOpacity>
+        </Block>
+      </Block>
+    );
+  };
+
+  const renderCheckingIn = () => {
+    return (
+      <Block style={styles.checkingInOverlay}>
+        <Block
+          style={[
+            styles.checkingInContainer,
+            {
+              height: 64 + TabBarHeight + insets.bottom
+            }
+          ]}
+        >
+          {showCheckedInStatus ? (
+            checkinErrorMessage !== '' ? (
+              <React.Fragment>
+                <Icon family="Feather" name="x" size={24} color={theme.COLORS.PRIMARY} />
+                <Text style={styles.failedCheckIn}>{checkinErrorMessage}</Text>
+              </React.Fragment>
+            ) : (
+              <React.Fragment>
+                <Icon family="Feather" name="check" size={24} color={theme.COLORS.PRIMARY_GREEN} />
+                <Text style={styles.alreadyCheckedIn}>Checked In</Text>
+              </React.Fragment>
+            )
+          ) : (
+            <ActivityIndicator size="large" />
+          )}
         </Block>
       </Block>
     );
@@ -366,6 +420,7 @@ const CheckInContent: React.FC<{
                       code.length !== 4 ||
                       !moment(selectedEvent.start).isSame(moment(), 'day')
                     }
+                    loading={checkingIn}
                     label="Check In"
                     onPress={onPressCheckIn}
                   />
@@ -377,6 +432,9 @@ const CheckInContent: React.FC<{
 
         <SlideModal visible={choosingEvent}>{renderChoosingEvent()}</SlideModal>
         <SlideModal visible={scanning}>{renderScanner()}</SlideModal>
+        <FadeModal visible={waitingForCheckIn || showCheckedInStatus} transparent={true}>
+          {renderCheckingIn()}
+        </FadeModal>
       </Block>
     </KeyboardDismissView>
   );
@@ -442,6 +500,12 @@ const styles = StyleSheet.create({
     fontFamily: 'OpenSans-SemiBold',
     fontSize: 18,
     color: theme.COLORS.PRIMARY_GREEN
+  },
+  failedCheckIn: {
+    marginLeft: 4,
+    fontFamily: 'OpenSans-SemiBold',
+    fontSize: 18,
+    color: theme.COLORS.PRIMARY
   },
   checkInContainer: {
     marginTop: 32
@@ -509,7 +573,26 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.25)'
   },
-  scannerCloseButton: {}
+  scannerCloseButton: {},
+  checkingInOverlay: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(255, 255, 255, 0.25)'
+  },
+  checkingInContainer: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: theme.COLORS.WHITE,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
 });
 
 export default CheckInContent;
