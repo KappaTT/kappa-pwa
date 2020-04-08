@@ -49,6 +49,10 @@ const CheckInContent: React.FC<{
     [dispatch]
   );
   const dispatchGetMyAttendance = React.useCallback(() => dispatch(_kappa.getMyAttendance(user)), [dispatch, user]);
+  const dispatchCheckIn = React.useCallback(
+    (event_id: string, event_code: string) => dispatch(_kappa.checkIn(user, event_id, event_code)),
+    [dispatch, user]
+  );
 
   const insets = useSafeArea();
 
@@ -118,10 +122,15 @@ const CheckInContent: React.FC<{
           setScanning(false);
           setScanned(true);
           setCode(data);
+
+          if (checkInEventId !== '') {
+            dispatchCheckIn(checkInEventId, data);
+          }
         } else if (data.indexOf(':') > 0) {
           const pieces = data.split(':');
 
           let event_id = '';
+          let event_code = pieces[0];
 
           for (const event of eventOptions) {
             if (event.id === pieces[0]) {
@@ -130,16 +139,17 @@ const CheckInContent: React.FC<{
             }
           }
 
-          if (event_id !== '' && numberFormatter(pieces[1]) === pieces[1] && pieces[1].length === 4) {
+          if (event_id !== '' && numberFormatter(event_code) === event_code && event_code.length === 4) {
             setScanning(false);
             setScanned(true);
-            setCode(pieces[1]);
+            setCode(event_code);
             dispatchSetCheckInEvent(event_id, false);
+            dispatchCheckIn(event_id, event_code);
           }
         }
       }
     },
-    [eventOptions]
+    [eventOptions, checkInEventId]
   );
 
   const numberFormatter = (text: string) => {
@@ -157,6 +167,18 @@ const CheckInContent: React.FC<{
       dispatchSetCheckInEvent('', checkInExcuse);
     }
   }, [selectedEvent, checkInEventId, checkInExcuse]);
+
+  React.useEffect(() => {
+    if (checkInEventId !== '') {
+      for (const event of eventOptions) {
+        if (event.id === checkInEventId) {
+          return;
+        }
+      }
+
+      dispatchSetCheckInEvent('', false);
+    }
+  }, [checkInEventId, eventOptions]);
 
   const renderChoosingEvent = () => {
     return (
@@ -402,7 +424,7 @@ const styles = StyleSheet.create({
     color: theme.COLORS.PRIMARY_GREEN
   },
   checkInContainer: {
-    marginTop: 48
+    marginTop: 32
   },
   input: {
     backgroundColor: theme.COLORS.SUPER_LIGHT_BLUE_GRAY
@@ -430,7 +452,8 @@ const styles = StyleSheet.create({
   },
   dividerWrapper: {
     marginHorizontal: 8,
-    marginVertical: 20,
+    marginTop: 20,
+    marginBottom: 4,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
