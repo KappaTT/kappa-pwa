@@ -93,6 +93,7 @@ export const jsonRequest = async <T>(
       return {
         success: true,
         code: response.status,
+        data,
         error: data.error
       };
     }
