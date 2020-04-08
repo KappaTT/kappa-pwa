@@ -66,11 +66,6 @@ const CheckInContent: React.FC<{
     return hasValidCheckIn(records, user.email, selectedEvent.id, true);
   }, [user, records, selectedEvent]);
 
-  const needsLoading = React.useMemo(() => {
-    const a = shouldLoad(loadHistory, user.email);
-    return a;
-  }, [user, loadHistory]);
-
   const eventOptions = React.useMemo(() => {
     return Object.values(events)
       .filter(event => !hasValidCheckIn(records, user.email, event.id, true))
@@ -339,7 +334,12 @@ const CheckInContent: React.FC<{
                   <RoundButton
                     alt={true}
                     label="Request Excuse"
-                    disabled={selectedEvent === null || needsLoading || !selectedEvent.excusable || alreadyCheckedIn}
+                    disabled={
+                      selectedEvent === null ||
+                      // needsLoading ||
+                      !selectedEvent.excusable ||
+                      alreadyCheckedIn
+                    }
                     onPress={() => {}}
                   />
                 </Block>
@@ -349,7 +349,7 @@ const CheckInContent: React.FC<{
                   <RoundButton
                     disabled={
                       selectedEvent === null ||
-                      needsLoading ||
+                      // needsLoading ||
                       alreadyCheckedIn ||
                       !moment(selectedEvent.start).isSame(moment(), 'day')
                     }
