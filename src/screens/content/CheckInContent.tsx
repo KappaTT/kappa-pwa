@@ -30,7 +30,8 @@ const CheckInContent: React.FC<{
   const user = useSelector((state: TRedux) => state.auth.user);
   const loadHistory = useSelector((state: TRedux) => state.kappa.loadHistory);
   const gettingAttendance = useSelector((state: TRedux) => state.kappa.gettingAttendance);
-  const events = useSelector((state: TRedux) => state.kappa.events);
+  const futureEventArray = useSelector((state: TRedux) => state.kappa.futureEventArray);
+  const futureEvents = useSelector((state: TRedux) => state.kappa.futureEvents);
   const records = useSelector((state: TRedux) => state.kappa.records);
   const checkInEventId = useSelector((state: TRedux) => state.kappa.checkInEventId);
   const checkInExcuse = useSelector((state: TRedux) => state.kappa.checkInExcuse);
@@ -57,8 +58,8 @@ const CheckInContent: React.FC<{
   const insets = useSafeArea();
 
   const selectedEvent = React.useMemo(() => {
-    return getEventById(events, checkInEventId);
-  }, [events, checkInEventId]);
+    return getEventById(futureEvents, checkInEventId);
+  }, [futureEvents, checkInEventId]);
 
   const alreadyCheckedIn = React.useMemo(() => {
     if (!selectedEvent) return false;
@@ -67,15 +68,18 @@ const CheckInContent: React.FC<{
   }, [user, records, selectedEvent]);
 
   const eventOptions = React.useMemo(() => {
-    return Object.values(events)
-      .filter(event => !hasValidCheckIn(records, user.email, event.id, true))
+    return futureEventArray
+      .filter(
+        event =>
+          !hasValidCheckIn(records, user.email, event.id, true) && moment(event.start).isSameOrBefore(moment(), 'day')
+      )
       .sort(sortEventByDate)
       .map(event => ({
         id: event.id,
         title: event.title,
         subtitle: moment(event.start).format('ddd LLL')
       }));
-  }, [user, records, events]);
+  }, [user, records.attended, records.excused, futureEventArray]);
 
   const onPressBackButton = () => {
     setChoosingEvent(false);
