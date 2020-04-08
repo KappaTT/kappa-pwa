@@ -81,11 +81,21 @@ export const jsonRequest = async <T>(
       body: body && JSON.stringify(body)
     });
 
-    return {
-      success: true,
-      code: response.status,
-      data: await response.json()
-    };
+    const data = await response.json();
+
+    if (response.status === 200) {
+      return {
+        success: true,
+        code: response.status,
+        data
+      };
+    } else {
+      return {
+        success: true,
+        code: response.status,
+        error: data.error
+      };
+    }
   } catch (error) {
     return {
       success: false,
