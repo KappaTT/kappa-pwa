@@ -73,7 +73,10 @@ export interface TKappaState {
   getAttendanceErrorMessage: string;
 
   loadHistory: TLoadHistory;
+  eventArray: Array<TEvent>;
   events: TEventDict;
+  futureEventArray: Array<TEvent>;
+  futureEvents: TEventDict;
   eventsByDate: TEventDateDict;
   mandatoryEvents: TEventDict;
   missedMandatory: TUserEventDict;
@@ -120,7 +123,10 @@ const initialState: TKappaState = {
   getAttendanceErrorMessage: '',
 
   loadHistory: {},
+  eventArray: [],
   events: {},
+  futureEventArray: [],
+  futureEvents: {},
   eventsByDate: {},
   mandatoryEvents: {},
   missedMandatory: {},

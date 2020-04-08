@@ -442,6 +442,10 @@ export const recomputeKappaState = ({
   records: TRecords;
   directory: TDirectory;
 }) => {
+  const eventArray = Object.values(events);
+  const now = moment();
+  const futureEventArray = eventArray.filter(event => moment(event.start).isSameOrAfter(now, 'day'));
+  const futureEvents = separateByEventId(futureEventArray);
   const eventsSize = Object.keys(events).length;
   const directorySize = Object.keys(directory).length;
   const eventsByDate = separateByDate(Object.values(events));
@@ -452,6 +456,9 @@ export const recomputeKappaState = ({
   return {
     events,
     eventsSize,
+    eventArray,
+    futureEventArray,
+    futureEvents,
     records,
     directory,
     directorySize,
