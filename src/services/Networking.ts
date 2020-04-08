@@ -65,6 +65,9 @@ export const jsonRequest = async <T>(
   body: any
 ): Promise<TRequestResponse & {
   data?: T;
+  error?: {
+    message: string;
+  };
 }> => {
   const url = attachQueryParams(buildUrl(baseUrl, port, endpoint, secure), queryParams);
 
