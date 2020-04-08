@@ -495,12 +495,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.25)'
   },
-  scannerCloseButton: {},
-  description: {
-    marginTop: 12,
-    fontFamily: 'OpenSans',
-    fontSize: 12
-  }
+  scannerCloseButton: {}
 });
 
 export default CheckInContent;
