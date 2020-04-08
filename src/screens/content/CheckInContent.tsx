@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, ScrollView, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
+import { StyleSheet, ScrollView, TouchableWithoutFeedback, TouchableOpacity, Keyboard } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { useSafeArea } from 'react-native-safe-area-context';
 import moment from 'moment';
@@ -103,6 +103,8 @@ const CheckInContent: React.FC<{
   };
 
   const onPressScan = React.useCallback(() => {
+    Keyboard.dismiss();
+
     if (hasPermission) {
       setScanning(true);
       setScanned(false);
@@ -110,6 +112,14 @@ const CheckInContent: React.FC<{
       askForPermission();
     }
   }, [hasPermission]);
+
+  const onPressCheckIn = React.useCallback(() => {
+    Keyboard.dismiss();
+
+    if (checkInEventId && code) {
+      dispatchCheckIn(checkInEventId, code);
+    }
+  }, [checkInEventId, code]);
 
   const handleCodeScanned = React.useCallback(
     ({ type, data }) => {
@@ -351,10 +361,11 @@ const CheckInContent: React.FC<{
                       selectedEvent === null ||
                       // needsLoading ||
                       alreadyCheckedIn ||
+                      code.length !== 4 ||
                       !moment(selectedEvent.start).isSame(moment(), 'day')
                     }
                     label="Check In"
-                    onPress={() => {}}
+                    onPress={onPressCheckIn}
                   />
                 </Block>
               </React.Fragment>
