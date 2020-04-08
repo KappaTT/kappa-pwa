@@ -318,6 +318,12 @@ const CheckInContent: React.FC<{
                 onChangeText={(text: string) => setExcuse(text)}
               />
             </Block>
+
+            <Text style={styles.description}>
+              You may only check into an event on the same day it happened. If you forgot to check in and it is the same
+              day, you can still submit the code. If it isn't, please send a request from your profile page. Excuses
+              must be requested before an event.
+            </Text>
           </Block>
 
           <Block style={styles.bottomBar}>
@@ -489,7 +495,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.25)'
   },
-  scannerCloseButton: {}
+  scannerCloseButton: {},
+  description: {
+    marginTop: 12,
+    fontFamily: 'OpenSans',
+    fontSize: 12
+  }
 });
 
 export default CheckInContent;
