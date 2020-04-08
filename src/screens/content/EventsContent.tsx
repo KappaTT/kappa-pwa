@@ -14,7 +14,7 @@ import { NavigationTypes } from '@types';
 import { HeaderHeight, isEmpty } from '@services/utils';
 import { log } from '@services/logService';
 import { TEvent, TPoint } from '@backend/kappa';
-import { hasValidCheckIn, getEventById } from '@services/kappaService';
+import { hasValidCheckIn, getEventById, shouldLoad } from '@services/kappaService';
 
 const EventSkeleton: React.FC<{}> = ({}) => {
   return (
@@ -33,6 +33,7 @@ const EventsContent: React.FC<{
   navigation: NavigationTypes.ParamType;
 }> = ({ navigation }) => {
   const user = useSelector((state: TRedux) => state.auth.user);
+  const loadHistory = useSelector((state: TRedux) => state.kappa.loadHistory);
   const records = useSelector((state: TRedux) => state.kappa.records);
   const gettingEvents = useSelector((state: TRedux) => state.kappa.gettingEvents);
   const gettingDirectory = useSelector((state: TRedux) => state.kappa.gettingDirectory);
@@ -60,16 +61,22 @@ const EventsContent: React.FC<{
 
   const scrollRef = React.useRef(undefined);
 
-  const loadData = () => {
-    dispatchGetEvents();
-    dispatchGetMyAttendance();
-    dispatchGetDirectory();
-  };
+  const loadData = React.useCallback(
+    (force: boolean) => {
+      dispatchGetEvents();
+      dispatchGetDirectory();
+
+      if (force || shouldLoad(loadHistory, user.email)) {
+        dispatchGetMyAttendance();
+      }
+    },
+    [user, loadHistory]
+  );
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
 
-    setTimeout(loadData, 500);
+    setTimeout(() => loadData(true), 500);
   }, [refreshing]);
 
   React.useEffect(() => {
@@ -80,7 +87,7 @@ const EventsContent: React.FC<{
 
   React.useEffect(() => {
     if (user?.sessionToken) {
-      loadData();
+      loadData(false);
     }
   }, [user]);
 
