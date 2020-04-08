@@ -1,8 +1,9 @@
 import React from 'react';
-import { StyleSheet, ScrollView, TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, ScrollView, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { useSafeArea } from 'react-native-safe-area-context';
 import moment from 'moment';
+import { BarCodeScanner } from 'expo-barcode-scanner';
 
 import { theme } from '@constants';
 import { TRedux } from '@reducers';
@@ -37,6 +38,10 @@ const CheckInContent: React.FC<{
   const [choosingEvent, setChoosingEvent] = React.useState<boolean>(false);
   const [code, setCode] = React.useState<string>('');
   const [excuse, setExcuse] = React.useState<string>('');
+
+  const [hasPermission, setHasPermission] = React.useState<boolean>(false);
+  const [scanned, setScanned] = React.useState<boolean>(false);
+  const [scanning, setScanning] = React.useState<boolean>(false);
 
   const dispatch = useDispatch();
   const dispatchSetCheckInEvent = React.useCallback(
@@ -82,6 +87,59 @@ const CheckInContent: React.FC<{
       setChoosingEvent(false);
     },
     [checkInExcuse]
+  );
+
+  const askForPermission = async () => {
+    const { status } = await BarCodeScanner.requestPermissionsAsync();
+
+    if (status === 'granted') {
+      setHasPermission(true);
+      setScanning(true);
+      setScanned(false);
+    } else {
+      setHasPermission(false);
+      setScanning(false);
+    }
+  };
+
+  const onPressScan = React.useCallback(() => {
+    if (hasPermission) {
+      setScanning(true);
+      setScanned(false);
+    } else {
+      askForPermission();
+    }
+  }, [hasPermission]);
+
+  const handleCodeScanned = React.useCallback(
+    ({ type, data }) => {
+      if (type === BarCodeScanner.Constants.BarCodeType.qr && data) {
+        if (numberFormatter(data) === data && data.length === 4) {
+          setScanning(false);
+          setScanned(true);
+          setCode(data);
+        } else if (data.indexOf(':') > 0) {
+          const pieces = data.split(':');
+
+          let event_id = '';
+
+          for (const event of eventOptions) {
+            if (event.id === pieces[0]) {
+              event_id = pieces[0];
+              break;
+            }
+          }
+
+          if (event_id !== '' && numberFormatter(pieces[1]) === pieces[1] && pieces[1].length === 4) {
+            setScanning(false);
+            setScanned(true);
+            setCode(pieces[1]);
+            dispatchSetCheckInEvent(event_id, false);
+          }
+        }
+      }
+    },
+    [eventOptions]
   );
 
   const numberFormatter = (text: string) => {
@@ -136,6 +194,35 @@ const CheckInContent: React.FC<{
     );
   };
 
+  const renderScanner = () => {
+    return (
+      <Block flex>
+        {hasPermission && <BarCodeScanner style={styles.scanner} onBarCodeScanned={handleCodeScanned} />}
+
+        <Block
+          style={[
+            styles.scannerOverlay,
+            {
+              top: insets.top
+            }
+          ]}
+        >
+          <TouchableOpacity onPress={() => setScanning(false)}>
+            <Block style={styles.scannerCloseButtonContainer}>
+              <Icon
+                style={styles.scannerCloseButton}
+                family="Feather"
+                name="x"
+                color={theme.COLORS.PRIMARY}
+                size={32}
+              />
+            </Block>
+          </TouchableOpacity>
+        </Block>
+      </Block>
+    );
+  };
+
   return (
     <KeyboardDismissView style={styles.flex}>
       <Block flex>
@@ -163,16 +250,29 @@ const CheckInContent: React.FC<{
                 <Text style={styles.propertyHeader}>Check in</Text>
               </Block>
 
-              <FormattedInput
-                style={styles.input}
-                placeholderText="code"
-                maxLength={4}
-                keyboardType="number-pad"
-                error={false}
-                defaultValue={code}
-                formatter={numberFormatter}
-                onChangeText={(text: string) => setCode(text)}
-              />
+              <Block style={styles.codeContainer}>
+                <Block style={styles.column}>
+                  <FormattedInput
+                    style={styles.input}
+                    placeholderText="code"
+                    maxLength={4}
+                    keyboardType="number-pad"
+                    error={false}
+                    defaultValue={code}
+                    formatter={numberFormatter}
+                    onChangeText={(text: string) => setCode(text)}
+                  />
+                </Block>
+
+                <Block style={styles.scanButton}>
+                  <RoundButton
+                    label="Scan"
+                    right={true}
+                    icon={<Icon family="MaterialCommunityIcons" name="qrcode" size={24} color={theme.COLORS.WHITE} />}
+                    onPress={onPressScan}
+                  />
+                </Block>
+              </Block>
             </Block>
 
             <Block style={styles.dividerWrapper}>
@@ -187,7 +287,8 @@ const CheckInContent: React.FC<{
               </Block>
 
               <FormattedInput
-                style={styles.input}
+                style={styles.multiInput}
+                multiline={true}
                 placeholderText="reason"
                 maxLength={128}
                 error={false}
@@ -233,6 +334,7 @@ const CheckInContent: React.FC<{
         </Block>
 
         <SlideModal visible={choosingEvent}>{renderChoosingEvent()}</SlideModal>
+        <SlideModal visible={scanning}>{renderScanner()}</SlideModal>
       </Block>
     </KeyboardDismissView>
   );
@@ -309,6 +411,23 @@ const styles = StyleSheet.create({
     backgroundColor: theme.COLORS.SUPER_LIGHT_BLUE_GRAY,
     height: 128
   },
+  codeContainer: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center'
+  },
+  column: {
+    flex: 1,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  scanButton: {
+    marginLeft: 24,
+    width: 128
+  },
   dividerWrapper: {
     marginHorizontal: 8,
     marginVertical: 20,
@@ -327,7 +446,27 @@ const styles = StyleSheet.create({
     fontFamily: 'OpenSans',
     color: theme.COLORS.BORDER
   },
-  excuseContainer: {}
+  excuseContainer: {},
+  scanner: {
+    flex: 1
+  },
+  scannerOverlay: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0
+  },
+  scannerCloseButtonContainer: {
+    margin: 24,
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.25)'
+  },
+  scannerCloseButton: {}
 });
 
 export default CheckInContent;
