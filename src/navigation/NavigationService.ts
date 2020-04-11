@@ -1,8 +1,8 @@
 import { NavigationActions, NavigationContainerComponent } from 'react-navigation';
 
-let _navigator: NavigationContainerComponent;
+let _navigator: NavigationContainerComponent | null;
 
-export const setTopLevelNavigator = (navigatorRef: NavigationContainerComponent) => {
+export const setTopLevelNavigator = (navigatorRef: NavigationContainerComponent | null) => {
   _navigator = navigatorRef;
 };
 
