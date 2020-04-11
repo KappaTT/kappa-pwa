@@ -89,7 +89,7 @@ export const getBatch = async (parent: string, defaultData: any, force: boolean 
     promises.push(
       new Promise((resolve, reject) => {
         getItem(`${parent}.${key}`).then(res => {
-          if (res.value) {
+          if (res && res.value) {
             loaded[key] = castTo(res.value, typeof defaultValue);
             resolve();
           } else if (force) {
