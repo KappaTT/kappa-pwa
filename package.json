@@ -5,7 +5,10 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "eject": "expo eject"
+    "eject": "expo eject",
+    "buildios": "expo build:ios",
+    "buildiossim": "expo build:ios -t simulator",
+    "uploadios": "expo upload:ios"
   },
   "dependencies": {
     "@expo/vector-icons": "^10.0.0",
