@@ -15,10 +15,10 @@ export const M_PATCH = 'PATCH';
 export const M_DELETE = 'DELETE';
 export type TMethod = typeof M_GET | typeof M_POST | typeof M_PUT | typeof M_PATCH | typeof M_DELETE;
 
-export const BASE_URL = '';
+export const BASE_URL = 'https://ehtj3rcnn3.execute-api.us-east-2.amazonaws.com/dev/';
 export const BASE_URL_DEV = 'http://localhost:3000/dev/';
 
-export const BASE_URL_MOCKING = true;
+export const BASE_URL_MOCKING = false;
 
 export const BASE_URL_IP =
   typeof manifest.packagerOpts === 'object' && manifest.packagerOpts.dev
