@@ -18,7 +18,13 @@
     "assetBundlePatterns": ["**/*"],
     "userInterfaceStyle": "automatic",
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.jefftc.kappa",
+      "buildNumber": "1.0.0"
+    },
+    "android": {
+      "package": "come.jefftc.kappa",
+      "versionCode": 1
     }
   }
 }
