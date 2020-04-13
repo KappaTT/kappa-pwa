@@ -20,7 +20,12 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.jefftc.kappa",
-      "buildNumber": "1.0.0"
+      "buildNumber": "1.0.0",
+      "config": {
+        "googleSignIn": {
+          "reservedClientId": "com.googleusercontent.apps.223233671218-v5meaa316pd8mgar3mgcvsmg3td7qnl6"
+        }
+      }
     },
     "android": {
       "package": "come.jefftc.kappa",
