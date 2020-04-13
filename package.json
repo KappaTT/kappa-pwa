@@ -8,7 +8,10 @@
     "eject": "expo eject",
     "buildios": "expo build:ios",
     "buildiossim": "expo build:ios -t simulator",
-    "uploadios": "expo upload:ios"
+    "uploadios": "expo upload:ios",
+    "fixsim": "xattr -cr kappa-theta-tau.app",
+    "installsim": "xcrun simctl install booted kappa-theta-tau.app",
+    "launchsim": "xcrun simctl launch booted kappa-theta-tau.app"
   },
   "dependencies": {
     "@expo/vector-icons": "^10.0.0",
