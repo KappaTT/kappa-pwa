@@ -1,16 +1,14 @@
 import React from 'react';
-import { ViewStyle } from 'react-native';
-
-import Block from '@components/Block';
+import { View, StyleProp, ViewStyle } from 'react-native';
 
 const Ghost: React.FC<{
-  style?: ViewStyle | Array<ViewStyle>;
+  style?: StyleProp<ViewStyle>;
   children?: React.ReactNode;
 }> = ({ style, children }) => {
   return (
-    <Block style={style} pointerEvents="box-none">
+    <View style={style} pointerEvents="box-none">
       {children}
-    </Block>
+    </View>
   );
 };
 
