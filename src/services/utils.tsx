@@ -2,8 +2,6 @@ import { Platform, StatusBar, Dimensions } from 'react-native';
 import Constants from 'expo-constants';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 
-import { theme } from '@galio';
-
 const { width, height } = Dimensions.get('screen');
 
 export const StatusHeight = StatusBar.currentHeight || getStatusBarHeight();
