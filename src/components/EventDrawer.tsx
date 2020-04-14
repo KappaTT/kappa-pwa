@@ -112,7 +112,7 @@ const EventDrawer: React.FC<{}> = ({}) => {
     setRefreshing(true);
 
     setTimeout(() => loadData(true), 500);
-  }, [refreshing]);
+  }, [user, refreshing]);
 
   const snapTo = React.useCallback(
     newSnap => {

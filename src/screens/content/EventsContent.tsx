@@ -70,6 +70,8 @@ const EventsContent: React.FC<{
         if (force || shouldLoad(loadHistory, user.email)) {
           dispatchGetMyAttendance();
         }
+      } else {
+        log('Bad user request');
       }
     },
     [user, loadHistory]
@@ -79,7 +81,7 @@ const EventsContent: React.FC<{
     setRefreshing(true);
 
     setTimeout(() => loadData(true), 500);
-  }, [refreshing]);
+  }, [user, refreshing]);
 
   React.useEffect(() => {
     if (!gettingEvents && !gettingDirectory && !gettingAttendance) {

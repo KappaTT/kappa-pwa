@@ -69,7 +69,7 @@ const DirectoryContent: React.FC<{
     setRefreshing(true);
 
     setTimeout(() => loadData(true), 500);
-  }, [refreshing]);
+  }, [user, refreshing]);
 
   React.useEffect(() => {
     if (!gettingEvents && !gettingDirectory && !gettingAttendance) {
