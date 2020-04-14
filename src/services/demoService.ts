@@ -35,9 +35,11 @@ export const getDemoEndpoint = (endpoint: string, method: string) => {
     case 'GET|users':
       return demoGetUsers;
     case `GET|attendance/user/`:
-      return demoGetAttendanceByUser(arg);
+      return demoGetAttendanceByUser;
     case `GET|attendance/event/`:
       return demoGetAttendanceByEvent(arg);
+    default:
+      log('Missed DEMO request', endpoint, method);
   }
 
   return null;
@@ -49,7 +51,7 @@ export const jsonDemoRequest = async <T>(
 ): Promise<TRequestResponse & {
   data?: T;
 }> => {
-  log(`Mocking via ${method}`, endpoint);
+  log(`DEMO via ${method}`, endpoint);
 
   return {
     success: true,
