@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: 'OpenSans',
-    fontSize: 17
+    fontSize: 16
   },
   subtitle: {
     fontFamily: 'OpenSans',

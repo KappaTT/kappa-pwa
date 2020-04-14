@@ -397,7 +397,7 @@ const styles = StyleSheet.create({
   },
   userTitle: {
     fontFamily: 'OpenSans-Bold',
-    fontSize: 24
+    fontSize: 20
   },
   propertyWrapper: {
     display: 'flex',
@@ -428,7 +428,7 @@ const styles = StyleSheet.create({
   propertyValue: {
     marginTop: 4,
     fontFamily: 'OpenSans',
-    fontSize: 17
+    fontSize: 15
   },
   splitPropertyRow: {
     display: 'flex',

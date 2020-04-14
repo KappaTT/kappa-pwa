@@ -227,7 +227,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     marginLeft: 24,
     fontFamily: 'OpenSans-Bold',
-    fontSize: 18
+    fontSize: 17
   },
   separator: {
     marginHorizontal: 24,
@@ -249,12 +249,12 @@ const styles = StyleSheet.create({
   },
   eventTitle: {
     fontFamily: 'OpenSans-SemiBold',
-    fontSize: 14
+    fontSize: 13
   },
   eventDate: {
     marginLeft: 8,
     fontFamily: 'OpenSans',
-    fontSize: 14,
+    fontSize: 13,
     color: theme.COLORS.DARK_GRAY
   },
   mandatoryIcon: {
@@ -269,7 +269,7 @@ const styles = StyleSheet.create({
   },
   eventDescription: {
     fontFamily: 'OpenSans',
-    fontSize: 17
+    fontSize: 15
   }
 });
 
