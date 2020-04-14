@@ -5,7 +5,8 @@ import {
   TouchableWithoutFeedback,
   TouchableOpacity,
   Keyboard,
-  ActivityIndicator
+  ActivityIndicator,
+  Alert
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { useSafeArea } from 'react-native-safe-area-context';
@@ -38,6 +39,7 @@ const CheckInContent: React.FC<{
   const user = useSelector((state: TRedux) => state.auth.user);
   const loadHistory = useSelector((state: TRedux) => state.kappa.loadHistory);
   const gettingAttendance = useSelector((state: TRedux) => state.kappa.gettingAttendance);
+  const getAttendanceErrorMessage = useSelector((state: TRedux) => state.kappa.getAttendanceErrorMessage);
   const futureEventArray = useSelector((state: TRedux) => state.kappa.futureEventArray);
   const futureEvents = useSelector((state: TRedux) => state.kappa.futureEvents);
   const records = useSelector((state: TRedux) => state.kappa.records);
@@ -112,6 +114,8 @@ const CheckInContent: React.FC<{
     } else {
       setHasPermission(false);
       setScanning(false);
+
+      Alert.alert('You must enable camera access from phone settings to scan');
     }
   };
 
@@ -176,7 +180,7 @@ const CheckInContent: React.FC<{
   };
 
   React.useEffect(() => {
-    if (shouldLoad(loadHistory, user.email) && !gettingAttendance) {
+    if (shouldLoad(loadHistory, user.email) && !gettingAttendance && getAttendanceErrorMessage === '') {
       dispatchGetMyAttendance();
     }
   }, [user, loadHistory, gettingAttendance]);

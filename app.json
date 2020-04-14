@@ -4,7 +4,7 @@
     "slug": "kappa-theta-tau",
     "privacy": "unlisted",
     "platforms": ["ios", "android", "web"],
-    "version": "1.0.4",
+    "version": "1.0.5",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -16,15 +16,18 @@
       "fallbackToCacheTimeout": 0
     },
     "assetBundlePatterns": ["**/*"],
-    "userInterfaceStyle": "automatic",
+    "userInterfaceStyle": "light",
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.jefftc.kappa",
-      "buildNumber": "1.0.4",
+      "buildNumber": "1.0.5",
       "config": {
         "googleSignIn": {
           "reservedClientId": "com.googleusercontent.apps.223233671218-v5meaa316pd8mgar3mgcvsmg3td7qnl6"
         }
+      },
+      "infoPlist": {
+        "NSCameraUsageDescription": "This app uses the camera to scan event QR codes"
       }
     },
     "android": {
