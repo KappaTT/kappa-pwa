@@ -157,7 +157,7 @@ export const signInWithGoogle = () => {
 
     GoogleService.login().then(res => {
       if (res.success) {
-        if (res.data.email.endsWith('@illinois.edu')) {
+        if (res.data.email.endsWith('@illinois.edu') || res.data.email === 'thetataudemo@gmail.com') {
           dispatch(signInWithGoogleSuccess());
           dispatch(authenticate(res.data.email, res.data.idToken, res.data));
         } else {
