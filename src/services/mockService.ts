@@ -22,7 +22,7 @@ export const getMockEndpoint = (endpoint: string, method: string) => {
     case `GET|attendance/user/`:
       return mockGetAttendanceByUser;
     case `GET|attendance/event/`:
-      return mockGetAttendanceByEvent(parseInt(arg));
+      return mockGetAttendanceByEvent(arg);
   }
 
   return null;
