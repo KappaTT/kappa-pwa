@@ -242,6 +242,7 @@ export default (state = initialState, action: any): TKappaState => {
     case GET_ATTENDANCE_FAILURE:
       return {
         ...state,
+        gettingAttendance: false,
         getAttendanceError: true,
         getAttendanceErrorMessage: action.error.message
       };

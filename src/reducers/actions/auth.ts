@@ -24,6 +24,7 @@ import { TUser, initialUser, TUserResponse, TGoogleUser } from '@backend/auth';
 import { getBatch, setBatch, deleteBatch } from '@services/secureStorage';
 import * as GoogleService from '@services/googleService';
 import { log } from '@services/logService';
+import { DEMO_USER } from '@services/demoService';
 
 export const showOnboarding = () => {
   return {
@@ -157,9 +158,13 @@ export const signInWithGoogle = () => {
 
     GoogleService.login().then(res => {
       if (res.success) {
-        if (res.data.email.endsWith('@illinois.edu') || res.data.email === 'thetataudemo@gmail.com') {
+        if (res.data.email.endsWith('@illinois.edu')) {
           dispatch(signInWithGoogleSuccess());
           dispatch(authenticate(res.data.email, res.data.idToken, res.data));
+        } else if (res.data.email === 'thetataudemo@gmail.com') {
+          dispatch(signInWithGoogleSuccess());
+          dispatch(setUser(DEMO_USER));
+          dispatch(signInSuccess());
         } else {
           dispatch(
             signInWithGoogleFailure({

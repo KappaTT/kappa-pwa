@@ -1,10 +1,8 @@
 import Constants from 'expo-constants';
 
-const manifest = Constants.manifest;
-
 import { jsonRequest, jsonAuthorizedRequest } from '@services/Networking';
-import { setItem } from '@services/secureStorage';
 import { jsonMockRequest } from '@services/mockService';
+import { jsonDemoRequest, DEMO_TOKEN } from '@services/demoService';
 import { log } from '@services/logService';
 import { isEmpty } from '@services/utils';
 
@@ -20,12 +18,7 @@ export const BASE_URL_DEV = 'http://localhost:3000/dev/';
 
 export const BASE_URL_MOCKING = false;
 
-export const BASE_URL_IP =
-  typeof manifest.packagerOpts === 'object' && manifest.packagerOpts.dev
-    ? manifest.debuggerHost.indexOf('127.0.0.1') >= 0
-      ? `http://${manifest.debuggerHost.split(':').shift()}:3000/dev/`
-      : `http://${manifest.debuggerHost.split(':').shift()}:3000/dev/` // replace with ngrok if necessary
-    : BASE_URL;
+export const BASE_URL_IP = process.env.NODE_ENV === 'development' ? 'http://127.0.0.1:3000/dev/' : BASE_URL;
 
 log('Built base url', BASE_URL_IP);
 
@@ -122,6 +115,10 @@ export const makeAuthorizedRequest = async <T>(
 ) => {
   if (BASE_URL_MOCKING) {
     return jsonMockRequest<T>(endpoint, method);
+  }
+
+  if (token === DEMO_TOKEN) {
+    return jsonDemoRequest<T>(endpoint, method);
   }
 
   return jsonAuthorizedRequest<T>(
