@@ -5,6 +5,21 @@ import demoGetUsers from '@services/demo/demoGetUsers';
 import demoGetAttendanceByUser from '@services/demo/demoGetAttendanceByUser';
 import demoGetAttendanceByEvent from '@services/demo/demoGetAttendanceByEvent';
 
+export const DEMO_TOKEN = 'DEMO';
+
+export const DEMO_USER = {
+  _id: 'demo',
+  email: 'thetataudemo@gmail.com',
+  familyName: 'Jobs',
+  givenName: 'Steve',
+  semester: 'Fall 2018',
+  type: 'B',
+  gradYear: 'Spring 2021',
+  phone: '5555555555',
+
+  sessionToken: DEMO_TOKEN
+};
+
 export const getDemoEndpoint = (endpoint: string, method: string) => {
   let demo = `${method}|${endpoint}`;
   let arg = '';
