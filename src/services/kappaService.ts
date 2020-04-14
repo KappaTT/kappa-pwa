@@ -16,7 +16,8 @@ import {
 import { TUser } from '@backend/auth';
 import { log } from '@services/logService';
 
-export const netidToEmail = (netid: string) => `${netid}@illinois.edu`;
+export const netidToEmail = (netid: string) =>
+  netid === 'thetataudemo' ? 'thetataudemo@gmail.com' : `${netid}@illinois.edu`;
 
 export const separateByEventId = (events: Array<TEvent>) => {
   let separated = {};
