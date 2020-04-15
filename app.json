@@ -33,6 +33,18 @@
     "android": {
       "package": "come.jefftc.kappa",
       "versionCode": 1
+    },
+    "hooks": {
+      "postPublish": [
+        {
+          "file": "sentry-expo/upload-sourcemaps",
+          "config": {
+            "organization": "theta-tau",
+            "project": "kappa",
+            "authToken": "dcdc8da9de2a4adcb95e47d3142ed313ed531908dc89407bbc07a619e07fa5df"
+          }
+        }
+      ]
     }
   }
 }
