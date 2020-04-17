@@ -78,7 +78,7 @@ const BrotherDrawer: React.FC<{}> = ({}) => {
     setRefreshing(true);
 
     setTimeout(() => loadData(true), 500);
-  }, [user, refreshing]);
+  }, [user, selectedUserEmail, refreshing]);
 
   const snapTo = React.useCallback(
     newSnap => {
