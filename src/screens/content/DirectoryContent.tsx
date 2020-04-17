@@ -55,12 +55,9 @@ const DirectoryContent: React.FC<{
 
   const loadData = React.useCallback(
     (force: boolean) => {
-      dispatchGetEvents();
-      dispatchGetDirectory();
-
-      if (force || shouldLoad(loadHistory, user.email)) {
-        dispatchGetMyAttendance();
-      }
+      if (force || shouldLoad(loadHistory, 'events')) dispatchGetEvents();
+      if (force || shouldLoad(loadHistory, 'directory')) dispatchGetDirectory();
+      if (force || shouldLoad(loadHistory, user.email)) dispatchGetMyAttendance();
     },
     [user, loadHistory]
   );
@@ -79,7 +76,7 @@ const DirectoryContent: React.FC<{
 
   React.useEffect(() => {
     if (user?.sessionToken) {
-      // loadData(false);
+      loadData(false);
     }
   }, [user]);
 

@@ -64,12 +64,9 @@ const EventsContent: React.FC<{
   const loadData = React.useCallback(
     (force: boolean) => {
       if (user.sessionToken) {
-        dispatchGetEvents();
-        dispatchGetDirectory();
-
-        if (force || shouldLoad(loadHistory, user.email)) {
-          dispatchGetMyAttendance();
-        }
+        if (force || shouldLoad(loadHistory, 'events')) dispatchGetEvents();
+        if (force || shouldLoad(loadHistory, 'directory')) dispatchGetDirectory();
+        if (force || shouldLoad(loadHistory, user.email)) dispatchGetMyAttendance();
       } else {
         log('Bad user request');
       }

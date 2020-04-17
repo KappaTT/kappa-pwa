@@ -193,9 +193,14 @@ export default (state = initialState, action: any): TKappaState => {
         getEventsErrorMessage: ''
       };
     case GET_EVENTS_SUCCESS:
+      const eventsLoadHistory = state.loadHistory;
+
+      eventsLoadHistory['events'] = moment();
+
       return {
         ...state,
         gettingEvents: false,
+        loadHistory: eventsLoadHistory,
         ...recomputeKappaState({
           events: separateByEventId(action.events),
           records: state.records,
@@ -219,9 +224,14 @@ export default (state = initialState, action: any): TKappaState => {
         getDirectoryErrorMessage: ''
       };
     case GET_DIRECTORY_SUCCESS:
+      const directoryLoadHistory = state.loadHistory;
+
+      directoryLoadHistory['directory'] = moment();
+
       return {
         ...state,
         gettingDirectory: false,
+        loadHistory: directoryLoadHistory,
         ...recomputeKappaState({
           events: state.events,
           records: state.records,
