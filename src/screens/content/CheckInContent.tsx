@@ -584,7 +584,7 @@ const styles = StyleSheet.create({
     right: 0,
     top: 0,
     bottom: 0,
-    backgroundColor: 'rgba(255, 255, 255, 0.25)'
+    backgroundColor: 'rgba(255, 255, 255, 0.4)'
   },
   checkingInContainer: {
     position: 'absolute',
@@ -592,6 +592,8 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     backgroundColor: theme.COLORS.WHITE,
+    borderTopColor: theme.COLORS.LIGHT_BORDER,
+    borderTopWidth: 1,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
