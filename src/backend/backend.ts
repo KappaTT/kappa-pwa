@@ -18,7 +18,7 @@ export const BASE_URL_DEV = 'http://localhost:3000/dev/';
 
 export const BASE_URL_MOCKING = false;
 
-export const BASE_URL_IP = process.env.NODE_ENV === 'development' ? 'http://127.0.0.1:3000/dev/' : BASE_URL;
+export const BASE_URL_IP = BASE_URL; //process.env.NODE_ENV === 'development' ? 'http://127.0.0.1:3000/dev/' : BASE_URL;
 
 log('Built base url', BASE_URL_IP);
 
@@ -55,6 +55,7 @@ export const METHODS: {
 export interface TResponse {
   success: boolean;
   error?: {
+    code?: number;
     message?: string;
     blame?: TFlatBlame;
   };
@@ -146,13 +147,14 @@ export const flattenBlame = (blameObj: TBlame): TFlatBlame => {
   return blame;
 };
 
-export const fail = (blame: TBlame, message?: string) => {
+export const fail = (blame: TBlame, message?: string, code?: number) => {
   if (isEmpty(blame)) {
     return {
       success: false,
       error: {
         blame: {},
-        message
+        message,
+        code
       }
     };
   }
@@ -161,7 +163,8 @@ export const fail = (blame: TBlame, message?: string) => {
     success: false,
     error: {
       blame: flattenBlame(blame),
-      message
+      message,
+      code
     }
   };
 };
