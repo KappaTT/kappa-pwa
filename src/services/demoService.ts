@@ -1,4 +1,5 @@
 import { TRequestResponse } from '@backend/backend';
+import { TUser } from '@backend/auth';
 import { log } from '@services/logService';
 import demoGetEvents from '@services/demo/demoGetEvents';
 import demoGetUsers from '@services/demo/demoGetUsers';
@@ -7,11 +8,12 @@ import demoGetAttendanceByEvent from '@services/demo/demoGetAttendanceByEvent';
 
 export const DEMO_TOKEN = 'DEMO';
 
-export const DEMO_USER = {
+export const DEMO_USER: TUser = {
   _id: 'demo',
   email: 'thetataudemo@gmail.com',
   familyName: 'Jobs',
   givenName: 'Steve',
+  firstYear: '2017',
   semester: 'Fall 2018',
   type: 'B',
   gradYear: 'Spring 2021',
