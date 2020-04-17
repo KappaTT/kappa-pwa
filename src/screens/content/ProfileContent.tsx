@@ -245,6 +245,10 @@ const ProfileContent: React.FC<{
           </Block>
 
           <Block>{renderAdmin()}</Block>
+
+          <Text style={styles.madeWithText}>
+            {'Whatsoever thy hand findeth to do, do it with thy might.\nJTC - Web Chair 2019-2021'}
+          </Text>
         </Block>
       </ScrollView>
     </Block>
@@ -266,7 +270,7 @@ const styles = StyleSheet.create({
     fontSize: 24
   },
   subtitle: {
-    fontFamily: 'OpenSans',
+    fontFamily: 'OpenSans-SemiBold',
     fontSize: 13,
     color: theme.COLORS.GRAY
   },
@@ -378,6 +382,14 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: theme.COLORS.GRAY,
     textTransform: 'uppercase'
+  },
+  madeWithText: {
+    marginTop: 32,
+    marginBottom: 8,
+    fontFamily: 'OpenSans',
+    fontSize: 12,
+    color: theme.COLORS.BORDER,
+    textAlign: 'center'
   }
 });
 
