@@ -102,6 +102,7 @@ const OnboardingPage: React.FC<{
         <ListButton keyText="Member Status" valueText={user.type === 'B' ? 'Brother' : 'Unknown'} disabled={true} />
         {user.role !== '' && <ListButton keyText="Position" valueText={user.role} disabled={true} />}
         <ListButton keyText="Pledge Class" valueText={user.semester} disabled={true} />
+        <ListButton keyText="Freshmen Year" valueText={user.firstYear} disabled={true} />
         <ListButton keyText="Graduation Year" valueText={gradYear} onPress={() => setEditing('Graduation Year')} />
 
         <Text style={styles.description}>
