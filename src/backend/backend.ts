@@ -34,7 +34,8 @@ export const ENDPOINTS: {
   CREATE_EVENT: () => 'events',
   UPDATE_EVENT: (config: { event_id: string }) => `events/${config.event_id}`,
   DELETE_EVENT: (config: { event_id: string }) => `events/${config.event_id}`,
-  CREATE_ATTENDANCE: () => 'attendance'
+  CREATE_ATTENDANCE: () => 'attendance',
+  GET_POINTS_BY_USER: (config: { email: string }) => `points/${config.email}`
 };
 
 export const METHODS: {
@@ -49,7 +50,8 @@ export const METHODS: {
   CREATE_EVENT: M_POST,
   UPDATE_EVENT: M_PATCH,
   DELETE_EVENT: M_DELETE,
-  CREATE_ATTENDANCE: M_POST
+  CREATE_ATTENDANCE: M_POST,
+  GET_POINTS: M_GET
 };
 
 export interface TResponse {

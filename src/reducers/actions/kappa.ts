@@ -27,7 +27,9 @@ import {
   CHECK_IN_SUCCESS,
   CHECK_IN_FAILURE,
   SET_GLOBAL_ERROR_MESSAGE,
-  CLEAR_GLOBAL_ERROR_MESSAGE
+  CLEAR_GLOBAL_ERROR_MESSAGE,
+  GET_POINTS,
+  GET_POINTS_SUCCESS
 } from '@reducers/kappa';
 import { TUser } from '@backend/auth';
 import { TEvent, TPoint } from '@backend/kappa';
@@ -328,6 +330,41 @@ export const checkIn = (user: TUser, event_id: string, event_code: string) => {
         dispatch(checkInSuccess(res.data));
       } else {
         dispatch(checkInFailure(res.error));
+      }
+    });
+  };
+};
+
+const gettingPoints = () => {
+  return {
+    type: GET_POINTS
+  };
+};
+
+const getPointsSuccess = (data, target: string) => {
+  return {
+    type: GET_POINTS_SUCCESS,
+    points: data.points,
+    target
+  };
+};
+
+const getPointsFailure = err => {
+  return {
+    type: CHECK_IN_FAILURE,
+    error: err
+  };
+};
+
+export const getPointsByUser = (user: TUser, target: string) => {
+  return dispatch => {
+    dispatch(gettingPoints());
+
+    Kappa.getPointsByUser({ user, target }).then(res => {
+      if (res.success) {
+        dispatch(getPointsSuccess(res.data, target));
+      } else {
+        dispatch(getPointsFailure(res.error));
       }
     });
   };

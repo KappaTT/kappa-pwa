@@ -7,7 +7,8 @@ import {
   TEventDateDict,
   TEventDict,
   TUserEventDict,
-  TLoadHistory
+  TLoadHistory,
+  TPointsUserDict
 } from '@backend/kappa';
 import {
   getEventById,
@@ -62,6 +63,10 @@ export const CHECK_IN = 'CHECK_IN';
 export const CHECK_IN_SUCCESS = 'CHECK_IN_SUCCESS';
 export const CHECK_IN_FAILURE = 'CHECK_IN_FAILURE';
 
+export const GET_POINTS = 'GET_POINTS';
+export const GET_POINTS_SUCCESS = 'GET_POINTS_SUCCESS';
+export const GET_POINTS_FAILURE = 'GET_POINTS_FAILURE';
+
 export interface TKappaState {
   globalErrorMessage: string;
   globalErrorCode: number;
@@ -78,6 +83,10 @@ export interface TKappaState {
   getAttendanceError: boolean;
   getAttendanceErrorMessage: string;
 
+  gettingPoints: boolean;
+  getPointsError: boolean;
+  getPointsErrorMessage: string;
+
   loadHistory: TLoadHistory;
   eventArray: Array<TEvent>;
   events: TEventDict;
@@ -88,6 +97,7 @@ export interface TKappaState {
   missedMandatory: TUserEventDict;
   records: TRecords;
   directory: TDirectory;
+  points: TPointsUserDict;
 
   eventsSize: number;
   gmCount: number;
@@ -131,6 +141,10 @@ const initialState: TKappaState = {
   getAttendanceError: false,
   getAttendanceErrorMessage: '',
 
+  gettingPoints: false,
+  getPointsError: false,
+  getPointsErrorMessage: '',
+
   loadHistory: {},
   eventArray: [],
   events: {},
@@ -144,6 +158,7 @@ const initialState: TKappaState = {
     excused: {}
   },
   directory: {},
+  points: {},
 
   eventsSize: 0,
   gmCount: 0,
@@ -193,7 +208,7 @@ export default (state = initialState, action: any): TKappaState => {
         getEventsErrorMessage: ''
       };
     case GET_EVENTS_SUCCESS:
-      const eventsLoadHistory = state.loadHistory;
+      let eventsLoadHistory = state.loadHistory;
 
       eventsLoadHistory['events'] = moment();
 
@@ -224,7 +239,7 @@ export default (state = initialState, action: any): TKappaState => {
         getDirectoryErrorMessage: ''
       };
     case GET_DIRECTORY_SUCCESS:
-      const directoryLoadHistory = state.loadHistory;
+      let directoryLoadHistory = state.loadHistory;
 
       directoryLoadHistory['directory'] = moment();
 
@@ -255,7 +270,7 @@ export default (state = initialState, action: any): TKappaState => {
         getAttendanceErrorMessage: ''
       };
     case GET_ATTENDANCE_SUCCESS:
-      const loadHistory = state.loadHistory;
+      let loadHistory = state.loadHistory;
 
       if (action.loadKey) {
         loadHistory[action.loadKey] = moment();
@@ -413,6 +428,35 @@ export default (state = initialState, action: any): TKappaState => {
         checkingIn: false,
         checkInError: true,
         checkInErrorMessage: action.error.message
+      };
+    case GET_POINTS:
+      return {
+        ...state,
+        gettingPoints: true,
+        getPointsError: false,
+        getPointsErrorMessage: ''
+      };
+    case GET_POINTS_SUCCESS:
+      let mergedPoints = state.points;
+
+      mergedPoints[action.target] = action.points;
+
+      let pointsLoadHistory = state.loadHistory;
+
+      pointsLoadHistory[`points-${action.target}`] = moment();
+
+      return {
+        ...state,
+        gettingPoints: false,
+        points: mergedPoints,
+        loadHistory: pointsLoadHistory
+      };
+    case GET_POINTS_FAILURE:
+      return {
+        ...state,
+        gettingPoints: false,
+        getPointsError: true,
+        getPointsErrorMessage: action.error.message
       };
     default:
       return state;

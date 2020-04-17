@@ -448,7 +448,7 @@ const EditEventPage: React.FC<{
                     <Block style={styles.doubleColumn}>
                       <Block style={styles.column}>
                         <Block style={styles.propertyHeaderContainer}>
-                          <Text style={styles.propertyHeader}>Brother</Text>
+                          <Text style={styles.propertyHeader}>Brotherhood</Text>
                         </Block>
 
                         <FormattedInput

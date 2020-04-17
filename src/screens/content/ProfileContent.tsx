@@ -31,6 +31,7 @@ const ProfileContent: React.FC<{
   const gmCount = useSelector((state: TRedux) => state.kappa.gmCount);
   const records = useSelector((state: TRedux) => state.kappa.records);
   const missedMandatory = useSelector((state: TRedux) => state.kappa.missedMandatory);
+  const points = useSelector((state: TRedux) => state.kappa.points);
 
   const [refreshing, setRefreshing] = React.useState<boolean>(false);
 
@@ -39,6 +40,10 @@ const ProfileContent: React.FC<{
   const dispatchSignOut = React.useCallback(() => dispatch(_auth.signOut()), [dispatch]);
   const dispatchGetEvents = React.useCallback(() => dispatch(_kappa.getEvents(user)), [dispatch, user]);
   const dispatchGetMyAttendance = React.useCallback(() => dispatch(_kappa.getMyAttendance(user)), [dispatch, user]);
+  const dispatchGetPoints = React.useCallback(() => dispatch(_kappa.getPointsByUser(user, user.email)), [
+    dispatch,
+    user
+  ]);
 
   const insets = useSafeArea();
 
@@ -46,6 +51,7 @@ const ProfileContent: React.FC<{
     (force: boolean) => {
       if (force || shouldLoad(loadHistory, 'events')) dispatchGetEvents();
       if (force || shouldLoad(loadHistory, user.email)) dispatchGetMyAttendance();
+      if (force || shouldLoad(loadHistory, `points-${user.email}`)) dispatchGetPoints();
     },
     [user, loadHistory]
   );
@@ -210,6 +216,34 @@ const ProfileContent: React.FC<{
             </Block>
           </Block>
 
+          <Text style={styles.pointsText}>Points</Text>
+          <Block>
+            <Block style={styles.splitPropertyRow}>
+              <Block style={styles.splitPropertyThirds}>
+                <Text style={styles.propertyHeader}>Prof</Text>
+                <Text style={styles.propertyValue}>{points?.[user.email]?.PROF || '0'}</Text>
+              </Block>
+              <Block style={styles.splitPropertyThirds}>
+                <Text style={styles.propertyHeader}>Phil</Text>
+                <Text style={styles.propertyValue}>{points?.[user.email]?.PHIL || '0'}</Text>
+              </Block>
+              <Block style={styles.splitPropertyThirds}>
+                <Text style={styles.propertyHeader}>Bro</Text>
+                <Text style={styles.propertyValue}>{points?.[user.email]?.BRO || '0'}</Text>
+              </Block>
+            </Block>
+            <Block style={styles.splitPropertyRow}>
+              <Block style={styles.splitPropertyThirds}>
+                <Text style={styles.propertyHeader}>Rush</Text>
+                <Text style={styles.propertyValue}>{points?.[user.email]?.RUSH || '0'}</Text>
+              </Block>
+              <Block style={styles.splitPropertyThirds}>
+                <Text style={styles.propertyHeader}>Any</Text>
+                <Text style={styles.propertyValue}>{points?.[user.email]?.ANY || '0'}</Text>
+              </Block>
+            </Block>
+          </Block>
+
           <Block>{renderAdmin()}</Block>
         </Block>
       </ScrollView>
@@ -254,10 +288,19 @@ const styles = StyleSheet.create({
   splitPropertyRow: {
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'flex-start'
   },
   splitProperty: {
     width: '50%'
+  },
+  splitPropertyThirds: {
+    width: '33%'
+  },
+  pointsText: {
+    marginTop: 20,
+    fontFamily: 'OpenSans-Bold',
+    fontSize: 24,
+    marginBottom: -8
   },
   adminContainer: {},
   adminChartsContainer: {
