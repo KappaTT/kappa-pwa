@@ -197,11 +197,11 @@ const EditEventPage: React.FC<{
             <RadioList
               options={[
                 { id: 'GM', title: 'GM' },
-                { id: 'Weekly Happy Hour', title: 'Happy Hour' },
-                { id: 'Misc Philanthropy', title: 'Philanthropy' },
-                { id: 'Misc Professional', title: 'Professional' },
-                { id: 'Misc Rush', title: 'Rush' },
-                { id: 'Misc Social', title: 'Social' },
+                { id: 'Weekly Happy Hour', title: 'Weekly Happy Hour' },
+                { id: 'Philanthropy', title: 'Philanthropy' },
+                { id: 'Professional', title: 'Professional' },
+                { id: 'Rush', title: 'Rush' },
+                { id: 'Brotherhood', title: 'Brotherhood' },
                 { id: 'Misc', title: 'Misc' }
               ]}
               selected={type}
