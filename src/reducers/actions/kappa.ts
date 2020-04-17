@@ -25,10 +25,26 @@ import {
   SET_CHECK_IN_EVENT,
   CHECK_IN,
   CHECK_IN_SUCCESS,
-  CHECK_IN_FAILURE
+  CHECK_IN_FAILURE,
+  SET_GLOBAL_ERROR_MESSAGE,
+  CLEAR_GLOBAL_ERROR_MESSAGE
 } from '@reducers/kappa';
 import { TUser } from '@backend/auth';
 import { TEvent, TPoint } from '@backend/kappa';
+
+export const setGlobalError = data => {
+  return {
+    type: SET_GLOBAL_ERROR_MESSAGE,
+    message: data.message,
+    code: data.code
+  };
+};
+
+export const clearGlobalError = () => {
+  return {
+    type: CLEAR_GLOBAL_ERROR_MESSAGE
+  };
+};
 
 const gettingEvents = () => {
   return {

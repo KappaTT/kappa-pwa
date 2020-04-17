@@ -26,6 +26,9 @@ import {
 import { TUser } from '@backend/auth';
 import moment from 'moment';
 
+export const SET_GLOBAL_ERROR_MESSAGE = 'SET_GLOBAL_ERROR_MESSAGE';
+export const CLEAR_GLOBAL_ERROR_MESSAGE = 'CLEAR_GLOBAL_ERROR_MESSAGE';
+
 export const GET_EVENTS = 'GET_EVENTS';
 export const GET_EVENTS_SUCCESS = 'GET_EVENTS_SUCCESS';
 export const GET_EVENTS_FAILURE = 'GET_EVENTS_FAILURE';
@@ -60,6 +63,9 @@ export const CHECK_IN_SUCCESS = 'CHECK_IN_SUCCESS';
 export const CHECK_IN_FAILURE = 'CHECK_IN_FAILURE';
 
 export interface TKappaState {
+  globalErrorMessage: string;
+  globalErrorCode: number;
+
   gettingEvents: boolean;
   getEventsError: boolean;
   getEventsErrorMessage: string;
@@ -110,6 +116,9 @@ export interface TKappaState {
 }
 
 const initialState: TKappaState = {
+  globalErrorMessage: '',
+  globalErrorCode: 0,
+
   gettingEvents: false,
   getEventsError: false,
   getEventsErrorMessage: '',
@@ -164,6 +173,18 @@ const initialState: TKappaState = {
 
 export default (state = initialState, action: any): TKappaState => {
   switch (action.type) {
+    case SET_GLOBAL_ERROR_MESSAGE:
+      return {
+        ...state,
+        globalErrorMessage: action.message,
+        globalErrorCode: action.code
+      };
+    case CLEAR_GLOBAL_ERROR_MESSAGE:
+      return {
+        ...state,
+        globalErrorMessage: '',
+        globalErrorCode: 0
+      };
     case GET_EVENTS:
       return {
         ...state,
@@ -186,7 +207,9 @@ export default (state = initialState, action: any): TKappaState => {
         ...state,
         gettingEvents: false,
         getEventsError: true,
-        getEventsErrorMessage: action.error.message
+        getEventsErrorMessage: action.error.message,
+        globalErrorMessage: action.error.message,
+        globalErrorCode: action.error.code
       };
     case GET_DIRECTORY:
       return {
@@ -210,7 +233,9 @@ export default (state = initialState, action: any): TKappaState => {
         ...state,
         gettingDirectory: false,
         getDirectoryError: true,
-        getDirectoryErrorMessage: action.error.message
+        getDirectoryErrorMessage: action.error.message,
+        globalErrorMessage: action.error.message,
+        globalErrorCode: action.error.code
       };
     case GET_ATTENDANCE:
       return {
@@ -244,7 +269,9 @@ export default (state = initialState, action: any): TKappaState => {
         ...state,
         gettingAttendance: false,
         getAttendanceError: true,
-        getAttendanceErrorMessage: action.error.message
+        getAttendanceErrorMessage: action.error.message,
+        globalErrorMessage: action.error.message,
+        globalErrorCode: action.error.code
       };
     case SELECT_EVENT:
       return {
@@ -375,7 +402,9 @@ export default (state = initialState, action: any): TKappaState => {
         ...state,
         checkingIn: false,
         checkInError: true,
-        checkInErrorMessage: action.error.message
+        checkInErrorMessage: action.error.message,
+        globalErrorMessage: action.error.message,
+        globalErrorCode: action.error.code
       };
     default:
       return state;
