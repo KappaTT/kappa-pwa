@@ -16,6 +16,7 @@ const ProfileContent: React.FC<{
   const user = useSelector((state: TRedux) => state.auth.user);
 
   const dispatch = useDispatch();
+  const dispatchEdit = React.useCallback(() => dispatch(_auth.showOnboarding(true)), [dispatch]);
   const dispatchSignOut = React.useCallback(() => dispatch(_auth.signOut()), [dispatch]);
 
   const insets = useSafeArea();
@@ -37,7 +38,7 @@ const ProfileContent: React.FC<{
               <Text style={styles.subtitle}>{user.email}</Text>
             </Block>
 
-            <TouchableOpacity onPress={() => log('todo')}>
+            <TouchableOpacity onPress={dispatchEdit}>
               <Icon style={styles.editButton} family="MaterialIcons" name="edit" size={24} />
             </TouchableOpacity>
           </Block>

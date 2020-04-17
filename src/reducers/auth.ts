@@ -28,6 +28,7 @@ export const UPDATE_USER_FAILURE = 'UPDATE_USER_FAILURE';
 
 export interface TAuthState {
   visible: boolean;
+  isEditingUser: boolean;
   onboardingVisible: boolean;
 
   isSigningInWithGoogle: boolean;
@@ -51,6 +52,7 @@ export interface TAuthState {
 
 const initialState: TAuthState = {
   visible: false,
+  isEditingUser: false,
   onboardingVisible: false,
 
   isSigningInWithGoogle: false,
@@ -77,12 +79,14 @@ export default (state = initialState, action: any): TAuthState => {
     case SHOW_ONBOARDING:
       return {
         ...state,
-        onboardingVisible: true
+        onboardingVisible: true,
+        isEditingUser: action.editing
       };
     case HIDE_ONBOARDING:
       return {
         ...state,
-        onboardingVisible: false
+        onboardingVisible: false,
+        isEditingUser: false
       };
     case SHOW_MODAL:
       return {
@@ -173,7 +177,8 @@ export default (state = initialState, action: any): TAuthState => {
     case UPDATE_USER_SUCCESS:
       return {
         ...state,
-        isUpdatingUser: false
+        isUpdatingUser: false,
+        isEditingUser: false
       };
     case UPDATE_USER_FAILURE:
       return {

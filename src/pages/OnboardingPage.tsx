@@ -57,6 +57,7 @@ const getGradYearOptions = () => {
 
 const OnboardingPage: React.FC<{}> = ({}) => {
   const user = useSelector((state: TRedux) => state.auth.user);
+  const isEditingUser = useSelector((state: TRedux) => state.auth.isEditingUser);
 
   const [editing, setEditing] = React.useState<string>('');
   const [phone, setPhone] = React.useState<string>(user.phone || '');
@@ -204,7 +205,7 @@ const OnboardingPage: React.FC<{}> = ({}) => {
         >
           <Block style={styles.header}>
             <Text style={styles.subtitle}>Hi {user.givenName}</Text>
-            <Text style={styles.title}>Let's finish setting up</Text>
+            <Text style={styles.title}>{isEditingUser ? 'Edit your profile' : "Let's finish setting up"}</Text>
           </Block>
 
           <ScrollView contentContainerStyle={styles.scrollContent}>

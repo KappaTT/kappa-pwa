@@ -26,9 +26,10 @@ import * as GoogleService from '@services/googleService';
 import { log } from '@services/logService';
 import { DEMO_USER } from '@services/demoService';
 
-export const showOnboarding = () => {
+export const showOnboarding = (editing: boolean = false) => {
   return {
-    type: SHOW_ONBOARDING
+    type: SHOW_ONBOARDING,
+    editing
   };
 };
 

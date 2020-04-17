@@ -40,6 +40,7 @@ const App = () => {
   const loginVisible = useSelector((state: TRedux) => state.auth.visible);
   const loadedPrefs = useSelector((state: TRedux) => state.prefs.loaded);
   const onboardingVisible = useSelector((state: TRedux) => state.auth.onboardingVisible);
+  const isEditingUser = useSelector((state: TRedux) => state.auth.isEditingUser);
   const globalErrorMessage = useSelector((state: TRedux) => state.kappa.globalErrorMessage);
   const globalErrorCode = useSelector((state: TRedux) => state.kappa.globalErrorCode);
 
@@ -104,6 +105,10 @@ const App = () => {
       return;
     }
 
+    if (isEditingUser) {
+      return;
+    }
+
     let incomplete = false;
 
     for (const key of Object.keys(incompleteUser)) {
@@ -118,7 +123,7 @@ const App = () => {
     } else if (!incomplete && onboardingVisible) {
       dispatchHideOnboarding();
     }
-  }, [authorized, user, onboardingVisible]);
+  }, [authorized, user, onboardingVisible, isEditingUser]);
 
   React.useEffect(() => {
     if (!loadedPrefs) {
