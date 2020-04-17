@@ -16,7 +16,7 @@ import { Block, Ghost, FadeModal, EventDrawer, BrotherDrawer } from '@components
 import { Images, theme } from '@constants';
 import AppNavigator from '@navigation/TabAppNavigator';
 import { setTopLevelNavigator, navigate } from '@navigation/NavigationService';
-import { LoginPage, OnboardingPage } from '@pages';
+import { LoginPage, OnboardingPage, GlobalErrorPage } from '@pages';
 import { BASE_URL_MOCKING } from '@backend/backend';
 
 enableScreens();
@@ -40,6 +40,8 @@ const App = () => {
   const loginVisible = useSelector((state: TRedux) => state.auth.visible);
   const loadedPrefs = useSelector((state: TRedux) => state.prefs.loaded);
   const onboardingVisible = useSelector((state: TRedux) => state.auth.onboardingVisible);
+  const globalErrorMessage = useSelector((state: TRedux) => state.kappa.globalErrorMessage);
+  const globalErrorCode = useSelector((state: TRedux) => state.kappa.globalErrorCode);
 
   const [isLoadingComplete, setIsLoadingComplete] = React.useState<boolean>(false);
   const [isNavigatorReady, setIsNavigatorReady] = React.useState<boolean>(false);
@@ -159,8 +161,22 @@ const App = () => {
               <LoginPage onRequestClose={dispatchHideLogin}></LoginPage>
             </FadeModal>
 
-            <FadeModal transparent={false} visible={onboardingVisible} onRequestClose={() => {}}>
+            <FadeModal
+              transparent={false}
+              visible={onboardingVisible}
+              onRequestClose={() => {}}
+              disableAndroidBack={true}
+            >
               <OnboardingPage onRequestClose={() => {}} />
+            </FadeModal>
+
+            <FadeModal
+              transparent={true}
+              visible={globalErrorMessage !== ''}
+              onRequestClose={() => {}}
+              disableAndroidBack={true}
+            >
+              <GlobalErrorPage errorMessage={globalErrorMessage} errorCode={globalErrorCode} />
             </FadeModal>
           </Block>
         </SafeAreaProvider>

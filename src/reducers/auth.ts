@@ -184,7 +184,11 @@ export default (state = initialState, action: any): TAuthState => {
       };
     case SIGN_OUT:
       return {
-        ...initialState
+        ...initialState,
+        authorized: false,
+        user: initialUser,
+        authorizedGoogle: false,
+        visible: true
       };
     default:
       return state;

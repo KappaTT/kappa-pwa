@@ -20,7 +20,7 @@ import {
   UPDATE_USER_FAILURE,
   MODIFY_USER
 } from '@reducers/auth';
-import { TUser, initialUser, TUserResponse, TGoogleUser } from '@backend/auth';
+import { TUser, initialUser, TUserResponse, TGoogleUser, purge } from '@backend/auth';
 import { getBatch, setBatch, deleteBatch } from '@services/secureStorage';
 import * as GoogleService from '@services/googleService';
 import { log } from '@services/logService';
@@ -96,6 +96,8 @@ const signingIn = () => {
 };
 
 export const signOut = () => {
+  purge();
+
   return {
     type: SIGN_OUT
   };

@@ -402,9 +402,7 @@ export default (state = initialState, action: any): TKappaState => {
         ...state,
         checkingIn: false,
         checkInError: true,
-        checkInErrorMessage: action.error.message,
-        globalErrorMessage: action.error.message,
-        globalErrorCode: action.error.code
+        checkInErrorMessage: action.error.message
       };
     default:
       return state;

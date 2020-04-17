@@ -34,6 +34,7 @@ export interface TUser {
   email: string;
   familyName: string;
   givenName: string;
+  firstYear?: string;
   semester?: string;
   type: string;
   role?: string;
@@ -51,6 +52,7 @@ export const initialUser: TUser = {
   email: '',
   familyName: '',
   givenName: '',
+  firstYear: '',
   semester: '',
   type: '',
   role: '',
@@ -72,6 +74,8 @@ export interface TUserResponse {
   email: string;
   familyName: string;
   givenName: string;
+  firstYear: string;
+  semester: string;
   type: string;
   role?: string;
   privileged?: boolean;
