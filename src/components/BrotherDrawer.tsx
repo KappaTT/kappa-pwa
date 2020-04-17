@@ -13,7 +13,6 @@ import { log } from '@services/logService';
 import {
   getAttendedEvents,
   getExcusedEvents,
-  getUserRecordCounts,
   getTypeCounts,
   prettyPhone,
   sortEventByDate,
@@ -25,8 +24,6 @@ import { TEvent } from '@backend/kappa';
 import Block from '@components/Block';
 import Ghost from '@components/Ghost';
 import Text from '@components/Text';
-import RoundButton from '@components/RoundButton';
-import Icon from '@components/Icon';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -125,10 +122,6 @@ const BrotherDrawer: React.FC<{}> = ({}) => {
       percent: `${Math.round(fraction * 100)}%`
     };
   }, [user, gmCount, gmCounts]);
-
-  const recordCounts = React.useMemo(() => {
-    return getUserRecordCounts(records, selectedUserEmail);
-  }, [records, selectedUserEmail]);
 
   const mandatory = React.useMemo(() => {
     if (!user.privileged) return [];
