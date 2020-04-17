@@ -77,6 +77,14 @@ export interface TPoint {
   count: number;
 }
 
+export interface TPointsDict {
+  [category: string]: number;
+}
+
+export interface TPointsUserDict {
+  [email: string]: TPointsDict;
+}
+
 export interface TGetEventsPayload {
   user: TUser;
 }
@@ -441,6 +449,59 @@ export const createAttendance = async (payload: TCreateAttendancePayload): Promi
 
     return pass({
       attended: response.data.attended || []
+    });
+  } catch (error) {
+    log(error);
+    return fail({}, "that wasn't supposed to happen", -1);
+  }
+};
+
+export interface TCreateExcusePayload {}
+
+export interface TCreateExcuseRequestResponse {}
+
+export interface TCreateExcuseResponse extends TResponse {}
+
+// TODO
+
+export interface TGetPointsByUserPayload {
+  user: TUser;
+  target: string;
+}
+
+export interface TGetPointsByUserRequestResponse {
+  points: TPointsDict;
+}
+
+export interface TGetPointsByUserResponse extends TResponse {
+  data?: {
+    points: TPointsDict;
+  };
+}
+
+export const getPointsByUser = async (payload: TGetPointsByUserPayload): Promise<TGetPointsByUserResponse> => {
+  try {
+    const response = await makeAuthorizedRequest<TGetPointsByUserRequestResponse>(
+      ENDPOINTS.GET_POINTS_BY_USER({ email: payload.target }),
+      METHODS.GET_POINTS_BY_USER,
+      {},
+      payload.user.sessionToken
+    );
+
+    log('Get points response', response.code);
+
+    if (!response.success || response.code === 500) {
+      return fail({}, 'problem connecting to server', 500);
+    } else if (response.code !== 200) {
+      if (response.code === 401) {
+        return fail({}, 'your credentials were invalid', response.code);
+      }
+
+      return fail({}, response.error?.message, response.code);
+    }
+
+    return pass({
+      points: response.data.points
     });
   } catch (error) {
     log(error);
