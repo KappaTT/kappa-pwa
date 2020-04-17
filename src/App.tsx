@@ -152,13 +152,8 @@ const App = () => {
               <BrotherDrawer />
             </Ghost>
 
-            <FadeModal
-              transparent={false}
-              visible={loginVisible}
-              disableAndroidBack={true}
-              onRequestClose={dispatchHideLogin}
-            >
-              <LoginPage onRequestClose={dispatchHideLogin}></LoginPage>
+            <FadeModal transparent={false} visible={loginVisible} disableAndroidBack={true} onRequestClose={() => {}}>
+              <LoginPage />
             </FadeModal>
 
             <FadeModal
@@ -167,7 +162,7 @@ const App = () => {
               onRequestClose={() => {}}
               disableAndroidBack={true}
             >
-              <OnboardingPage onRequestClose={() => {}} />
+              <OnboardingPage />
             </FadeModal>
 
             <FadeModal

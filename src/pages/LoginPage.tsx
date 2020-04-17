@@ -7,17 +7,16 @@ import { _auth } from '@reducers/actions';
 import { theme, Images } from '@constants';
 import { Block, Text, GoogleSignInButton } from '@components';
 
-const LoginPage: React.FC<{
-  onRequestClose(): void;
-}> = ({ onRequestClose }) => {
+const LoginPage: React.FC<{}> = ({}) => {
   const authorized = useSelector((state: TRedux) => state.auth.authorized);
 
   const dispatch = useDispatch();
+  const dispatchHideModal = React.useCallback(() => _auth.hideModal(), [dispatch]);
   const dispatchSignInWithGoogle = React.useCallback(() => dispatch(_auth.signInWithGoogle()), [dispatch]);
 
   React.useEffect(() => {
     if (authorized) {
-      onRequestClose();
+      dispatchHideModal();
     }
   }, [authorized]);
 

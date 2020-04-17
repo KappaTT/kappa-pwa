@@ -55,9 +55,7 @@ const getGradYearOptions = () => {
   return options;
 };
 
-const OnboardingPage: React.FC<{
-  onRequestClose(): void;
-}> = ({ onRequestClose }) => {
+const OnboardingPage: React.FC<{}> = ({}) => {
   const user = useSelector((state: TRedux) => state.auth.user);
 
   const [editing, setEditing] = React.useState<string>('');
