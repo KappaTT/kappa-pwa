@@ -55,12 +55,14 @@ const EventDrawer: React.FC<{}> = ({}) => {
   const [readyToDelete, setReadyToDelete] = React.useState<boolean>(false);
 
   const dispatch = useDispatch();
-  const dispatchGetAttendance = React.useCallback(() => dispatch(_kappa.getEventAttendance(user, selectedEventId)), [
-    dispatch,
-    user,
-    selectedEventId
-  ]);
-  const dispatchGetMyAttendance = React.useCallback(() => dispatch(_kappa.getMyAttendance(user)), [dispatch, user]);
+  const dispatchGetAttendance = React.useCallback(
+    (overwrite: boolean = false) => dispatch(_kappa.getEventAttendance(user, selectedEventId, overwrite)),
+    [dispatch, user, selectedEventId]
+  );
+  const dispatchGetMyAttendance = React.useCallback(
+    (overwrite: boolean = false) => dispatch(_kappa.getMyAttendance(user, overwrite)),
+    [dispatch, user]
+  );
   const dispatchUnselectEvent = React.useCallback(() => dispatch(_kappa.unselectEvent()), [dispatch]);
   const dispatchEditEvent = React.useCallback(() => dispatch(_kappa.editExistingEvent(selectedEventId)), [
     dispatch,
@@ -94,14 +96,14 @@ const EventDrawer: React.FC<{}> = ({}) => {
   const loadData = React.useCallback(
     (force: boolean) => {
       if (user.privileged) {
-        if (force || shouldLoad(loadHistory, selectedEventId)) {
-          dispatchGetAttendance();
+        if (force || shouldLoad(loadHistory, `event-${selectedEventId}`)) {
+          dispatchGetAttendance(force);
         }
 
         setReadyToDelete(false);
       } else {
-        if (force || shouldLoad(loadHistory, user.email)) {
-          dispatchGetMyAttendance();
+        if (force || shouldLoad(loadHistory, `user-${user.email}`)) {
+          dispatchGetMyAttendance(force);
         }
       }
     },

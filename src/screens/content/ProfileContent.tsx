@@ -32,7 +32,10 @@ const ProfileContent: React.FC<{
   const dispatchEdit = React.useCallback(() => dispatch(_auth.showOnboarding(true)), [dispatch]);
   const dispatchSignOut = React.useCallback(() => dispatch(_auth.signOut()), [dispatch]);
   const dispatchGetEvents = React.useCallback(() => dispatch(_kappa.getEvents(user)), [dispatch, user]);
-  const dispatchGetMyAttendance = React.useCallback(() => dispatch(_kappa.getMyAttendance(user)), [dispatch, user]);
+  const dispatchGetMyAttendance = React.useCallback(
+    (overwrite: boolean = false) => dispatch(_kappa.getMyAttendance(user, overwrite)),
+    [dispatch, user]
+  );
   const dispatchGetPoints = React.useCallback(() => dispatch(_kappa.getPointsByUser(user, user.email)), [
     dispatch,
     user
@@ -43,7 +46,7 @@ const ProfileContent: React.FC<{
   const loadData = React.useCallback(
     (force: boolean) => {
       if (force || shouldLoad(loadHistory, 'events')) dispatchGetEvents();
-      if (force || shouldLoad(loadHistory, user.email)) dispatchGetMyAttendance();
+      if (force || shouldLoad(loadHistory, `user-${user.email}`)) dispatchGetMyAttendance(force);
       if (force || shouldLoad(loadHistory, `points-${user.email}`)) dispatchGetPoints();
     },
     [user, loadHistory]

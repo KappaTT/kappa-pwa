@@ -123,12 +123,13 @@ const gettingAttendance = () => {
   };
 };
 
-const getAttendanceSuccess = (data, loadKey?: string) => {
+const getAttendanceSuccess = (data, loadKey?: string, overwrite: boolean = false) => {
   return {
     type: GET_ATTENDANCE_SUCCESS,
     attended: data.attended,
     excused: data.excused,
-    loadKey
+    loadKey,
+    overwrite
   };
 };
 
@@ -139,17 +140,17 @@ const getAttendanceFailure = err => {
   };
 };
 
-export const getMyAttendance = (user: TUser) => {
-  return getUserAttendance(user, user.email);
+export const getMyAttendance = (user: TUser, overwrite: boolean = false) => {
+  return getUserAttendance(user, user.email, overwrite);
 };
 
-export const getUserAttendance = (user: TUser, target: string) => {
+export const getUserAttendance = (user: TUser, target: string, overwrite: boolean = false) => {
   return dispatch => {
     dispatch(gettingAttendance());
 
     Kappa.getAttendanceByUser({ user, target }).then(res => {
       if (res.success) {
-        dispatch(getAttendanceSuccess(res.data, target));
+        dispatch(getAttendanceSuccess(res.data, `user-${target}`, overwrite));
       } else {
         dispatch(getAttendanceFailure(res.error));
       }
@@ -157,13 +158,13 @@ export const getUserAttendance = (user: TUser, target: string) => {
   };
 };
 
-export const getEventAttendance = (user: TUser, target: string) => {
+export const getEventAttendance = (user: TUser, target: string, overwrite: boolean = false) => {
   return dispatch => {
     dispatch(gettingAttendance());
 
     Kappa.getAttendanceByEvent({ user, target }).then(res => {
       if (res.success) {
-        dispatch(getAttendanceSuccess(res.data, target));
+        dispatch(getAttendanceSuccess(res.data, `event-${target}`, overwrite));
       } else {
         dispatch(getAttendanceFailure(res.error));
       }

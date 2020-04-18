@@ -45,7 +45,10 @@ const DirectoryContent: React.FC<{
 
   const dispatch = useDispatch();
   const dispatchGetEvents = React.useCallback(() => dispatch(_kappa.getEvents(user)), [dispatch, user]);
-  const dispatchGetMyAttendance = React.useCallback(() => dispatch(_kappa.getMyAttendance(user)), [dispatch, user]);
+  const dispatchGetMyAttendance = React.useCallback(
+    (overwrite: boolean = false) => dispatch(_kappa.getMyAttendance(user, overwrite)),
+    [dispatch, user]
+  );
   const dispatchGetDirectory = React.useCallback(() => dispatch(_kappa.getDirectory(user)), [dispatch, user]);
   const dispatchSelectUser = React.useCallback((email: string) => dispatch(_kappa.selectUser(email)), [dispatch]);
 
@@ -57,7 +60,7 @@ const DirectoryContent: React.FC<{
     (force: boolean) => {
       if (force || shouldLoad(loadHistory, 'events')) dispatchGetEvents();
       if (force || shouldLoad(loadHistory, 'directory')) dispatchGetDirectory();
-      if (force || shouldLoad(loadHistory, user.email)) dispatchGetMyAttendance();
+      if (force || shouldLoad(loadHistory, `user-${user.email}`)) dispatchGetMyAttendance(force);
     },
     [user, loadHistory]
   );

@@ -102,9 +102,15 @@ export const mergeRecords = (
   newRecords: {
     attended: Array<TAttendance>;
     excused: Array<TExcuse>;
-  }
+  },
+  overwrite: boolean = false
 ) => {
-  let mergedRecords = records;
+  let mergedRecords = overwrite
+    ? {
+        attended: {},
+        excused: {}
+      }
+    : records;
 
   for (const attend of newRecords.attended) {
     const email = netidToEmail(attend.netid);

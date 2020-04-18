@@ -34,11 +34,10 @@ const BrotherDrawer: React.FC<{}> = ({}) => {
   const [refreshing, setRefreshing] = React.useState<boolean>(gettingAttendance);
 
   const dispatch = useDispatch();
-  const dispatchGetAttendance = React.useCallback(() => dispatch(_kappa.getUserAttendance(user, selectedUserEmail)), [
-    dispatch,
-    user,
-    selectedUserEmail
-  ]);
+  const dispatchGetAttendance = React.useCallback(
+    (overwrite: boolean = false) => dispatch(_kappa.getUserAttendance(user, selectedUserEmail, overwrite)),
+    [dispatch, user, selectedUserEmail]
+  );
   const dispatchUnselectUser = React.useCallback(() => dispatch(_kappa.unselectUser()), [dispatch]);
 
   const insets = useSafeArea();
@@ -59,8 +58,8 @@ const BrotherDrawer: React.FC<{}> = ({}) => {
   const loadData = React.useCallback(
     (force: boolean) => {
       if (user.privileged) {
-        if (force || shouldLoad(loadHistory, selectedUserEmail)) {
-          dispatchGetAttendance();
+        if (force || shouldLoad(loadHistory, `user-${selectedUserEmail}`)) {
+          dispatchGetAttendance(force);
         }
       }
     },

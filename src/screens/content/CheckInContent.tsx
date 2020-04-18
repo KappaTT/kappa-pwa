@@ -181,7 +181,7 @@ const CheckInContent: React.FC<{
   };
 
   React.useEffect(() => {
-    if (shouldLoad(loadHistory, user.email) && !gettingAttendance && getAttendanceErrorMessage === '') {
+    if (shouldLoad(loadHistory, `user-${user.email}`) && !gettingAttendance && getAttendanceErrorMessage === '') {
       dispatchGetMyAttendance();
     }
   }, [user, loadHistory, gettingAttendance]);

@@ -268,19 +268,39 @@ export default (state = initialState, action: any): TKappaState => {
         getAttendanceErrorMessage: ''
       };
     case GET_ATTENDANCE_SUCCESS:
+      let newLoadHistory = {};
+
+      if (action.overwrite) {
+        for (const [key, value] of Object.entries(state.loadHistory)) {
+          if (key.startsWith('user-') || key.startsWith('event-')) {
+            continue;
+          }
+
+          newLoadHistory[key] = value;
+        }
+
+        newLoadHistory[action.loadKey] = moment();
+      } else {
+        newLoadHistory = {
+          ...state.loadHistory,
+          [action.loadKey]: moment()
+        };
+      }
+
       return {
         ...state,
         gettingAttendance: false,
-        loadHistory: {
-          ...state.loadHistory,
-          [action.loadKey]: moment()
-        },
+        loadHistory: newLoadHistory,
         ...recomputeKappaState({
           events: state.events,
-          records: mergeRecords(state.records, {
-            attended: action.attended,
-            excused: action.excused
-          }),
+          records: mergeRecords(
+            state.records,
+            {
+              attended: action.attended,
+              excused: action.excused
+            },
+            action.overwrite
+          ),
           directory: state.directory
         })
       };
