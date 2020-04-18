@@ -208,14 +208,13 @@ export default (state = initialState, action: any): TKappaState => {
         getEventsErrorMessage: ''
       };
     case GET_EVENTS_SUCCESS:
-      let eventsLoadHistory = state.loadHistory;
-
-      eventsLoadHistory['events'] = moment();
-
       return {
         ...state,
         gettingEvents: false,
-        loadHistory: eventsLoadHistory,
+        loadHistory: {
+          ...state.loadHistory,
+          events: moment()
+        },
         ...recomputeKappaState({
           events: separateByEventId(action.events),
           records: state.records,
@@ -239,14 +238,13 @@ export default (state = initialState, action: any): TKappaState => {
         getDirectoryErrorMessage: ''
       };
     case GET_DIRECTORY_SUCCESS:
-      let directoryLoadHistory = state.loadHistory;
-
-      directoryLoadHistory['directory'] = moment();
-
       return {
         ...state,
         gettingDirectory: false,
-        loadHistory: directoryLoadHistory,
+        loadHistory: {
+          ...state.loadHistory,
+          directory: moment()
+        },
         ...recomputeKappaState({
           events: state.events,
           records: state.records,
@@ -270,16 +268,13 @@ export default (state = initialState, action: any): TKappaState => {
         getAttendanceErrorMessage: ''
       };
     case GET_ATTENDANCE_SUCCESS:
-      let loadHistory = state.loadHistory;
-
-      if (action.loadKey) {
-        loadHistory[action.loadKey] = moment();
-      }
-
       return {
         ...state,
         gettingAttendance: false,
-        loadHistory,
+        loadHistory: {
+          ...state.loadHistory,
+          [action.loadKey]: moment()
+        },
         ...recomputeKappaState({
           events: state.events,
           records: mergeRecords(state.records, {
@@ -437,19 +432,17 @@ export default (state = initialState, action: any): TKappaState => {
         getPointsErrorMessage: ''
       };
     case GET_POINTS_SUCCESS:
-      let mergedPoints = state.points;
-
-      mergedPoints[action.target] = action.points;
-
-      let pointsLoadHistory = state.loadHistory;
-
-      pointsLoadHistory[`points-${action.target}`] = moment();
-
       return {
         ...state,
         gettingPoints: false,
-        points: mergedPoints,
-        loadHistory: pointsLoadHistory
+        points: {
+          ...state.points,
+          [action.target]: action.points
+        },
+        loadHistory: {
+          ...state.loadHistory,
+          [`points-${action.taget}`]: moment()
+        }
       };
     case GET_POINTS_FAILURE:
       return {

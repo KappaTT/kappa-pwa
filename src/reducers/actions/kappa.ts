@@ -29,7 +29,8 @@ import {
   SET_GLOBAL_ERROR_MESSAGE,
   CLEAR_GLOBAL_ERROR_MESSAGE,
   GET_POINTS,
-  GET_POINTS_SUCCESS
+  GET_POINTS_SUCCESS,
+  GET_POINTS_FAILURE
 } from '@reducers/kappa';
 import { TUser } from '@backend/auth';
 import { TEvent, TPoint } from '@backend/kappa';
@@ -351,7 +352,7 @@ const getPointsSuccess = (data, target: string) => {
 
 const getPointsFailure = err => {
   return {
-    type: CHECK_IN_FAILURE,
+    type: GET_POINTS_FAILURE,
     error: err
   };
 };
