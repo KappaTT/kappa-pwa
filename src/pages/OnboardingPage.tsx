@@ -1,5 +1,12 @@
 import React from 'react';
-import { StyleSheet, Dimensions, KeyboardAvoidingView, ScrollView, TouchableWithoutFeedback } from 'react-native';
+import {
+  StyleSheet,
+  Dimensions,
+  KeyboardAvoidingView,
+  ScrollView,
+  TouchableWithoutFeedback,
+  TouchableOpacity
+} from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { useSafeArea } from 'react-native-safe-area-context';
 
@@ -9,15 +16,16 @@ import { theme } from '@constants';
 import { prettyPhone } from '@services/kappaService';
 import {
   Block,
+  Ghost,
   Text,
   ListButton,
   FAB,
   SlideModal,
-  FadeModal,
   BackButton,
   FormattedInput,
   EndCapButton,
-  RadioList
+  RadioList,
+  Icon
 } from '@components';
 
 const { width, height } = Dimensions.get('screen');
@@ -74,6 +82,7 @@ const OnboardingPage: React.FC<{}> = ({}) => {
       ),
     [dispatch, phone, gradYear]
   );
+  const dispatchHideOnboarding = React.useCallback(() => dispatch(_auth.hideOnboarding()), [dispatch]);
 
   const insets = useSafeArea();
 
@@ -204,8 +213,19 @@ const OnboardingPage: React.FC<{}> = ({}) => {
           ]}
         >
           <Block style={styles.header}>
-            <Text style={styles.subtitle}>Hi {user.givenName}</Text>
-            <Text style={styles.title}>{isEditingUser ? 'Edit your profile' : "Let's finish setting up"}</Text>
+            <Block style={styles.headerText}>
+              <Text style={styles.subtitle}>Hi {user.givenName}</Text>
+              <Text style={styles.title}>{isEditingUser ? 'Edit your profile' : "Let's finish setting up"}</Text>
+            </Block>
+            <Block style={styles.headerButtons}>
+              {isEditingUser && (
+                <TouchableOpacity onPress={dispatchHideOnboarding}>
+                  <Block style={styles.closeButtonContianer}>
+                    <Icon family="Feather" name="x" color={theme.COLORS.PRIMARY} size={32} />
+                  </Block>
+                </TouchableOpacity>
+              )}
+            </Block>
           </Block>
 
           <ScrollView contentContainerStyle={styles.scrollContent}>
@@ -214,7 +234,7 @@ const OnboardingPage: React.FC<{}> = ({}) => {
             </TouchableWithoutFeedback>
           </ScrollView>
 
-          <Block
+          <Ghost
             style={[
               styles.buttonWrapper,
               {
@@ -228,7 +248,7 @@ const OnboardingPage: React.FC<{}> = ({}) => {
               bgColor={submitDisabled ? theme.COLORS.GRAY : theme.COLORS.PRIMARY}
               onPress={() => !submitDisabled && onPressSubmit()}
             />
-          </Block>
+          </Ghost>
         </Block>
       </KeyboardAvoidingView>
     );
@@ -257,7 +277,19 @@ const styles = StyleSheet.create({
     backgroundColor: theme.COLORS.WHITE
   },
   header: {
-    paddingHorizontal: 20
+    paddingHorizontal: 20,
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  headerText: {},
+  headerButtons: {},
+  closeButtonContianer: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   title: {
     fontFamily: 'OpenSans',
@@ -282,11 +314,12 @@ const styles = StyleSheet.create({
   },
   description: {
     marginTop: 12,
+    marginBottom: 64,
     fontFamily: 'OpenSans',
     fontSize: 12
   },
   content: {
-    height: '100%',
+    minHeight: '100%',
     display: 'flex',
     justifyContent: 'space-between'
   },

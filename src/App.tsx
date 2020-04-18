@@ -12,7 +12,7 @@ import { GalioProvider } from '@galio';
 import { TRedux } from '@reducers';
 import { _auth, _prefs } from '@reducers/actions';
 import { incompleteUser, purge } from '@backend/auth';
-import { Block, Ghost, FadeModal, EventDrawer, BrotherDrawer } from '@components';
+import { Block, Ghost, FadeModal, SlideModal, EventDrawer, BrotherDrawer } from '@components';
 import { Images, theme } from '@constants';
 import AppNavigator from '@navigation/TabAppNavigator';
 import { setTopLevelNavigator, navigate } from '@navigation/NavigationService';
@@ -161,14 +161,14 @@ const App = () => {
               <LoginPage />
             </FadeModal>
 
-            <FadeModal
+            <SlideModal
               transparent={false}
               visible={onboardingVisible}
               onRequestClose={() => {}}
               disableAndroidBack={true}
             >
               <OnboardingPage />
-            </FadeModal>
+            </SlideModal>
 
             <FadeModal
               transparent={true}
