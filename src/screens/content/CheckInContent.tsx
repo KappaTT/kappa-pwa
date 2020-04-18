@@ -523,9 +523,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: theme.COLORS.PRIMARY
   },
-  checkInContainer: {
-    marginTop: 32
-  },
+  checkInContainer: {},
   input: {
     backgroundColor: theme.COLORS.SUPER_LIGHT_BLUE_GRAY
   },
@@ -569,7 +567,9 @@ const styles = StyleSheet.create({
     fontFamily: 'OpenSans',
     color: theme.COLORS.BORDER
   },
-  excuseContainer: {},
+  excuseContainer: {
+    marginTop: 32
+  },
   scanner: {
     flex: 1
   },
