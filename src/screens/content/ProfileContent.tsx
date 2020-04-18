@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useSafeArea } from 'react-native-safe-area-context';
 import { ProgressCircle } from 'react-native-svg-charts';
 import moment from 'moment';
+import Constants from 'expo-constants';
 
 import { TRedux } from '@reducers';
 import { _auth, _kappa } from '@reducers/actions';
@@ -247,7 +248,7 @@ const ProfileContent: React.FC<{
           <Block>{renderAdmin()}</Block>
 
           <Text style={styles.madeWithText}>
-            {'Whatsoever thy hand findeth to do, do it with thy might.\nJTC - Web Chair 2019-2021'}
+            {`${Constants.manifest.version} - ${Constants.manifest.revisionId} - ${Constants.manifest.sdkVersion} - ${Constants.nativeBuildVersion}\n\nWhatsoever thy hand findeth to do, do it with thy might.\nJTC - Web Chair 2019-2021`}
           </Text>
         </Block>
       </ScrollView>
