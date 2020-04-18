@@ -51,7 +51,7 @@ export const METHODS: {
   UPDATE_EVENT: M_PATCH,
   DELETE_EVENT: M_DELETE,
   CREATE_ATTENDANCE: M_POST,
-  GET_POINTS: M_GET
+  GET_POINTS_BY_USER: M_GET
 };
 
 export interface TResponse {
