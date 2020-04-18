@@ -456,6 +456,50 @@ export const createAttendance = async (payload: TCreateAttendancePayload): Promi
   }
 };
 
+export interface TGetPendingExcusesPayload {
+  user: TUser;
+}
+
+export interface TGetPendingExcusesRequestResponse {
+  excused: Array<TExcuse>;
+}
+
+export interface TGetPendingExcusesResponse extends TResponse {
+  data?: {
+    excused: Array<TExcuse>;
+  };
+}
+
+export const getPendingExcuses = async (payload: TGetPendingExcusesPayload): Promise<TGetPendingExcusesResponse> => {
+  try {
+    const response = await makeAuthorizedRequest<TGetPendingExcusesRequestResponse>(
+      ENDPOINTS.GET_EXCUSES(),
+      METHODS.GET_EXCUSES,
+      {},
+      payload.user.sessionToken
+    );
+
+    log('Get excuses response', response.code);
+
+    if (!response.success || response.code === 500) {
+      return fail({}, 'problem connecting to server', 500);
+    } else if (response.code !== 200) {
+      if (response.code === 401) {
+        return fail({}, 'your credentials were invalid', response.code);
+      }
+
+      return fail({}, response.error?.message, response.code);
+    }
+
+    return pass({
+      excused: response.data.excused || []
+    });
+  } catch (error) {
+    log(error);
+    return fail({}, "that wasn't supposed to happen", -1);
+  }
+};
+
 export interface TCreateExcusePayload {}
 
 export interface TCreateExcuseRequestResponse {}
