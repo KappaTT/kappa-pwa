@@ -112,9 +112,14 @@ const ProfileContent: React.FC<{
               <Text style={styles.subtitle}>{user.role}</Text>
             </Block>
 
-            <TouchableOpacity onPress={dispatchEdit}>
-              <Icon style={styles.editButton} family="MaterialIcons" name="edit" size={24} />
-            </TouchableOpacity>
+            <Block style={styles.headerButtons}>
+              <TouchableOpacity onPress={dispatchEdit}>
+                <Icon style={styles.headerButton} family="MaterialIcons" name="edit" size={24} />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={dispatchSignOut}>
+                <Icon style={styles.headerButtonEnd} family="MaterialIcons" name="lock-outline" size={24} />
+              </TouchableOpacity>
+            </Block>
           </Block>
 
           <Block>
@@ -181,7 +186,7 @@ const ProfileContent: React.FC<{
           <Block>{renderAdmin()}</Block>
 
           <Text style={styles.madeWithText}>
-            {`${Constants.manifest.version} - ${Constants.manifest.revisionId} - ${Constants.manifest.sdkVersion} - ${Constants.nativeBuildVersion}\n\nWhatsoever thy hand findeth to do, do it with thy might.\nJTC - Web Chair 2019-2021`}
+            {`${Constants.manifest.version} - ${Constants.manifest.sdkVersion} - ${Constants.nativeBuildVersion}\nWhatsoever thy hand findeth to do, do it with thy might.\nJTC - Web Chair 2019-2021`}
           </Text>
         </Block>
       </ScrollView>
@@ -208,8 +213,15 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: theme.COLORS.GRAY
   },
-  editButton: {
-    paddingTop: 6
+  headerButtons: {
+    paddingTop: 6,
+    flexDirection: 'row'
+  },
+  headerButton: {
+    paddingHorizontal: 4
+  },
+  headerButtonEnd: {
+    marginLeft: 8
   },
   propertyHeader: {
     marginTop: 16,
