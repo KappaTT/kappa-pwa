@@ -6,7 +6,8 @@ import {
   TouchableOpacity,
   Keyboard,
   ActivityIndicator,
-  Alert
+  Alert,
+  KeyboardAvoidingView
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { useSafeArea } from 'react-native-safe-area-context';
@@ -324,79 +325,81 @@ const CheckInContent: React.FC<{
             }
           ]}
         >
-          <ScrollView style={styles.scrollContent}>
-            <TouchableWithoutFeedback>
-              <Block style={styles.content}>
-                <Block style={styles.eventIdContainer}>
-                  <ListButton
-                    keyText="Event"
-                    valueText={selectedEvent === null ? 'choose one' : selectedEvent.title}
-                    onPress={() => setChoosingEvent(true)}
-                  />
-                </Block>
-
-                <Block style={styles.checkInContainer}>
-                  <Block style={styles.propertyHeaderContainer}>
-                    <Text style={styles.propertyHeader}>Check in</Text>
+          <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={insets.top + HeaderHeight} enabled>
+            <ScrollView contentContainerStyle={styles.scrollContent}>
+              <TouchableWithoutFeedback>
+                <Block style={styles.content}>
+                  <Block style={styles.eventIdContainer}>
+                    <ListButton
+                      keyText="Event"
+                      valueText={selectedEvent === null ? 'choose one' : selectedEvent.title}
+                      onPress={() => setChoosingEvent(true)}
+                    />
                   </Block>
 
-                  <Block style={styles.codeContainer}>
-                    <Block style={styles.column}>
-                      <FormattedInput
-                        style={styles.input}
-                        placeholderText="code"
-                        maxLength={4}
-                        keyboardType="number-pad"
-                        error={false}
-                        defaultValue={code}
-                        formatter={numberFormatter}
-                        onChangeText={(text: string) => setCode(text)}
-                      />
+                  <Block style={styles.excuseContainer}>
+                    <Block style={styles.propertyHeaderContainer}>
+                      <Text style={styles.propertyHeader}>Excuse</Text>
                     </Block>
 
-                    <Block style={styles.scanButton}>
-                      <RoundButton
-                        label="Scan"
-                        right={true}
-                        icon={
-                          <Icon family="MaterialCommunityIcons" name="qrcode" size={24} color={theme.COLORS.WHITE} />
-                        }
-                        onPress={onPressScan}
-                      />
+                    <FormattedInput
+                      style={styles.multiInput}
+                      multiline={true}
+                      placeholderText="reason"
+                      maxLength={128}
+                      error={false}
+                      defaultValue={excuse}
+                      onChangeText={(text: string) => setExcuse(text)}
+                    />
+                  </Block>
+
+                  <Block style={styles.dividerWrapper}>
+                    <Block style={styles.divider} />
+                    <Text style={styles.orDividerText}>OR</Text>
+                    <Block style={styles.divider} />
+                  </Block>
+
+                  <Block style={styles.checkInContainer}>
+                    <Block style={styles.propertyHeaderContainer}>
+                      <Text style={styles.propertyHeader}>Check in</Text>
+                    </Block>
+
+                    <Block style={styles.codeContainer}>
+                      <Block style={styles.column}>
+                        <FormattedInput
+                          style={styles.input}
+                          placeholderText="code"
+                          maxLength={4}
+                          keyboardType="number-pad"
+                          error={false}
+                          defaultValue={code}
+                          formatter={numberFormatter}
+                          onChangeText={(text: string) => setCode(text)}
+                        />
+                      </Block>
+
+                      <Block style={styles.scanButton}>
+                        <RoundButton
+                          label="Scan"
+                          right={true}
+                          icon={
+                            <Icon family="MaterialCommunityIcons" name="qrcode" size={24} color={theme.COLORS.WHITE} />
+                          }
+                          onPress={onPressScan}
+                        />
+                      </Block>
                     </Block>
                   </Block>
+
+                  <Text style={styles.description}>
+                    You may only check into an event on the same day it happened. If you forgot to check in and it is
+                    the same day, you can still submit the code. If it isn't, please send a request from your profile
+                    page. Excuses must be requested before an event.
+                  </Text>
                 </Block>
-
-                <Block style={styles.dividerWrapper}>
-                  <Block style={styles.divider} />
-                  <Text style={styles.orDividerText}>OR</Text>
-                  <Block style={styles.divider} />
-                </Block>
-
-                <Block style={styles.excuseContainer}>
-                  <Block style={styles.propertyHeaderContainer}>
-                    <Text style={styles.propertyHeader}>Excuse</Text>
-                  </Block>
-
-                  <FormattedInput
-                    style={styles.multiInput}
-                    multiline={true}
-                    placeholderText="reason"
-                    maxLength={128}
-                    error={false}
-                    defaultValue={excuse}
-                    onChangeText={(text: string) => setExcuse(text)}
-                  />
-                </Block>
-
-                <Text style={styles.description}>
-                  You may only check into an event on the same day it happened. If you forgot to check in and it is the
-                  same day, you can still submit the code. If it isn't, please send a request from your profile page.
-                  Excuses must be requested before an event.
-                </Text>
-              </Block>
-            </TouchableWithoutFeedback>
-          </ScrollView>
+              </TouchableWithoutFeedback>
+            </ScrollView>
+          </KeyboardAvoidingView>
 
           <Block style={styles.bottomBar}>
             {alreadyCheckedIn ? (
@@ -465,6 +468,7 @@ const styles = StyleSheet.create({
   },
   content: {
     minHeight: '100%',
+    paddingBottom: 64,
     paddingHorizontal: 24
   },
   eventIdContainer: {
@@ -487,6 +491,8 @@ const styles = StyleSheet.create({
     fontSize: 12
   },
   bottomBar: {
+    position: 'absolute',
+    bottom: 0,
     width: '100%',
     height: 64,
     backgroundColor: theme.COLORS.WHITE,
