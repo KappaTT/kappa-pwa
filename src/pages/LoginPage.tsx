@@ -11,7 +11,7 @@ const LoginPage: React.FC<{}> = ({}) => {
   const authorized = useSelector((state: TRedux) => state.auth.authorized);
 
   const dispatch = useDispatch();
-  const dispatchHideModal = React.useCallback(() => _auth.hideModal(), [dispatch]);
+  const dispatchHideModal = React.useCallback(() => dispatch(_auth.hideModal()), [dispatch]);
   const dispatchSignInWithGoogle = React.useCallback(() => dispatch(_auth.signInWithGoogle()), [dispatch]);
 
   React.useEffect(() => {
