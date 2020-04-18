@@ -15,6 +15,7 @@ import ExpandingComponent from './ExpandingComponent';
 import FAB from './FAB';
 import FadeModal from './FadeModal';
 import FormattedInput from './FormattedInput';
+import GeneralMeetingChart from './GeneralMeetingChart';
 import Ghost from './Ghost';
 import GoogleSignInButton from './GoogleSignInButton';
 import GradientBlobButton from './GradientBlobButton';
@@ -61,6 +62,7 @@ export {
   FAB,
   FadeModal,
   FormattedInput,
+  GeneralMeetingChart,
   Ghost,
   GoogleSignInButton,
   GradientBlobButton,

@@ -5,25 +5,18 @@ import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
 import { useSafeArea } from 'react-native-safe-area-context';
 import moment from 'moment';
-import { ProgressCircle } from 'react-native-svg-charts';
 
 import { TRedux } from '@reducers';
 import { _auth, _kappa } from '@reducers/actions';
 import { log } from '@services/logService';
-import {
-  getAttendedEvents,
-  getExcusedEvents,
-  getTypeCounts,
-  prettyPhone,
-  sortEventByDate,
-  shouldLoad
-} from '@services/kappaService';
+import { prettyPhone, sortEventByDate, shouldLoad } from '@services/kappaService';
 import { theme } from '@constants';
 import { TabBarHeight, isEmpty } from '@services/utils';
 import { TEvent } from '@backend/kappa';
 import Block from '@components/Block';
 import Ghost from '@components/Ghost';
 import Text from '@components/Text';
+import GeneralMeetingChart from '@components/GeneralMeetingChart';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -92,37 +85,6 @@ const BrotherDrawer: React.FC<{}> = ({}) => {
     snapTo(1);
   }, []);
 
-  const attended = React.useMemo(() => {
-    if (!user.privileged) return {};
-
-    return getAttendedEvents(records, selectedUserEmail);
-  }, [user, records, selectedUserEmail]);
-
-  const excused = React.useMemo(() => {
-    if (!user.privileged) return {};
-
-    return getExcusedEvents(records, selectedUserEmail);
-  }, [user, records, selectedUserEmail]);
-
-  const gmCounts = React.useMemo(() => {
-    return getTypeCounts(events, attended, excused, 'GM');
-  }, [events, attended, excused]);
-
-  const gmStats = React.useMemo(() => {
-    if (!user.privileged)
-      return {
-        raw: 0,
-        percent: '0%'
-      };
-
-    const fraction = gmCount === 0 ? 0 : gmCounts.sum / gmCount;
-
-    return {
-      raw: fraction,
-      percent: `${Math.round(fraction * 100)}%`
-    };
-  }, [user, gmCount, gmCounts]);
-
   const mandatory = React.useMemo(() => {
     if (!user.privileged) return [];
 
@@ -187,50 +149,12 @@ const BrotherDrawer: React.FC<{}> = ({}) => {
   const renderAdmin = () => {
     return (
       <Block style={styles.adminContainer}>
-        <Block style={styles.adminChartsContainer}>
-          <Block style={styles.circleChartContainer}>
-            <ProgressCircle
-              style={styles.circleChart}
-              progress={gmStats.raw}
-              progressColor={theme.COLORS.PRIMARY}
-              startAngle={-Math.PI * 0.8}
-              endAngle={Math.PI * 0.8}
-            />
-            <Block style={styles.circleChartLabels}>
-              <Text style={styles.circleChartValue}>{gmStats.percent}</Text>
-              <Text style={styles.circleChartTitle}>GM</Text>
-            </Block>
-          </Block>
-
-          <Block style={styles.chartPropertyContainer}>
-            <Block style={styles.chartProperty}>
-              <Text style={styles.chartPropertyLabel}>Attended</Text>
-              <Text style={styles.chartPropertyValue}>{gmCounts.attended}</Text>
-            </Block>
-            <Block style={styles.chartProperty}>
-              <Text style={styles.chartPropertyLabel}>Excused</Text>
-              <Text style={styles.chartPropertyValue}>{gmCounts.excused}</Text>
-            </Block>
-            <Block style={styles.chartProperty}>
-              <Text style={styles.chartPropertyLabel}>Pending</Text>
-              <Text style={styles.chartPropertyValue}>{gmCounts.pending}</Text>
-            </Block>
-          </Block>
-        </Block>
+        <GeneralMeetingChart user={user} records={records} events={events} gmCount={gmCount} />
 
         <Block style={styles.eventList}>
           {mandatory.length > 0 && (
             <React.Fragment>
-              <Text
-                style={[
-                  styles.chartPropertyLabel,
-                  {
-                    color: theme.COLORS.PRIMARY
-                  }
-                ]}
-              >
-                Missed Mandatory
-              </Text>
+              <Text style={styles.mandatoryLabel}>Missed Mandatory</Text>
               {mandatory.map((event: TEvent) => renderEvent(event))}
             </React.Fragment>
           )}
@@ -432,61 +356,11 @@ const styles = StyleSheet.create({
     width: '50%'
   },
   adminContainer: {},
-  adminChartsContainer: {
-    marginTop: 24,
-    marginBottom: 24,
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between'
-  },
-  circleChartContainer: {
-    width: 144,
-    height: 144
-  },
-  circleChart: {
-    height: '100%'
-  },
-  circleChartLabels: {
-    position: 'absolute',
-    width: 144,
-    height: 144,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  circleChartValue: {
-    fontFamily: 'OpenSans',
-    fontSize: 17
-  },
-  circleChartTitle: {
-    fontFamily: 'OpenSans-SemiBold',
-    fontSize: 13,
-    textTransform: 'uppercase',
-    color: theme.COLORS.GRAY
-  },
-  chartPropertyContainer: {
-    flexGrow: 1,
-    paddingLeft: 24,
-    justifyContent: 'center'
-  },
-  chartProperty: {
-    height: 42,
-    borderBottomWidth: 1,
-    borderBottomColor: theme.COLORS.LIGHT_BORDER,
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center'
-  },
-  chartPropertyLabel: {
+  mandatoryLabel: {
     fontFamily: 'OpenSans-SemiBold',
     fontSize: 15,
-    color: theme.COLORS.GRAY,
+    color: theme.COLORS.PRIMARY,
     textTransform: 'uppercase'
-  },
-  chartPropertyValue: {
-    fontFamily: 'OpenSans',
-    fontSize: 15
   },
   eventList: {},
   eventContainer: {

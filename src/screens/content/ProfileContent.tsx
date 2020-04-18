@@ -9,7 +9,7 @@ import Constants from 'expo-constants';
 import { TRedux } from '@reducers';
 import { _auth, _kappa } from '@reducers/actions';
 import { theme } from '@constants';
-import { Block, Text, Icon } from '@components';
+import { Block, Text, Icon, GeneralMeetingChart } from '@components';
 import { NavigationTypes } from '@types';
 import {
   getAttendedEvents,
@@ -63,37 +63,6 @@ const ProfileContent: React.FC<{
     setTimeout(() => loadData(true), 500);
   }, [user, refreshing]);
 
-  const attended = React.useMemo(() => {
-    if (!user.privileged) return {};
-
-    return getAttendedEvents(records, user.email);
-  }, [user, records]);
-
-  const excused = React.useMemo(() => {
-    if (!user.privileged) return {};
-
-    return getExcusedEvents(records, user.email);
-  }, [user, records]);
-
-  const gmCounts = React.useMemo(() => {
-    return getTypeCounts(events, attended, excused, 'GM');
-  }, [events, attended, excused]);
-
-  const gmStats = React.useMemo(() => {
-    if (!user.privileged)
-      return {
-        raw: 0,
-        percent: '0%'
-      };
-
-    const fraction = gmCount === 0 ? 0 : gmCounts.sum / gmCount;
-
-    return {
-      raw: fraction,
-      percent: `${Math.round(fraction * 100)}%`
-    };
-  }, [user, gmCount, gmCounts]);
-
   const mandatory = React.useMemo(() => {
     if (!user.privileged) return [];
 
@@ -120,50 +89,12 @@ const ProfileContent: React.FC<{
   const renderAdmin = () => {
     return (
       <Block style={styles.adminContainer}>
-        <Block style={styles.adminChartsContainer}>
-          <Block style={styles.circleChartContainer}>
-            <ProgressCircle
-              style={styles.circleChart}
-              progress={gmStats.raw}
-              progressColor={theme.COLORS.PRIMARY}
-              startAngle={-Math.PI * 0.8}
-              endAngle={Math.PI * 0.8}
-            />
-            <Block style={styles.circleChartLabels}>
-              <Text style={styles.circleChartValue}>{gmStats.percent}</Text>
-              <Text style={styles.circleChartTitle}>GM</Text>
-            </Block>
-          </Block>
-
-          <Block style={styles.chartPropertyContainer}>
-            <Block style={styles.chartProperty}>
-              <Text style={styles.chartPropertyLabel}>Attended</Text>
-              <Text style={styles.chartPropertyValue}>{gmCounts.attended}</Text>
-            </Block>
-            <Block style={styles.chartProperty}>
-              <Text style={styles.chartPropertyLabel}>Excused</Text>
-              <Text style={styles.chartPropertyValue}>{gmCounts.excused}</Text>
-            </Block>
-            <Block style={styles.chartProperty}>
-              <Text style={styles.chartPropertyLabel}>Pending</Text>
-              <Text style={styles.chartPropertyValue}>{gmCounts.pending}</Text>
-            </Block>
-          </Block>
-        </Block>
+        <GeneralMeetingChart user={user} records={records} events={events} gmCount={gmCount} />
 
         <Block style={styles.eventList}>
           {mandatory.length > 0 && (
             <React.Fragment>
-              <Text
-                style={[
-                  styles.chartPropertyLabel,
-                  {
-                    color: theme.COLORS.PRIMARY
-                  }
-                ]}
-              >
-                Missed Mandatory
-              </Text>
+              <Text style={styles.mandatoryLabel}>Missed Mandatory</Text>
               {mandatory.map((event: TEvent) => renderEvent(event))}
             </React.Fragment>
           )}
@@ -222,25 +153,35 @@ const ProfileContent: React.FC<{
             <Block style={styles.splitPropertyRow}>
               <Block style={styles.splitPropertyThirds}>
                 <Text style={styles.propertyHeader}>Prof</Text>
-                <Text style={styles.propertyValue}>{points?.[user.email]?.PROF || '0'}</Text>
+                <Text style={styles.propertyValue}>
+                  {points.hasOwnProperty(user.email) ? points[user.email].PROF : '0'}
+                </Text>
               </Block>
               <Block style={styles.splitPropertyThirds}>
                 <Text style={styles.propertyHeader}>Phil</Text>
-                <Text style={styles.propertyValue}>{points?.[user.email]?.PHIL || '0'}</Text>
+                <Text style={styles.propertyValue}>
+                  {points.hasOwnProperty(user.email) ? points[user.email].PHIL : '0'}
+                </Text>
               </Block>
               <Block style={styles.splitPropertyThirds}>
                 <Text style={styles.propertyHeader}>Bro</Text>
-                <Text style={styles.propertyValue}>{points?.[user.email]?.BRO || '0'}</Text>
+                <Text style={styles.propertyValue}>
+                  {points.hasOwnProperty(user.email) ? points[user.email].BRO : '0'}
+                </Text>
               </Block>
             </Block>
             <Block style={styles.splitPropertyRow}>
               <Block style={styles.splitPropertyThirds}>
                 <Text style={styles.propertyHeader}>Rush</Text>
-                <Text style={styles.propertyValue}>{points?.[user.email]?.RUSH || '0'}</Text>
+                <Text style={styles.propertyValue}>
+                  {points.hasOwnProperty(user.email) ? points[user.email].RUSH : '0'}
+                </Text>
               </Block>
               <Block style={styles.splitPropertyThirds}>
                 <Text style={styles.propertyHeader}>Any</Text>
-                <Text style={styles.propertyValue}>{points?.[user.email]?.ANY || '0'}</Text>
+                <Text style={styles.propertyValue}>
+                  {points.hasOwnProperty(user.email) ? points[user.email].ANY : '0'}
+                </Text>
               </Block>
             </Block>
           </Block>
@@ -308,61 +249,11 @@ const styles = StyleSheet.create({
     marginBottom: -8
   },
   adminContainer: {},
-  adminChartsContainer: {
-    marginTop: 24,
-    marginBottom: 24,
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between'
-  },
-  circleChartContainer: {
-    width: 144,
-    height: 144
-  },
-  circleChart: {
-    height: '100%'
-  },
-  circleChartLabels: {
-    position: 'absolute',
-    width: 144,
-    height: 144,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  circleChartValue: {
-    fontFamily: 'OpenSans',
-    fontSize: 17
-  },
-  circleChartTitle: {
-    fontFamily: 'OpenSans-SemiBold',
-    fontSize: 13,
-    textTransform: 'uppercase',
-    color: theme.COLORS.GRAY
-  },
-  chartPropertyContainer: {
-    flexGrow: 1,
-    paddingLeft: 24,
-    justifyContent: 'center'
-  },
-  chartProperty: {
-    height: 42,
-    borderBottomWidth: 1,
-    borderBottomColor: theme.COLORS.LIGHT_BORDER,
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center'
-  },
-  chartPropertyLabel: {
+  mandatoryLabel: {
     fontFamily: 'OpenSans-SemiBold',
     fontSize: 15,
-    color: theme.COLORS.GRAY,
+    color: theme.COLORS.PRIMARY,
     textTransform: 'uppercase'
-  },
-  chartPropertyValue: {
-    fontFamily: 'OpenSans',
-    fontSize: 15
   },
   eventList: {},
   eventContainer: {
