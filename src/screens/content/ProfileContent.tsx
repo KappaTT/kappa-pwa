@@ -2,7 +2,6 @@ import React from 'react';
 import { StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { useSafeArea } from 'react-native-safe-area-context';
-import { ProgressCircle } from 'react-native-svg-charts';
 import moment from 'moment';
 import Constants from 'expo-constants';
 
@@ -11,14 +10,7 @@ import { _auth, _kappa } from '@reducers/actions';
 import { theme } from '@constants';
 import { Block, Text, Icon, GeneralMeetingChart } from '@components';
 import { NavigationTypes } from '@types';
-import {
-  getAttendedEvents,
-  getExcusedEvents,
-  getTypeCounts,
-  prettyPhone,
-  sortEventByDate,
-  shouldLoad
-} from '@services/kappaService';
+import { prettyPhone, sortEventByDate, shouldLoad } from '@services/kappaService';
 import { isEmpty } from '@services/utils';
 import { log } from '@services/logService';
 import { TEvent } from '@backend/kappa';
