@@ -19,10 +19,7 @@ const UserSkeleton: React.FC<{}> = ({}) => {
   return (
     <Block style={styles.skeletonWrapper}>
       <Placeholder Animation={Fade}>
-        <PlaceholderLine width={33} />
-        <PlaceholderLine />
-        <PlaceholderLine />
-        <PlaceholderLine width={67} />
+        <PlaceholderLine width={100} />
       </Placeholder>
     </Block>
   );
