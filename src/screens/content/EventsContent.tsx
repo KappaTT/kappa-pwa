@@ -38,7 +38,6 @@ const EventsContent: React.FC<{
   const gettingEvents = useSelector((state: TRedux) => state.kappa.gettingEvents);
   const gettingDirectory = useSelector((state: TRedux) => state.kappa.gettingDirectory);
   const gettingAttendance = useSelector((state: TRedux) => state.kappa.gettingAttendance);
-  const getEventsError = useSelector((state: TRedux) => state.kappa.getEventsError);
   const events = useSelector((state: TRedux) => state.kappa.events);
   const eventsByDate = useSelector((state: TRedux) => state.kappa.eventsByDate);
   const editingEventId = useSelector((state: TRedux) => state.kappa.editingEventId);

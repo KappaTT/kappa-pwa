@@ -31,11 +31,9 @@ const DirectoryContent: React.FC<{
   const user = useSelector((state: TRedux) => state.auth.user);
   const loadHistory = useSelector((state: TRedux) => state.kappa.loadHistory);
   const directory = useSelector((state: TRedux) => state.kappa.directory);
-  const missedMandatory = useSelector((state: TRedux) => state.kappa.missedMandatory);
   const gettingEvents = useSelector((state: TRedux) => state.kappa.gettingEvents);
   const gettingDirectory = useSelector((state: TRedux) => state.kappa.gettingDirectory);
   const gettingAttendance = useSelector((state: TRedux) => state.kappa.gettingAttendance);
-  const getEventsError = useSelector((state: TRedux) => state.kappa.getEventsError);
   const events = useSelector((state: TRedux) => state.kappa.events);
 
   const [refreshing, setRefreshing] = React.useState<boolean>(gettingEvents || gettingDirectory || gettingAttendance);
