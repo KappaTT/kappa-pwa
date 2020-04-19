@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, ScrollView, RefreshControl } from 'react-native';
+import { StyleSheet, ScrollView, RefreshControl, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { useSafeArea } from 'react-native-safe-area-context';
 import moment from 'moment';
@@ -7,11 +7,12 @@ import moment from 'moment';
 import { TRedux } from '@reducers';
 import { _auth, _kappa } from '@reducers/actions';
 import { theme } from '@constants';
-import { Block, Text, Header } from '@components';
+import { Block, Text, Header, FadeModal, Switch, Icon, TextButton } from '@components';
 import { NavigationTypes } from '@types';
 import { sortEventByDate, shouldLoad } from '@services/kappaService';
-import { HeaderHeight } from '@services/utils';
+import { HeaderHeight, TabBarHeight } from '@services/utils';
 import { TPendingExcuse } from '@backend/kappa';
+import { ExcusePage } from '@pages';
 
 const MessagesContent: React.FC<{
   navigation: NavigationTypes.ParamType;
@@ -23,6 +24,8 @@ const MessagesContent: React.FC<{
   const gettingExcuses = useSelector((state: TRedux) => state.kappa.gettingExcuses);
 
   const [refreshing, setRefreshing] = React.useState<boolean>(false);
+
+  const [selectedExcuse, setSelectedExcuse] = React.useState<TPendingExcuse>(null);
 
   const dispatch = useDispatch();
   const dispatchGetExcuses = React.useCallback(() => dispatch(_kappa.getExcuses(user)), [dispatch, user]);
@@ -41,6 +44,15 @@ const MessagesContent: React.FC<{
 
     loadData(true);
   }, [user, refreshing]);
+
+  const onSelectExcuse = React.useCallback(
+    (excuse: TPendingExcuse) => {
+      if (excuse === null || user.privileged) {
+        setSelectedExcuse(excuse);
+      }
+    },
+    [user]
+  );
 
   React.useEffect(() => {
     if (!gettingExcuses) {
@@ -64,21 +76,25 @@ const MessagesContent: React.FC<{
     return excuse.netid;
   };
 
-  const renderExcuse = (excuse: TPendingExcuse) => {
+  const renderExcuse = (excuse: TPendingExcuse, separator: boolean = true, disable: boolean = false) => {
+    if (excuse === null) return <React.Fragment />;
+
     return (
       <React.Fragment key={`${excuse.event_id}:${excuse.netid}`}>
-        <Block style={styles.excuseContainer}>
-          <Text style={styles.excuseRequester}>{getExcuseRequester(excuse)}</Text>
+        <TouchableOpacity disabled={!user.privileged || disable} onPress={() => onSelectExcuse(excuse)}>
+          <Block style={styles.excuseContainer}>
+            <Text style={styles.excuseRequester}>{getExcuseRequester(excuse)}</Text>
 
-          <Block style={styles.excuseEvent}>
-            <Text style={styles.excuseEventTitle}>{excuse.title}</Text>
-            <Text style={styles.excuseEventStart}>{moment(excuse.start).format('MM/DD')}</Text>
+            <Block style={styles.excuseEvent}>
+              <Text style={styles.excuseEventTitle}>{excuse.title}</Text>
+              <Text style={styles.excuseEventStart}>{moment(excuse.start).format('MM/DD')}</Text>
+            </Block>
+
+            <Text style={styles.excuseReason}>{excuse.reason}</Text>
           </Block>
+        </TouchableOpacity>
 
-          <Text style={styles.excuseReason}>{excuse.reason}</Text>
-        </Block>
-
-        <Block style={styles.separator} />
+        {separator && <Block style={styles.separator} />}
       </React.Fragment>
     );
   };
@@ -101,6 +117,14 @@ const MessagesContent: React.FC<{
           </Block>
         </ScrollView>
       </Block>
+
+      <FadeModal transparent={true} visible={selectedExcuse !== null} onRequestClose={() => onSelectExcuse(null)}>
+        <ExcusePage
+          excuse={selectedExcuse}
+          renderExcuse={renderExcuse(selectedExcuse, false, true)}
+          onRequestClose={() => onSelectExcuse(null)}
+        />
+      </FadeModal>
     </Block>
   );
 };
