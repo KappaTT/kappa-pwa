@@ -62,7 +62,7 @@ const DirectoryContent: React.FC<{
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
 
-    setTimeout(() => loadData(true), 500);
+    loadData(true);
   }, [user, refreshing]);
 
   React.useEffect(() => {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator, RefreshControl } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { useSafeArea } from 'react-native-safe-area-context';
 import moment from 'moment';
@@ -21,8 +21,10 @@ const ProfileContent: React.FC<{
   const user = useSelector((state: TRedux) => state.auth.user);
   const loadHistory = useSelector((state: TRedux) => state.kappa.loadHistory);
   const events = useSelector((state: TRedux) => state.kappa.events);
+  const gettingEvents = useSelector((state: TRedux) => state.kappa.gettingEvents);
   const gmCount = useSelector((state: TRedux) => state.kappa.gmCount);
   const records = useSelector((state: TRedux) => state.kappa.records);
+  const gettingAttendance = useSelector((state: TRedux) => state.kappa.gettingAttendance);
   const missedMandatory = useSelector((state: TRedux) => state.kappa.missedMandatory);
   const points = useSelector((state: TRedux) => state.kappa.points);
   const gettingPoints = useSelector((state: TRedux) => state.kappa.gettingPoints);
@@ -56,7 +58,7 @@ const ProfileContent: React.FC<{
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
 
-    setTimeout(() => loadData(true), 500);
+    loadData(true);
   }, [user, refreshing]);
 
   const mandatory = React.useMemo(() => {
@@ -66,6 +68,12 @@ const ProfileContent: React.FC<{
 
     return Object.values(missedMandatory[user.email]).sort(sortEventByDate);
   }, [user, missedMandatory]);
+
+  React.useEffect(() => {
+    if (!gettingEvents && !gettingAttendance && !gettingPoints) {
+      setRefreshing(false);
+    }
+  }, [gettingEvents, gettingAttendance, gettingPoints]);
 
   React.useEffect(() => {
     if (user?.sessionToken) {
@@ -101,7 +109,7 @@ const ProfileContent: React.FC<{
 
   return (
     <Block flex>
-      <ScrollView>
+      <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
         <Block
           style={[
             styles.content,
@@ -218,6 +226,7 @@ const ProfileContent: React.FC<{
 
 const styles = StyleSheet.create({
   content: {
+    minHeight: '100%',
     paddingHorizontal: 20
   },
   header: {
@@ -231,7 +240,7 @@ const styles = StyleSheet.create({
     fontSize: 24
   },
   subtitle: {
-    fontFamily: 'OpenSans-SemiBold',
+    fontFamily: 'OpenSans-Bold',
     fontSize: 13,
     color: theme.COLORS.GRAY
   },
