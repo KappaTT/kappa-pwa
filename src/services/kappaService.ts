@@ -355,7 +355,8 @@ export const prettyPhone = (phone: string) => {
   return `(${phone.substring(0, 3)}) ${phone.substring(3, 6)}-${phone.substring(6, 10)}`;
 };
 
-export const sortEventByDate = (a: TEvent, b: TEvent) => (moment(a.start).isBefore(moment(b.start)) ? -1 : 1);
+export const sortEventByDate = (a: { start: string }, b: { start: string }) =>
+  moment(a.start).isBefore(moment(b.start)) ? -1 : 1;
 
 export const sortUserByName = (a: TUser, b: TUser) => {
   const nameA = `${a.familyName}, ${b.givenName}`;

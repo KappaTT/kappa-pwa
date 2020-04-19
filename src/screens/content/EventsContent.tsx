@@ -246,7 +246,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    marginBottom: 8
+    marginBottom: 8,
+    flexWrap: 'wrap'
   },
   eventTitle: {
     fontFamily: 'OpenSans-SemiBold',
