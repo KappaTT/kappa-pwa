@@ -337,12 +337,20 @@ const CheckInContent: React.FC<{
                     />
                   </Block>
 
-                  <Block style={styles.excuseContainer}>
+                  <Block
+                    style={[
+                      styles.excuseContainer,
+                      (selectedEvent === null || selectedEvent.excusable === 0) && {
+                        opacity: 0.5
+                      }
+                    ]}
+                  >
                     <Block style={styles.propertyHeaderContainer}>
                       <Text style={styles.propertyHeader}>Excuse</Text>
                     </Block>
 
                     <FormattedInput
+                      editable={selectedEvent !== null && selectedEvent.excusable === 1}
                       style={styles.multiInput}
                       multiline={true}
                       placeholderText="reason"
@@ -390,7 +398,6 @@ const CheckInContent: React.FC<{
                       </Block>
                     </Block>
                   </Block>
-
                   <Text style={styles.description}>
                     You may only check into an event on the same day it happened. If you forgot to check in and it is
                     the same day, you can still submit the code. If it isn't, please send a request from your profile
@@ -416,7 +423,7 @@ const CheckInContent: React.FC<{
                     disabled={
                       selectedEvent === null ||
                       // needsLoading ||
-                      !selectedEvent.excusable ||
+                      selectedEvent.excusable === 0 ||
                       alreadyCheckedIn
                     }
                     onPress={() => {}}

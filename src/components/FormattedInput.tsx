@@ -24,6 +24,7 @@ const FormattedInput: React.FC<{
   autoFocus?: boolean;
   blurOnSubmit?: boolean;
   error?: boolean;
+  editable?: boolean;
   getRef?(ref): void;
   formatter?(text: string): string;
   onChangeText?(text: string): void;
@@ -46,6 +47,7 @@ const FormattedInput: React.FC<{
   autoFocus = false,
   blurOnSubmit = !multiline,
   error = false,
+  editable = true,
   getRef = ref => {},
   formatter = (text: string) => text,
   onChangeText = (text: string) => {},
@@ -65,6 +67,7 @@ const FormattedInput: React.FC<{
         getRef={getRef}
         style={[styles.input, style]}
         bgColor={bgColor}
+        editable={editable}
         multiline={multiline}
         textAlignVertical={multiline ? 'top' : 'center'}
         numberOfLines={numberOfLines}
