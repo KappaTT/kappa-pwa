@@ -18,7 +18,7 @@ export const BASE_URL_DEV = 'http://localhost:3000/dev/';
 
 export const BASE_URL_MOCKING = false;
 
-export const BASE_URL_IP = BASE_URL; //process.env.NODE_ENV === 'development' ? 'http://127.0.0.1:3000/dev/' : BASE_URL;
+export const BASE_URL_IP = process.env.NODE_ENV === 'development' ? 'http://127.0.0.1:3000/dev/' : BASE_URL;
 
 log('Built base url', BASE_URL_IP);
 
