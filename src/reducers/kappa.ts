@@ -8,7 +8,8 @@ import {
   TEventDict,
   TUserEventDict,
   TLoadHistory,
-  TPointsUserDict
+  TPointsUserDict,
+  TExcuse
 } from '@backend/kappa';
 import {
   getEventById,
@@ -106,6 +107,7 @@ export interface TKappaState {
   records: TRecords;
   directory: TDirectory;
   points: TPointsUserDict;
+  pendingExcusesArray: Array<TExcuse>;
 
   eventsSize: number;
   gmCount: number;
@@ -171,6 +173,7 @@ const initialState: TKappaState = {
   },
   directory: {},
   points: {},
+  pendingExcusesArray: [],
 
   eventsSize: 0,
   gmCount: 0,
@@ -336,18 +339,19 @@ export default (state = initialState, action: any): TKappaState => {
       return {
         ...state,
         gettingExcuses: false,
+        pendingExcusesArray: action.excused,
         loadHistory: {
           ...state.loadHistory,
           excuses: moment()
-        },
-        ...recomputeKappaState({
-          events: state.events,
-          records: mergeRecords(state.records, {
-            attended: [],
-            excused: action.excused
-          }),
-          directory: state.directory
-        })
+        }
+        // ...recomputeKappaState({
+        //   events: state.events,
+        //   records: mergeRecords(state.records, {
+        //     attended: [],
+        //     excused: action.excused
+        //   }),
+        //   directory: state.directory
+        // })
       };
     case GET_EXCUSES_FAILURE:
       return {

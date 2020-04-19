@@ -21,7 +21,13 @@ const TabBar: React.FC<{
   const { routes, index: activeRouteIndex } = navigation.state;
 
   const user = useSelector((state: TRedux) => state.auth.user);
-  const unreadMessages = false;
+  const pendingExcuses = useSelector((state: TRedux) => state.kappa.pendingExcusesArray);
+
+  const unreadMessages = React.useMemo(() => {
+    if (pendingExcuses.length > 0) return true;
+
+    return false;
+  }, [pendingExcuses]);
 
   const insets = useSafeArea();
 
