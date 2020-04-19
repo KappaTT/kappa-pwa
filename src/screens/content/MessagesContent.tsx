@@ -5,7 +5,7 @@ import { theme } from '@constants';
 import { Block, Text } from '@components';
 import { NavigationTypes } from '@types';
 
-const AnnouncementsContent: React.FC<{
+const MessagesContent: React.FC<{
   navigation: NavigationTypes.ParamType;
 }> = ({ navigation }) => {
   return (
@@ -21,4 +21,4 @@ const AnnouncementsContent: React.FC<{
 
 const styles = StyleSheet.create({});
 
-export default AnnouncementsContent;
+export default MessagesContent;

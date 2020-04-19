@@ -1,12 +1,12 @@
 import React from 'react';
 
 import { NavigationTypes } from '@types';
-import Content from '@screens/content/AnnouncementsContent';
+import Content from '@screens/content/MessagesContent';
 
-const AnnouncementsScreen: React.FC<{
+const MessagesScreen: React.FC<{
   navigation: NavigationTypes.ParamType;
 }> = ({ navigation }) => {
   return <Content navigation={navigation} />;
 };
 
-export default AnnouncementsScreen;
+export default MessagesScreen;

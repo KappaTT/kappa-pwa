@@ -41,7 +41,7 @@ const TabBar: React.FC<{
             const isRouteActive = routeIndex === activeRouteIndex;
             const labelText = getLabelText({ route });
 
-            const isAnnouncements = labelText === 'Announcements';
+            const isMessages = labelText === 'Messages';
 
             const onPress = () => onTabPress({ route });
 
@@ -59,7 +59,7 @@ const TabBar: React.FC<{
                 onTabPress={onPress}
                 onTabLongPress={onLongPress}
                 user={user}
-                badge={isAnnouncements && unreadMessages}
+                badge={isMessages && unreadMessages}
               />
             );
           })}

@@ -5,7 +5,7 @@ import { createBottomTabNavigator } from 'react-navigation-tabs';
 
 import { theme } from '@constants';
 import { Icon, TabBar } from '@components';
-import { AnnouncementsScreen, CheckInScreen, DirectoryScreen, EventsScreen, ProfileScreen } from '@screens';
+import { MessagesScreen, CheckInScreen, DirectoryScreen, EventsScreen, ProfileScreen } from '@screens';
 
 const EventsStack = createStackNavigator({
   Events: {
@@ -55,19 +55,19 @@ CheckInStack.navigationOptions = ({ navigation }) => ({
   )
 });
 
-const AnnouncementsStack = createStackNavigator({
-  Announcements: {
-    screen: AnnouncementsScreen,
+const MessagesStack = createStackNavigator({
+  Messages: {
+    screen: MessagesScreen,
     navigationOptions: ({ navigation }) => ({
       header: null
     })
   }
 });
 
-AnnouncementsStack.navigationOptions = ({ navigation }) => ({
-  tabBarLabel: 'Announcements',
+MessagesStack.navigationOptions = ({ navigation }) => ({
+  tabBarLabel: 'Messages',
   tabBarIcon: ({ tintColor }) => (
-    <Icon style={styles.iconAnnouncements} name="message-square" family="Feather" color={tintColor} size={28} />
+    <Icon style={styles.iconMessages} name="message-square" family="Feather" color={tintColor} size={28} />
   )
 });
 
@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
   iconEvents: {},
   iconDirectory: {},
   iconCheckIn: {},
-  iconAnnouncements: {},
+  iconMessages: {},
   iconProfile: {}
 });
 
@@ -100,7 +100,7 @@ export default createBottomTabNavigator(
     EventsStack,
     DirectoryStack,
     CheckInStack,
-    AnnouncementsStack,
+    MessagesStack,
     ProfileStack
   },
   {
