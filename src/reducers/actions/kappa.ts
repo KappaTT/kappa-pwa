@@ -30,7 +30,10 @@ import {
   CLEAR_GLOBAL_ERROR_MESSAGE,
   GET_POINTS,
   GET_POINTS_SUCCESS,
-  GET_POINTS_FAILURE
+  GET_POINTS_FAILURE,
+  GET_EXCUSES,
+  GET_EXCUSES_SUCCESS,
+  GET_EXCUSES_FAILURE
 } from '@reducers/kappa';
 import { TUser } from '@backend/auth';
 import { TEvent, TPoint } from '@backend/kappa';
@@ -167,6 +170,40 @@ export const getEventAttendance = (user: TUser, target: string, overwrite: boole
         dispatch(getAttendanceSuccess(res.data, `event-${target}`, overwrite));
       } else {
         dispatch(getAttendanceFailure(res.error));
+      }
+    });
+  };
+};
+
+const gettingExcuses = () => {
+  return {
+    type: GET_EXCUSES
+  };
+};
+
+const getExcusesSuccess = data => {
+  return {
+    type: GET_EXCUSES_SUCCESS,
+    excused: data.excused
+  };
+};
+
+const getExcusesFailure = err => {
+  return {
+    type: GET_EXCUSES_FAILURE,
+    error: err
+  };
+};
+
+export const getExcuses = (user: TUser) => {
+  return dispatch => {
+    dispatch(gettingExcuses());
+
+    Kappa.getPendingExcuses({ user }).then(res => {
+      if (res.success) {
+        dispatch(getExcusesSuccess(res.data));
+      } else {
+        dispatch(getExcusesFailure(res.error));
       }
     });
   };

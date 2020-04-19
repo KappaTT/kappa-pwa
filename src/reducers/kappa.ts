@@ -42,6 +42,14 @@ export const GET_ATTENDANCE = 'GET_ATTENDANCE';
 export const GET_ATTENDANCE_SUCCESS = 'GET_ATTENDANCE_SUCCESS';
 export const GET_ATTENDANCE_FAILURE = 'GET_ATTENDANCE_FAILURE';
 
+export const GET_EXCUSES = 'GET_EXCUSES';
+export const GET_EXCUSES_SUCCESS = 'GET_EXCUSES_SUCCESS';
+export const GET_EXCUSES_FAILURE = 'GET_EXCUSES_FAILURE';
+
+export const GET_POINTS = 'GET_POINTS';
+export const GET_POINTS_SUCCESS = 'GET_POINTS_SUCCESS';
+export const GET_POINTS_FAILURE = 'GET_POINTS_FAILURE';
+
 export const SELECT_EVENT = 'SELECT_EVENT';
 export const UNSELECT_EVENT = 'UNSELECT_EVENT';
 
@@ -63,10 +71,6 @@ export const CHECK_IN = 'CHECK_IN';
 export const CHECK_IN_SUCCESS = 'CHECK_IN_SUCCESS';
 export const CHECK_IN_FAILURE = 'CHECK_IN_FAILURE';
 
-export const GET_POINTS = 'GET_POINTS';
-export const GET_POINTS_SUCCESS = 'GET_POINTS_SUCCESS';
-export const GET_POINTS_FAILURE = 'GET_POINTS_FAILURE';
-
 export interface TKappaState {
   globalErrorMessage: string;
   globalErrorCode: number;
@@ -82,6 +86,10 @@ export interface TKappaState {
   gettingAttendance: boolean;
   getAttendanceError: boolean;
   getAttendanceErrorMessage: string;
+
+  gettingExcuses: boolean;
+  getExcusesError: boolean;
+  getExcusesErrorMessage: string;
 
   gettingPoints: boolean;
   getPointsError: boolean;
@@ -140,6 +148,10 @@ const initialState: TKappaState = {
   gettingAttendance: false,
   getAttendanceError: false,
   getAttendanceErrorMessage: '',
+
+  gettingExcuses: false,
+  getExcusesError: false,
+  getExcusesErrorMessage: '',
 
   gettingPoints: false,
   getPointsError: false,
@@ -312,6 +324,37 @@ export default (state = initialState, action: any): TKappaState => {
         getAttendanceErrorMessage: action.error.message,
         globalErrorMessage: action.error.message,
         globalErrorCode: action.error.code
+      };
+    case GET_EXCUSES:
+      return {
+        ...state,
+        gettingExcuses: true,
+        getExcusesError: false,
+        getExcusesErrorMessage: ''
+      };
+    case GET_EXCUSES_SUCCESS:
+      return {
+        ...state,
+        gettingExcuses: false,
+        loadHistory: {
+          ...state.loadHistory,
+          excuses: moment()
+        },
+        ...recomputeKappaState({
+          events: state.events,
+          records: mergeRecords(state.records, {
+            attended: [],
+            excused: action.excused
+          }),
+          directory: state.directory
+        })
+      };
+    case GET_EXCUSES_FAILURE:
+      return {
+        ...state,
+        gettingExcuses: false,
+        getExcusesError: true,
+        getExcusesErrorMessage: action.error.message
       };
     case SELECT_EVENT:
       return {
