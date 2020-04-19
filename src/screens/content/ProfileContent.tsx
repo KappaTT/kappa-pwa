@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { useSafeArea } from 'react-native-safe-area-context';
 import moment from 'moment';
@@ -25,6 +25,7 @@ const ProfileContent: React.FC<{
   const records = useSelector((state: TRedux) => state.kappa.records);
   const missedMandatory = useSelector((state: TRedux) => state.kappa.missedMandatory);
   const points = useSelector((state: TRedux) => state.kappa.points);
+  const gettingPoints = useSelector((state: TRedux) => state.kappa.gettingPoints);
 
   const [refreshing, setRefreshing] = React.useState<boolean>(false);
 
@@ -153,35 +154,55 @@ const ProfileContent: React.FC<{
             <Block style={styles.splitPropertyRow}>
               <Block style={styles.splitPropertyThirds}>
                 <Text style={styles.propertyHeader}>Prof</Text>
-                <Text style={styles.propertyValue}>
-                  {points.hasOwnProperty(user.email) ? points[user.email].PROF : '0'}
-                </Text>
+                {gettingPoints ? (
+                  <ActivityIndicator style={styles.propertyLoader} />
+                ) : (
+                  <Text style={styles.propertyValue}>
+                    {points.hasOwnProperty(user.email) ? points[user.email].PROF : '0'}
+                  </Text>
+                )}
               </Block>
               <Block style={styles.splitPropertyThirds}>
                 <Text style={styles.propertyHeader}>Phil</Text>
-                <Text style={styles.propertyValue}>
-                  {points.hasOwnProperty(user.email) ? points[user.email].PHIL : '0'}
-                </Text>
+                {gettingPoints ? (
+                  <ActivityIndicator style={styles.propertyLoader} />
+                ) : (
+                  <Text style={styles.propertyValue}>
+                    {points.hasOwnProperty(user.email) ? points[user.email].PHIL : '0'}
+                  </Text>
+                )}
               </Block>
               <Block style={styles.splitPropertyThirds}>
                 <Text style={styles.propertyHeader}>Bro</Text>
-                <Text style={styles.propertyValue}>
-                  {points.hasOwnProperty(user.email) ? points[user.email].BRO : '0'}
-                </Text>
+                {gettingPoints ? (
+                  <ActivityIndicator style={styles.propertyLoader} />
+                ) : (
+                  <Text style={styles.propertyValue}>
+                    {points.hasOwnProperty(user.email) ? points[user.email].BRO : '0'}
+                  </Text>
+                )}
               </Block>
             </Block>
             <Block style={styles.splitPropertyRow}>
               <Block style={styles.splitPropertyThirds}>
                 <Text style={styles.propertyHeader}>Rush</Text>
-                <Text style={styles.propertyValue}>
-                  {points.hasOwnProperty(user.email) ? points[user.email].RUSH : '0'}
-                </Text>
+                {gettingPoints ? (
+                  <ActivityIndicator style={styles.propertyLoader} />
+                ) : (
+                  <Text style={styles.propertyValue}>
+                    {points.hasOwnProperty(user.email) ? points[user.email].RUSH : '0'}
+                  </Text>
+                )}
               </Block>
               <Block style={styles.splitPropertyThirds}>
                 <Text style={styles.propertyHeader}>Any</Text>
-                <Text style={styles.propertyValue}>
-                  {points.hasOwnProperty(user.email) ? points[user.email].ANY : '0'}
-                </Text>
+                {gettingPoints ? (
+                  <ActivityIndicator style={styles.propertyLoader} />
+                ) : (
+                  <Text style={styles.propertyValue}>
+                    {points.hasOwnProperty(user.email) ? points[user.email].ANY : '0'}
+                  </Text>
+                )}
               </Block>
             </Block>
           </Block>
@@ -237,6 +258,9 @@ const styles = StyleSheet.create({
     marginTop: 4,
     fontFamily: 'OpenSans',
     fontSize: 15
+  },
+  propertyLoader: {
+    alignSelf: 'flex-start'
   },
   splitPropertyRow: {
     display: 'flex',
