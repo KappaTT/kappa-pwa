@@ -58,6 +58,11 @@ export interface TExcuse {
   approved: 0 | 1;
 }
 
+export interface TPendingExcuse extends TExcuse {
+  title: string;
+  start: string;
+}
+
 export interface TExcuseEventDict {
   [event_id: string]: TExcuse;
 }
@@ -461,12 +466,12 @@ export interface TGetPendingExcusesPayload {
 }
 
 export interface TGetPendingExcusesRequestResponse {
-  excused: Array<TExcuse>;
+  excused: Array<TPendingExcuse>;
 }
 
 export interface TGetPendingExcusesResponse extends TResponse {
   data?: {
-    excused: Array<TExcuse>;
+    excused: Array<TPendingExcuse>;
   };
 }
 

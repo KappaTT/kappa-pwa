@@ -9,7 +9,8 @@ import {
   TUserEventDict,
   TLoadHistory,
   TPointsUserDict,
-  TExcuse
+  TExcuse,
+  TPendingExcuse
 } from '@backend/kappa';
 import {
   getEventById,
@@ -107,7 +108,7 @@ export interface TKappaState {
   records: TRecords;
   directory: TDirectory;
   points: TPointsUserDict;
-  pendingExcusesArray: Array<TExcuse>;
+  pendingExcusesArray: Array<TPendingExcuse>;
 
   eventsSize: number;
   gmCount: number;
