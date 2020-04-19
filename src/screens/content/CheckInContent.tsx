@@ -340,9 +340,10 @@ const CheckInContent: React.FC<{
                   <Block
                     style={[
                       styles.excuseContainer,
-                      (selectedEvent === null || selectedEvent.excusable === 0) && {
-                        opacity: 0.5
-                      }
+                      selectedEvent !== null &&
+                        selectedEvent.excusable === 0 && {
+                          opacity: 0.5
+                        }
                     ]}
                   >
                     <Block style={styles.propertyHeaderContainer}>
@@ -350,7 +351,7 @@ const CheckInContent: React.FC<{
                     </Block>
 
                     <FormattedInput
-                      editable={selectedEvent !== null && selectedEvent.excusable === 1}
+                      editable={selectedEvent === null || selectedEvent.excusable === 1}
                       style={styles.multiInput}
                       multiline={true}
                       placeholderText="reason"
