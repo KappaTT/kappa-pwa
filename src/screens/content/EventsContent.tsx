@@ -51,6 +51,7 @@ const EventsContent: React.FC<{
     [dispatch, user]
   );
   const dispatchGetDirectory = React.useCallback(() => dispatch(_kappa.getDirectory(user)), [dispatch, user]);
+  const dispatchGetExcuses = React.useCallback(() => dispatch(_kappa.getExcuses(user)), [dispatch, user]);
   const dispatchSelectEvent = React.useCallback((eventId: string) => dispatch(_kappa.selectEvent(eventId)), [dispatch]);
   const dispatchEditNewEvent = React.useCallback(() => dispatch(_kappa.editNewEvent()), [dispatch]);
   const dispatchSaveEditEvent = React.useCallback(
@@ -69,6 +70,7 @@ const EventsContent: React.FC<{
         if (force || shouldLoad(loadHistory, 'events')) dispatchGetEvents();
         if (force || shouldLoad(loadHistory, 'directory')) dispatchGetDirectory();
         if (force || shouldLoad(loadHistory, `user-${user.email}`)) dispatchGetMyAttendance(force);
+        if (force || shouldLoad(loadHistory, 'excuses')) dispatchGetExcuses();
       } else {
         log('Bad user request');
       }

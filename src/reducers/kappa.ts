@@ -345,14 +345,6 @@ export default (state = initialState, action: any): TKappaState => {
           ...state.loadHistory,
           excuses: moment()
         }
-        // ...recomputeKappaState({
-        //   events: state.events,
-        //   records: mergeRecords(state.records, {
-        //     attended: [],
-        //     excused: action.excused
-        //   }),
-        //   directory: state.directory
-        // })
       };
     case GET_EXCUSES_FAILURE:
       return {

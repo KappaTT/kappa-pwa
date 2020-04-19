@@ -16,7 +16,7 @@ const MessagesContent: React.FC<{
 }> = ({ navigation }) => {
   const user = useSelector((state: TRedux) => state.auth.user);
   const loadHistory = useSelector((state: TRedux) => state.kappa.loadHistory);
-  const records = useSelector((state: TRedux) => state.kappa.records);
+  const pendingExcusesArray = useSelector((state: TRedux) => state.kappa.pendingExcusesArray);
   const gettingExcuses = useSelector((state: TRedux) => state.kappa.gettingExcuses);
 
   const [refreshing, setRefreshing] = React.useState<boolean>(false);

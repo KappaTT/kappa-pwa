@@ -44,6 +44,7 @@ const DirectoryContent: React.FC<{
     [dispatch, user]
   );
   const dispatchGetDirectory = React.useCallback(() => dispatch(_kappa.getDirectory(user)), [dispatch, user]);
+  const dispatchGetExcuses = React.useCallback(() => dispatch(_kappa.getExcuses(user)), [dispatch, user]);
   const dispatchSelectUser = React.useCallback((email: string) => dispatch(_kappa.selectUser(email)), [dispatch]);
 
   const insets = useSafeArea();
@@ -55,6 +56,7 @@ const DirectoryContent: React.FC<{
       if (force || shouldLoad(loadHistory, 'events')) dispatchGetEvents();
       if (force || shouldLoad(loadHistory, 'directory')) dispatchGetDirectory();
       if (force || shouldLoad(loadHistory, `user-${user.email}`)) dispatchGetMyAttendance(force);
+      if (force || shouldLoad(loadHistory, 'excuses')) dispatchGetExcuses();
     },
     [user, loadHistory]
   );
