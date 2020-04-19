@@ -152,7 +152,7 @@ const ProfileContent: React.FC<{
           <Text style={styles.pointsText}>Points</Text>
           <Block>
             <Block style={styles.splitPropertyRow}>
-              <Block style={styles.splitPropertyThirds}>
+              <Block style={styles.splitPropertyFifths}>
                 <Text style={styles.propertyHeader}>Prof</Text>
                 {gettingPoints ? (
                   <ActivityIndicator style={styles.propertyLoader} />
@@ -162,7 +162,7 @@ const ProfileContent: React.FC<{
                   </Text>
                 )}
               </Block>
-              <Block style={styles.splitPropertyThirds}>
+              <Block style={styles.splitPropertyFifths}>
                 <Text style={styles.propertyHeader}>Phil</Text>
                 {gettingPoints ? (
                   <ActivityIndicator style={styles.propertyLoader} />
@@ -172,7 +172,7 @@ const ProfileContent: React.FC<{
                   </Text>
                 )}
               </Block>
-              <Block style={styles.splitPropertyThirds}>
+              <Block style={styles.splitPropertyFifths}>
                 <Text style={styles.propertyHeader}>Bro</Text>
                 {gettingPoints ? (
                   <ActivityIndicator style={styles.propertyLoader} />
@@ -182,9 +182,7 @@ const ProfileContent: React.FC<{
                   </Text>
                 )}
               </Block>
-            </Block>
-            <Block style={styles.splitPropertyRow}>
-              <Block style={styles.splitPropertyThirds}>
+              <Block style={styles.splitPropertyFifths}>
                 <Text style={styles.propertyHeader}>Rush</Text>
                 {gettingPoints ? (
                   <ActivityIndicator style={styles.propertyLoader} />
@@ -194,7 +192,7 @@ const ProfileContent: React.FC<{
                   </Text>
                 )}
               </Block>
-              <Block style={styles.splitPropertyThirds}>
+              <Block style={styles.splitPropertyFifths}>
                 <Text style={styles.propertyHeader}>Any</Text>
                 {gettingPoints ? (
                   <ActivityIndicator style={styles.propertyLoader} />
@@ -210,7 +208,7 @@ const ProfileContent: React.FC<{
           <Block>{renderAdmin()}</Block>
 
           <Text style={styles.madeWithText}>
-            {`${Constants.manifest.version} - ${Constants.manifest.sdkVersion} - ${Constants.nativeBuildVersion}\nWhatsoever thy hand findeth to do, do it with thy might.\nJTC - Web Chair 2019-2021`}
+            {`Whatsoever thy hand findeth to do, do it with thy might.\n\n${Constants.manifest.version} - ${Constants.manifest.sdkVersion} - ${Constants.nativeBuildVersion}\n\nJTC - Web Chair 2019-2021`}
           </Text>
         </Block>
       </ScrollView>
@@ -272,6 +270,9 @@ const styles = StyleSheet.create({
   },
   splitPropertyThirds: {
     width: '33%'
+  },
+  splitPropertyFifths: {
+    width: '20%'
   },
   pointsText: {
     marginTop: 20,
