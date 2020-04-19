@@ -3,17 +3,16 @@ import { StyleSheet, FlatList, RefreshControl, TouchableOpacity } from 'react-na
 import { useSelector, useDispatch } from 'react-redux';
 import { Placeholder, PlaceholderLine, Fade } from 'rn-placeholder';
 import { useSafeArea } from 'react-native-safe-area-context';
-import moment from 'moment';
 
 import { theme } from '@constants';
 import { TRedux } from '@reducers';
 import { _kappa } from '@reducers/actions';
-import { Block, Header, EndCapButton, Text, Icon } from '@components';
+import { Block, Header, Text, Icon } from '@components';
 import { NavigationTypes } from '@types';
 import { HeaderHeight, isEmpty } from '@services/utils';
 import { log } from '@services/logService';
 import { TUser } from '@backend/auth';
-import { hasValidCheckIn, sortUserByName, shouldLoad } from '@services/kappaService';
+import { sortUserByName, shouldLoad } from '@services/kappaService';
 
 const UserSkeleton: React.FC<{}> = ({}) => {
   return (
