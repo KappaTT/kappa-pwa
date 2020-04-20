@@ -107,7 +107,6 @@ const styles = StyleSheet.create({
   message: {
     marginLeft: 4,
     fontFamily: 'OpenSans-SemiBold',
-    textTransform: 'capitalize',
     color: theme.COLORS.ERROR
   },
   signInButton: {
