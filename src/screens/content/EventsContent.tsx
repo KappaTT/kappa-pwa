@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, SectionList, ScrollView, RefreshControl, TouchableOpacity } from 'react-native';
+import { StyleSheet, SectionList, RefreshControl, TouchableOpacity } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { Placeholder, PlaceholderLine, Fade } from 'rn-placeholder';
 import { useSafeArea } from 'react-native-safe-area-context';
@@ -39,7 +39,7 @@ const EventsContent: React.FC<{
   const gettingDirectory = useSelector((state: TRedux) => state.kappa.gettingDirectory);
   const gettingAttendance = useSelector((state: TRedux) => state.kappa.gettingAttendance);
   const events = useSelector((state: TRedux) => state.kappa.events);
-  const eventsByDate = useSelector((state: TRedux) => state.kappa.eventsByDate);
+  const eventSections = useSelector((state: TRedux) => state.kappa.eventSections);
   const editingEventId = useSelector((state: TRedux) => state.kappa.editingEventId);
   const getEventsErrorMessage = useSelector((state: TRedux) => state.kappa.getEventsErrorMessage);
 
@@ -165,35 +165,32 @@ const EventsContent: React.FC<{
           }
         ]}
       >
-        {isEmpty(eventsByDate) ? (
-          gettingEvents ? (
-            <Block style={styles.loadingContainer}>
-              <EventSkeleton />
-              <Block style={styles.separator} />
-              <EventSkeleton />
-              <Block style={styles.separator} />
-              <EventSkeleton />
-              <Block style={styles.separator} />
-              <EventSkeleton />
-              <Block style={styles.separator} />
-              <EventSkeleton />
-            </Block>
-          ) : (
-            <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
-              <Text style={styles.pullToRefresh}>Pull to refresh</Text>
-              <Text style={styles.errorMessage}>{getEventsErrorMessage}</Text>
-            </ScrollView>
-          )
+        {gettingEvents && eventSections.length === 0 ? (
+          <Block style={styles.loadingContainer}>
+            <EventSkeleton />
+            <Block style={styles.separator} />
+            <EventSkeleton />
+            <Block style={styles.separator} />
+            <EventSkeleton />
+            <Block style={styles.separator} />
+            <EventSkeleton />
+            <Block style={styles.separator} />
+            <EventSkeleton />
+          </Block>
         ) : (
           <SectionList
             ref={ref => (scrollRef.current = ref)}
-            sections={Object.entries(eventsByDate)
-              .sort((a, b) => (moment(a[0]).isBefore(moment(b[0])) ? -1 : 1))
-              .map(entry => ({ title: entry[0], data: entry[1] }))}
+            sections={eventSections}
             keyExtractor={keyExtractor}
             renderSectionHeader={renderSectionHeader}
             renderItem={renderItem}
             refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+            ListEmptyComponent={
+              <React.Fragment>
+                <Text style={styles.pullToRefresh}>Pull to refresh</Text>
+                <Text style={styles.errorMessage}>{getEventsErrorMessage}</Text>
+              </React.Fragment>
+            }
           />
         )}
       </Block>

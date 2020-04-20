@@ -428,6 +428,19 @@ export const extractPoints = (points: string, type: string) => {
   return cutPoints;
 };
 
+export const getFutureDateIndex = (
+  eventSections: Array<{
+    title: string;
+    data: Array<TEvent>;
+  }>
+) => {
+  if (eventSections.length === 0) {
+    return -1;
+  }
+
+  return eventSections.length - 1;
+};
+
 export const shouldLoad = (loadHistory: TLoadHistory, key: string) => {
   if (!loadHistory.hasOwnProperty(key)) {
     return true;
@@ -460,6 +473,10 @@ export const recomputeKappaState = ({
   const mandatoryEvents = getMandatoryEvents(events);
   const missedMandatory = getMissedMandatory(records, mandatoryEvents, directory);
   const gmCount = getTypeCount(events, 'GM');
+  const eventSections = Object.entries(eventsByDate)
+    .sort((a, b) => (moment(a[0]).isBefore(moment(b[0])) ? -1 : 1))
+    .map((entry: [string, Array<TEvent>]) => ({ title: entry[0], data: entry[1] }));
+  const futureIndex = getFutureDateIndex(eventSections);
 
   return {
     events,
@@ -473,6 +490,8 @@ export const recomputeKappaState = ({
     eventsByDate,
     mandatoryEvents,
     missedMandatory,
-    gmCount
+    gmCount,
+    eventSections,
+    futureIndex
   };
 };

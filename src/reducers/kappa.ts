@@ -109,6 +109,11 @@ export interface TKappaState {
   directory: TDirectory;
   points: TPointsUserDict;
   pendingExcusesArray: Array<TPendingExcuse>;
+  eventSections: Array<{
+    title: string;
+    data: Array<TEvent>;
+  }>;
+  futureIndex: number;
 
   eventsSize: number;
   gmCount: number;
@@ -175,6 +180,8 @@ const initialState: TKappaState = {
   directory: {},
   points: {},
   pendingExcusesArray: [],
+  eventSections: [],
+  futureIndex: -1,
 
   eventsSize: 0,
   gmCount: 0,

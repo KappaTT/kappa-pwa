@@ -33,7 +33,6 @@ const DirectoryContent: React.FC<{
   const gettingEvents = useSelector((state: TRedux) => state.kappa.gettingEvents);
   const gettingDirectory = useSelector((state: TRedux) => state.kappa.gettingDirectory);
   const gettingAttendance = useSelector((state: TRedux) => state.kappa.gettingAttendance);
-  const events = useSelector((state: TRedux) => state.kappa.events);
   const getDirectoryErrorMessage = useSelector((state: TRedux) => state.kappa.getDirectoryErrorMessage);
 
   const [refreshing, setRefreshing] = React.useState<boolean>(gettingEvents || gettingDirectory || gettingAttendance);
@@ -126,25 +125,18 @@ const DirectoryContent: React.FC<{
           }
         ]}
       >
-        {isEmpty(events) ? (
-          gettingDirectory ? (
-            <Block style={styles.loadingContainer}>
-              <UserSkeleton />
-              <Block style={styles.separator} />
-              <UserSkeleton />
-              <Block style={styles.separator} />
-              <UserSkeleton />
-              <Block style={styles.separator} />
-              <UserSkeleton />
-              <Block style={styles.separator} />
-              <UserSkeleton />
-            </Block>
-          ) : (
-            <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
-              <Text style={styles.pullToRefresh}>Pull to refresh</Text>
-              <Text style={styles.errorMessage}>{getDirectoryErrorMessage}</Text>
-            </ScrollView>
-          )
+        {gettingDirectory && isEmpty(directory) ? (
+          <Block style={styles.loadingContainer}>
+            <UserSkeleton />
+            <Block style={styles.separator} />
+            <UserSkeleton />
+            <Block style={styles.separator} />
+            <UserSkeleton />
+            <Block style={styles.separator} />
+            <UserSkeleton />
+            <Block style={styles.separator} />
+            <UserSkeleton />
+          </Block>
         ) : (
           <FlatList
             ref={ref => (scrollRef.current = ref)}
@@ -152,6 +144,12 @@ const DirectoryContent: React.FC<{
             keyExtractor={keyExtractor}
             renderItem={renderItem}
             refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+            ListEmptyComponent={
+              <React.Fragment>
+                <Text style={styles.pullToRefresh}>Pull to refresh</Text>
+                <Text style={styles.errorMessage}>{getDirectoryErrorMessage}</Text>
+              </React.Fragment>
+            }
           />
         )}
       </Block>
