@@ -12,9 +12,10 @@ const Header: React.FC<{
   title?: string;
   subtitle?: string;
   showBackButton?: boolean;
+  leftButton?: React.ReactElement;
   rightButton?: React.ReactElement;
   onPressBackButton?(): void;
-}> = ({ title = '', subtitle = '', showBackButton = false, rightButton, onPressBackButton = () => {} }) => {
+}> = ({ title = '', subtitle = '', showBackButton = false, leftButton, rightButton, onPressBackButton = () => {} }) => {
   const insets = useSafeArea();
 
   return (
@@ -28,6 +29,7 @@ const Header: React.FC<{
         ]}
       >
         {showBackButton && <BackButton onPress={onPressBackButton} />}
+        {!showBackButton && leftButton}
 
         <Block style={styles.textContainer}>
           <Text style={styles.title}>{title}</Text>
