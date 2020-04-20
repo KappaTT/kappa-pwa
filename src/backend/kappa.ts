@@ -55,6 +55,7 @@ export interface TExcuse {
   event_id: string;
   netid: string;
   reason: string;
+  late: 0 | 1;
   approved: 0 | 1;
 }
 

@@ -88,6 +88,7 @@ const MessagesContent: React.FC<{
             <Block style={styles.excuseEvent}>
               <Text style={styles.excuseEventTitle}>{excuse.title}</Text>
               <Text style={styles.excuseEventStart}>{moment(excuse.start).format('MM/DD')}</Text>
+              {excuse.late === 1 && <Text style={styles.excuseLate}>LATE</Text>}
             </Block>
 
             <Text style={styles.excuseReason}>{excuse.reason}</Text>
@@ -162,6 +163,12 @@ const styles = StyleSheet.create({
     fontFamily: 'OpenSans',
     fontSize: 13,
     color: theme.COLORS.DARK_GRAY
+  },
+  excuseLate: {
+    marginLeft: 8,
+    fontFamily: 'OpenSans-Bold',
+    fontSize: 13,
+    color: theme.COLORS.PRIMARY
   },
   excuseReason: {
     marginTop: 12
