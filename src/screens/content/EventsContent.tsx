@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, SectionList, RefreshControl, TouchableOpacity } from 'react-native';
+import { StyleSheet, SectionList, ScrollView, RefreshControl, TouchableOpacity } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { Placeholder, PlaceholderLine, Fade } from 'rn-placeholder';
 import { useSafeArea } from 'react-native-safe-area-context';
@@ -41,6 +41,7 @@ const EventsContent: React.FC<{
   const events = useSelector((state: TRedux) => state.kappa.events);
   const eventsByDate = useSelector((state: TRedux) => state.kappa.eventsByDate);
   const editingEventId = useSelector((state: TRedux) => state.kappa.editingEventId);
+  const getEventsErrorMessage = useSelector((state: TRedux) => state.kappa.getEventsErrorMessage);
 
   const [refreshing, setRefreshing] = React.useState<boolean>(gettingEvents || gettingDirectory || gettingAttendance);
 
@@ -164,18 +165,25 @@ const EventsContent: React.FC<{
           }
         ]}
       >
-        {gettingEvents && isEmpty(eventsByDate) ? (
-          <Block style={styles.loadingContainer}>
-            <EventSkeleton />
-            <Block style={styles.separator} />
-            <EventSkeleton />
-            <Block style={styles.separator} />
-            <EventSkeleton />
-            <Block style={styles.separator} />
-            <EventSkeleton />
-            <Block style={styles.separator} />
-            <EventSkeleton />
-          </Block>
+        {isEmpty(eventsByDate) ? (
+          gettingEvents ? (
+            <Block style={styles.loadingContainer}>
+              <EventSkeleton />
+              <Block style={styles.separator} />
+              <EventSkeleton />
+              <Block style={styles.separator} />
+              <EventSkeleton />
+              <Block style={styles.separator} />
+              <EventSkeleton />
+              <Block style={styles.separator} />
+              <EventSkeleton />
+            </Block>
+          ) : (
+            <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
+              <Text style={styles.pullToRefresh}>Pull to refresh</Text>
+              <Text style={styles.errorMessage}>{getEventsErrorMessage}</Text>
+            </ScrollView>
+          )
         ) : (
           <SectionList
             ref={ref => (scrollRef.current = ref)}
@@ -272,6 +280,15 @@ const styles = StyleSheet.create({
   eventDescription: {
     fontFamily: 'OpenSans',
     fontSize: 15
+  },
+  pullToRefresh: {
+    marginTop: '50%',
+    textAlign: 'center',
+    fontFamily: 'OpenSans-SemiBold'
+  },
+  errorMessage: {
+    textAlign: 'center',
+    fontFamily: 'OpenSans'
   }
 });
 

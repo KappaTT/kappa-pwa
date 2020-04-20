@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, FlatList, RefreshControl, TouchableOpacity } from 'react-native';
+import { StyleSheet, FlatList, ScrollView, RefreshControl, TouchableOpacity } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { Placeholder, PlaceholderLine, Fade } from 'rn-placeholder';
 import { useSafeArea } from 'react-native-safe-area-context';
@@ -34,6 +34,7 @@ const DirectoryContent: React.FC<{
   const gettingDirectory = useSelector((state: TRedux) => state.kappa.gettingDirectory);
   const gettingAttendance = useSelector((state: TRedux) => state.kappa.gettingAttendance);
   const events = useSelector((state: TRedux) => state.kappa.events);
+  const getDirectoryErrorMessage = useSelector((state: TRedux) => state.kappa.getDirectoryErrorMessage);
 
   const [refreshing, setRefreshing] = React.useState<boolean>(gettingEvents || gettingDirectory || gettingAttendance);
 
@@ -125,18 +126,25 @@ const DirectoryContent: React.FC<{
           }
         ]}
       >
-        {gettingDirectory && isEmpty(events) ? (
-          <Block style={styles.loadingContainer}>
-            <UserSkeleton />
-            <Block style={styles.separator} />
-            <UserSkeleton />
-            <Block style={styles.separator} />
-            <UserSkeleton />
-            <Block style={styles.separator} />
-            <UserSkeleton />
-            <Block style={styles.separator} />
-            <UserSkeleton />
-          </Block>
+        {isEmpty(events) ? (
+          gettingDirectory ? (
+            <Block style={styles.loadingContainer}>
+              <UserSkeleton />
+              <Block style={styles.separator} />
+              <UserSkeleton />
+              <Block style={styles.separator} />
+              <UserSkeleton />
+              <Block style={styles.separator} />
+              <UserSkeleton />
+              <Block style={styles.separator} />
+              <UserSkeleton />
+            </Block>
+          ) : (
+            <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
+              <Text style={styles.pullToRefresh}>Pull to refresh</Text>
+              <Text style={styles.errorMessage}>{getDirectoryErrorMessage}</Text>
+            </ScrollView>
+          )
         ) : (
           <FlatList
             ref={ref => (scrollRef.current = ref)}
@@ -212,6 +220,15 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center'
+  },
+  pullToRefresh: {
+    marginTop: '50%',
+    textAlign: 'center',
+    fontFamily: 'OpenSans-SemiBold'
+  },
+  errorMessage: {
+    textAlign: 'center',
+    fontFamily: 'OpenSans'
   }
 });
 
