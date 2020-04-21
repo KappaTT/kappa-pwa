@@ -21,7 +21,7 @@ const MessagesContent: React.FC<{
   const loadHistory = useSelector((state: TRedux) => state.kappa.loadHistory);
   const directory = useSelector((state: TRedux) => state.kappa.directory);
   const pendingExcusesArray = useSelector((state: TRedux) => state.kappa.pendingExcusesArray);
-  const gettingExcuses = useSelector((state: TRedux) => state.kappa.gettingExcuses);
+  const isGettingExcuses = useSelector((state: TRedux) => state.kappa.isGettingExcuses);
 
   const [refreshing, setRefreshing] = React.useState<boolean>(false);
 
@@ -55,10 +55,10 @@ const MessagesContent: React.FC<{
   );
 
   React.useEffect(() => {
-    if (!gettingExcuses) {
+    if (!isGettingExcuses) {
       setRefreshing(false);
     }
-  }, [gettingExcuses]);
+  }, [isGettingExcuses]);
 
   React.useEffect(() => {
     if (user?.sessionToken) {

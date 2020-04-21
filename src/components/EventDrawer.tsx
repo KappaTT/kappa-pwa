@@ -47,11 +47,11 @@ const EventDrawer: React.FC<{}> = ({}) => {
   const directorySize = useSelector((state: TRedux) => state.kappa.directorySize);
   const records = useSelector((state: TRedux) => state.kappa.records);
   const missedMandatory = useSelector((state: TRedux) => state.kappa.missedMandatory);
-  const gettingAttendance = useSelector((state: TRedux) => state.kappa.gettingAttendance);
+  const isGettingAttendance = useSelector((state: TRedux) => state.kappa.isGettingAttendance);
   const selectedEventId = useSelector((state: TRedux) => state.kappa.selectedEventId);
   const selectedEvent = useSelector((state: TRedux) => state.kappa.selectedEvent);
 
-  const [refreshing, setRefreshing] = React.useState<boolean>(gettingAttendance);
+  const [refreshing, setRefreshing] = React.useState<boolean>(isGettingAttendance);
   const [readyToDelete, setReadyToDelete] = React.useState<boolean>(false);
 
   const dispatch = useDispatch();
@@ -190,10 +190,10 @@ const EventDrawer: React.FC<{}> = ({}) => {
   };
 
   React.useEffect(() => {
-    if (!gettingAttendance) {
+    if (!isGettingAttendance) {
       setRefreshing(false);
     }
-  }, [gettingAttendance]);
+  }, [isGettingAttendance]);
 
   React.useEffect(() => {
     if (selectedEventId === '') {

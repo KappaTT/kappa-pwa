@@ -21,13 +21,13 @@ const ProfileContent: React.FC<{
   const user = useSelector((state: TRedux) => state.auth.user);
   const loadHistory = useSelector((state: TRedux) => state.kappa.loadHistory);
   const events = useSelector((state: TRedux) => state.kappa.events);
-  const gettingEvents = useSelector((state: TRedux) => state.kappa.gettingEvents);
+  const isGettingEvents = useSelector((state: TRedux) => state.kappa.isGettingEvents);
   const gmCount = useSelector((state: TRedux) => state.kappa.gmCount);
   const records = useSelector((state: TRedux) => state.kappa.records);
-  const gettingAttendance = useSelector((state: TRedux) => state.kappa.gettingAttendance);
+  const isGettingAttendance = useSelector((state: TRedux) => state.kappa.isGettingAttendance);
   const missedMandatory = useSelector((state: TRedux) => state.kappa.missedMandatory);
   const points = useSelector((state: TRedux) => state.kappa.points);
-  const gettingPoints = useSelector((state: TRedux) => state.kappa.gettingPoints);
+  const isGettingPoints = useSelector((state: TRedux) => state.kappa.isGettingPoints);
 
   const [refreshing, setRefreshing] = React.useState<boolean>(false);
 
@@ -70,10 +70,10 @@ const ProfileContent: React.FC<{
   }, [user, missedMandatory]);
 
   React.useEffect(() => {
-    if (!gettingEvents && !gettingAttendance && !gettingPoints) {
+    if (!isGettingEvents && !isGettingAttendance && !isGettingPoints) {
       setRefreshing(false);
     }
-  }, [gettingEvents, gettingAttendance, gettingPoints]);
+  }, [isGettingEvents, isGettingAttendance, isGettingPoints]);
 
   React.useEffect(() => {
     if (user?.sessionToken) {
@@ -162,7 +162,7 @@ const ProfileContent: React.FC<{
             <Block style={styles.splitPropertyRow}>
               <Block style={styles.splitPropertyFifths}>
                 <Text style={styles.propertyHeader}>Prof</Text>
-                {gettingPoints ? (
+                {isGettingPoints ? (
                   <ActivityIndicator style={styles.propertyLoader} />
                 ) : (
                   <Text style={styles.propertyValue}>
@@ -172,7 +172,7 @@ const ProfileContent: React.FC<{
               </Block>
               <Block style={styles.splitPropertyFifths}>
                 <Text style={styles.propertyHeader}>Phil</Text>
-                {gettingPoints ? (
+                {isGettingPoints ? (
                   <ActivityIndicator style={styles.propertyLoader} />
                 ) : (
                   <Text style={styles.propertyValue}>
@@ -182,7 +182,7 @@ const ProfileContent: React.FC<{
               </Block>
               <Block style={styles.splitPropertyFifths}>
                 <Text style={styles.propertyHeader}>Bro</Text>
-                {gettingPoints ? (
+                {isGettingPoints ? (
                   <ActivityIndicator style={styles.propertyLoader} />
                 ) : (
                   <Text style={styles.propertyValue}>
@@ -192,7 +192,7 @@ const ProfileContent: React.FC<{
               </Block>
               <Block style={styles.splitPropertyFifths}>
                 <Text style={styles.propertyHeader}>Rush</Text>
-                {gettingPoints ? (
+                {isGettingPoints ? (
                   <ActivityIndicator style={styles.propertyLoader} />
                 ) : (
                   <Text style={styles.propertyValue}>
@@ -202,7 +202,7 @@ const ProfileContent: React.FC<{
               </Block>
               <Block style={styles.splitPropertyFifths}>
                 <Text style={styles.propertyHeader}>Any</Text>
-                {gettingPoints ? (
+                {isGettingPoints ? (
                   <ActivityIndicator style={styles.propertyLoader} />
                 ) : (
                   <Text style={styles.propertyValue}>

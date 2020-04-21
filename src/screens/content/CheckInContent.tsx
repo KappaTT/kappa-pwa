@@ -39,14 +39,14 @@ const CheckInContent: React.FC<{
 }> = ({ navigation }) => {
   const user = useSelector((state: TRedux) => state.auth.user);
   const loadHistory = useSelector((state: TRedux) => state.kappa.loadHistory);
-  const gettingAttendance = useSelector((state: TRedux) => state.kappa.gettingAttendance);
+  const isGettingAttendance = useSelector((state: TRedux) => state.kappa.isGettingAttendance);
   const getAttendanceErrorMessage = useSelector((state: TRedux) => state.kappa.getAttendanceErrorMessage);
   const futureEventArray = useSelector((state: TRedux) => state.kappa.futureEventArray);
   const futureEvents = useSelector((state: TRedux) => state.kappa.futureEvents);
   const records = useSelector((state: TRedux) => state.kappa.records);
   const checkInEventId = useSelector((state: TRedux) => state.kappa.checkInEventId);
   const checkInExcuse = useSelector((state: TRedux) => state.kappa.checkInExcuse);
-  const checkingIn = useSelector((state: TRedux) => state.kappa.checkingIn);
+  const isCheckingIn = useSelector((state: TRedux) => state.kappa.isCheckingIn);
   const checkinErrorMessage = useSelector((state: TRedux) => state.kappa.checkInErrorMessage);
 
   const [choosingEvent, setChoosingEvent] = React.useState<boolean>(false);
@@ -181,10 +181,10 @@ const CheckInContent: React.FC<{
   };
 
   React.useEffect(() => {
-    if (shouldLoad(loadHistory, `user-${user.email}`) && !gettingAttendance && getAttendanceErrorMessage === '') {
+    if (shouldLoad(loadHistory, `user-${user.email}`) && !isGettingAttendance && getAttendanceErrorMessage === '') {
       dispatchGetMyAttendance();
     }
-  }, [user, loadHistory, gettingAttendance]);
+  }, [user, loadHistory, isGettingAttendance]);
 
   React.useEffect(() => {
     if (selectedEvent === null && checkInEventId !== '') {
@@ -206,7 +206,7 @@ const CheckInContent: React.FC<{
   }, [checkInEventId, code, eventOptions]);
 
   React.useEffect(() => {
-    if (checkingIn) {
+    if (isCheckingIn) {
       setWaitingForCheckIn(true);
     } else if (waitingForCheckIn) {
       setWaitingForCheckIn(false);
@@ -214,7 +214,7 @@ const CheckInContent: React.FC<{
 
       setTimeout(() => setShowCheckedInStatus(false), 1000);
     }
-  }, [checkingIn, waitingForCheckIn]);
+  }, [isCheckingIn, waitingForCheckIn]);
 
   const renderChoosingEvent = () => {
     return (
@@ -453,7 +453,7 @@ const CheckInContent: React.FC<{
                       code.length !== 4 ||
                       !moment(selectedEvent.start).isSame(moment(), 'day')
                     }
-                    loading={checkingIn}
+                    loading={isCheckingIn}
                     label="Check In"
                     onPress={onPressCheckIn}
                   />

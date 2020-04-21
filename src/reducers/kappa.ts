@@ -77,23 +77,23 @@ export interface TKappaState {
   globalErrorMessage: string;
   globalErrorCode: number;
 
-  gettingEvents: boolean;
+  isGettingEvents: boolean;
   getEventsError: boolean;
   getEventsErrorMessage: string;
 
-  gettingDirectory: boolean;
+  isGettingDirectory: boolean;
   getDirectoryError: boolean;
   getDirectoryErrorMessage: string;
 
-  gettingAttendance: boolean;
+  isGettingAttendance: boolean;
   getAttendanceError: boolean;
   getAttendanceErrorMessage: string;
 
-  gettingExcuses: boolean;
+  isGettingExcuses: boolean;
   getExcusesError: boolean;
   getExcusesErrorMessage: string;
 
-  gettingPoints: boolean;
+  isGettingPoints: boolean;
   getPointsError: boolean;
   getPointsErrorMessage: string;
 
@@ -129,18 +129,18 @@ export interface TKappaState {
   selectedUser: TUser;
 
   editingEventId: string;
-  savingEvent: boolean;
+  isSavingEvent: boolean;
   saveEventError: boolean;
   saveEventErrorMessage: string;
 
-  deletingEvent: boolean;
+  isDeletingEvent: boolean;
   deleteEventError: boolean;
   deleteEventErrorMessage: string;
 
   checkInEventId: string;
   checkInExcuse: boolean;
 
-  checkingIn: boolean;
+  isCheckingIn: boolean;
   checkInError: boolean;
   checkInErrorMessage: string;
 }
@@ -149,23 +149,23 @@ const initialState: TKappaState = {
   globalErrorMessage: '',
   globalErrorCode: 0,
 
-  gettingEvents: false,
+  isGettingEvents: false,
   getEventsError: false,
   getEventsErrorMessage: '',
 
-  gettingDirectory: false,
+  isGettingDirectory: false,
   getDirectoryError: false,
   getDirectoryErrorMessage: '',
 
-  gettingAttendance: false,
+  isGettingAttendance: false,
   getAttendanceError: false,
   getAttendanceErrorMessage: '',
 
-  gettingExcuses: false,
+  isGettingExcuses: false,
   getExcusesError: false,
   getExcusesErrorMessage: '',
 
-  gettingPoints: false,
+  isGettingPoints: false,
   getPointsError: false,
   getPointsErrorMessage: '',
 
@@ -198,18 +198,18 @@ const initialState: TKappaState = {
   selectedUser: null,
 
   editingEventId: '',
-  savingEvent: false,
+  isSavingEvent: false,
   saveEventError: false,
   saveEventErrorMessage: '',
 
-  deletingEvent: false,
+  isDeletingEvent: false,
   deleteEventError: false,
   deleteEventErrorMessage: '',
 
   checkInEventId: '',
   checkInExcuse: false,
 
-  checkingIn: false,
+  isCheckingIn: false,
   checkInError: false,
   checkInErrorMessage: ''
 };
@@ -231,14 +231,14 @@ export default (state = initialState, action: any): TKappaState => {
     case GET_EVENTS:
       return {
         ...state,
-        gettingEvents: true,
+        isGettingEvents: true,
         getEventsError: false,
         getEventsErrorMessage: ''
       };
     case GET_EVENTS_SUCCESS:
       return {
         ...state,
-        gettingEvents: false,
+        isGettingEvents: false,
         loadHistory: {
           ...state.loadHistory,
           events: moment()
@@ -252,7 +252,7 @@ export default (state = initialState, action: any): TKappaState => {
     case GET_EVENTS_FAILURE:
       return {
         ...state,
-        gettingEvents: false,
+        isGettingEvents: false,
         getEventsError: true,
         getEventsErrorMessage: action.error.message,
         globalErrorMessage: action.error.message,
@@ -261,14 +261,14 @@ export default (state = initialState, action: any): TKappaState => {
     case GET_DIRECTORY:
       return {
         ...state,
-        gettingDirectory: true,
+        isGettingDirectory: true,
         getDirectoryError: false,
         getDirectoryErrorMessage: ''
       };
     case GET_DIRECTORY_SUCCESS:
       return {
         ...state,
-        gettingDirectory: false,
+        isGettingDirectory: false,
         loadHistory: {
           ...state.loadHistory,
           directory: moment()
@@ -282,7 +282,7 @@ export default (state = initialState, action: any): TKappaState => {
     case GET_DIRECTORY_FAILURE:
       return {
         ...state,
-        gettingDirectory: false,
+        isGettingDirectory: false,
         getDirectoryError: true,
         getDirectoryErrorMessage: action.error.message,
         globalErrorMessage: action.error.message,
@@ -291,7 +291,7 @@ export default (state = initialState, action: any): TKappaState => {
     case GET_ATTENDANCE:
       return {
         ...state,
-        gettingAttendance: true,
+        isGettingAttendance: true,
         getAttendanceError: false,
         getAttendanceErrorMessage: ''
       };
@@ -317,7 +317,7 @@ export default (state = initialState, action: any): TKappaState => {
 
       return {
         ...state,
-        gettingAttendance: false,
+        isGettingAttendance: false,
         loadHistory: newLoadHistory,
         ...recomputeKappaState({
           events: state.events,
@@ -335,7 +335,7 @@ export default (state = initialState, action: any): TKappaState => {
     case GET_ATTENDANCE_FAILURE:
       return {
         ...state,
-        gettingAttendance: false,
+        isGettingAttendance: false,
         getAttendanceError: true,
         getAttendanceErrorMessage: action.error.message,
         globalErrorMessage: action.error.message,
@@ -344,14 +344,14 @@ export default (state = initialState, action: any): TKappaState => {
     case GET_EXCUSES:
       return {
         ...state,
-        gettingExcuses: true,
+        isGettingExcuses: true,
         getExcusesError: false,
         getExcusesErrorMessage: ''
       };
     case GET_EXCUSES_SUCCESS:
       return {
         ...state,
-        gettingExcuses: false,
+        isGettingExcuses: false,
         pendingExcusesArray: action.excused,
         loadHistory: {
           ...state.loadHistory,
@@ -361,7 +361,7 @@ export default (state = initialState, action: any): TKappaState => {
     case GET_EXCUSES_FAILURE:
       return {
         ...state,
-        gettingExcuses: false,
+        isGettingExcuses: false,
         getExcusesError: true,
         getExcusesErrorMessage: action.error.message
       };
@@ -417,7 +417,7 @@ export default (state = initialState, action: any): TKappaState => {
     case SAVE_EDIT_EVENT_SUCCESS:
       return {
         ...state,
-        savingEvent: false,
+        isSavingEvent: false,
         selectedEventId: '',
         selectedEvent: null,
         editingEventId: '',
@@ -430,14 +430,14 @@ export default (state = initialState, action: any): TKappaState => {
     case SAVE_EDIT_EVENT_FAILURE:
       return {
         ...state,
-        savingEvent: false,
+        isSavingEvent: false,
         saveEventError: true,
         saveEventErrorMessage: action.error.message
       };
     case DELETE_EVENT:
       return {
         ...state,
-        deletingEvent: true,
+        isDeletingEvent: true,
         deleteEventError: false,
         deleteEventErrorMessage: ''
       };
@@ -447,7 +447,7 @@ export default (state = initialState, action: any): TKappaState => {
 
       return {
         ...state,
-        deletingEvent: false,
+        isDeletingEvent: false,
         selectedEventId: '',
         selectedEvent: null,
         ...recomputeKappaState({
@@ -459,7 +459,7 @@ export default (state = initialState, action: any): TKappaState => {
     case DELETE_EVENT_FAILURE:
       return {
         ...state,
-        deletingEvent: false,
+        isDeletingEvent: false,
         deleteEventError: true,
         deleteEventErrorMessage: action.error.message
       };
@@ -472,14 +472,14 @@ export default (state = initialState, action: any): TKappaState => {
     case CHECK_IN:
       return {
         ...state,
-        checkingIn: true,
+        isCheckingIn: true,
         checkInError: false,
         checkInErrorMessage: ''
       };
     case CHECK_IN_SUCCESS:
       return {
         ...state,
-        checkingIn: false,
+        isCheckingIn: false,
         ...recomputeKappaState({
           events: state.events,
           records: mergeRecords(state.records, {
@@ -492,21 +492,21 @@ export default (state = initialState, action: any): TKappaState => {
     case CHECK_IN_FAILURE:
       return {
         ...state,
-        checkingIn: false,
+        isCheckingIn: false,
         checkInError: true,
         checkInErrorMessage: action.error.message
       };
     case GET_POINTS:
       return {
         ...state,
-        gettingPoints: true,
+        isGettingPoints: true,
         getPointsError: false,
         getPointsErrorMessage: ''
       };
     case GET_POINTS_SUCCESS:
       return {
         ...state,
-        gettingPoints: false,
+        isGettingPoints: false,
         points: {
           ...state.points,
           [action.target]: action.points
@@ -519,7 +519,7 @@ export default (state = initialState, action: any): TKappaState => {
     case GET_POINTS_FAILURE:
       return {
         ...state,
-        gettingPoints: false,
+        isGettingPoints: false,
         getPointsError: true,
         getPointsErrorMessage: action.error.message
       };

@@ -30,12 +30,14 @@ const DirectoryContent: React.FC<{
   const user = useSelector((state: TRedux) => state.auth.user);
   const loadHistory = useSelector((state: TRedux) => state.kappa.loadHistory);
   const directory = useSelector((state: TRedux) => state.kappa.directory);
-  const gettingEvents = useSelector((state: TRedux) => state.kappa.gettingEvents);
-  const gettingDirectory = useSelector((state: TRedux) => state.kappa.gettingDirectory);
-  const gettingAttendance = useSelector((state: TRedux) => state.kappa.gettingAttendance);
+  const isGettingEvents = useSelector((state: TRedux) => state.kappa.isGettingEvents);
+  const isGettingDirectory = useSelector((state: TRedux) => state.kappa.isGettingDirectory);
+  const isGettingAttendance = useSelector((state: TRedux) => state.kappa.isGettingAttendance);
   const getDirectoryErrorMessage = useSelector((state: TRedux) => state.kappa.getDirectoryErrorMessage);
 
-  const [refreshing, setRefreshing] = React.useState<boolean>(gettingEvents || gettingDirectory || gettingAttendance);
+  const [refreshing, setRefreshing] = React.useState<boolean>(
+    isGettingEvents || isGettingDirectory || isGettingAttendance
+  );
 
   const dispatch = useDispatch();
   const dispatchGetEvents = React.useCallback(() => dispatch(_kappa.getEvents(user)), [dispatch, user]);
@@ -68,10 +70,10 @@ const DirectoryContent: React.FC<{
   }, [user, refreshing]);
 
   React.useEffect(() => {
-    if (!gettingEvents && !gettingDirectory && !gettingAttendance) {
+    if (!isGettingEvents && !isGettingDirectory && !isGettingAttendance) {
       setRefreshing(false);
     }
-  }, [gettingEvents, gettingDirectory, gettingAttendance]);
+  }, [isGettingEvents, isGettingDirectory, isGettingAttendance]);
 
   React.useEffect(() => {
     if (user?.sessionToken) {
@@ -125,7 +127,7 @@ const DirectoryContent: React.FC<{
           }
         ]}
       >
-        {gettingDirectory && isEmpty(directory) ? (
+        {isGettingDirectory && isEmpty(directory) ? (
           <Block style={styles.loadingContainer}>
             <UserSkeleton />
             <Block style={styles.separator} />

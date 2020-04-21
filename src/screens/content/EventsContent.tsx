@@ -35,16 +35,18 @@ const EventsContent: React.FC<{
   const user = useSelector((state: TRedux) => state.auth.user);
   const loadHistory = useSelector((state: TRedux) => state.kappa.loadHistory);
   const records = useSelector((state: TRedux) => state.kappa.records);
-  const gettingEvents = useSelector((state: TRedux) => state.kappa.gettingEvents);
-  const gettingDirectory = useSelector((state: TRedux) => state.kappa.gettingDirectory);
-  const gettingAttendance = useSelector((state: TRedux) => state.kappa.gettingAttendance);
+  const isGettingEvents = useSelector((state: TRedux) => state.kappa.isGettingEvents);
+  const isGettingDirectory = useSelector((state: TRedux) => state.kappa.isGettingDirectory);
+  const isGettingAttendance = useSelector((state: TRedux) => state.kappa.isGettingAttendance);
   const events = useSelector((state: TRedux) => state.kappa.events);
   const eventSections = useSelector((state: TRedux) => state.kappa.eventSections);
   const upcomingSections = useSelector((state: TRedux) => state.kappa.upcomingSections);
   const editingEventId = useSelector((state: TRedux) => state.kappa.editingEventId);
   const getEventsErrorMessage = useSelector((state: TRedux) => state.kappa.getEventsErrorMessage);
 
-  const [refreshing, setRefreshing] = React.useState<boolean>(gettingEvents || gettingDirectory || gettingAttendance);
+  const [refreshing, setRefreshing] = React.useState<boolean>(
+    isGettingEvents || isGettingDirectory || isGettingAttendance
+  );
   const [showing, setShowing] = React.useState<'Full Year' | 'Upcoming'>('Upcoming');
 
   const dispatch = useDispatch();
@@ -103,10 +105,10 @@ const EventsContent: React.FC<{
   }, [showing, eventSections, upcomingSections]);
 
   React.useEffect(() => {
-    if (!gettingEvents && !gettingDirectory && !gettingAttendance) {
+    if (!isGettingEvents && !isGettingDirectory && !isGettingAttendance) {
       setRefreshing(false);
     }
-  }, [gettingEvents, gettingDirectory, gettingAttendance]);
+  }, [isGettingEvents, isGettingDirectory, isGettingAttendance]);
 
   React.useEffect(() => {
     if (user?.sessionToken) {
@@ -183,7 +185,7 @@ const EventsContent: React.FC<{
           }
         ]}
       >
-        {gettingEvents && eventSections.length === 0 ? (
+        {isGettingEvents && eventSections.length === 0 ? (
           <Block style={styles.loadingContainer}>
             <EventSkeleton />
             <Block style={styles.separator} />

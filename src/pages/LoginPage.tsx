@@ -9,6 +9,7 @@ import { Block, Text, GoogleSignInButton } from '@components';
 
 const LoginPage: React.FC<{}> = ({}) => {
   const authorized = useSelector((state: TRedux) => state.auth.authorized);
+  const isSigningInWithGoogle = useSelector((state: TRedux) => state.auth.isSigningInWithGoogle);
 
   const dispatch = useDispatch();
   const dispatchHideModal = React.useCallback(() => dispatch(_auth.hideModal()), [dispatch]);

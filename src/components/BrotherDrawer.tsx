@@ -27,11 +27,11 @@ const BrotherDrawer: React.FC<{}> = ({}) => {
   const gmCount = useSelector((state: TRedux) => state.kappa.gmCount);
   const records = useSelector((state: TRedux) => state.kappa.records);
   const missedMandatory = useSelector((state: TRedux) => state.kappa.missedMandatory);
-  const gettingAttendance = useSelector((state: TRedux) => state.kappa.gettingAttendance);
+  const isGettingAttendance = useSelector((state: TRedux) => state.kappa.isGettingAttendance);
   const selectedUserEmail = useSelector((state: TRedux) => state.kappa.selectedUserEmail);
   const selectedUser = useSelector((state: TRedux) => state.kappa.selectedUser);
 
-  const [refreshing, setRefreshing] = React.useState<boolean>(gettingAttendance);
+  const [refreshing, setRefreshing] = React.useState<boolean>(isGettingAttendance);
 
   const dispatch = useDispatch();
   const dispatchGetAttendance = React.useCallback(
@@ -111,10 +111,10 @@ const BrotherDrawer: React.FC<{}> = ({}) => {
   };
 
   React.useEffect(() => {
-    if (!gettingAttendance) {
+    if (!isGettingAttendance) {
       setRefreshing(false);
     }
-  }, [gettingAttendance]);
+  }, [isGettingAttendance]);
 
   React.useEffect(() => {
     if (selectedUserEmail === '') {
