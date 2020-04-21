@@ -121,7 +121,6 @@ const MessagesContent: React.FC<{
 
       <FadeModal transparent={true} visible={selectedExcuse !== null} onRequestClose={() => onSelectExcuse(null)}>
         <ExcusePage
-          excuse={selectedExcuse}
           renderExcuse={renderExcuse(selectedExcuse, false, true)}
           onRequestClose={() => onSelectExcuse(null)}
         />

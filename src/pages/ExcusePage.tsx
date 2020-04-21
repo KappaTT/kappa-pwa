@@ -4,13 +4,11 @@ import { useSafeArea } from 'react-native-safe-area-context';
 
 import { theme } from '@constants';
 import { Block, Text, Switch, Icon, TextButton } from '@components';
-import { TPendingExcuse } from '@backend/kappa';
 
 const ExcusePage: React.FC<{
-  excuse: TPendingExcuse;
   renderExcuse: React.ReactElement;
   onRequestClose(): void;
-}> = ({ excuse, renderExcuse, onRequestClose }) => {
+}> = ({ renderExcuse, onRequestClose }) => {
   const [readyToDelete, setReadyToDelete] = React.useState<boolean>(false);
 
   const insets = useSafeArea();
@@ -30,7 +28,7 @@ const ExcusePage: React.FC<{
         ]}
       >
         <Block style={styles.topBar}>
-          <TextButton label="Cancel" textStyle={styles.cancelButton} onPress={onRequestClose} />
+          <TextButton label="Back" textStyle={styles.backButton} onPress={onRequestClose} />
         </Block>
 
         <Block style={styles.excusePageContent}>
@@ -124,7 +122,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center'
   },
-  cancelButton: {
+  backButton: {
     paddingHorizontal: 20,
     fontFamily: 'OpenSans-SemiBold',
     fontSize: 16,
