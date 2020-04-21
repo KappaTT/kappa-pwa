@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
 
 import Block from '@components/Block';
 import Text from '@components/Text';
@@ -10,11 +10,15 @@ const googleLogo = {
     'https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/200px-Google_%22G%22_Logo.svg.png'
 };
 
-const GoogleSignInButton: React.FC<{ onPress(): void }> = ({ onPress }) => {
+const GoogleSignInButton: React.FC<{ loading?: boolean; disabled?: boolean; onPress(): void }> = ({
+  loading = false,
+  disabled = false,
+  onPress
+}) => {
   return (
-    <TouchableOpacity activeOpacity={0.6} style={styles.button} onPress={onPress}>
+    <TouchableOpacity disabled={loading || disabled} activeOpacity={0.6} style={styles.button} onPress={onPress}>
       <Block style={styles.content}>
-        <Image source={googleLogo} style={styles.icon} />
+        {loading ? <ActivityIndicator style={styles.icon} /> : <Image source={googleLogo} style={styles.icon} />}
         <Text style={styles.text}>Sign in with Google</Text>
       </Block>
     </TouchableOpacity>
