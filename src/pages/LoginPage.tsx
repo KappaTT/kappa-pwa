@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Image } from 'react-native';
+import { StyleSheet, Image, Alert } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { TRedux } from '@reducers';
@@ -9,7 +9,10 @@ import { Block, Text, GoogleSignInButton } from '@components';
 
 const LoginPage: React.FC<{}> = ({}) => {
   const authorized = useSelector((state: TRedux) => state.auth.authorized);
+  const isAuthenticating = useSelector((state: TRedux) => state.auth.isAuthenticating);
   const isSigningInWithGoogle = useSelector((state: TRedux) => state.auth.isSigningInWithGoogle);
+  const signInWithGoogleErrorMessage = useSelector((state: TRedux) => state.auth.signInWithGoogleErrorMessage);
+  const signInErrorMessage = useSelector((state: TRedux) => state.auth.signInErrorMessage);
 
   const dispatch = useDispatch();
   const dispatchHideModal = React.useCallback(() => dispatch(_auth.hideModal()), [dispatch]);
@@ -20,6 +23,18 @@ const LoginPage: React.FC<{}> = ({}) => {
       dispatchHideModal();
     }
   }, [authorized]);
+
+  React.useEffect(() => {
+    if (signInWithGoogleErrorMessage) {
+      Alert.alert('Could not sign in!', signInWithGoogleErrorMessage);
+    }
+  }, [signInWithGoogleErrorMessage]);
+
+  React.useEffect(() => {
+    if (signInErrorMessage) {
+      Alert.alert('Could not sign in!', signInErrorMessage);
+    }
+  }, [signInErrorMessage]);
 
   const renderBackground = () => {
     return <Block style={styles.bg} />;
@@ -35,7 +50,7 @@ const LoginPage: React.FC<{}> = ({}) => {
         </Block>
 
         <Block style={styles.bottomArea}>
-          <GoogleSignInButton onPress={dispatchSignInWithGoogle} />
+          <GoogleSignInButton loading={isSigningInWithGoogle || isAuthenticating} onPress={dispatchSignInWithGoogle} />
         </Block>
       </Block>
     );
