@@ -298,6 +298,7 @@ const EditEventPage: React.FC<{
                     <FormattedInput
                       style={styles.input}
                       placeholderText="ex: General Meeting"
+                      returnKeyType="done"
                       maxLength={32}
                       error={showErrors && title.trim() === ''}
                       defaultValue={title}
@@ -356,6 +357,7 @@ const EditEventPage: React.FC<{
                           placeholderText="ex: 60"
                           maxLength={4}
                           keyboardType="number-pad"
+                          returnKeyType="done"
                           error={showErrors && (duration === '' || duration === '0')}
                           defaultValue={duration}
                           formatter={numberFormatter}
@@ -374,6 +376,7 @@ const EditEventPage: React.FC<{
                     <FormattedInput
                       style={styles.input}
                       placeholderText="ex: EHall 106b1"
+                      returnKeyType="done"
                       maxLength={64}
                       defaultValue={location}
                       onChangeText={(text: string) => setLocation(text)}
@@ -421,6 +424,7 @@ const EditEventPage: React.FC<{
                           placeholderText="points"
                           maxLength={1}
                           keyboardType="number-pad"
+                          returnKeyType="done"
                           defaultValue={profPoints}
                           formatter={numberFormatter}
                           onChangeText={(text: string) => setProfPoints(text)}
@@ -439,6 +443,7 @@ const EditEventPage: React.FC<{
                           placeholderText="points"
                           maxLength={1}
                           keyboardType="number-pad"
+                          returnKeyType="done"
                           defaultValue={philPoints}
                           formatter={numberFormatter}
                           onChangeText={(text: string) => setPhilPoints(text)}
@@ -456,6 +461,7 @@ const EditEventPage: React.FC<{
                           placeholderText="points"
                           maxLength={1}
                           keyboardType="number-pad"
+                          returnKeyType="done"
                           defaultValue={broPoints}
                           formatter={numberFormatter}
                           onChangeText={(text: string) => setBroPoints(text)}
@@ -474,6 +480,7 @@ const EditEventPage: React.FC<{
                           placeholderText="points"
                           maxLength={1}
                           keyboardType="number-pad"
+                          returnKeyType="done"
                           defaultValue={rushPoints}
                           formatter={numberFormatter}
                           onChangeText={(text: string) => setRushPoints(text)}
@@ -491,6 +498,7 @@ const EditEventPage: React.FC<{
                           placeholderText="points"
                           maxLength={1}
                           keyboardType="number-pad"
+                          returnKeyType="done"
                           defaultValue={anyPoints}
                           formatter={numberFormatter}
                           onChangeText={(text: string) => setAnyPoints(text)}

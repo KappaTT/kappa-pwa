@@ -131,6 +131,7 @@ const OnboardingPage: React.FC<{}> = ({}) => {
           autoFocus={true}
           placeholderText="phone"
           keyboardType="phone-pad"
+          returnKeyType="done"
           textContentType="telephoneNumber"
           maxLength={10}
           defaultValue={phone}

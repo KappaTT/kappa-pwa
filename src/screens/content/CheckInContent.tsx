@@ -365,6 +365,7 @@ const CheckInContent: React.FC<{
                       style={styles.multiInput}
                       multiline={true}
                       placeholderText="reason"
+                      returnKeyType="done"
                       maxLength={128}
                       error={false}
                       defaultValue={excuse}
@@ -390,6 +391,7 @@ const CheckInContent: React.FC<{
                           placeholderText="code"
                           maxLength={4}
                           keyboardType="number-pad"
+                          returnKeyType="done"
                           error={false}
                           defaultValue={code}
                           formatter={numberFormatter}
