@@ -7,14 +7,28 @@ import Text from '@components/Text';
 
 const EndCapButton: React.FC<{
   label: string;
+  direction?: string;
   color?: string;
   disabled?: boolean;
   onPress?(): void;
-}> = ({ label, color = theme.COLORS.PRIMARY, disabled = false, onPress = () => {} }) => {
+}> = ({ label, direction = 'right', color = theme.COLORS.PRIMARY, disabled = false, onPress = () => {} }) => {
   const computedOpacity = disabled ? 0.5 : 1;
 
   return (
-    <Block style={styles.wrapper}>
+    <Block
+      style={[
+        styles.wrapper,
+        direction === 'right'
+          ? {
+              right: 16
+            }
+          : direction === 'left'
+          ? {
+              left: 16
+            }
+          : {}
+      ]}
+    >
       <TouchableOpacity style={styles.button} disabled={disabled} onPress={onPress}>
         <Text
           style={[
@@ -35,7 +49,6 @@ const EndCapButton: React.FC<{
 const styles = StyleSheet.create({
   wrapper: {
     position: 'absolute',
-    right: 16,
     height: 42
   },
   button: {

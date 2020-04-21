@@ -44,6 +44,7 @@ const EventsContent: React.FC<{
   const getEventsErrorMessage = useSelector((state: TRedux) => state.kappa.getEventsErrorMessage);
 
   const [refreshing, setRefreshing] = React.useState<boolean>(gettingEvents || gettingDirectory || gettingAttendance);
+  const [showing, setShowing] = React.useState<'Full Year' | 'Upcoming'>('Upcoming');
 
   const dispatch = useDispatch();
   const dispatchGetEvents = React.useCallback(() => dispatch(_kappa.getEvents(user)), [dispatch, user]);
@@ -84,6 +85,10 @@ const EventsContent: React.FC<{
 
     loadData(true);
   }, [user, refreshing]);
+
+  const toggleShowing = React.useCallback(() => {
+    setShowing(showing === 'Upcoming' ? 'Full Year' : 'Upcoming');
+  }, [showing]);
 
   React.useEffect(() => {
     if (!gettingEvents && !gettingDirectory && !gettingAttendance) {
@@ -153,7 +158,8 @@ const EventsContent: React.FC<{
   return (
     <Block flex>
       <Header
-        title="Upcoming Events"
+        title="Events"
+        leftButton={<EndCapButton direction="left" label={showing} onPress={toggleShowing} />}
         rightButton={user.privileged === true && <EndCapButton label="New Event" onPress={dispatchEditNewEvent} />}
       />
 
