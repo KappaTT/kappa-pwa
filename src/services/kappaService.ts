@@ -232,7 +232,7 @@ export const getTypeCount = (events: TEventDict, type: string, allowFuture: bool
 
   for (const event of Object.values(events)) {
     if (event.event_type === type) {
-      if (allowFuture || moment(event.start).isSameOrBefore(now)) {
+      if (allowFuture || moment(event.start).isSameOrBefore(now, 'day')) {
         count++;
       }
     }
@@ -257,7 +257,7 @@ export const getTypeCounts = (
 
   for (const event_id of Object.keys(attended)) {
     if (events.hasOwnProperty(event_id) && events[event_id].event_type === type) {
-      if (allowFuture || moment(events[event_id].start).isSameOrBefore(now)) {
+      if (allowFuture || moment(events[event_id].start).isSameOrBefore(now, 'day')) {
         attendedCount++;
       }
     }
@@ -265,7 +265,7 @@ export const getTypeCounts = (
 
   for (const [event_id, excuse] of Object.entries(excused)) {
     if (events.hasOwnProperty(event_id) && events[event_id].event_type === type) {
-      if (allowFuture || moment(events[event_id].start).isSameOrBefore(now)) {
+      if (allowFuture || moment(events[event_id].start).isSameOrBefore(now, 'day')) {
         if (excuse.approved) {
           excusedCount++;
         } else {
@@ -300,7 +300,7 @@ export const getMandatoryEvents = (events: TEventDict) => {
 
   for (const event of Object.values(events)) {
     if (event.mandatory) {
-      if (moment(event.start).isBefore(now)) {
+      if (moment(event.start).isBefore(now, 'day')) {
         mandatory[event.id] = event;
       }
     }
