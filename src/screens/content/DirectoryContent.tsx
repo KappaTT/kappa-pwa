@@ -147,7 +147,7 @@ const DirectoryContent: React.FC<{
             ListEmptyComponent={
               <React.Fragment>
                 <Text style={styles.pullToRefresh}>Pull to refresh</Text>
-                <Text style={styles.errorMessage}>{getDirectoryErrorMessage}</Text>
+                <Text style={styles.errorMessage}>{getDirectoryErrorMessage || 'No users'}</Text>
               </React.Fragment>
             }
           />

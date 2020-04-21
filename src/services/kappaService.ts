@@ -438,7 +438,17 @@ export const getFutureDateIndex = (
     return -1;
   }
 
-  return eventSections.length - 1;
+  const now = moment();
+
+  for (let i = 0; i < eventSections.length; i++) {
+    const event = moment(eventSections[i].title);
+
+    if (event.isSameOrAfter(now, 'day')) {
+      return i;
+    }
+  }
+
+  return -1;
 };
 
 export const shouldLoad = (loadHistory: TLoadHistory, key: string) => {
@@ -477,6 +487,7 @@ export const recomputeKappaState = ({
     .sort((a, b) => (moment(a[0]).isBefore(moment(b[0])) ? -1 : 1))
     .map((entry: [string, Array<TEvent>]) => ({ title: entry[0], data: entry[1] }));
   const futureIndex = getFutureDateIndex(eventSections);
+  const upcomingSections = futureIndex >= 0 ? eventSections.slice(futureIndex) : [];
 
   return {
     events,
@@ -492,6 +503,7 @@ export const recomputeKappaState = ({
     missedMandatory,
     gmCount,
     eventSections,
+    upcomingSections,
     futureIndex
   };
 };

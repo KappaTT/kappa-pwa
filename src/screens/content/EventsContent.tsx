@@ -40,6 +40,7 @@ const EventsContent: React.FC<{
   const gettingAttendance = useSelector((state: TRedux) => state.kappa.gettingAttendance);
   const events = useSelector((state: TRedux) => state.kappa.events);
   const eventSections = useSelector((state: TRedux) => state.kappa.eventSections);
+  const upcomingSections = useSelector((state: TRedux) => state.kappa.upcomingSections);
   const editingEventId = useSelector((state: TRedux) => state.kappa.editingEventId);
   const getEventsErrorMessage = useSelector((state: TRedux) => state.kappa.getEventsErrorMessage);
 
@@ -87,8 +88,19 @@ const EventsContent: React.FC<{
   }, [user, refreshing]);
 
   const toggleShowing = React.useCallback(() => {
+    if (
+      (showing === 'Upcoming' && upcomingSections.length > 0) ||
+      (showing === 'Full Year' && eventSections.length > 0)
+    ) {
+      scrollRef?.current?.scrollToLocation({
+        animated: false,
+        sectionIndex: 0,
+        itemIndex: 0
+      });
+    }
+
     setShowing(showing === 'Upcoming' ? 'Full Year' : 'Upcoming');
-  }, [showing]);
+  }, [showing, eventSections, upcomingSections]);
 
   React.useEffect(() => {
     if (!gettingEvents && !gettingDirectory && !gettingAttendance) {
@@ -186,7 +198,7 @@ const EventsContent: React.FC<{
         ) : (
           <SectionList
             ref={ref => (scrollRef.current = ref)}
-            sections={eventSections}
+            sections={showing === 'Upcoming' ? upcomingSections : eventSections}
             keyExtractor={keyExtractor}
             renderSectionHeader={renderSectionHeader}
             renderItem={renderItem}
@@ -194,9 +206,10 @@ const EventsContent: React.FC<{
             ListEmptyComponent={
               <React.Fragment>
                 <Text style={styles.pullToRefresh}>Pull to refresh</Text>
-                <Text style={styles.errorMessage}>{getEventsErrorMessage}</Text>
+                <Text style={styles.errorMessage}>{getEventsErrorMessage || 'No upcoming events'}</Text>
               </React.Fragment>
             }
+            onScrollToIndexFailed={() => {}}
           />
         )}
       </Block>

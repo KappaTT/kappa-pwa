@@ -113,6 +113,10 @@ export interface TKappaState {
     title: string;
     data: Array<TEvent>;
   }>;
+  upcomingSections: Array<{
+    title: string;
+    data: Array<TEvent>;
+  }>;
   futureIndex: number;
 
   eventsSize: number;
@@ -181,6 +185,7 @@ const initialState: TKappaState = {
   points: {},
   pendingExcusesArray: [],
   eventSections: [],
+  upcomingSections: [],
   futureIndex: -1,
 
   eventsSize: 0,
