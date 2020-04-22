@@ -1,5 +1,12 @@
 import React from 'react';
-import { StyleSheet, Dimensions, TouchableWithoutFeedback, ScrollView, RefreshControl } from 'react-native';
+import {
+  StyleSheet,
+  Dimensions,
+  TouchableWithoutFeedback,
+  ScrollView,
+  RefreshControl,
+  ActivityIndicator
+} from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
@@ -27,6 +34,8 @@ const BrotherDrawer: React.FC<{}> = ({}) => {
   const gmCount = useSelector((state: TRedux) => state.kappa.gmCount);
   const records = useSelector((state: TRedux) => state.kappa.records);
   const missedMandatory = useSelector((state: TRedux) => state.kappa.missedMandatory);
+  const points = useSelector((state: TRedux) => state.kappa.points);
+  const isGettingPoints = useSelector((state: TRedux) => state.kappa.isGettingPoints);
   const isGettingAttendance = useSelector((state: TRedux) => state.kappa.isGettingAttendance);
   const selectedUserEmail = useSelector((state: TRedux) => state.kappa.selectedUserEmail);
   const selectedUser = useSelector((state: TRedux) => state.kappa.selectedUser);
@@ -38,6 +47,11 @@ const BrotherDrawer: React.FC<{}> = ({}) => {
     (overwrite: boolean = false) => dispatch(_kappa.getUserAttendance(user, selectedUserEmail, overwrite)),
     [dispatch, user, selectedUserEmail]
   );
+  const dispatchGetPoints = React.useCallback(() => dispatch(_kappa.getPointsByUser(user, selectedUserEmail)), [
+    dispatch,
+    user,
+    selectedUserEmail
+  ]);
   const dispatchUnselectUser = React.useCallback(() => dispatch(_kappa.unselectUser()), [dispatch]);
 
   const insets = useSafeArea();
@@ -58,9 +72,8 @@ const BrotherDrawer: React.FC<{}> = ({}) => {
   const loadData = React.useCallback(
     (force: boolean) => {
       if (user.privileged) {
-        if (force || shouldLoad(loadHistory, `user-${selectedUserEmail}`)) {
-          dispatchGetAttendance(force);
-        }
+        if (force || shouldLoad(loadHistory, `user-${selectedUserEmail}`)) dispatchGetAttendance(force);
+        if (force || shouldLoad(loadHistory, `points-${selectedUserEmail}`)) dispatchGetPoints();
       }
     },
     [user, loadHistory, selectedUserEmail]
@@ -148,6 +161,61 @@ const BrotherDrawer: React.FC<{}> = ({}) => {
   const renderAdmin = () => {
     return (
       <Block style={styles.adminContainer}>
+        <Block>
+          <Block style={styles.splitPropertyRow}>
+            <Block style={styles.splitPropertyFifths}>
+              <Text style={styles.propertyHeader}>Prof</Text>
+              {isGettingPoints ? (
+                <ActivityIndicator style={styles.propertyLoader} />
+              ) : (
+                <Text style={styles.propertyValue}>
+                  {points.hasOwnProperty(user.email) ? points[user.email].PROF : '0'}
+                </Text>
+              )}
+            </Block>
+            <Block style={styles.splitPropertyFifths}>
+              <Text style={styles.propertyHeader}>Phil</Text>
+              {isGettingPoints ? (
+                <ActivityIndicator style={styles.propertyLoader} />
+              ) : (
+                <Text style={styles.propertyValue}>
+                  {points.hasOwnProperty(user.email) ? points[user.email].PHIL : '0'}
+                </Text>
+              )}
+            </Block>
+            <Block style={styles.splitPropertyFifths}>
+              <Text style={styles.propertyHeader}>Bro</Text>
+              {isGettingPoints ? (
+                <ActivityIndicator style={styles.propertyLoader} />
+              ) : (
+                <Text style={styles.propertyValue}>
+                  {points.hasOwnProperty(user.email) ? points[user.email].BRO : '0'}
+                </Text>
+              )}
+            </Block>
+            <Block style={styles.splitPropertyFifths}>
+              <Text style={styles.propertyHeader}>Rush</Text>
+              {isGettingPoints ? (
+                <ActivityIndicator style={styles.propertyLoader} />
+              ) : (
+                <Text style={styles.propertyValue}>
+                  {points.hasOwnProperty(user.email) ? points[user.email].RUSH : '0'}
+                </Text>
+              )}
+            </Block>
+            <Block style={styles.splitPropertyFifths}>
+              <Text style={styles.propertyHeader}>Any</Text>
+              {isGettingPoints ? (
+                <ActivityIndicator style={styles.propertyLoader} />
+              ) : (
+                <Text style={styles.propertyValue}>
+                  {points.hasOwnProperty(user.email) ? points[user.email].ANY : '0'}
+                </Text>
+              )}
+            </Block>
+          </Block>
+        </Block>
+
         <GeneralMeetingChart user={user} records={records} events={events} gmCount={gmCount} />
 
         <Block style={styles.eventList}>
@@ -191,7 +259,14 @@ const BrotherDrawer: React.FC<{}> = ({}) => {
               refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
               scrollIndicatorInsets={{ right: 1 }}
             >
-              <Block style={styles.userWrapper}>
+              <Block
+                style={[
+                  styles.userWrapper,
+                  {
+                    paddingBottom: insets.bottom
+                  }
+                ]}
+              >
                 <Block style={styles.userHeader}>
                   {selectedUser.role !== undefined && <Text style={styles.userDate}>{selectedUser.role}</Text>}
                   <Text style={styles.userTitle}>
@@ -346,6 +421,9 @@ const styles = StyleSheet.create({
     fontFamily: 'OpenSans',
     fontSize: 15
   },
+  propertyLoader: {
+    alignSelf: 'flex-start'
+  },
   splitPropertyRow: {
     display: 'flex',
     flexDirection: 'row',
@@ -353,6 +431,9 @@ const styles = StyleSheet.create({
   },
   splitProperty: {
     width: '50%'
+  },
+  splitPropertyFifths: {
+    width: '20%'
   },
   adminContainer: {},
   mandatoryLabel: {
