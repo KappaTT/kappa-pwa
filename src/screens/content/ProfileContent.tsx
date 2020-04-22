@@ -90,23 +90,6 @@ const ProfileContent: React.FC<{
     );
   };
 
-  const renderAdmin = () => {
-    return (
-      <Block style={styles.adminContainer}>
-        <GeneralMeetingChart user={user} records={records} events={events} gmCount={gmCount} />
-
-        <Block style={styles.eventList}>
-          {mandatory.length > 0 && (
-            <React.Fragment>
-              <Text style={styles.mandatoryLabel}>Missed Mandatory</Text>
-              {mandatory.map((event: TEvent) => renderEvent(event))}
-            </React.Fragment>
-          )}
-        </Block>
-      </Block>
-    );
-  };
-
   return (
     <Block flex>
       <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
@@ -213,7 +196,18 @@ const ProfileContent: React.FC<{
             </Block>
           </Block>
 
-          <Block>{renderAdmin()}</Block>
+          <Block style={styles.adminContainer}>
+            <GeneralMeetingChart user={user} records={records} events={events} gmCount={gmCount} />
+
+            <Block style={styles.eventList}>
+              {mandatory.length > 0 && (
+                <React.Fragment>
+                  <Text style={styles.mandatoryLabel}>Missed Mandatory</Text>
+                  {mandatory.map((event: TEvent) => renderEvent(event))}
+                </React.Fragment>
+              )}
+            </Block>
+          </Block>
 
           <Text style={styles.madeWithText}>
             {`Whatsoever thy hand findeth to do, do it with thy might.\n\n${Constants.manifest.version} - ${Constants.manifest.sdkVersion} - ${Constants.nativeBuildVersion}\n\nJTC - Web Chair 2019-2021`}
@@ -242,7 +236,8 @@ const styles = StyleSheet.create({
   subtitle: {
     fontFamily: 'OpenSans-Bold',
     fontSize: 13,
-    color: theme.COLORS.GRAY
+    color: theme.COLORS.GRAY,
+    textTransform: 'uppercase'
   },
   headerButtons: {
     paddingTop: 6,
