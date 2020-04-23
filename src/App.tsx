@@ -10,13 +10,14 @@ import { enableScreens } from 'react-native-screens';
 import { GalioProvider } from '@galio';
 
 import { TRedux } from '@reducers';
-import { _auth, _prefs } from '@reducers/actions';
+import { TToast } from '@reducers/ui';
+import { _auth, _prefs, _ui } from '@reducers/actions';
 import { incompleteUser, purge } from '@backend/auth';
-import { Block, Ghost, FadeModal, SlideModal, EventDrawer, BrotherDrawer } from '@components';
+import { Block, Ghost, FadeModal, SlideModal, EventDrawer, BrotherDrawer, ToastController } from '@components';
 import { Images, theme } from '@constants';
 import AppNavigator from '@navigation/TabAppNavigator';
 import { setTopLevelNavigator, navigate } from '@navigation/NavigationService';
-import { LoginPage, OnboardingPage, GlobalErrorPage } from '@pages';
+import { LoginPage, OnboardingPage } from '@pages';
 import { BASE_URL_MOCKING } from '@backend/backend';
 
 enableScreens();
@@ -54,6 +55,7 @@ const App = () => {
   const dispatchHideOnboarding = React.useCallback(() => dispatch(_auth.hideOnboarding()), [dispatch]);
   const dispatchLoadUser = React.useCallback(() => dispatch(_auth.loadUser()), [dispatch]);
   const dispatchLoadPrefs = React.useCallback(() => dispatch(_prefs.loadPrefs()), [dispatch]);
+  const dispatchShowToast = React.useCallback((toast: Partial<TToast>) => dispatch(_ui.showToast(toast)), [dispatch]);
 
   const _loadResourcesAsync = async () => {
     await Promise.all([
@@ -126,6 +128,18 @@ const App = () => {
   }, [authorized, user, onboardingVisible, isEditingUser]);
 
   React.useEffect(() => {
+    if (globalErrorMessage !== '') {
+      dispatchShowToast({
+        toastTitle: 'Error',
+        toastMessage: globalErrorMessage,
+        toastAllowClose: globalErrorCode !== 401,
+        toastTimer: globalErrorCode !== 401 ? 3000 : -1,
+        toastCode: globalErrorCode
+      });
+    }
+  }, [globalErrorMessage, globalErrorCode]);
+
+  React.useEffect(() => {
     if (!loadedPrefs) {
       dispatchLoadPrefs();
     }
@@ -170,14 +184,7 @@ const App = () => {
               <OnboardingPage />
             </SlideModal>
 
-            <FadeModal
-              transparent={true}
-              visible={globalErrorMessage !== ''}
-              onRequestClose={() => {}}
-              disableAndroidBack={true}
-            >
-              <GlobalErrorPage errorMessage={globalErrorMessage} errorCode={globalErrorCode} />
-            </FadeModal>
+            <ToastController />
           </Block>
         </SafeAreaProvider>
       </GalioProvider>

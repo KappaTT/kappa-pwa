@@ -43,6 +43,7 @@ import TextButton from './TextButton';
 import TextConstraint from './TextConstraint';
 import TitleCard from './TitleCard';
 import Toast from './Toast';
+import ToastController from './ToastController';
 
 export {
   AuthorizedComponent,
@@ -89,5 +90,6 @@ export {
   TextButton,
   TextConstraint,
   TitleCard,
-  Toast
+  Toast,
+  ToastController
 };
