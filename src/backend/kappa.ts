@@ -361,7 +361,7 @@ export const getAttendanceByUser = async (payload: TGetAttendancePayload): Promi
     log('Get attendance response', response.code);
 
     if (!response.success || response.code === 500) {
-      return fail({}, 'issue connecting to the server');
+      return fail({}, 'issue connecting to the server', 500);
     } else if (response.code !== 200) {
       if (response.code === 401) {
         return fail({}, 'your credentials were invalid', response.code);
@@ -392,7 +392,7 @@ export const getAttendanceByEvent = async (payload: TGetAttendancePayload): Prom
     log('Get attendance response', response.code);
 
     if (!response.success || response.code === 500) {
-      return fail({}, 'issue connecting to the server');
+      return fail({}, 'issue connecting to the server', 500);
     } else if (response.code !== 200) {
       if (response.code === 401) {
         return fail({}, 'your credentials were invalid', response.code);

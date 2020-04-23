@@ -56,7 +56,7 @@ const ToastController: React.FC<{}> = ({}) => {
       setStoredMessage(toastMessage);
       setTimeout(handleTimer, toastTimer);
     }
-  }, [isShowingToast, toastTimer, toastTitle, toastMessage]);
+  }, [isShowingToast, toastTimer, toastTitle, toastMessage, storedTitle, storedMessage]);
 
   return (
     <Ghost style={styles.container}>
