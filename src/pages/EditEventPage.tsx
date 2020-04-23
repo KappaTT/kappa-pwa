@@ -10,6 +10,7 @@ import {
   Alert
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { useSelector } from 'react-redux';
 import { useSafeArea } from 'react-native-safe-area-context';
 import { useColorScheme } from 'react-native-appearance';
 import moment from 'moment';
@@ -40,6 +41,8 @@ const EditEventPage: React.FC<{
   onPressBack(): void;
   onPressSave(event: Partial<TEvent>, points: Array<Partial<TPoint>>): void;
 }> = ({ initialEvent, onPressBack, onPressSave }) => {
+  const isSavingEvent = useSelector((state: TRedux) => state.kappa.isSavingEvent);
+
   const insets = useSafeArea();
   const colorScheme = useColorScheme();
 
@@ -259,7 +262,14 @@ const EditEventPage: React.FC<{
         subtitle={initialEvent ? initialEvent.title : ''}
         showBackButton={true}
         onPressBackButton={onPressBackButton}
-        rightButton={type !== '' && <EndCapButton label="Save" onPress={onPressSaveButton} disabled={false} />}
+        rightButton={
+          <EndCapButton
+            label="Save"
+            loading={isSavingEvent}
+            disabled={isSavingEvent || type === ''}
+            onPress={onPressSaveButton}
+          />
+        }
       />
 
       <Block

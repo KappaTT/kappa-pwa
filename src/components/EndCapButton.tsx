@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
 
 import { theme } from '@constants';
 import Block from '@components/Block';
@@ -9,9 +9,17 @@ const EndCapButton: React.FC<{
   label: string;
   direction?: string;
   color?: string;
+  loading?: boolean;
   disabled?: boolean;
   onPress?(): void;
-}> = ({ label, direction = 'right', color = theme.COLORS.PRIMARY, disabled = false, onPress = () => {} }) => {
+}> = ({
+  label,
+  direction = 'right',
+  color = theme.COLORS.PRIMARY,
+  loading = false,
+  disabled = false,
+  onPress = () => {}
+}) => {
   const computedOpacity = disabled ? 0.5 : 1;
 
   return (
@@ -29,19 +37,23 @@ const EndCapButton: React.FC<{
           : {}
       ]}
     >
-      <TouchableOpacity style={styles.button} disabled={disabled} onPress={onPress}>
-        <Text
-          style={[
-            styles.text,
-            {
-              opacity: computedOpacity,
-              color
-            }
-          ]}
-        >
-          {label}
-        </Text>
-      </TouchableOpacity>
+      {loading ? (
+        <ActivityIndicator style={styles.button} />
+      ) : (
+        <TouchableOpacity style={styles.button} disabled={disabled} onPress={onPress}>
+          <Text
+            style={[
+              styles.text,
+              {
+                opacity: computedOpacity,
+                color
+              }
+            ]}
+          >
+            {label}
+          </Text>
+        </TouchableOpacity>
+      )}
     </Block>
   );
 };

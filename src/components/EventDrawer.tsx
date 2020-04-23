@@ -5,7 +5,8 @@ import {
   TouchableWithoutFeedback,
   ScrollView,
   RefreshControl,
-  TouchableOpacity
+  TouchableOpacity,
+  ActivityIndicator
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import Animated from 'react-native-reanimated';
@@ -50,6 +51,7 @@ const EventDrawer: React.FC<{}> = ({}) => {
   const isGettingAttendance = useSelector((state: TRedux) => state.kappa.isGettingAttendance);
   const selectedEventId = useSelector((state: TRedux) => state.kappa.selectedEventId);
   const selectedEvent = useSelector((state: TRedux) => state.kappa.selectedEvent);
+  const isDeletingEvent = useSelector((state: TRedux) => state.kappa.isDeletingEvent);
 
   const [refreshing, setRefreshing] = React.useState<boolean>(isGettingAttendance);
   const [readyToDelete, setReadyToDelete] = React.useState<boolean>(false);
@@ -280,20 +282,23 @@ const EventDrawer: React.FC<{}> = ({}) => {
                 Deleting an event will delete all associated points, attendance and excuse records. Please double check
                 and be certain this is the event you want to delete.
               </Text>
-
-              <Block style={styles.enableDeleteContainer}>
-                <Switch value={readyToDelete} onValueChange={(newValue: boolean) => setReadyToDelete(newValue)} />
-                <Text style={styles.readyToDelete}>I am ready to delete this event</Text>
-              </Block>
             </Block>
 
-            <TouchableOpacity
-              style={!readyToDelete && styles.disabledButton}
-              disabled={!readyToDelete}
-              onPress={dispatchDeleteEvent}
-            >
-              <Icon style={styles.zoneIcon} family="Feather" name="trash-2" size={32} color={theme.COLORS.PRIMARY} />
-            </TouchableOpacity>
+            {isDeletingEvent ? (
+              <ActivityIndicator style={styles.zoneIcon} />
+            ) : (
+              <TouchableOpacity
+                style={!readyToDelete && styles.disabledButton}
+                disabled={!readyToDelete}
+                onPress={dispatchDeleteEvent}
+              >
+                <Icon style={styles.zoneIcon} family="Feather" name="trash-2" size={32} color={theme.COLORS.PRIMARY} />
+              </TouchableOpacity>
+            )}
+          </Block>
+          <Block style={styles.enableDeleteContainer}>
+            <Switch value={readyToDelete} onValueChange={(newValue: boolean) => setReadyToDelete(newValue)} />
+            <Text style={styles.readyToDelete}>I am ready to delete this event</Text>
           </Block>
         </Block>
 
@@ -717,7 +722,9 @@ const styles = StyleSheet.create({
     fontFamily: 'OpenSans',
     fontSize: 12
   },
-  zoneIcon: {},
+  zoneIcon: {
+    width: 32
+  },
   enableDeleteContainer: {
     marginTop: 8,
     marginLeft: 16,

@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, TouchableOpacity, TouchableWithoutFeedback, ActivityIndicator } from 'react-native';
+import { useSelector } from 'react-redux';
 import { useSafeArea } from 'react-native-safe-area-context';
 
 import { theme } from '@constants';
@@ -9,6 +10,9 @@ const ExcusePage: React.FC<{
   renderExcuse: React.ReactElement;
   onRequestClose(): void;
 }> = ({ renderExcuse, onRequestClose }) => {
+  const isApprovingExcuse = false;
+  const isRejectingExcuse = false;
+
   const [readyToDelete, setReadyToDelete] = React.useState<boolean>(false);
 
   const insets = useSafeArea();
@@ -43,15 +47,19 @@ const ExcusePage: React.FC<{
                 </Text>
               </Block>
 
-              <TouchableOpacity onPress={() => {}}>
-                <Icon
-                  style={styles.zoneIcon}
-                  family="Feather"
-                  name="thumbs-up"
-                  size={32}
-                  color={theme.COLORS.PRIMARY}
-                />
-              </TouchableOpacity>
+              {isApprovingExcuse ? (
+                <ActivityIndicator style={styles.zoneIcon} />
+              ) : (
+                <TouchableOpacity disabled={isApprovingExcuse || isRejectingExcuse} onPress={() => {}}>
+                  <Icon
+                    style={styles.zoneIcon}
+                    family="Feather"
+                    name="thumbs-up"
+                    size={32}
+                    color={theme.COLORS.PRIMARY}
+                  />
+                </TouchableOpacity>
+              )}
             </Block>
             <Block style={styles.rejectZone}>
               <Block style={styles.warning}>
@@ -60,30 +68,33 @@ const ExcusePage: React.FC<{
                   Rejecting an excuse will delete the excuse permanently and is an action that cannot be undone. Please
                   double check and be certain you want to reject this excuse.
                 </Text>
-
-                <Block style={styles.enableDeleteContainer}>
-                  <Switch value={readyToDelete} onValueChange={(newValue: boolean) => setReadyToDelete(newValue)} />
-                  <Text style={styles.readyToDelete}>I am ready to reject this excuse</Text>
-                </Block>
               </Block>
 
-              <TouchableOpacity
-                style={
-                  !readyToDelete && {
-                    opacity: 0.4
+              {isRejectingExcuse ? (
+                <ActivityIndicator style={styles.zoneIcon} />
+              ) : (
+                <TouchableOpacity
+                  style={
+                    !readyToDelete && {
+                      opacity: 0.4
+                    }
                   }
-                }
-                disabled={!readyToDelete}
-                onPress={() => {}}
-              >
-                <Icon
-                  style={styles.zoneIcon}
-                  family="Feather"
-                  name="thumbs-down"
-                  size={32}
-                  color={theme.COLORS.PRIMARY}
-                />
-              </TouchableOpacity>
+                  disabled={!readyToDelete || isApprovingExcuse || isRejectingExcuse}
+                  onPress={() => {}}
+                >
+                  <Icon
+                    style={styles.zoneIcon}
+                    family="Feather"
+                    name="thumbs-down"
+                    size={32}
+                    color={theme.COLORS.PRIMARY}
+                  />
+                </TouchableOpacity>
+              )}
+            </Block>
+            <Block style={styles.enableDeleteContainer}>
+              <Switch value={readyToDelete} onValueChange={(newValue: boolean) => setReadyToDelete(newValue)} />
+              <Text style={styles.readyToDelete}>I am ready to reject this excuse</Text>
             </Block>
           </Block>
         </Block>
@@ -159,7 +170,9 @@ const styles = StyleSheet.create({
     fontFamily: 'OpenSans-Bold',
     fontSize: 14
   },
-  zoneIcon: {},
+  zoneIcon: {
+    width: 32
+  },
   enableDeleteContainer: {
     marginTop: 8,
     marginLeft: 16,
