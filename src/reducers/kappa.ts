@@ -363,7 +363,9 @@ export default (state = initialState, action: any): TKappaState => {
         ...state,
         isGettingExcuses: false,
         getExcusesError: true,
-        getExcusesErrorMessage: action.error.message
+        getExcusesErrorMessage: action.error.message,
+        globalErrorMessage: action.error.message,
+        globalErrorCode: action.error.code
       };
     case SELECT_EVENT:
       return {
