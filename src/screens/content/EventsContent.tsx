@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Placeholder, PlaceholderLine, Fade } from 'rn-placeholder';
 import { useSafeArea } from 'react-native-safe-area-context';
 import moment from 'moment';
+import { useIsFocused } from 'react-navigation-hooks';
 
 import { theme } from '@constants';
 import { TRedux } from '@reducers';
@@ -32,6 +33,8 @@ const EventSkeleton: React.FC<{}> = ({}) => {
 const EventsContent: React.FC<{
   navigation: NavigationTypes.ParamType;
 }> = ({ navigation }) => {
+  const isFocused = useIsFocused();
+
   const user = useSelector((state: TRedux) => state.auth.user);
   const loadHistory = useSelector((state: TRedux) => state.kappa.loadHistory);
   const records = useSelector((state: TRedux) => state.kappa.records);
@@ -111,10 +114,10 @@ const EventsContent: React.FC<{
   }, [isGettingEvents, isGettingDirectory, isGettingAttendance]);
 
   React.useEffect(() => {
-    if (user?.sessionToken) {
+    if (isFocused && user?.sessionToken) {
       loadData(false);
     }
-  }, [user]);
+  }, [user, isFocused]);
 
   const keyExtractor = (item: TEvent, index) => {
     return `${item.id}-${index}`;

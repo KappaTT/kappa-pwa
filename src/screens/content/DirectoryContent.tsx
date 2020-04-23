@@ -3,6 +3,7 @@ import { StyleSheet, FlatList, ScrollView, RefreshControl, TouchableOpacity } fr
 import { useSelector, useDispatch } from 'react-redux';
 import { Placeholder, PlaceholderLine, Fade } from 'rn-placeholder';
 import { useSafeArea } from 'react-native-safe-area-context';
+import { useIsFocused } from 'react-navigation-hooks';
 
 import { theme } from '@constants';
 import { TRedux } from '@reducers';
@@ -27,6 +28,8 @@ const UserSkeleton: React.FC<{}> = ({}) => {
 const DirectoryContent: React.FC<{
   navigation: NavigationTypes.ParamType;
 }> = ({ navigation }) => {
+  const isFocused = useIsFocused();
+
   const user = useSelector((state: TRedux) => state.auth.user);
   const loadHistory = useSelector((state: TRedux) => state.kappa.loadHistory);
   const directory = useSelector((state: TRedux) => state.kappa.directory);
@@ -76,10 +79,10 @@ const DirectoryContent: React.FC<{
   }, [isGettingEvents, isGettingDirectory, isGettingAttendance]);
 
   React.useEffect(() => {
-    if (user?.sessionToken) {
+    if (isFocused && user?.sessionToken) {
       loadData(false);
     }
-  }, [user]);
+  }, [user, isFocused]);
 
   const keyExtractor = (item: TUser) => item._id;
 

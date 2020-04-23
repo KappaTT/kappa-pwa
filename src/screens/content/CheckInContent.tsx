@@ -13,6 +13,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useSafeArea } from 'react-native-safe-area-context';
 import moment from 'moment';
 import { BarCodeScanner } from 'expo-barcode-scanner';
+import { useIsFocused } from 'react-navigation-hooks';
 
 import { theme } from '@constants';
 import { TRedux } from '@reducers';
@@ -37,6 +38,8 @@ import { getEventById, hasValidCheckIn, shouldLoad, sortEventByDate } from '@ser
 const CheckInContent: React.FC<{
   navigation: NavigationTypes.ParamType;
 }> = ({ navigation }) => {
+  const isFocused = useIsFocused();
+
   const user = useSelector((state: TRedux) => state.auth.user);
   const loadHistory = useSelector((state: TRedux) => state.kappa.loadHistory);
   const isGettingAttendance = useSelector((state: TRedux) => state.kappa.isGettingAttendance);
@@ -181,10 +184,15 @@ const CheckInContent: React.FC<{
   };
 
   React.useEffect(() => {
-    if (shouldLoad(loadHistory, `user-${user.email}`) && !isGettingAttendance && getAttendanceErrorMessage === '') {
+    if (
+      isFocused &&
+      !isGettingAttendance &&
+      getAttendanceErrorMessage === '' &&
+      shouldLoad(loadHistory, `user-${user.email}`)
+    ) {
       dispatchGetMyAttendance();
     }
-  }, [user, loadHistory, isGettingAttendance]);
+  }, [user, loadHistory, isGettingAttendance, isFocused]);
 
   React.useEffect(() => {
     if (selectedEvent === null && checkInEventId !== '') {

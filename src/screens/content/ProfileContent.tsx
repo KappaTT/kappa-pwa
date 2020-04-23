@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useSafeArea } from 'react-native-safe-area-context';
 import moment from 'moment';
 import Constants from 'expo-constants';
+import { useIsFocused } from 'react-navigation-hooks';
 
 import { TRedux } from '@reducers';
 import { _auth, _kappa } from '@reducers/actions';
@@ -18,6 +19,8 @@ import { TEvent } from '@backend/kappa';
 const ProfileContent: React.FC<{
   navigation: NavigationTypes.ParamType;
 }> = ({ navigation }) => {
+  const isFocused = useIsFocused();
+
   const user = useSelector((state: TRedux) => state.auth.user);
   const loadHistory = useSelector((state: TRedux) => state.kappa.loadHistory);
   const events = useSelector((state: TRedux) => state.kappa.events);
@@ -76,10 +79,10 @@ const ProfileContent: React.FC<{
   }, [isGettingEvents, isGettingAttendance, isGettingPoints]);
 
   React.useEffect(() => {
-    if (user?.sessionToken) {
+    if (isFocused && user?.sessionToken) {
       loadData(false);
     }
-  }, [user]);
+  }, [user, isFocused]);
 
   const renderEvent = (event: TEvent) => {
     return (

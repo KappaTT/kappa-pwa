@@ -3,6 +3,7 @@ import { StyleSheet, ScrollView, RefreshControl, TouchableOpacity, TouchableWith
 import { useSelector, useDispatch } from 'react-redux';
 import { useSafeArea } from 'react-native-safe-area-context';
 import moment from 'moment';
+import { useIsFocused } from 'react-navigation-hooks';
 
 import { TRedux } from '@reducers';
 import { _auth, _kappa } from '@reducers/actions';
@@ -17,6 +18,8 @@ import { ExcusePage } from '@pages';
 const MessagesContent: React.FC<{
   navigation: NavigationTypes.ParamType;
 }> = ({ navigation }) => {
+  const isFocused = useIsFocused();
+
   const user = useSelector((state: TRedux) => state.auth.user);
   const loadHistory = useSelector((state: TRedux) => state.kappa.loadHistory);
   const directory = useSelector((state: TRedux) => state.kappa.directory);
@@ -61,10 +64,10 @@ const MessagesContent: React.FC<{
   }, [isGettingExcuses]);
 
   React.useEffect(() => {
-    if (user?.sessionToken) {
+    if (isFocused && user?.sessionToken) {
       loadData(false);
     }
-  }, [user]);
+  }, [user, isFocused]);
 
   const getExcuseRequester = (excuse: TPendingExcuse) => {
     const email = `${excuse.netid}@illinois.edu`;
