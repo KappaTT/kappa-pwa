@@ -5,7 +5,8 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   TouchableWithoutFeedback,
-  TouchableOpacity
+  TouchableOpacity,
+  ActivityIndicator
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { useSafeArea } from 'react-native-safe-area-context';
@@ -66,6 +67,7 @@ const getGradYearOptions = () => {
 const OnboardingPage: React.FC<{}> = ({}) => {
   const user = useSelector((state: TRedux) => state.auth.user);
   const isEditingUser = useSelector((state: TRedux) => state.auth.isEditingUser);
+  const isUpdatingUser = useSelector((state: TRedux) => state.auth.isUpdatingUser);
 
   const [editing, setEditing] = React.useState<string>('');
   const [phone, setPhone] = React.useState<string>(user.phone || '');
@@ -220,7 +222,7 @@ const OnboardingPage: React.FC<{}> = ({}) => {
             </Block>
             <Block style={styles.headerButtons}>
               {isEditingUser && (
-                <TouchableOpacity onPress={dispatchHideOnboarding}>
+                <TouchableOpacity disabled={isUpdatingUser} onPress={dispatchHideOnboarding}>
                   <Block style={styles.closeButtonContianer}>
                     <Icon family="Feather" name="x" color={theme.COLORS.PRIMARY} size={32} />
                   </Block>
@@ -243,12 +245,16 @@ const OnboardingPage: React.FC<{}> = ({}) => {
               }
             ]}
           >
-            <FAB
-              iconFamily="Feather"
-              iconName="arrow-right"
-              bgColor={submitDisabled ? theme.COLORS.GRAY : theme.COLORS.PRIMARY}
-              onPress={() => !submitDisabled && onPressSubmit()}
-            />
+            {isUpdatingUser ? (
+              <ActivityIndicator style={styles.activityIndicator} />
+            ) : (
+              <FAB
+                iconFamily="Feather"
+                iconName="arrow-right"
+                bgColor={submitDisabled ? theme.COLORS.GRAY : theme.COLORS.PRIMARY}
+                onPress={() => !submitDisabled && onPressSubmit()}
+              />
+            )}
           </Ghost>
         </Block>
       </KeyboardAvoidingView>
@@ -346,6 +352,9 @@ const styles = StyleSheet.create({
   },
   input: {
     backgroundColor: theme.COLORS.SUPER_LIGHT_BLUE_GRAY
+  },
+  activityIndicator: {
+    height: 56
   }
 });
 
