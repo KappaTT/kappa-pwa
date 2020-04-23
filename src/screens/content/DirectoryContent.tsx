@@ -141,6 +141,18 @@ const DirectoryContent: React.FC<{
             <UserSkeleton />
             <Block style={styles.separator} />
             <UserSkeleton />
+            <Block style={styles.separator} />
+            <UserSkeleton />
+            <Block style={styles.separator} />
+            <UserSkeleton />
+            <Block style={styles.separator} />
+            <UserSkeleton />
+            <Block style={styles.separator} />
+            <UserSkeleton />
+            <Block style={styles.separator} />
+            <UserSkeleton />
+            <Block style={styles.separator} />
+            <UserSkeleton />
           </Block>
         ) : (
           <FlatList
@@ -174,7 +186,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 8,
     marginVertical: 4,
     paddingHorizontal: 16,
-    paddingVertical: 16,
+    paddingVertical: 8,
     backgroundColor: theme.COLORS.WHITE
   },
   container: {

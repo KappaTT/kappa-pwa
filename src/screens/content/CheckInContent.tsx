@@ -546,7 +546,6 @@ const styles = StyleSheet.create({
     width: 128
   },
   dividerWrapper: {
-    marginHorizontal: 8,
     marginTop: 20,
     marginBottom: 4,
     display: 'flex',
