@@ -20,7 +20,6 @@ const PopupModal: React.FC<{
   children?: React.ReactNode;
 }> = ({ title, subtitle, allowClose = true, shouldClose = false, showClose = false, onPressClose, children }) => {
   const heightBase = new Animated.Value(height * 0.05);
-  const backgroundBase = new Animated.Value(0.2);
   const opacityBase = new Animated.Value(1);
   const [progress, setProgress] = React.useState<Animated.Value>(new Animated.Value(1));
 
