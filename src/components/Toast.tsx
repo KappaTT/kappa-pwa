@@ -33,7 +33,7 @@ const Toast: React.FC<{
     Animated.timing(progress, {
       toValue: 1,
       easing: Easing.out(Easing.poly(4)),
-      duration: 400,
+      duration: 200,
       useNativeDriver: true
     }).start(() => {
       onDoneClosing();
@@ -109,32 +109,23 @@ const styles = StyleSheet.create({
     height: height
   },
   wrapper: {
-    width: width - 60,
-    minHeight: 80,
-    borderRadius: 10,
-    backgroundColor: theme.COLORS.WHITE,
-    shadowOffset: { width: 0, height: 4 },
-    shadowRadius: 16,
-    shadowColor: theme.COLORS.BLACK,
-    shadowOpacity: 0.2,
-    elevation: 2
+    width: width - 40,
+    borderRadius: 8,
+    backgroundColor: theme.COLORS.WHITE
   },
   container: {
-    margin: 20,
-    paddingVertical: 20
+    marginTop: 20,
+    marginHorizontal: 20
   },
   title: {
     overflow: 'visible',
     marginBottom: 5,
-    paddingVertical: 2,
     fontFamily: 'OpenSans-Bold',
-    fontSize: 24,
-    lineHeight: 24
+    fontSize: 18
   },
   message: {
     fontFamily: 'OpenSans',
-    fontSize: 16,
-    lineHeight: 16
+    fontSize: 13
   },
   contentWrapper: {
     marginTop: 20,
