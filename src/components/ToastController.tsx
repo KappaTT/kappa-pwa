@@ -1,7 +1,6 @@
 import React from 'react';
-import { StyleSheet, TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, Keyboard } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import { useSafeArea } from 'react-native-safe-area-context';
 
 import { TRedux } from '@reducers';
 import { TToast } from '@reducers/ui';
@@ -67,10 +66,14 @@ const ToastController: React.FC<{}> = ({}) => {
   }, [globalErrorMessage, globalErrorCode]);
 
   React.useEffect(() => {
-    if (isShowingToast && toastTimer > 0) {
-      setStoredTitle(toastTitle);
-      setStoredMessage(toastMessage);
-      setTimeout(handleTimer, toastTimer);
+    if (isShowingToast) {
+      Keyboard.dismiss();
+
+      if (toastTimer > 0) {
+        setStoredTitle(toastTitle);
+        setStoredMessage(toastMessage);
+        setTimeout(handleTimer, toastTimer);
+      }
     }
   }, [isShowingToast, toastTimer, toastTitle, toastMessage, storedTitle, storedMessage]);
 
