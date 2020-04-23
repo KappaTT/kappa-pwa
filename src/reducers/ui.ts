@@ -21,7 +21,7 @@ const initialState: TUIState = {
   isHidingToast: false,
   toastTitle: '',
   toastMessage: '',
-  toastAllowClose: false,
+  toastAllowClose: true,
   toastTimer: -1,
   toastCode: -1,
   toastChildren: null
@@ -36,7 +36,7 @@ export default (state = initialState, action: any): TUIState => {
         isHidingToast: false,
         toastTitle: action.toast.toastTitle || '',
         toastMessage: action.toast.toastMessage || '',
-        toastAllowClose: action.toast.toastAllowClose === true,
+        toastAllowClose: action.toast.toastAllowClose !== false,
         toastTimer: action.toast.toastTimer !== undefined ? action.toast.toastTimer : -1,
         toastCode: action.toast.toastCode !== undefined ? action.toast.toastCode : -1,
         toastChildren: action.toast.toastChildren !== null ? action.toast.toastChildren : null
@@ -53,7 +53,7 @@ export default (state = initialState, action: any): TUIState => {
         isHidingToast: false,
         toastTitle: '',
         toastMessage: '',
-        toastAllowClose: false,
+        toastAllowClose: true,
         toastTimer: -1,
         toastCode: -1,
         toastChildren: null

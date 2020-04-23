@@ -2,10 +2,12 @@ import React from 'react';
 import {
   StyleSheet,
   Dimensions,
+  TouchableOpacity,
   TouchableWithoutFeedback,
   ScrollView,
   RefreshControl,
-  ActivityIndicator
+  ActivityIndicator,
+  Clipboard
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import Animated from 'react-native-reanimated';
@@ -14,7 +16,8 @@ import { useSafeArea } from 'react-native-safe-area-context';
 import moment from 'moment';
 
 import { TRedux } from '@reducers';
-import { _auth, _kappa } from '@reducers/actions';
+import { TToast } from '@reducers/ui';
+import { _auth, _kappa, _ui } from '@reducers/actions';
 import { log } from '@services/logService';
 import { prettyPhone, sortEventByDate, shouldLoad } from '@services/kappaService';
 import { theme } from '@constants';
@@ -53,6 +56,7 @@ const BrotherDrawer: React.FC<{}> = ({}) => {
     selectedUserEmail
   ]);
   const dispatchUnselectUser = React.useCallback(() => dispatch(_kappa.unselectUser()), [dispatch]);
+  const dispatchShowToast = React.useCallback((toast: Partial<TToast>) => dispatch(_ui.showToast(toast)), [dispatch]);
 
   const insets = useSafeArea();
 
@@ -96,6 +100,26 @@ const BrotherDrawer: React.FC<{}> = ({}) => {
   const onPressClose = React.useCallback(() => {
     snapTo(1);
   }, []);
+
+  const onPressEmail = React.useCallback(() => {
+    Clipboard.setString(selectedUser.email);
+
+    dispatchShowToast({
+      toastTitle: 'Copied',
+      toastMessage: 'The email was saved to your clipboard',
+      toastTimer: 1500
+    });
+  }, [selectedUser]);
+
+  const onPressPhone = React.useCallback(() => {
+    Clipboard.setString(selectedUser.phone);
+
+    dispatchShowToast({
+      toastTitle: 'Copied',
+      toastMessage: 'The phone number was saved to your clipboard',
+      toastTimer: 1500
+    });
+  }, [selectedUser]);
 
   const mandatory = React.useMemo(() => {
     if (!user.privileged) return [];
@@ -287,14 +311,18 @@ const BrotherDrawer: React.FC<{}> = ({}) => {
                   </Block>
                   <Block style={styles.splitPropertyRow}>
                     <Block style={styles.splitProperty}>
-                      <Text style={styles.propertyHeader}>Email</Text>
-                      <Text style={styles.propertyValue}>{selectedUser.email}</Text>
+                      <TouchableOpacity onPress={onPressEmail}>
+                        <Text style={styles.propertyHeader}>Email</Text>
+                        <Text style={styles.propertyValue}>{selectedUser.email}</Text>
+                      </TouchableOpacity>
                     </Block>
                     <Block style={styles.splitProperty}>
-                      <Text style={styles.propertyHeader}>Phone</Text>
-                      <Text style={styles.propertyValue}>
-                        {selectedUser.phone ? prettyPhone(selectedUser.phone) : ''}
-                      </Text>
+                      <TouchableOpacity onPress={onPressPhone}>
+                        <Text style={styles.propertyHeader}>Phone</Text>
+                        <Text style={styles.propertyValue}>
+                          {selectedUser.phone ? prettyPhone(selectedUser.phone) : ''}
+                        </Text>
+                      </TouchableOpacity>
                     </Block>
                   </Block>
 

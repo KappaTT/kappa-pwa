@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useSafeArea } from 'react-native-safe-area-context';
 
 import { TRedux } from '@reducers';
+import { TToast } from '@reducers/ui';
 import { _auth, _kappa, _ui } from '@reducers/actions';
 import { theme } from '@constants';
 import Block from '@components/Block';
@@ -13,6 +14,8 @@ import RoundButton from '@components/RoundButton';
 
 const ToastController: React.FC<{}> = ({}) => {
   const authorized = useSelector((state: TRedux) => state.auth.authorized);
+  const globalErrorMessage = useSelector((state: TRedux) => state.kappa.globalErrorMessage);
+  const globalErrorCode = useSelector((state: TRedux) => state.kappa.globalErrorCode);
   const isShowingToast = useSelector((state: TRedux) => state.ui.isShowingToast);
   const isHidingToast = useSelector((state: TRedux) => state.ui.isHidingToast);
   const toastTitle = useSelector((state: TRedux) => state.ui.toastTitle);
@@ -26,6 +29,7 @@ const ToastController: React.FC<{}> = ({}) => {
   const [storedMessage, setStoredMessage] = React.useState<string>('');
 
   const dispatch = useDispatch();
+  const dispatchShowToast = React.useCallback((toast: Partial<TToast>) => dispatch(_ui.showToast(toast)), [dispatch]);
   const dispatchHideToast = React.useCallback(() => dispatch(_ui.hideToast()), [dispatch]);
   const dispatchDoneHidingToast = React.useCallback(() => dispatch(_ui.doneHidingToast()), [dispatch]);
   const dispatchClearError = React.useCallback(() => dispatch(_kappa.clearGlobalError()), [dispatch]);
@@ -49,6 +53,18 @@ const ToastController: React.FC<{}> = ({}) => {
     dispatchHideToast();
     dispatchSignOut();
   }, []);
+
+  React.useEffect(() => {
+    if (globalErrorMessage !== '') {
+      dispatchShowToast({
+        toastTitle: 'Error',
+        toastMessage: globalErrorMessage,
+        toastAllowClose: globalErrorCode !== 401,
+        toastTimer: globalErrorCode !== 401 ? 3000 : -1,
+        toastCode: globalErrorCode
+      });
+    }
+  }, [globalErrorMessage, globalErrorCode]);
 
   React.useEffect(() => {
     if (isShowingToast && toastTimer > 0) {

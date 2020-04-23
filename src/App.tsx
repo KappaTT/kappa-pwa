@@ -10,13 +10,12 @@ import { enableScreens } from 'react-native-screens';
 import { GalioProvider } from '@galio';
 
 import { TRedux } from '@reducers';
-import { TToast } from '@reducers/ui';
 import { _auth, _prefs, _ui } from '@reducers/actions';
-import { incompleteUser, purge } from '@backend/auth';
+import { incompleteUser } from '@backend/auth';
 import { Block, Ghost, FadeModal, SlideModal, EventDrawer, BrotherDrawer, ToastController } from '@components';
 import { Images, theme } from '@constants';
 import AppNavigator from '@navigation/TabAppNavigator';
-import { setTopLevelNavigator, navigate } from '@navigation/NavigationService';
+import { setTopLevelNavigator } from '@navigation/NavigationService';
 import { LoginPage, OnboardingPage } from '@pages';
 import { BASE_URL_MOCKING } from '@backend/backend';
 
@@ -42,8 +41,6 @@ const App = () => {
   const loadedPrefs = useSelector((state: TRedux) => state.prefs.loaded);
   const onboardingVisible = useSelector((state: TRedux) => state.auth.onboardingVisible);
   const isEditingUser = useSelector((state: TRedux) => state.auth.isEditingUser);
-  const globalErrorMessage = useSelector((state: TRedux) => state.kappa.globalErrorMessage);
-  const globalErrorCode = useSelector((state: TRedux) => state.kappa.globalErrorCode);
 
   const [isLoadingComplete, setIsLoadingComplete] = React.useState<boolean>(false);
   const [isNavigatorReady, setIsNavigatorReady] = React.useState<boolean>(false);
@@ -55,7 +52,6 @@ const App = () => {
   const dispatchHideOnboarding = React.useCallback(() => dispatch(_auth.hideOnboarding()), [dispatch]);
   const dispatchLoadUser = React.useCallback(() => dispatch(_auth.loadUser()), [dispatch]);
   const dispatchLoadPrefs = React.useCallback(() => dispatch(_prefs.loadPrefs()), [dispatch]);
-  const dispatchShowToast = React.useCallback((toast: Partial<TToast>) => dispatch(_ui.showToast(toast)), [dispatch]);
 
   const _loadResourcesAsync = async () => {
     await Promise.all([
@@ -126,18 +122,6 @@ const App = () => {
       dispatchHideOnboarding();
     }
   }, [authorized, user, onboardingVisible, isEditingUser]);
-
-  React.useEffect(() => {
-    if (globalErrorMessage !== '') {
-      dispatchShowToast({
-        toastTitle: 'Error',
-        toastMessage: globalErrorMessage,
-        toastAllowClose: globalErrorCode !== 401,
-        toastTimer: globalErrorCode !== 401 ? 3000 : -1,
-        toastCode: globalErrorCode
-      });
-    }
-  }, [globalErrorMessage, globalErrorCode]);
 
   React.useEffect(() => {
     if (!loadedPrefs) {
