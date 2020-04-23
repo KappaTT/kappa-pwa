@@ -383,6 +383,7 @@ const CheckInContent: React.FC<{
 
                       <Block style={styles.scanButton}>
                         <RoundButton
+                          disabled={isCheckingIn}
                           label="Scan"
                           right={true}
                           icon={
@@ -416,10 +417,7 @@ const CheckInContent: React.FC<{
                     alt={true}
                     label="Request Excuse"
                     disabled={
-                      selectedEvent === null ||
-                      // needsLoading ||
-                      selectedEvent.excusable === 0 ||
-                      alreadyCheckedIn
+                      isCheckingIn || selectedEvent === null || selectedEvent.excusable === 0 || alreadyCheckedIn
                     }
                     onPress={() => {}}
                   />
@@ -429,8 +427,8 @@ const CheckInContent: React.FC<{
                 <Block style={styles.attendButton}>
                   <RoundButton
                     disabled={
+                      isCheckingIn ||
                       selectedEvent === null ||
-                      // needsLoading ||
                       alreadyCheckedIn ||
                       code.length !== 4 ||
                       !moment(selectedEvent.start).isSame(moment(), 'day')
