@@ -413,6 +413,7 @@ export default (state = initialState, action: any): TKappaState => {
     case SAVE_EDIT_EVENT:
       return {
         ...state,
+        isSavingEvent: true,
         saveEventError: false,
         saveEventErrorMessage: ''
       };
@@ -434,7 +435,9 @@ export default (state = initialState, action: any): TKappaState => {
         ...state,
         isSavingEvent: false,
         saveEventError: true,
-        saveEventErrorMessage: action.error.message
+        saveEventErrorMessage: action.error.message,
+        globalErrorMessage: action.error.message,
+        globalErrorCode: action.error.code
       };
     case DELETE_EVENT:
       return {
@@ -463,7 +466,9 @@ export default (state = initialState, action: any): TKappaState => {
         ...state,
         isDeletingEvent: false,
         deleteEventError: true,
-        deleteEventErrorMessage: action.error.message
+        deleteEventErrorMessage: action.error.message,
+        globalErrorMessage: action.error.message,
+        globalErrorCode: action.error.code
       };
     case SET_CHECK_IN_EVENT:
       return {
