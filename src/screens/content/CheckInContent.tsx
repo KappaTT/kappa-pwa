@@ -17,7 +17,8 @@ import { useIsFocused } from 'react-navigation-hooks';
 
 import { theme } from '@constants';
 import { TRedux } from '@reducers';
-import { _kappa } from '@reducers/actions';
+import { TToast } from '@reducers/ui';
+import { _kappa, _ui } from '@reducers/actions';
 import { NavigationTypes } from '@types';
 import {
   Block,
@@ -29,8 +30,7 @@ import {
   SlideModal,
   RadioList,
   FormattedInput,
-  KeyboardDismissView,
-  FadeModal
+  KeyboardDismissView
 } from '@components';
 import { HeaderHeight, TabBarHeight } from '@services/utils';
 import { getEventById, hasValidCheckIn, shouldLoad, sortEventByDate } from '@services/kappaService';
@@ -60,7 +60,6 @@ const CheckInContent: React.FC<{
   const [scanned, setScanned] = React.useState<boolean>(false);
   const [scanning, setScanning] = React.useState<boolean>(false);
   const [waitingForCheckIn, setWaitingForCheckIn] = React.useState<boolean>(false);
-  const [showCheckedInStatus, setShowCheckedInStatus] = React.useState<boolean>(false);
 
   const dispatch = useDispatch();
   const dispatchSetCheckInEvent = React.useCallback(
@@ -72,6 +71,7 @@ const CheckInContent: React.FC<{
     (event_id: string, event_code: string) => dispatch(_kappa.checkIn(user, event_id, event_code)),
     [dispatch, user]
   );
+  const dispatchShowToast = React.useCallback((toast: Partial<TToast>) => dispatch(_ui.showToast(toast)), [dispatch]);
 
   const insets = useSafeArea();
 
@@ -218,11 +218,16 @@ const CheckInContent: React.FC<{
       setWaitingForCheckIn(true);
     } else if (waitingForCheckIn) {
       setWaitingForCheckIn(false);
-      setShowCheckedInStatus(true);
 
-      setTimeout(() => setShowCheckedInStatus(false), 1000);
+      if (checkinErrorMessage === '') {
+        dispatchShowToast({
+          toastTitle: 'Success',
+          toastMessage: 'You have been checked in to the event!',
+          toastTimer: 2000
+        });
+      }
     }
-  }, [isCheckingIn, waitingForCheckIn]);
+  }, [isCheckingIn, waitingForCheckIn, checkinErrorMessage]);
 
   const renderChoosingEvent = () => {
     return (
@@ -294,37 +299,6 @@ const CheckInContent: React.FC<{
               />
             </Block>
           </TouchableOpacity>
-        </Block>
-      </Block>
-    );
-  };
-
-  const renderCheckingIn = () => {
-    return (
-      <Block style={styles.checkingInOverlay}>
-        <Block
-          style={[
-            styles.checkingInContainer,
-            {
-              height: 64 + TabBarHeight + insets.bottom
-            }
-          ]}
-        >
-          {showCheckedInStatus ? (
-            checkinErrorMessage !== '' ? (
-              <React.Fragment>
-                <Icon family="Feather" name="x" size={24} color={theme.COLORS.PRIMARY} />
-                <Text style={styles.failedCheckIn}>{checkinErrorMessage}</Text>
-              </React.Fragment>
-            ) : (
-              <React.Fragment>
-                <Icon family="Feather" name="check" size={24} color={theme.COLORS.PRIMARY_GREEN} />
-                <Text style={styles.alreadyCheckedIn}>Checked In</Text>
-              </React.Fragment>
-            )
-          ) : (
-            <ActivityIndicator size="large" />
-          )}
         </Block>
       </Block>
     );
@@ -473,9 +447,6 @@ const CheckInContent: React.FC<{
 
         <SlideModal visible={choosingEvent}>{renderChoosingEvent()}</SlideModal>
         <SlideModal visible={scanning}>{renderScanner()}</SlideModal>
-        <FadeModal visible={waitingForCheckIn || showCheckedInStatus} transparent={true}>
-          {renderCheckingIn()}
-        </FadeModal>
       </Block>
     </KeyboardDismissView>
   );
@@ -617,28 +588,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.25)'
   },
-  scannerCloseButton: {},
-  checkingInOverlay: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)'
-  },
-  checkingInContainer: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: theme.COLORS.WHITE,
-    borderTopColor: theme.COLORS.LIGHT_BORDER,
-    borderTopWidth: 1,
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center'
-  }
+  scannerCloseButton: {}
 });
 
 export default CheckInContent;

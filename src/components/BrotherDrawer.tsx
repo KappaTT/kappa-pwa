@@ -17,7 +17,7 @@ import moment from 'moment';
 
 import { TRedux } from '@reducers';
 import { TToast } from '@reducers/ui';
-import { _auth, _kappa, _ui } from '@reducers/actions';
+import { _kappa, _ui } from '@reducers/actions';
 import { log } from '@services/logService';
 import { prettyPhone, sortEventByDate, shouldLoad } from '@services/kappaService';
 import { theme } from '@constants';
