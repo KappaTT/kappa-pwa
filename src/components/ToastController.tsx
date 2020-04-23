@@ -19,8 +19,6 @@ const ToastController: React.FC<{}> = ({}) => {
   const toastMessage = useSelector((state: TRedux) => state.ui.toastMessage);
   const toastAllowClose = useSelector((state: TRedux) => state.ui.toastAllowClose);
   const toastTimer = useSelector((state: TRedux) => state.ui.toastTimer);
-  const toastIconFamily = useSelector((state: TRedux) => state.ui.toastIconFamily);
-  const toastIconName = useSelector((state: TRedux) => state.ui.toastIconName);
   const toastCode = useSelector((state: TRedux) => state.ui.toastCode);
   const toastChildren = useSelector((state: TRedux) => state.ui.toastChildren);
 

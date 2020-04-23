@@ -7,8 +7,6 @@ export interface TToast {
   toastMessage: string;
   toastAllowClose: boolean;
   toastTimer: number;
-  toastIconFamily: string;
-  toastIconName: string;
   toastCode: number;
   toastChildren: React.ReactNode;
 }
@@ -25,8 +23,6 @@ const initialState: TUIState = {
   toastMessage: '',
   toastAllowClose: false,
   toastTimer: -1,
-  toastIconFamily: '',
-  toastIconName: '',
   toastCode: -1,
   toastChildren: null
 };
@@ -38,7 +34,12 @@ export default (state = initialState, action: any): TUIState => {
         ...state,
         isShowingToast: true,
         isHidingToast: false,
-        ...action.toast
+        toastTitle: action.toast.toastTitle || '',
+        toastMessage: action.toast.toastMessage || '',
+        toastAllowClose: action.toast.toastAllowClose === true,
+        toastTimer: action.toast.toastTimer !== undefined ? action.toast.toastTimer : -1,
+        toastCode: action.toast.toastCode !== undefined ? action.toast.toastCode : -1,
+        toastChildren: action.toast.toastChildren !== null ? action.toast.toastChildren : null
       };
     case HIDE_TOAST:
       return {
@@ -54,8 +55,6 @@ export default (state = initialState, action: any): TUIState => {
         toastMessage: '',
         toastAllowClose: false,
         toastTimer: -1,
-        toastIconFamily: '',
-        toastIconName: '',
         toastCode: -1,
         toastChildren: null
       };
