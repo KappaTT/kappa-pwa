@@ -494,7 +494,9 @@ export default (state = initialState, action: any): TKappaState => {
         ...state,
         isCheckingIn: false,
         checkInError: true,
-        checkInErrorMessage: action.error.message
+        checkInErrorMessage: action.error.message,
+        globalErrorMessage: action.error.message,
+        globalErrorCode: action.error.code
       };
     case GET_POINTS:
       return {
