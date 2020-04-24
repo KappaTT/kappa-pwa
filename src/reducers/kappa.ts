@@ -556,7 +556,7 @@ export default (state = initialState, action: any): TKappaState => {
         },
         loadHistory: {
           ...state.loadHistory,
-          [`points-${action.taget}`]: moment()
+          [`points-${action.target}`]: moment()
         }
       };
     case GET_POINTS_FAILURE:
