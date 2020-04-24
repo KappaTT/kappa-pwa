@@ -232,6 +232,8 @@ const CheckInContent: React.FC<{
           toastMessage: 'You have been checked in to the event!',
           toastTimer: 2000
         });
+
+        setCode('');
       }
     }
   }, [isCheckingIn, waitingForCheckIn, checkinErrorMessage]);
@@ -248,6 +250,8 @@ const CheckInContent: React.FC<{
           toastMessage: 'Your excuse has been submitted!',
           toastTimer: 2000
         });
+
+        setReason('');
       }
     }
   }, [isCreatingExcuse, waitingForExcuse, createExcuseErrorMessage]);
