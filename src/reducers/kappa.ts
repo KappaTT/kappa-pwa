@@ -15,15 +15,10 @@ import {
 import {
   getEventById,
   mergeRecords,
-  separateByDate,
   separateByEmail,
   getUserByEmail,
   separateByEventId,
-  getMandatoryEvents,
-  getMissedMandatory,
-  getTypeCount,
   mergeEvents,
-  mergeEventDates,
   recomputeKappaState
 } from '@services/kappaService';
 import { TUser } from '@backend/auth';
@@ -72,6 +67,9 @@ export const SET_CHECK_IN_EVENT = 'SET_CHECK_IN_EVENT';
 export const CHECK_IN = 'CHECK_IN';
 export const CHECK_IN_SUCCESS = 'CHECK_IN_SUCCESS';
 export const CHECK_IN_FAILURE = 'CHECK_IN_FAILURE';
+export const CREATE_EXCUSE = 'CREATE_EXCUSE';
+export const CREATE_EXCUSE_SUCCESS = 'CREATE_EXCUSE_SUCCESS';
+export const CREATE_EXCUSE_FAILURE = 'CREATE_EXCUSE_FAILURE';
 
 export interface TKappaState {
   globalErrorMessage: string;
@@ -143,6 +141,9 @@ export interface TKappaState {
   isCheckingIn: boolean;
   checkInError: boolean;
   checkInErrorMessage: string;
+  isCreatingExcuse: boolean;
+  createExcuseError: boolean;
+  createExcuseErrorMessage: string;
 }
 
 const initialState: TKappaState = {
@@ -211,7 +212,10 @@ const initialState: TKappaState = {
 
   isCheckingIn: false,
   checkInError: false,
-  checkInErrorMessage: ''
+  checkInErrorMessage: '',
+  isCreatingExcuse: false,
+  createExcuseError: false,
+  createExcuseErrorMessage: ''
 };
 
 export default (state = initialState, action: any): TKappaState => {
@@ -352,7 +356,7 @@ export default (state = initialState, action: any): TKappaState => {
       return {
         ...state,
         isGettingExcuses: false,
-        pendingExcusesArray: action.excused,
+        pendingExcusesArray: action.pending,
         loadHistory: {
           ...state.loadHistory,
           excuses: moment()
@@ -502,6 +506,36 @@ export default (state = initialState, action: any): TKappaState => {
         isCheckingIn: false,
         checkInError: true,
         checkInErrorMessage: action.error.message,
+        globalErrorMessage: action.error.message,
+        globalErrorCode: action.error.code
+      };
+    case CREATE_EXCUSE:
+      return {
+        ...state,
+        isCreatingExcuse: true,
+        createExcuseError: false,
+        createExcuseErrorMessage: ''
+      };
+    case CREATE_EXCUSE_SUCCESS:
+      return {
+        ...state,
+        isCreatingExcuse: false,
+        pendingExcusesArray: state.pendingExcusesArray.concat(action.pending),
+        ...recomputeKappaState({
+          events: state.events,
+          records: mergeRecords(state.records, {
+            attended: [],
+            excused: action.excused
+          }),
+          directory: state.directory
+        })
+      };
+    case CREATE_EXCUSE_FAILURE:
+      return {
+        ...state,
+        isCreatingExcuse: false,
+        createExcuseError: true,
+        createExcuseErrorMessage: action.error.message,
         globalErrorMessage: action.error.message,
         globalErrorCode: action.error.code
       };

@@ -70,7 +70,6 @@ export interface TResponse {
 export interface TRequestResponse {
   success: boolean;
   code?: number;
-  data?: any;
   error?: {
     message?: string;
     details?: string;

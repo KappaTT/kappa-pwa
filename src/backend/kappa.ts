@@ -467,12 +467,12 @@ export interface TGetPendingExcusesPayload {
 }
 
 export interface TGetPendingExcusesRequestResponse {
-  excused: Array<TPendingExcuse>;
+  pending: Array<TPendingExcuse>;
 }
 
 export interface TGetPendingExcusesResponse extends TResponse {
   data?: {
-    excused: Array<TPendingExcuse>;
+    pending: Array<TPendingExcuse>;
   };
 }
 
@@ -498,7 +498,7 @@ export const getPendingExcuses = async (payload: TGetPendingExcusesPayload): Pro
     }
 
     return pass({
-      excused: response.data.excused || []
+      pending: response.data.pending || []
     });
   } catch (error) {
     log(error);
@@ -506,11 +506,69 @@ export const getPendingExcuses = async (payload: TGetPendingExcusesPayload): Pro
   }
 };
 
-export interface TCreateExcusePayload {}
+export interface TCreateExcusePayload {
+  user: TUser;
+  event: TEvent;
+  excuse: {
+    reason: string;
+    late: 0 | 1;
+  };
+}
 
-export interface TCreateExcuseRequestResponse {}
+export interface TCreateExcuseRequestResponse {
+  excused: Array<TEvent>;
+}
 
-export interface TCreateExcuseResponse extends TResponse {}
+export interface TCreateExcuseResponse extends TResponse {
+  data?: {
+    excused: Array<TExcuse>;
+    pending: Array<TPendingExcuse>;
+  };
+}
+
+export const createExcuse = async (payload: TCreateExcusePayload): Promise<TCreateExcuseResponse> => {
+  try {
+    const response = await makeAuthorizedRequest<TCreateExcuseRequestResponse>(
+      ENDPOINTS.CREATE_EXCUSE(),
+      METHODS.CREATE_EXCUSE,
+      {
+        body: {
+          excuse: {
+            ...payload.excuse,
+            event_id: payload.event.id
+          }
+        }
+      },
+      payload.user.sessionToken
+    );
+
+    log('Create excuse response', response.code);
+
+    if (!response.success || response.code === 500) {
+      return fail({}, 'issue connecting to the server', 500);
+    } else if (response.code !== 200) {
+      if (response.code === 401) {
+        return fail({}, 'your credentials were invalid', response.code);
+      }
+
+      return fail({}, response.error?.message, response.code);
+    }
+
+    return pass({
+      excused: response.data.excused,
+      pending: [
+        {
+          ...response.data.excused[0],
+          title: payload.event.title,
+          start: payload.event.start
+        }
+      ]
+    });
+  } catch (error) {
+    log(error);
+    return fail({}, "that wasn't supposed to happen", -1);
+  }
+};
 
 // TODO
 

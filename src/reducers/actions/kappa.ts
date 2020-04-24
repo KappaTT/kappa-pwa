@@ -33,7 +33,10 @@ import {
   GET_POINTS_FAILURE,
   GET_EXCUSES,
   GET_EXCUSES_SUCCESS,
-  GET_EXCUSES_FAILURE
+  GET_EXCUSES_FAILURE,
+  CREATE_EXCUSE,
+  CREATE_EXCUSE_SUCCESS,
+  CREATE_EXCUSE_FAILURE
 } from '@reducers/kappa';
 import { TUser } from '@backend/auth';
 import { TEvent, TPoint } from '@backend/kappa';
@@ -184,7 +187,7 @@ const gettingExcuses = () => {
 const getExcusesSuccess = data => {
   return {
     type: GET_EXCUSES_SUCCESS,
-    excused: data.excused
+    pending: data.pending
   };
 };
 
@@ -369,6 +372,48 @@ export const checkIn = (user: TUser, event_id: string, event_code: string) => {
         dispatch(checkInSuccess(res.data));
       } else {
         dispatch(checkInFailure(res.error));
+      }
+    });
+  };
+};
+
+const creatingExcuse = () => {
+  return {
+    type: CREATE_EXCUSE
+  };
+};
+
+const createExcuseSuccess = data => {
+  return {
+    type: CREATE_EXCUSE_SUCCESS,
+    excused: data.excused,
+    pending: data.pending
+  };
+};
+
+const createExcuseFailure = err => {
+  return {
+    type: CREATE_EXCUSE_FAILURE,
+    error: err
+  };
+};
+
+export const createExcuse = (
+  user: TUser,
+  event: TEvent,
+  excuse: {
+    reason: string;
+    late: 0 | 1;
+  }
+) => {
+  return dispatch => {
+    dispatch(creatingExcuse());
+
+    Kappa.createExcuse({ user, event, excuse }).then(res => {
+      if (res.success) {
+        dispatch(createExcuseSuccess(res.data));
+      } else {
+        dispatch(createExcuseFailure(res.error));
       }
     });
   };
