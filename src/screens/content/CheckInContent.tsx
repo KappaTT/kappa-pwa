@@ -62,6 +62,7 @@ const CheckInContent: React.FC<{
   const [scanned, setScanned] = React.useState<boolean>(false);
   const [scanning, setScanning] = React.useState<boolean>(false);
   const [waitingForCheckIn, setWaitingForCheckIn] = React.useState<boolean>(false);
+  const [waitingForExcuse, setWaitingForExcuse] = React.useState<boolean>(false);
 
   const dispatch = useDispatch();
   const dispatchSetCheckInEvent = React.useCallback(
@@ -235,6 +236,22 @@ const CheckInContent: React.FC<{
     }
   }, [isCheckingIn, waitingForCheckIn, checkinErrorMessage]);
 
+  React.useEffect(() => {
+    if (isCreatingExcuse) {
+      setWaitingForExcuse(true);
+    } else if (waitingForExcuse) {
+      setWaitingForExcuse(false);
+
+      if (createExcuseErrorMessage === '') {
+        dispatchShowToast({
+          toastTitle: 'Success',
+          toastMessage: 'Your excuse has been submitted!',
+          toastTimer: 2000
+        });
+      }
+    }
+  }, [isCreatingExcuse, waitingForExcuse, createExcuseErrorMessage]);
+
   const renderChoosingEvent = () => {
     return (
       <Block flex>
@@ -353,7 +370,6 @@ const CheckInContent: React.FC<{
                       style={styles.multiInput}
                       multiline={true}
                       placeholderText="reason"
-                      returnKeyType="done"
                       maxLength={128}
                       error={false}
                       defaultValue={reason}
