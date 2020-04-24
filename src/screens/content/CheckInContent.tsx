@@ -596,9 +596,7 @@ const styles = StyleSheet.create({
     fontFamily: 'OpenSans',
     color: theme.COLORS.BORDER
   },
-  excuseContainer: {
-    marginTop: 32
-  },
+  excuseContainer: {},
   scanner: {
     flex: 1
   },
