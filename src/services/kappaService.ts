@@ -456,10 +456,12 @@ export const shouldLoad = (loadHistory: TLoadHistory, key: string) => {
     return true;
   }
 
-  if (loadHistory[key].diff(moment(), 'minutes') > 5) {
+  const liveTime = moment().diff(loadHistory[key], 'minutes');
+
+  if (liveTime > 5) {
     return true;
   } else {
-    log('Using cache: ', key);
+    log(`Using cache (${liveTime}):`, key);
     return false;
   }
 };
