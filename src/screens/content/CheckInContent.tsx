@@ -51,10 +51,12 @@ const CheckInContent: React.FC<{
   const checkInExcuse = useSelector((state: TRedux) => state.kappa.checkInExcuse);
   const isCheckingIn = useSelector((state: TRedux) => state.kappa.isCheckingIn);
   const checkinErrorMessage = useSelector((state: TRedux) => state.kappa.checkInErrorMessage);
+  const isCreatingExcuse = useSelector((state: TRedux) => state.kappa.isCreatingExcuse);
+  const createExcuseErrorMessage = useSelector((state: TRedux) => state.kappa.createExcuseErrorMessage);
 
   const [choosingEvent, setChoosingEvent] = React.useState<boolean>(false);
   const [code, setCode] = React.useState<string>('');
-  const [excuse, setExcuse] = React.useState<string>('');
+  const [reason, setReason] = React.useState<string>('');
 
   const [hasPermission, setHasPermission] = React.useState<boolean>(false);
   const [scanned, setScanned] = React.useState<boolean>(false);
@@ -70,6 +72,10 @@ const CheckInContent: React.FC<{
   const dispatchCheckIn = React.useCallback(
     (event_id: string, event_code: string) => dispatch(_kappa.checkIn(user, event_id, event_code)),
     [dispatch, user]
+  );
+  const dispatchCreateExcuse = React.useCallback(
+    () => dispatch(_kappa.createExcuse(user, getEventById(futureEvents, checkInEventId), { reason, late: 0 })),
+    [dispatch, user, futureEvents, checkInEventId, reason]
   );
   const dispatchShowToast = React.useCallback((toast: Partial<TToast>) => dispatch(_ui.showToast(toast)), [dispatch]);
 
@@ -350,8 +356,8 @@ const CheckInContent: React.FC<{
                       returnKeyType="done"
                       maxLength={128}
                       error={false}
-                      defaultValue={excuse}
-                      onChangeText={(text: string) => setExcuse(text)}
+                      defaultValue={reason}
+                      onChangeText={(text: string) => setReason(text)}
                     />
                   </Block>
 
@@ -417,9 +423,15 @@ const CheckInContent: React.FC<{
                     alt={true}
                     label="Request Excuse"
                     disabled={
-                      isCheckingIn || selectedEvent === null || selectedEvent.excusable === 0 || alreadyCheckedIn
+                      isCheckingIn ||
+                      isCreatingExcuse ||
+                      selectedEvent === null ||
+                      selectedEvent.excusable === 0 ||
+                      alreadyCheckedIn ||
+                      reason.trim() === ''
                     }
-                    onPress={() => {}}
+                    loading={isCreatingExcuse}
+                    onPress={dispatchCreateExcuse}
                   />
                 </Block>
                 <Block style={styles.bottomDivider} />
@@ -428,6 +440,7 @@ const CheckInContent: React.FC<{
                   <RoundButton
                     disabled={
                       isCheckingIn ||
+                      isCreatingExcuse ||
                       selectedEvent === null ||
                       alreadyCheckedIn ||
                       code.length !== 4 ||
