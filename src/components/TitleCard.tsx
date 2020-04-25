@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     elevation: 2
   },
   title: {
-    fontFamily: 'Montserrat-Medium',
+    fontFamily: 'OpenSans',
     fontSize: 20,
     color: theme.COLORS.DARK_GRAY
   }

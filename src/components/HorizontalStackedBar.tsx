@@ -130,19 +130,19 @@ const styles = StyleSheet.create({
     flexGrow: 1
   },
   leftLabel: {
-    fontFamily: 'Montserrat',
+    fontFamily: 'OpenSans',
     fontSize: 10,
     color: theme.COLORS.DARK_GRAY,
     textAlign: 'left'
   },
   middleLabel: {
-    fontFamily: 'Montserrat',
+    fontFamily: 'OpenSans',
     fontSize: 10,
     color: theme.COLORS.DARK_GRAY,
     textAlign: 'center'
   },
   rightLabel: {
-    fontFamily: 'Montserrat',
+    fontFamily: 'OpenSans',
     fontSize: 10,
     color: theme.COLORS.DARK_GRAY,
     textAlign: 'right'

@@ -86,11 +86,11 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start'
   },
   title: {
-    fontFamily: 'PlayfairDisplay-Medium',
+    fontFamily: 'PlayfairDisplay-Bold',
     fontSize: 48
   },
   subtitle: {
-    fontFamily: 'PlayfairDisplay-Medium',
+    fontFamily: 'PlayfairDisplay-Bold',
     fontSize: 32
   },
   logo: {

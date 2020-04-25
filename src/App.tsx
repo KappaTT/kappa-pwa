@@ -56,15 +56,11 @@ const App = () => {
     await Promise.all([
       ...cacheImages(assetImages),
       Font.loadAsync({
-        Montserrat: require('../assets/font/Montserrat-Regular.ttf'),
         OpenSans: require('../assets/font/OpenSans-Regular.ttf'),
         'OpenSans-Bold': require('../assets/font/OpenSans-Bold.ttf'),
         'OpenSans-SemiBold': require('../assets/font/OpenSans-SemiBold.ttf'),
         'OpenSans-Light': require('../assets/font/OpenSans-Light.ttf'),
-        PlayfairDisplay: require('../assets/font/PlayfairDisplay-Regular.ttf'),
-        'PlayfairDisplay-Medium': require('../assets/font/PlayfairDisplay-Medium.ttf'),
         'PlayfairDisplay-Bold': require('../assets/font/PlayfairDisplay-Bold.ttf'),
-        'PlayfairDisplay-Black': require('../assets/font/PlayfairDisplay-Black.ttf'),
         Galio: require('../assets/font/galio.ttf'),
         ArgonExtra: require('../assets/font/argon.ttf')
       })

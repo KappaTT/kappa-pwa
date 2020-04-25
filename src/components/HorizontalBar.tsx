@@ -52,12 +52,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between'
   },
   label: {
-    fontFamily: 'Montserrat',
+    fontFamily: 'OpenSans',
     fontSize: 12,
     color: theme.COLORS.GRAY_BLUE
   },
   rightHandLabel: {
-    fontFamily: 'Montserrat',
+    fontFamily: 'OpenSans',
     fontSize: 12,
     color: theme.COLORS.GRAY
   },

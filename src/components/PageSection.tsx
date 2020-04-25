@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between'
   },
   title: {
-    fontFamily: 'Montserrat-Bold',
+    fontFamily: 'OpenSans-Bold',
     fontSize: 12,
     color: theme.COLORS.GRAY
   },
@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   viewAllText: {
-    fontFamily: 'Montserrat-Bold',
+    fontFamily: 'OpenSans-Bold',
     fontSize: 10,
     color: theme.COLORS.GRAY,
     marginRight: 8
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   countText: {
-    fontFamily: 'Montserrat-Bold',
+    fontFamily: 'OpenSans-Bold',
     fontSize: 12,
     color: theme.COLORS.GRAY
   }

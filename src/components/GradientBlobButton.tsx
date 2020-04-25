@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   alarmCount: {
-    fontFamily: 'Montserrat-Bold',
+    fontFamily: 'OpenSans-Bold',
     fontSize: 11,
     color: theme.COLORS.WHITE
   },
@@ -84,12 +84,12 @@ const styles = StyleSheet.create({
   },
   title: {
     marginRight: 4,
-    fontFamily: 'Montserrat-Bold',
+    fontFamily: 'OpenSans-Bold',
     fontSize: 20,
     color: theme.COLORS.WHITE
   },
   subtitle: {
-    fontFamily: 'Montserrat',
+    fontFamily: 'OpenSans',
     fontSize: 13,
     color: theme.COLORS.WHITE
   }

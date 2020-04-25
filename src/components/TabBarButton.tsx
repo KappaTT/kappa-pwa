@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   label: {
-    fontFamily: 'Montserrat-SemiBold'
+    fontFamily: 'OpenSans-SemiBold'
   }
 });
 
