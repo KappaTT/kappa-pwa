@@ -36,10 +36,16 @@ import {
   GET_EXCUSES_FAILURE,
   CREATE_EXCUSE,
   CREATE_EXCUSE_SUCCESS,
-  CREATE_EXCUSE_FAILURE
+  CREATE_EXCUSE_FAILURE,
+  APPROVE_EXCUSE,
+  APPROVE_EXCUSE_SUCCESS,
+  APPROVE_EXCUSE_FAILURE,
+  REJECT_EXCUSE,
+  REJECT_EXCUSE_SUCCESS,
+  REJECT_EXCUSE_FAILURE
 } from '@reducers/kappa';
 import { TUser } from '@backend/auth';
-import { TEvent, TPoint } from '@backend/kappa';
+import { TEvent, TPoint, TExcuse } from '@backend/kappa';
 
 export const setGlobalError = data => {
   return {
@@ -414,6 +420,74 @@ export const createExcuse = (
         dispatch(createExcuseSuccess(res.data));
       } else {
         dispatch(createExcuseFailure(res.error));
+      }
+    });
+  };
+};
+
+const approvingExcuse = () => {
+  return {
+    type: APPROVE_EXCUSE
+  };
+};
+
+const approveExcuseSuccess = data => {
+  return {
+    type: APPROVE_EXCUSE_SUCCESS,
+    excused: data.excused
+  };
+};
+
+const approveExcuseFailure = err => {
+  return {
+    type: APPROVE_EXCUSE_FAILURE,
+    error: err
+  };
+};
+
+export const approveExcuse = (user: TUser, excuse: TExcuse) => {
+  return dispatch => {
+    dispatch(approvingExcuse());
+
+    Kappa.updateExcuse({ user, excuse }).then(res => {
+      if (res.success) {
+        dispatch(approveExcuseSuccess(res.data));
+      } else {
+        dispatch(approveExcuseFailure(res.error));
+      }
+    });
+  };
+};
+
+const rejectingExcuse = () => {
+  return {
+    type: REJECT_EXCUSE
+  };
+};
+
+const rejectExcuseSuccess = data => {
+  return {
+    type: REJECT_EXCUSE_SUCCESS,
+    excused: data.excused
+  };
+};
+
+const rejectExcuseFailure = err => {
+  return {
+    type: REJECT_EXCUSE_FAILURE,
+    error: err
+  };
+};
+
+export const rejectExcuse = (user: TUser, excuse: TExcuse) => {
+  return dispatch => {
+    dispatch(rejectingExcuse());
+
+    Kappa.updateExcuse({ user, excuse }).then(res => {
+      if (res.success) {
+        dispatch(rejectExcuseSuccess(res.data));
+      } else {
+        dispatch(rejectExcuseFailure(res.error));
       }
     });
   };

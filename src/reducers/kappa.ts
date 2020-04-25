@@ -71,6 +71,13 @@ export const CREATE_EXCUSE = 'CREATE_EXCUSE';
 export const CREATE_EXCUSE_SUCCESS = 'CREATE_EXCUSE_SUCCESS';
 export const CREATE_EXCUSE_FAILURE = 'CREATE_EXCUSE_FAILURE';
 
+export const APPROVE_EXCUSE = 'APPROVE_EXCUSE';
+export const APPROVE_EXCUSE_SUCCESS = 'APPROVE_EXCUSE_SUCCESS';
+export const APPROVE_EXCUSE_FAILURE = 'APPROVE_EXCUSE_FAILURE';
+export const REJECT_EXCUSE = 'REJECT_EXCUSE';
+export const REJECT_EXCUSE_SUCCESS = 'REJECT_EXCUSE_SUCCESS';
+export const REJECT_EXCUSE_FAILURE = 'REJECT_EXCUSE_FAILURE';
+
 export interface TKappaState {
   globalErrorMessage: string;
   globalErrorCode: number;
@@ -144,6 +151,13 @@ export interface TKappaState {
   isCreatingExcuse: boolean;
   createExcuseError: boolean;
   createExcuseErrorMessage: string;
+
+  isApprovingExcuse: boolean;
+  approveExcuseError: boolean;
+  approveExcuseErrorMessage: string;
+  isRejectingExcuse: boolean;
+  rejectExcuseError: boolean;
+  rejectExcuseErrorMessage: string;
 }
 
 const initialState: TKappaState = {
@@ -215,7 +229,14 @@ const initialState: TKappaState = {
   checkInErrorMessage: '',
   isCreatingExcuse: false,
   createExcuseError: false,
-  createExcuseErrorMessage: ''
+  createExcuseErrorMessage: '',
+
+  isApprovingExcuse: false,
+  approveExcuseError: false,
+  approveExcuseErrorMessage: '',
+  isRejectingExcuse: false,
+  rejectExcuseError: false,
+  rejectExcuseErrorMessage: ''
 };
 
 export default (state = initialState, action: any): TKappaState => {
@@ -539,6 +560,72 @@ export default (state = initialState, action: any): TKappaState => {
         globalErrorMessage: action.error.message,
         globalErrorCode: action.error.code
       };
+    case APPROVE_EXCUSE:
+      return {
+        ...state,
+        isApprovingExcuse: true,
+        approveExcuseError: false,
+        approveExcuseErrorMessage: ''
+      };
+    case APPROVE_EXCUSE_SUCCESS:
+      return {
+        ...state,
+        isApprovingExcuse: false,
+        pendingExcusesArray: state.pendingExcusesArray.filter(
+          (excuse: TPendingExcuse) =>
+            excuse.event_id !== action.excused[0].event_id || excuse.netid !== action.excused[0].netid
+        ),
+        ...recomputeKappaState({
+          events: state.events,
+          records: mergeRecords(state.records, {
+            attended: [],
+            excused: action.excused
+          }),
+          directory: state.directory
+        })
+      };
+    case APPROVE_EXCUSE_FAILURE:
+      return {
+        ...state,
+        isApprovingExcuse: false,
+        approveExcuseError: true,
+        approveExcuseErrorMessage: action.error.message,
+        globalErrorMessage: action.error.message,
+        globalErrorCode: action.error.code
+      };
+    case REJECT_EXCUSE:
+      return {
+        ...state,
+        isRejectingExcuse: true,
+        rejectExcuseError: false,
+        rejectExcuseErrorMessage: ''
+      };
+    case REJECT_EXCUSE_SUCCESS:
+      return {
+        ...state,
+        isRejectingExcuse: false,
+        pendingExcusesArray: state.pendingExcusesArray.filter(
+          (excuse: TPendingExcuse) =>
+            excuse.event_id !== action.excused[0].event_id || excuse.netid !== action.excused[0].netid
+        ),
+        ...recomputeKappaState({
+          events: state.events,
+          records: mergeRecords(state.records, {
+            attended: [],
+            excused: action.excused
+          }),
+          directory: state.directory
+        })
+      };
+    case REJECT_EXCUSE_FAILURE:
+      return {
+        ...state,
+        isRejectingExcuse: false,
+        rejectExcuseError: true,
+        rejectExcuseErrorMessage: action.error.message,
+        globalErrorMessage: action.error.message,
+        globalErrorCode: action.error.code
+      };
     case GET_POINTS:
       return {
         ...state,
@@ -564,7 +651,9 @@ export default (state = initialState, action: any): TKappaState => {
         ...state,
         isGettingPoints: false,
         getPointsError: true,
-        getPointsErrorMessage: action.error.message
+        getPointsErrorMessage: action.error.message,
+        globalErrorMessage: action.error.message,
+        globalErrorCode: action.error.code
       };
     default:
       return state;

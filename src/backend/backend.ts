@@ -1,5 +1,3 @@
-import Constants from 'expo-constants';
-
 import { jsonRequest, jsonAuthorizedRequest } from '@services/Networking';
 import { jsonMockRequest } from '@services/mockService';
 import { jsonDemoRequest, DEMO_TOKEN } from '@services/demoService';
@@ -37,6 +35,7 @@ export const ENDPOINTS: {
   CREATE_ATTENDANCE: () => 'attendance',
   GET_EXCUSES: () => 'excuse',
   CREATE_EXCUSE: () => 'excuse',
+  UPDATE_EXCUSE: () => 'excuse',
   GET_POINTS_BY_USER: (config: { email: string }) => `points/${config.email}`
 };
 
@@ -55,6 +54,7 @@ export const METHODS: {
   CREATE_ATTENDANCE: M_POST,
   GET_EXCUSES: M_GET,
   CREATE_EXCUSE: M_POST,
+  UPDATE_EXCUSE: M_PATCH,
   GET_POINTS_BY_USER: M_GET
 };
 

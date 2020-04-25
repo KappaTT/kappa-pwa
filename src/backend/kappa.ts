@@ -56,7 +56,7 @@ export interface TExcuse {
   netid: string;
   reason: string;
   late: 0 | 1;
-  approved: 0 | 1;
+  approved: -1 | 0 | 1;
 }
 
 export interface TPendingExcuse extends TExcuse {
@@ -466,11 +466,11 @@ export interface TGetPendingExcusesPayload {
   user: TUser;
 }
 
-export interface TGetPendingExcusesRequestResponse {
+interface TGetPendingExcusesRequestResponse {
   pending: Array<TPendingExcuse>;
 }
 
-export interface TGetPendingExcusesResponse extends TResponse {
+interface TGetPendingExcusesResponse extends TResponse {
   data?: {
     pending: Array<TPendingExcuse>;
   };
@@ -570,18 +570,65 @@ export const createExcuse = async (payload: TCreateExcusePayload): Promise<TCrea
   }
 };
 
-// TODO
+export interface TUpdateExcusePayload {
+  user: TUser;
+  excuse: TExcuse;
+}
+
+interface TUpdateExcuseRequestResponse {
+  excused: Array<TExcuse>;
+}
+
+interface TUpdateExcuseResponse extends TResponse {
+  data?: {
+    excused: Array<TExcuse>;
+  };
+}
+
+export const updateExcuse = async (payload: TUpdateExcusePayload): Promise<TUpdateExcuseResponse> => {
+  try {
+    const response = await makeAuthorizedRequest<TUpdateExcuseRequestResponse>(
+      ENDPOINTS.UPDATE_EXCUSE(),
+      METHODS.UPDATE_EXCUSE,
+      {
+        body: {
+          excuse: payload.excuse
+        }
+      },
+      payload.user.sessionToken
+    );
+
+    log('Approve excuse response', response.code);
+
+    if (!response.success || response.code === 500) {
+      return fail({}, 'issue connecting to the server', 500);
+    } else if (response.code !== 200) {
+      if (response.code === 401) {
+        return fail({}, 'your credentials were invalid', response.code);
+      }
+
+      return fail({}, response.error?.message, response.code);
+    }
+
+    return pass({
+      excused: response.data.excused
+    });
+  } catch (error) {
+    log(error);
+    return fail({}, "that wasn't supposed to happen", -1);
+  }
+};
 
 export interface TGetPointsByUserPayload {
   user: TUser;
   target: string;
 }
 
-export interface TGetPointsByUserRequestResponse {
+interface TGetPointsByUserRequestResponse {
   points: TPointsDict;
 }
 
-export interface TGetPointsByUserResponse extends TResponse {
+interface TGetPointsByUserResponse extends TResponse {
   data?: {
     points: TPointsDict;
   };
