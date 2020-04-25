@@ -4,7 +4,7 @@ import { ProgressCircle } from 'react-native-svg-charts';
 
 import { theme } from '@constants';
 import { TUser } from '@backend/auth';
-import { TRecords, TEventDict } from '@backend/kappa';
+import { TRecords, TEventDict, TPendingExcuse } from '@backend/kappa';
 import { getAttendedEvents, getExcusedEvents, getTypeCounts } from '@services/kappaService';
 import Text from './Text';
 
@@ -15,20 +15,16 @@ const GeneralMeetingChart: React.FC<{
   gmCount: number;
 }> = ({ user, records, events, gmCount }) => {
   const attended = React.useMemo(() => {
-    if (!user.privileged) return {};
-
     return getAttendedEvents(records, user.email);
-  }, [user, records]);
+  }, [user, records.attended]);
 
   const excused = React.useMemo(() => {
-    if (!user.privileged) return {};
-
     return getExcusedEvents(records, user.email);
-  }, [user, records]);
+  }, [user, records.excused]);
 
   const gmCounts = React.useMemo(() => {
     return getTypeCounts(events, attended, excused, 'GM');
-  }, [events, attended, excused]);
+  }, [events, attended, JSON.stringify(excused)]);
 
   const gmStats = React.useMemo(() => {
     const fraction = gmCount === 0 ? 0 : gmCounts.sum / gmCount;
