@@ -35,7 +35,7 @@ export const login = async () => {
       };
     }
   } catch (error) {
-    log(error);
+    log(error.message);
 
     return {
       success: false

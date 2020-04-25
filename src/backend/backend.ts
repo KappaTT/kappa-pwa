@@ -1,5 +1,4 @@
 import { jsonRequest, jsonAuthorizedRequest } from '@services/Networking';
-import { jsonMockRequest } from '@services/mockService';
 import { jsonDemoRequest, DEMO_TOKEN } from '@services/demoService';
 import { log } from '@services/logService';
 import { isEmpty } from '@services/utils';
@@ -13,8 +12,6 @@ export type TMethod = typeof M_GET | typeof M_POST | typeof M_PUT | typeof M_PAT
 
 export const BASE_URL = 'https://80ala1muig.execute-api.us-east-1.amazonaws.com/dev/';
 export const BASE_URL_DEV = 'http://localhost:3000/dev/';
-
-export const BASE_URL_MOCKING = false;
 
 export const BASE_URL_IP = process.env.NODE_ENV === 'development' ? 'http://127.0.0.1:3000/dev/' : BASE_URL;
 
@@ -93,10 +90,6 @@ export const makeRequest = async <T>(
     body?: any;
   }
 ) => {
-  if (BASE_URL_MOCKING) {
-    return jsonMockRequest<T>(endpoint, method);
-  }
-
   return jsonRequest<T>(
     BASE_URL_IP,
     undefined,
@@ -119,10 +112,6 @@ export const makeAuthorizedRequest = async <T>(
   },
   token: string
 ) => {
-  if (BASE_URL_MOCKING) {
-    return jsonMockRequest<T>(endpoint, method);
-  }
-
   if (token === DEMO_TOKEN) {
     return jsonDemoRequest<T>(endpoint, method);
   }

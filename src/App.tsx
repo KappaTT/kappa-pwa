@@ -17,7 +17,6 @@ import { Images, theme } from '@constants';
 import AppNavigator from '@navigation/TabAppNavigator';
 import { setTopLevelNavigator } from '@navigation/NavigationService';
 import { LoginPage, OnboardingPage } from '@pages';
-import { BASE_URL_MOCKING } from '@backend/backend';
 
 enableScreens();
 
@@ -89,7 +88,7 @@ const App = () => {
   }, [loadedUser]);
 
   React.useEffect(() => {
-    if (loadedUser && !authorized && !BASE_URL_MOCKING) {
+    if (loadedUser && !authorized) {
       dispatchShowLogin();
     }
   }, [loadedUser, authorized]);
