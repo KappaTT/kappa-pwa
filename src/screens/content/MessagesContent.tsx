@@ -58,6 +58,18 @@ const MessagesContent: React.FC<{
   );
 
   React.useEffect(() => {
+    if (selectedExcuse === null) return;
+
+    if (
+      pendingExcusesArray.findIndex(
+        (excuse: TPendingExcuse) => excuse.event_id === selectedExcuse.event_id && excuse.netid === selectedExcuse.netid
+      ) === -1
+    ) {
+      setSelectedExcuse(null);
+    }
+  }, [pendingExcusesArray, selectedExcuse]);
+
+  React.useEffect(() => {
     if (!isGettingExcuses) {
       setRefreshing(false);
     }
@@ -124,6 +136,7 @@ const MessagesContent: React.FC<{
 
       <FadeModal transparent={true} visible={selectedExcuse !== null} onRequestClose={() => onSelectExcuse(null)}>
         <ExcusePage
+          excuse={selectedExcuse}
           renderExcuse={renderExcuse(selectedExcuse, false, true)}
           onRequestClose={() => onSelectExcuse(null)}
         />

@@ -1,19 +1,52 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity, TouchableWithoutFeedback, ActivityIndicator } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useSafeArea } from 'react-native-safe-area-context';
 
+import { TRedux } from '@reducers';
+import { _kappa, _ui } from '@reducers/actions';
+import { TPendingExcuse } from '@backend/kappa';
 import { theme } from '@constants';
 import { Block, Text, Switch, Icon, TextButton } from '@components';
 
 const ExcusePage: React.FC<{
+  excuse: TPendingExcuse;
   renderExcuse: React.ReactElement;
   onRequestClose(): void;
-}> = ({ renderExcuse, onRequestClose }) => {
-  const isApprovingExcuse = false;
-  const isRejectingExcuse = false;
+}> = ({ excuse, renderExcuse, onRequestClose }) => {
+  const user = useSelector((state: TRedux) => state.auth.user);
+  const isApprovingExcuse = useSelector((state: TRedux) => state.kappa.isApprovingExcuse);
+  const isRejectingExcuse = useSelector((state: TRedux) => state.kappa.isRejectingExcuse);
 
   const [readyToDelete, setReadyToDelete] = React.useState<boolean>(false);
+
+  const dispatch = useDispatch();
+  const dispatchApproveExcuse = React.useCallback(
+    () =>
+      dispatch(
+        _kappa.approveExcuse(user, {
+          event_id: excuse.event_id,
+          netid: excuse.netid,
+          reason: excuse.reason,
+          late: excuse.late,
+          approved: 1
+        })
+      ),
+    [dispatch, user, excuse]
+  );
+  const dispatchRejectExcuse = React.useCallback(
+    () =>
+      dispatch(
+        _kappa.rejectExcuse(user, {
+          event_id: excuse.event_id,
+          netid: excuse.netid,
+          reason: excuse.reason,
+          late: excuse.late,
+          approved: 0
+        })
+      ),
+    [dispatch, user, excuse]
+  );
 
   const insets = useSafeArea();
 
@@ -50,7 +83,7 @@ const ExcusePage: React.FC<{
               {isApprovingExcuse ? (
                 <ActivityIndicator style={styles.zoneIcon} />
               ) : (
-                <TouchableOpacity disabled={isApprovingExcuse || isRejectingExcuse} onPress={() => {}}>
+                <TouchableOpacity disabled={isApprovingExcuse || isRejectingExcuse} onPress={dispatchApproveExcuse}>
                   <Icon
                     style={styles.zoneIcon}
                     family="Feather"
@@ -80,7 +113,7 @@ const ExcusePage: React.FC<{
                     }
                   }
                   disabled={!readyToDelete || isApprovingExcuse || isRejectingExcuse}
-                  onPress={() => {}}
+                  onPress={dispatchRejectExcuse}
                 >
                   <Icon
                     style={styles.zoneIcon}
