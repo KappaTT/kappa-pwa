@@ -131,7 +131,11 @@ export const mergeRecords = (
       mergedRecords.excused[email] = {};
     }
 
-    mergedRecords.excused[email][event_id] = excuse;
+    if (excuse.approved === -1) {
+      delete mergedRecords.excused[email][event_id];
+    } else {
+      mergedRecords.excused[email][event_id] = excuse;
+    }
   }
 
   return mergedRecords;
@@ -251,7 +255,6 @@ export const getTypeCounts = (
   let attendedCount = 0;
   let excusedCount = 0;
   let pendingCount = 0;
-  let sum = 0;
 
   const now = moment();
 
