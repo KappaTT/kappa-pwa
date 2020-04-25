@@ -5,6 +5,9 @@ import demoGetEvents from '@services/demo/demoGetEvents';
 import demoGetUsers from '@services/demo/demoGetUsers';
 import demoGetAttendanceByUser from '@services/demo/demoGetAttendanceByUser';
 import demoGetAttendanceByEvent from '@services/demo/demoGetAttendanceByEvent';
+import demoGetPoints from '@services/demo/demoGetPoints';
+import demoGetExcuses from '@services/demo/demoGetExcuses';
+import demoPatchUser from '@services/demo/demoPatchUser';
 
 export const DEMO_TOKEN = 'DEMO';
 
@@ -26,7 +29,11 @@ export const getDemoEndpoint = (endpoint: string, method: string) => {
   let demo = `${method}|${endpoint}`;
   let arg = '';
 
-  if (['attendance/user/', 'attendance/event/'].includes(endpoint.substring(0, endpoint.lastIndexOf('/') + 1))) {
+  if (
+    ['attendance/user/', 'attendance/event/', 'points/', 'users/'].includes(
+      endpoint.substring(0, endpoint.lastIndexOf('/') + 1)
+    )
+  ) {
     demo = `${method}|${endpoint.substring(0, endpoint.lastIndexOf('/') + 1)}`;
     arg = endpoint.substring(endpoint.lastIndexOf('/') + 1);
   }
@@ -40,8 +47,14 @@ export const getDemoEndpoint = (endpoint: string, method: string) => {
       return demoGetAttendanceByUser;
     case `GET|attendance/event/`:
       return demoGetAttendanceByEvent(arg);
+    case `GET|excuse`:
+      return demoGetExcuses;
+    case `GET|points/`:
+      return demoGetPoints;
+    case `PATCH|users/`:
+      return demoPatchUser;
     default:
-      log('Missed DEMO request', endpoint, method);
+      log('Missed DEMO request', endpoint, demo, method);
   }
 
   return null;
