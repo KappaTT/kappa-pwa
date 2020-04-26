@@ -11,6 +11,7 @@ const { width, height } = Dimensions.get('screen');
 const Toast: React.FC<{
   title?: string;
   message?: string;
+  titleColor?: string;
   timer?: number;
   allowClose?: boolean;
   shouldClose?: boolean;
@@ -20,6 +21,7 @@ const Toast: React.FC<{
 }> = ({
   title = '',
   message = '',
+  titleColor = 'black',
   timer = -1,
   allowClose = true,
   shouldClose = false,
@@ -100,7 +102,16 @@ const Toast: React.FC<{
 
         <Block style={styles.wrapper}>
           <Block style={styles.container}>
-            <Text style={styles.title}>{title}</Text>
+            <Text
+              style={[
+                styles.title,
+                {
+                  color: titleColor
+                }
+              ]}
+            >
+              {title}
+            </Text>
             {<Text style={styles.message}>{message}</Text>}
             {children !== null && <Block style={styles.contentWrapper}>{children}</Block>}
           </Block>

@@ -23,6 +23,7 @@ const ToastController: React.FC<{}> = ({}) => {
   const toastAllowClose = useSelector((state: TRedux) => state.ui.toastAllowClose);
   const toastTimer = useSelector((state: TRedux) => state.ui.toastTimer);
   const toastCode = useSelector((state: TRedux) => state.ui.toastCode);
+  const toastTitleColor = useSelector((state: TRedux) => state.ui.toastTitleColor);
   const toastChildren = useSelector((state: TRedux) => state.ui.toastChildren);
 
   const dispatch = useDispatch();
@@ -52,6 +53,7 @@ const ToastController: React.FC<{}> = ({}) => {
         toastMessage: globalErrorMessage,
         toastAllowClose: globalErrorCode !== 401,
         toastTimer: globalErrorCode !== 401 ? 3000 : -1,
+        toastTitleColor: theme.COLORS.PRIMARY,
         toastCode: globalErrorCode
       });
     }
@@ -69,6 +71,7 @@ const ToastController: React.FC<{}> = ({}) => {
         <Toast
           title={toastTitle}
           message={toastMessage}
+          titleColor={toastTitleColor}
           timer={toastTimer}
           allowClose={toastAllowClose}
           shouldClose={isHidingToast}

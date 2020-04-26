@@ -8,6 +8,7 @@ export interface TToast {
   toastAllowClose: boolean;
   toastTimer: number;
   toastCode: number;
+  toastTitleColor: string;
   toastChildren: React.ReactNode;
 }
 
@@ -24,6 +25,7 @@ const initialState: TUIState = {
   toastAllowClose: true,
   toastTimer: -1,
   toastCode: -1,
+  toastTitleColor: 'black',
   toastChildren: null
 };
 
@@ -39,6 +41,7 @@ export default (state = initialState, action: any): TUIState => {
         toastAllowClose: action.toast.toastAllowClose !== false,
         toastTimer: action.toast.toastTimer !== undefined ? action.toast.toastTimer : -1,
         toastCode: action.toast.toastCode !== undefined ? action.toast.toastCode : -1,
+        toastTitleColor: action.toast.toastTitleColor || 'black',
         toastChildren: action.toast.toastChildren !== null ? action.toast.toastChildren : null
       };
     case HIDE_TOAST:
@@ -56,6 +59,7 @@ export default (state = initialState, action: any): TUIState => {
         toastAllowClose: true,
         toastTimer: -1,
         toastCode: -1,
+        toastTitleColor: 'black',
         toastChildren: null
       };
     default:

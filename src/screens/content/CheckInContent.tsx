@@ -230,7 +230,8 @@ const CheckInContent: React.FC<{
         dispatchShowToast({
           toastTitle: 'Success',
           toastMessage: 'You have been checked in to the event!',
-          toastTimer: 2000
+          toastTimer: 2000,
+          toastTitleColor: theme.COLORS.PRIMARY_GREEN
         });
 
         setCode('');
@@ -248,7 +249,8 @@ const CheckInContent: React.FC<{
         dispatchShowToast({
           toastTitle: 'Success',
           toastMessage: 'Your excuse has been submitted!',
-          toastTimer: 2000
+          toastTimer: 2000,
+          toastTitleColor: theme.COLORS.PRIMARY_GREEN
         });
 
         setReason('');
