@@ -19,7 +19,8 @@ import {
   getUserByEmail,
   separateByEventId,
   mergeEvents,
-  recomputeKappaState
+  recomputeKappaState,
+  setGlobalError
 } from '@services/kappaService';
 import { TUser } from '@backend/auth';
 import moment from 'moment';
@@ -81,6 +82,7 @@ export const REJECT_EXCUSE_FAILURE = 'REJECT_EXCUSE_FAILURE';
 export interface TKappaState {
   globalErrorMessage: string;
   globalErrorCode: number;
+  globalErrorDate: Date;
 
   isGettingEvents: boolean;
   getEventsError: boolean;
@@ -163,6 +165,7 @@ export interface TKappaState {
 const initialState: TKappaState = {
   globalErrorMessage: '',
   globalErrorCode: 0,
+  globalErrorDate: null,
 
   isGettingEvents: false,
   getEventsError: false,
@@ -244,14 +247,14 @@ export default (state = initialState, action: any): TKappaState => {
     case SET_GLOBAL_ERROR_MESSAGE:
       return {
         ...state,
-        globalErrorMessage: action.message,
-        globalErrorCode: action.code
+        ...setGlobalError(action.message, action.code)
       };
     case CLEAR_GLOBAL_ERROR_MESSAGE:
       return {
         ...state,
         globalErrorMessage: '',
-        globalErrorCode: 0
+        globalErrorCode: 0,
+        globalErrorDate: null
       };
     case GET_EVENTS:
       return {
@@ -280,8 +283,7 @@ export default (state = initialState, action: any): TKappaState => {
         isGettingEvents: false,
         getEventsError: true,
         getEventsErrorMessage: action.error.message,
-        globalErrorMessage: action.error.message,
-        globalErrorCode: action.error.code
+        ...setGlobalError(action.error.message, action.error.code)
       };
     case GET_DIRECTORY:
       return {
@@ -310,8 +312,7 @@ export default (state = initialState, action: any): TKappaState => {
         isGettingDirectory: false,
         getDirectoryError: true,
         getDirectoryErrorMessage: action.error.message,
-        globalErrorMessage: action.error.message,
-        globalErrorCode: action.error.code
+        ...setGlobalError(action.error.message, action.error.code)
       };
     case GET_ATTENDANCE:
       return {
@@ -363,8 +364,7 @@ export default (state = initialState, action: any): TKappaState => {
         isGettingAttendance: false,
         getAttendanceError: true,
         getAttendanceErrorMessage: action.error.message,
-        globalErrorMessage: action.error.message,
-        globalErrorCode: action.error.code
+        ...setGlobalError(action.error.message, action.error.code)
       };
     case GET_EXCUSES:
       return {
@@ -389,8 +389,7 @@ export default (state = initialState, action: any): TKappaState => {
         isGettingExcuses: false,
         getExcusesError: true,
         getExcusesErrorMessage: action.error.message,
-        globalErrorMessage: action.error.message,
-        globalErrorCode: action.error.code
+        ...setGlobalError(action.error.message, action.error.code)
       };
     case SELECT_EVENT:
       return {
@@ -461,8 +460,7 @@ export default (state = initialState, action: any): TKappaState => {
         isSavingEvent: false,
         saveEventError: true,
         saveEventErrorMessage: action.error.message,
-        globalErrorMessage: action.error.message,
-        globalErrorCode: action.error.code
+        ...setGlobalError(action.error.message, action.error.code)
       };
     case DELETE_EVENT:
       return {
@@ -492,8 +490,7 @@ export default (state = initialState, action: any): TKappaState => {
         isDeletingEvent: false,
         deleteEventError: true,
         deleteEventErrorMessage: action.error.message,
-        globalErrorMessage: action.error.message,
-        globalErrorCode: action.error.code
+        ...setGlobalError(action.error.message, action.error.code)
       };
     case SET_CHECK_IN_EVENT:
       return {
@@ -557,8 +554,7 @@ export default (state = initialState, action: any): TKappaState => {
         isCreatingExcuse: false,
         createExcuseError: true,
         createExcuseErrorMessage: action.error.message,
-        globalErrorMessage: action.error.message,
-        globalErrorCode: action.error.code
+        ...setGlobalError(action.error.message, action.error.code)
       };
     case APPROVE_EXCUSE:
       return {
@@ -590,8 +586,7 @@ export default (state = initialState, action: any): TKappaState => {
         isApprovingExcuse: false,
         approveExcuseError: true,
         approveExcuseErrorMessage: action.error.message,
-        globalErrorMessage: action.error.message,
-        globalErrorCode: action.error.code
+        ...setGlobalError(action.error.message, action.error.code)
       };
     case REJECT_EXCUSE:
       return {
@@ -623,8 +618,7 @@ export default (state = initialState, action: any): TKappaState => {
         isRejectingExcuse: false,
         rejectExcuseError: true,
         rejectExcuseErrorMessage: action.error.message,
-        globalErrorMessage: action.error.message,
-        globalErrorCode: action.error.code
+        ...setGlobalError(action.error.message, action.error.code)
       };
     case GET_POINTS:
       return {
@@ -652,8 +646,7 @@ export default (state = initialState, action: any): TKappaState => {
         isGettingPoints: false,
         getPointsError: true,
         getPointsErrorMessage: action.error.message,
-        globalErrorMessage: action.error.message,
-        globalErrorCode: action.error.code
+        ...setGlobalError(action.error.message, action.error.code)
       };
     default:
       return state;

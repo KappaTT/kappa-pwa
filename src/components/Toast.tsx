@@ -11,6 +11,7 @@ const { width, height } = Dimensions.get('screen');
 const Toast: React.FC<{
   title?: string;
   message?: string;
+  timer?: number;
   allowClose?: boolean;
   shouldClose?: boolean;
   showClose?: boolean;
@@ -19,6 +20,7 @@ const Toast: React.FC<{
 }> = ({
   title = '',
   message = '',
+  timer = -1,
   allowClose = true,
   shouldClose = false,
   showClose = false,
@@ -54,6 +56,13 @@ const Toast: React.FC<{
       handleClose();
     }
   }, [shouldClose]);
+
+  React.useEffect(() => {
+    if (timer > 0) {
+      const t = setTimeout(handleClose, timer);
+      return () => clearTimeout(t);
+    }
+  }, [timer]);
 
   return (
     <Animated.View

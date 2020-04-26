@@ -454,6 +454,14 @@ export const getFutureDateIndex = (
   return -1;
 };
 
+export const setGlobalError = (message: string, code: number) => {
+  return {
+    globalErrorMessage: message,
+    globalErrorCode: code,
+    globalErrorDate: new Date()
+  };
+};
+
 export const shouldLoad = (loadHistory: TLoadHistory, key: string) => {
   if (!loadHistory.hasOwnProperty(key)) {
     return true;

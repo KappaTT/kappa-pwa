@@ -15,6 +15,7 @@ const ToastController: React.FC<{}> = ({}) => {
   const authorized = useSelector((state: TRedux) => state.auth.authorized);
   const globalErrorMessage = useSelector((state: TRedux) => state.kappa.globalErrorMessage);
   const globalErrorCode = useSelector((state: TRedux) => state.kappa.globalErrorCode);
+  const globalErrorDate = useSelector((state: TRedux) => state.kappa.globalErrorDate);
   const isShowingToast = useSelector((state: TRedux) => state.ui.isShowingToast);
   const isHidingToast = useSelector((state: TRedux) => state.ui.isHidingToast);
   const toastTitle = useSelector((state: TRedux) => state.ui.toastTitle);
@@ -23,9 +24,6 @@ const ToastController: React.FC<{}> = ({}) => {
   const toastTimer = useSelector((state: TRedux) => state.ui.toastTimer);
   const toastCode = useSelector((state: TRedux) => state.ui.toastCode);
   const toastChildren = useSelector((state: TRedux) => state.ui.toastChildren);
-
-  const [storedTitle, setStoredTitle] = React.useState<string>('');
-  const [storedMessage, setStoredMessage] = React.useState<string>('');
 
   const dispatch = useDispatch();
   const dispatchShowToast = React.useCallback((toast: Partial<TToast>) => dispatch(_ui.showToast(toast)), [dispatch]);
@@ -42,12 +40,6 @@ const ToastController: React.FC<{}> = ({}) => {
     }
   }, [toastCode]);
 
-  const handleTimer = React.useCallback(() => {
-    if (storedTitle === toastTitle && storedMessage === toastMessage) {
-      dispatchHideToast();
-    }
-  }, [storedTitle, storedMessage, toastTitle, toastMessage]);
-
   const onPressSignOut = React.useCallback(() => {
     dispatchHideToast();
     dispatchSignOut();
@@ -63,19 +55,13 @@ const ToastController: React.FC<{}> = ({}) => {
         toastCode: globalErrorCode
       });
     }
-  }, [globalErrorMessage, globalErrorCode]);
+  }, [globalErrorMessage, globalErrorCode, globalErrorDate]);
 
   React.useEffect(() => {
     if (isShowingToast) {
       Keyboard.dismiss();
-
-      if (toastTimer > 0) {
-        setStoredTitle(toastTitle);
-        setStoredMessage(toastMessage);
-        setTimeout(handleTimer, toastTimer);
-      }
     }
-  }, [isShowingToast, toastTimer, toastTitle, toastMessage, storedTitle, storedMessage]);
+  }, [isShowingToast]);
 
   return (
     <Ghost style={styles.container}>
@@ -83,6 +69,7 @@ const ToastController: React.FC<{}> = ({}) => {
         <Toast
           title={toastTitle}
           message={toastMessage}
+          timer={toastTimer}
           allowClose={toastAllowClose}
           shouldClose={isHidingToast}
           onDoneClosing={onDoneClosing}
