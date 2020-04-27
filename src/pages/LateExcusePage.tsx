@@ -137,7 +137,7 @@ const LateExcusePage: React.FC<{
               </Block>
 
               <FormattedInput
-                editable={selectedEvent === null || selectedEvent.excusable === 1}
+                editable={selectedEvent === null}
                 style={styles.multiInput}
                 multiline={true}
                 placeholderText="reason"
@@ -153,7 +153,7 @@ const LateExcusePage: React.FC<{
                 consider. We may not be able to approve all requests but we will try to be as understanding as possible!
               </Text>
               <Text style={styles.description}>
-                Example: I couldn't submit the code due to bad reception at Legends, this was the code: 1234
+                Example: I couldn't submit the code due to bad reception at Legends, but this was the code: 1234
               </Text>
             </Block>
           </TouchableWithoutFeedback>
