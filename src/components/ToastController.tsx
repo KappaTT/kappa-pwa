@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Keyboard } from 'react-native';
+import { StyleSheet, Keyboard, AppState, AppStateStatus } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import * as Updates from 'expo-updates';
 
@@ -27,6 +27,8 @@ const ToastController: React.FC<{}> = ({}) => {
   const toastTitleColor = useSelector((state: TRedux) => state.ui.toastTitleColor);
   const toastChildren = useSelector((state: TRedux) => state.ui.toastChildren);
 
+  const [appState, setAppState] = React.useState<AppStateStatus>(AppState.currentState);
+
   const dispatch = useDispatch();
   const dispatchShowToast = React.useCallback((toast: Partial<TToast>) => dispatch(_ui.showToast(toast)), [dispatch]);
   const dispatchHideToast = React.useCallback(() => dispatch(_ui.hideToast()), [dispatch]);
@@ -51,25 +53,6 @@ const ToastController: React.FC<{}> = ({}) => {
     await Updates.reloadAsync();
   };
 
-  React.useEffect(() => {
-    if (globalErrorMessage !== '') {
-      dispatchShowToast({
-        toastTitle: 'Error',
-        toastMessage: globalErrorMessage,
-        toastAllowClose: globalErrorCode !== 401,
-        toastTimer: globalErrorCode !== 401 ? 3000 : -1,
-        toastTitleColor: theme.COLORS.PRIMARY,
-        toastCode: globalErrorCode
-      });
-    }
-  }, [globalErrorMessage, globalErrorCode, globalErrorDate]);
-
-  React.useEffect(() => {
-    if (isShowingToast) {
-      Keyboard.dismiss();
-    }
-  }, [isShowingToast]);
-
   const checkForUpdates = async () => {
     try {
       const update = await Updates.checkForUpdateAsync();
@@ -90,8 +73,41 @@ const ToastController: React.FC<{}> = ({}) => {
     }
   };
 
+  const handleAppStateChange = (nextAppState: AppStateStatus) => {
+    setAppState(nextAppState);
+  };
+
   React.useEffect(() => {
-    checkForUpdates();
+    if (isShowingToast) {
+      Keyboard.dismiss();
+    }
+  }, [isShowingToast]);
+
+  React.useEffect(() => {
+    if (globalErrorMessage !== '') {
+      dispatchShowToast({
+        toastTitle: 'Error',
+        toastMessage: globalErrorMessage,
+        toastAllowClose: globalErrorCode !== 401,
+        toastTimer: globalErrorCode !== 401 ? 3000 : -1,
+        toastTitleColor: theme.COLORS.PRIMARY,
+        toastCode: globalErrorCode
+      });
+    }
+  }, [globalErrorMessage, globalErrorCode, globalErrorDate]);
+
+  React.useEffect(() => {
+    if (appState === 'active') {
+      checkForUpdates();
+    }
+  }, [appState]);
+
+  React.useEffect(() => {
+    AppState.addEventListener('change', handleAppStateChange);
+
+    return () => {
+      AppState.removeEventListener('change', handleAppStateChange);
+    };
   }, []);
 
   return (
