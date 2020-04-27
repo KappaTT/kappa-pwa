@@ -22,6 +22,7 @@ const LateExcusePage: React.FC<{
 
   const [choosingEvent, setChoosingEvent] = React.useState<boolean>(false);
   const [selectedEvent, setSelectedEvent] = React.useState<TEvent>(null);
+  const [reason, setReason] = React.useState<string>('');
 
   const insets = useSafeArea();
 
@@ -130,6 +131,30 @@ const LateExcusePage: React.FC<{
                   onPress={() => setChoosingEvent(true)}
                 />
               </Block>
+
+              <Block style={styles.propertyHeaderContainer}>
+                <Text style={styles.propertyHeader}>Excuse</Text>
+              </Block>
+
+              <FormattedInput
+                editable={selectedEvent === null || selectedEvent.excusable === 1}
+                style={styles.multiInput}
+                multiline={true}
+                placeholderText="reason"
+                maxLength={128}
+                error={false}
+                defaultValue={reason}
+                onChangeText={(text: string) => setReason(text)}
+              />
+
+              <Text style={styles.description}>
+                Submit a special request if you were unable to submit an excuse beforehand but had a valid excuse or if
+                you missed the check in but attended the event. Please provide any details that you think we should
+                consider. We may not be able to approve all requests but we will try to be as understanding as possible!
+              </Text>
+              <Text style={styles.description}>
+                Example: I couldn't submit the code due to bad reception at Legends, this was the code: 1234
+              </Text>
             </Block>
           </TouchableWithoutFeedback>
         </ScrollView>
@@ -170,6 +195,10 @@ const styles = StyleSheet.create({
     fontSize: 13,
     textTransform: 'uppercase',
     color: theme.COLORS.GRAY
+  },
+  multiInput: {
+    backgroundColor: theme.COLORS.SUPER_LIGHT_BLUE_GRAY,
+    height: 128
   },
   description: {
     marginTop: 12,
