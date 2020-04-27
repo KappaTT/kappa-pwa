@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, ScrollView, RefreshControl, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, ScrollView, RefreshControl, TouchableOpacity } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { useSafeArea } from 'react-native-safe-area-context';
 import moment from 'moment';
@@ -8,12 +8,12 @@ import { useIsFocused } from 'react-navigation-hooks';
 import { TRedux } from '@reducers';
 import { _auth, _kappa } from '@reducers/actions';
 import { theme } from '@constants';
-import { Block, Text, Header, FadeModal, Switch, Icon, TextButton } from '@components';
+import { Block, Text, Header, FadeModal, SlideModal, EndCapButton } from '@components';
 import { NavigationTypes } from '@types';
 import { sortEventByDate, shouldLoad } from '@services/kappaService';
-import { HeaderHeight, TabBarHeight } from '@services/utils';
+import { HeaderHeight } from '@services/utils';
 import { TPendingExcuse } from '@backend/kappa';
-import { ExcusePage } from '@pages';
+import { ExcusePage, LateExcusePage } from '@pages';
 
 const MessagesContent: React.FC<{
   navigation: NavigationTypes.ParamType;
@@ -27,8 +27,8 @@ const MessagesContent: React.FC<{
   const isGettingExcuses = useSelector((state: TRedux) => state.kappa.isGettingExcuses);
 
   const [refreshing, setRefreshing] = React.useState<boolean>(false);
-
   const [selectedExcuse, setSelectedExcuse] = React.useState<TPendingExcuse>(null);
+  const [showingRequestPage, setShowingRequestPage] = React.useState<boolean>(false);
 
   const dispatch = useDispatch();
   const dispatchGetExcuses = React.useCallback(() => dispatch(_kappa.getExcuses(user)), [dispatch, user]);
@@ -117,7 +117,10 @@ const MessagesContent: React.FC<{
 
   return (
     <Block flex>
-      <Header title="Messages" />
+      <Header
+        title="Messages"
+        rightButton={<EndCapButton label="Request" onPress={() => setShowingRequestPage(true)} />}
+      />
 
       <Block
         style={[
@@ -141,6 +144,9 @@ const MessagesContent: React.FC<{
           onRequestClose={() => onSelectExcuse(null)}
         />
       </FadeModal>
+      <SlideModal transparent={false} visible={showingRequestPage} onRequestClose={() => setShowingRequestPage(false)}>
+        <LateExcusePage onRequestClose={() => setShowingRequestPage(false)} />
+      </SlideModal>
     </Block>
   );
 };

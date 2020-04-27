@@ -425,7 +425,7 @@ const CheckInContent: React.FC<{
                   <Text style={styles.description}>
                     You may only check into an event on the same day it happened. If you forgot to check in and it is
                     the same day, you can still submit the code. If it isn't, please send a request from your messages
-                    page. Excuses must be requested before an event.
+                    page and the exec board will consider it. Excuses must be requested before an event.
                   </Text>
                 </Block>
               </TouchableWithoutFeedback>

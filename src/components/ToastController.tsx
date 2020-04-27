@@ -54,6 +54,8 @@ const ToastController: React.FC<{}> = ({}) => {
   };
 
   const checkForUpdates = async () => {
+    log('Checking for updates');
+
     try {
       const update = await Updates.checkForUpdateAsync();
 
