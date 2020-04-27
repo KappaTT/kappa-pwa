@@ -11,6 +11,7 @@ import { Block, Header, EndCapButton, ListButton, SlideModal, Text, RadioList, F
 import { HeaderHeight } from '@services/utils';
 import { TEvent } from '@backend/kappa';
 import { getEventById, hasValidCheckIn, sortEventByDate } from '@services/kappaService';
+import { TToast } from '@reducers/ui';
 
 const LateExcusePage: React.FC<{
   onRequestClose(): void;
@@ -19,10 +20,20 @@ const LateExcusePage: React.FC<{
   const records = useSelector((state: TRedux) => state.kappa.records);
   const events = useSelector((state: TRedux) => state.kappa.events);
   const eventArray = useSelector((state: TRedux) => state.kappa.eventArray);
+  const isCreatingExcuse = useSelector((state: TRedux) => state.kappa.isCreatingExcuse);
+  const createExcuseErrorMessage = useSelector((state: TRedux) => state.kappa.createExcuseErrorMessage);
 
   const [choosingEvent, setChoosingEvent] = React.useState<boolean>(false);
   const [selectedEvent, setSelectedEvent] = React.useState<TEvent>(null);
   const [reason, setReason] = React.useState<string>('');
+  const [waitingForExcuse, setWaitingForExcuse] = React.useState<boolean>(false);
+
+  const dispatch = useDispatch();
+  const dispatchCreateExcuse = React.useCallback(
+    () => dispatch(_kappa.createExcuse(user, selectedEvent, { reason, late: 1 })),
+    [dispatch, user, selectedEvent, reason]
+  );
+  const dispatchShowToast = React.useCallback((toast: Partial<TToast>) => dispatch(_ui.showToast(toast)), [dispatch]);
 
   const insets = useSafeArea();
 
@@ -46,6 +57,25 @@ const LateExcusePage: React.FC<{
     },
     [events]
   );
+
+  React.useEffect(() => {
+    if (isCreatingExcuse) {
+      setWaitingForExcuse(true);
+    } else if (waitingForExcuse) {
+      setWaitingForExcuse(false);
+
+      if (createExcuseErrorMessage === '') {
+        dispatchShowToast({
+          toastTitle: 'Success',
+          toastMessage: 'Your excuse has been submitted',
+          toastTimer: 2000,
+          toastTitleColor: theme.COLORS.PRIMARY_GREEN
+        });
+
+        onRequestClose();
+      }
+    }
+  }, [isCreatingExcuse, waitingForExcuse, createExcuseErrorMessage]);
 
   const renderChoosingEvent = () => {
     return (
@@ -103,7 +133,14 @@ const LateExcusePage: React.FC<{
         title="Special Request"
         showBackButton={true}
         onPressBackButton={onRequestClose}
-        rightButton={<EndCapButton label="Submit" loading={false} disabled={selectedEvent === null || reason === ''} />}
+        rightButton={
+          <EndCapButton
+            label="Submit"
+            loading={isCreatingExcuse}
+            disabled={selectedEvent === null || reason === ''}
+            onPress={dispatchCreateExcuse}
+          />
+        }
       />
 
       <Block
