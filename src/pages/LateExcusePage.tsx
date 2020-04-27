@@ -103,7 +103,7 @@ const LateExcusePage: React.FC<{
         title="Special Request"
         showBackButton={true}
         onPressBackButton={onRequestClose}
-        rightButton={<EndCapButton label="Submit" loading={false} />}
+        rightButton={<EndCapButton label="Submit" loading={false} disabled={selectedEvent === null || reason === ''} />}
       />
 
       <Block
@@ -137,7 +137,7 @@ const LateExcusePage: React.FC<{
               </Block>
 
               <FormattedInput
-                editable={selectedEvent === null}
+                editable={selectedEvent !== null}
                 style={styles.multiInput}
                 multiline={true}
                 placeholderText="reason"
