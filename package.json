@@ -27,6 +27,7 @@
     "expo-font": "~8.1.0",
     "expo-google-app-auth": "^8.0.1",
     "expo-secure-store": "~8.1.0",
+    "expo-updates": "~0.1.0",
     "moment": "^2.24.0",
     "prop-types": "^15.7.2",
     "react": "16.9.0",
