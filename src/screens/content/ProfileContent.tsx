@@ -213,7 +213,7 @@ const ProfileContent: React.FC<{
           </Block>
 
           <Text style={styles.madeWithText}>
-            {`Whatsoever thy hand findeth to do, do it with thy might.\n\n${Constants.manifest.version} - ${Constants.manifest.sdkVersion} - ${Constants.nativeBuildVersion}\n\nJTC - Web Chair 2019-2021`}
+            {`Whatsoever thy hand findeth to do, do it with thy might.\n\n${Constants.nativeBuildVersion} - ${Constants.manifest.sdkVersion} - ${Constants.manifest.revisionId}\n\nJTC - Web Chair 2019-2021`}
           </Text>
         </Block>
       </ScrollView>

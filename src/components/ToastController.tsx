@@ -82,7 +82,6 @@ const ToastController: React.FC<{}> = ({}) => {
           toastMessage: 'The latest version has been downloaded, please reload the app to use it!',
           toastAllowClose: false,
           toastTimer: -1,
-          toastTitleColor: theme.COLORS.PRIMARY_GREEN,
           toastCode: 426
         });
       }
@@ -134,6 +133,7 @@ const styles = StyleSheet.create({
   },
   signInButton: {
     marginTop: 8,
+    marginBottom: 20,
     width: 196
   }
 });
