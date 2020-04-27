@@ -32,6 +32,12 @@ const initialState: TUIState = {
 export default (state = initialState, action: any): TUIState => {
   switch (action.type) {
     case SHOW_TOAST:
+      if (state.toastAllowClose === false && state.toastTitle !== '') {
+        return {
+          ...state
+        };
+      }
+
       return {
         ...state,
         isShowingToast: true,

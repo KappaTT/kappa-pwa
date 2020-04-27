@@ -1,18 +1,19 @@
 import React from 'react';
 import { StyleSheet, Keyboard } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
+import * as Updates from 'expo-updates';
 
 import { TRedux } from '@reducers';
 import { TToast } from '@reducers/ui';
 import { _auth, _kappa, _ui } from '@reducers/actions';
 import { theme } from '@constants';
+import { log } from '@services/logService';
 import Block from '@components/Block';
 import Ghost from '@components/Ghost';
 import Toast from '@components/Toast';
 import RoundButton from '@components/RoundButton';
 
 const ToastController: React.FC<{}> = ({}) => {
-  const authorized = useSelector((state: TRedux) => state.auth.authorized);
   const globalErrorMessage = useSelector((state: TRedux) => state.kappa.globalErrorMessage);
   const globalErrorCode = useSelector((state: TRedux) => state.kappa.globalErrorCode);
   const globalErrorDate = useSelector((state: TRedux) => state.kappa.globalErrorDate);
@@ -46,6 +47,10 @@ const ToastController: React.FC<{}> = ({}) => {
     dispatchSignOut();
   }, []);
 
+  const onPressReload = async () => {
+    await Updates.reloadAsync();
+  };
+
   React.useEffect(() => {
     if (globalErrorMessage !== '') {
       dispatchShowToast({
@@ -65,6 +70,31 @@ const ToastController: React.FC<{}> = ({}) => {
     }
   }, [isShowingToast]);
 
+  const checkForUpdates = async () => {
+    try {
+      const update = await Updates.checkForUpdateAsync();
+
+      if (update.isAvailable) {
+        await Updates.fetchUpdateAsync();
+
+        dispatchShowToast({
+          toastTitle: 'Update Ready',
+          toastMessage: 'The latest version has been downloaded, please reload the app to use it!',
+          toastAllowClose: false,
+          toastTimer: -1,
+          toastTitleColor: theme.COLORS.PRIMARY_GREEN,
+          toastCode: 426
+        });
+      }
+    } catch (error) {
+      log(error.message);
+    }
+  };
+
+  React.useEffect(() => {
+    checkForUpdates();
+  }, []);
+
   return (
     <Ghost style={styles.container}>
       {isShowingToast && (
@@ -78,9 +108,14 @@ const ToastController: React.FC<{}> = ({}) => {
           onDoneClosing={onDoneClosing}
         >
           {toastChildren !== null && toastChildren}
-          {toastCode === 401 && authorized && (
+          {toastCode === 401 && (
             <Block style={styles.signInButton}>
               <RoundButton label="Return to Sign In" onPress={onPressSignOut} />
+            </Block>
+          )}
+          {toastCode === 426 && (
+            <Block style={styles.signInButton}>
+              <RoundButton label="Reload" onPress={onPressReload} />
             </Block>
           )}
         </Toast>
