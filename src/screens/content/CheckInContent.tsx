@@ -478,8 +478,12 @@ const CheckInContent: React.FC<{
           </Block>
         </Block>
 
-        <SlideModal visible={choosingEvent}>{renderChoosingEvent()}</SlideModal>
-        <SlideModal visible={scanning}>{renderScanner()}</SlideModal>
+        <SlideModal visible={choosingEvent} onRequestClose={() => setChoosingEvent(false)}>
+          {renderChoosingEvent()}
+        </SlideModal>
+        <SlideModal visible={scanning} onRequestClose={() => setScanning(false)}>
+          {renderScanner()}
+        </SlideModal>
       </Block>
     </KeyboardDismissView>
   );
