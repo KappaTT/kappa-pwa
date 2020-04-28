@@ -76,18 +76,27 @@ const BrotherDrawer: React.FC = () => {
   const loadData = React.useCallback(
     (force: boolean) => {
       if (user.privileged) {
-        if (force || shouldLoad(loadHistory, `user-${selectedUserEmail}`)) dispatchGetAttendance(force);
-        if (force || shouldLoad(loadHistory, `points-${selectedUserEmail}`)) dispatchGetPoints();
+        if (!isGettingAttendance && (force || shouldLoad(loadHistory, `user-${selectedUserEmail}`)))
+          dispatchGetAttendance(force);
+        if (!isGettingPoints && (force || shouldLoad(loadHistory, `points-${selectedUserEmail}`))) dispatchGetPoints();
       }
     },
-    [user, loadHistory, selectedUserEmail]
+    [
+      user.privileged,
+      isGettingAttendance,
+      loadHistory,
+      selectedUserEmail,
+      dispatchGetAttendance,
+      isGettingPoints,
+      dispatchGetPoints
+    ]
   );
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
 
     loadData(true);
-  }, [user, selectedUserEmail, refreshing]);
+  }, [loadData]);
 
   const snapTo = React.useCallback(
     (newSnap) => {
@@ -99,27 +108,27 @@ const BrotherDrawer: React.FC = () => {
 
   const onPressClose = React.useCallback(() => {
     snapTo(1);
-  }, []);
+  }, [snapTo]);
 
   const onPressEmail = React.useCallback(() => {
-    Clipboard.setString(selectedUser.email);
+    Clipboard.setString(selectedUser ? selectedUser.email : '');
 
     dispatchShowToast({
       toastTitle: 'Copied',
       toastMessage: 'The email was saved to your clipboard',
       toastTimer: 1500
     });
-  }, [selectedUser]);
+  }, [dispatchShowToast, selectedUser]);
 
   const onPressPhone = React.useCallback(() => {
-    Clipboard.setString(selectedUser.phone);
+    Clipboard.setString(selectedUser ? selectedUser.phone : '');
 
     dispatchShowToast({
       toastTitle: 'Copied',
       toastMessage: 'The phone number was saved to your clipboard',
       toastTimer: 1500
     });
-  }, [selectedUser]);
+  }, [dispatchShowToast, selectedUser]);
 
   const mandatory = React.useMemo(() => {
     if (!user.privileged) return [];
@@ -161,7 +170,7 @@ const BrotherDrawer: React.FC = () => {
 
       loadData(false);
     }
-  }, [selectedUserEmail]);
+  }, [loadData, selectedUserEmail, snapTo]);
 
   const renderHeader = () => {
     return (

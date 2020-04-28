@@ -37,9 +37,9 @@ const MessagesContent: React.FC<{
 
   const loadData = React.useCallback(
     (force: boolean) => {
-      if (force || shouldLoad(loadHistory, 'excuses')) dispatchGetExcuses();
+      if (!isGettingExcuses && (force || shouldLoad(loadHistory, 'excuses'))) dispatchGetExcuses();
     },
-    [loadHistory, dispatchGetExcuses]
+    [isGettingExcuses, loadHistory, dispatchGetExcuses]
   );
 
   const onRefresh = React.useCallback(() => {

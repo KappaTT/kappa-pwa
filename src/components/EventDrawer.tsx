@@ -98,25 +98,33 @@ const EventDrawer: React.FC = () => {
   const loadData = React.useCallback(
     (force: boolean) => {
       if (user.privileged) {
-        if (force || shouldLoad(loadHistory, `event-${selectedEventId}`)) {
+        if (!isGettingAttendance && (force || shouldLoad(loadHistory, `event-${selectedEventId}`))) {
           dispatchGetAttendance(force);
         }
 
         setReadyToDelete(false);
       } else {
-        if (force || shouldLoad(loadHistory, `user-${user.email}`)) {
+        if (!isGettingAttendance && (force || shouldLoad(loadHistory, `user-${user.email}`))) {
           dispatchGetMyAttendance(force);
         }
       }
     },
-    [user, loadHistory, selectedEventId]
+    [
+      user.privileged,
+      user.email,
+      isGettingAttendance,
+      loadHistory,
+      selectedEventId,
+      dispatchGetAttendance,
+      dispatchGetMyAttendance
+    ]
   );
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
 
     loadData(true);
-  }, [user, selectedEventId, refreshing]);
+  }, [loadData]);
 
   const snapTo = React.useCallback(
     (newSnap) => {
@@ -128,21 +136,21 @@ const EventDrawer: React.FC = () => {
 
   const onPressClose = React.useCallback(() => {
     snapTo(1);
-  }, []);
+  }, [snapTo]);
 
   const onPressExcuse = React.useCallback(() => {
     dispatchCheckIn(true);
     navigate('CheckInStack', {});
 
     onPressClose();
-  }, [selectedEventId]);
+  }, [dispatchCheckIn, onPressClose]);
 
   const onPressCheckIn = React.useCallback(() => {
     dispatchCheckIn(false);
     navigate('CheckInStack', {});
 
     onPressClose();
-  }, [selectedEventId]);
+  }, [dispatchCheckIn, onPressClose]);
 
   const attended = React.useMemo(() => {
     return getAttendance(records, user.email, selectedEventId);
@@ -205,7 +213,7 @@ const EventDrawer: React.FC = () => {
 
       loadData(false);
     }
-  }, [selectedEventId]);
+  }, [loadData, selectedEventId, snapTo]);
 
   const renderHeader = () => {
     return (

@@ -52,11 +52,21 @@ const ProfileContent: React.FC<{
 
   const loadData = React.useCallback(
     (force: boolean) => {
-      if (force || shouldLoad(loadHistory, 'events')) dispatchGetEvents();
-      if (force || shouldLoad(loadHistory, `user-${user.email}`)) dispatchGetMyAttendance(force);
-      if (force || shouldLoad(loadHistory, `points-${user.email}`)) dispatchGetPoints();
+      if (!isGettingEvents && (force || shouldLoad(loadHistory, 'events'))) dispatchGetEvents();
+      if (!isGettingAttendance && (force || shouldLoad(loadHistory, `user-${user.email}`)))
+        dispatchGetMyAttendance(force);
+      if (!isGettingPoints && (force || shouldLoad(loadHistory, `points-${user.email}`))) dispatchGetPoints();
     },
-    [loadHistory, dispatchGetEvents, user.email, dispatchGetMyAttendance, dispatchGetPoints]
+    [
+      isGettingEvents,
+      loadHistory,
+      dispatchGetEvents,
+      isGettingAttendance,
+      user.email,
+      dispatchGetMyAttendance,
+      isGettingPoints,
+      dispatchGetPoints
+    ]
   );
 
   const onRefresh = React.useCallback(() => {

@@ -36,6 +36,7 @@ const DirectoryContent: React.FC<{
   const isGettingEvents = useSelector((state: TRedux) => state.kappa.isGettingEvents);
   const isGettingDirectory = useSelector((state: TRedux) => state.kappa.isGettingDirectory);
   const isGettingAttendance = useSelector((state: TRedux) => state.kappa.isGettingAttendance);
+  const isGettingExcuses = useSelector((state: TRedux) => state.kappa.isGettingExcuses);
   const getDirectoryErrorMessage = useSelector((state: TRedux) => state.kappa.getDirectoryErrorMessage);
 
   const [refreshing, setRefreshing] = React.useState<boolean>(
@@ -58,12 +59,24 @@ const DirectoryContent: React.FC<{
 
   const loadData = React.useCallback(
     (force: boolean) => {
-      if (force || shouldLoad(loadHistory, 'events')) dispatchGetEvents();
-      if (force || shouldLoad(loadHistory, 'directory')) dispatchGetDirectory();
-      if (force || shouldLoad(loadHistory, `user-${user.email}`)) dispatchGetMyAttendance(force);
-      if (force || shouldLoad(loadHistory, 'excuses')) dispatchGetExcuses();
+      if (!isGettingEvents && (force || shouldLoad(loadHistory, 'events'))) dispatchGetEvents();
+      if (!isGettingDirectory && (force || shouldLoad(loadHistory, 'directory'))) dispatchGetDirectory();
+      if (!isGettingAttendance && (force || shouldLoad(loadHistory, `user-${user.email}`)))
+        dispatchGetMyAttendance(force);
+      if (!isGettingExcuses && (force || shouldLoad(loadHistory, 'excuses'))) dispatchGetExcuses();
     },
-    [loadHistory, dispatchGetEvents, dispatchGetDirectory, user.email, dispatchGetMyAttendance, dispatchGetExcuses]
+    [
+      isGettingEvents,
+      loadHistory,
+      dispatchGetEvents,
+      isGettingDirectory,
+      dispatchGetDirectory,
+      isGettingAttendance,
+      user.email,
+      dispatchGetMyAttendance,
+      isGettingExcuses,
+      dispatchGetExcuses
+    ]
   );
 
   const onRefresh = React.useCallback(() => {

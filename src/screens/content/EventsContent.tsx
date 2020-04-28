@@ -41,6 +41,7 @@ const EventsContent: React.FC<{
   const isGettingEvents = useSelector((state: TRedux) => state.kappa.isGettingEvents);
   const isGettingDirectory = useSelector((state: TRedux) => state.kappa.isGettingDirectory);
   const isGettingAttendance = useSelector((state: TRedux) => state.kappa.isGettingAttendance);
+  const isGettingExcuses = useSelector((state: TRedux) => state.kappa.isGettingExcuses);
   const events = useSelector((state: TRedux) => state.kappa.events);
   const eventSections = useSelector((state: TRedux) => state.kappa.eventSections);
   const upcomingSections = useSelector((state: TRedux) => state.kappa.upcomingSections);
@@ -74,12 +75,24 @@ const EventsContent: React.FC<{
 
   const loadData = React.useCallback(
     (force: boolean) => {
-      if (force || shouldLoad(loadHistory, 'events')) dispatchGetEvents();
-      if (force || shouldLoad(loadHistory, 'directory')) dispatchGetDirectory();
-      if (force || shouldLoad(loadHistory, `user-${user.email}`)) dispatchGetMyAttendance(force);
-      if (force || shouldLoad(loadHistory, 'excuses')) dispatchGetExcuses();
+      if (!isGettingEvents && (force || shouldLoad(loadHistory, 'events'))) dispatchGetEvents();
+      if (!isGettingDirectory && (force || shouldLoad(loadHistory, 'directory'))) dispatchGetDirectory();
+      if (!isGettingAttendance && (force || shouldLoad(loadHistory, `user-${user.email}`)))
+        dispatchGetMyAttendance(force);
+      if (!isGettingExcuses && (force || shouldLoad(loadHistory, 'excuses'))) dispatchGetExcuses();
     },
-    [user.email, loadHistory, dispatchGetEvents, dispatchGetDirectory, dispatchGetMyAttendance, dispatchGetExcuses]
+    [
+      isGettingEvents,
+      loadHistory,
+      dispatchGetEvents,
+      isGettingDirectory,
+      dispatchGetDirectory,
+      isGettingAttendance,
+      user.email,
+      dispatchGetMyAttendance,
+      isGettingExcuses,
+      dispatchGetExcuses
+    ]
   );
 
   const onRefresh = React.useCallback(() => {
