@@ -14,6 +14,7 @@ import BottomSheet from 'reanimated-bottom-sheet';
 import { useSafeArea } from 'react-native-safe-area-context';
 import moment from 'moment';
 import { ProgressCircle } from 'react-native-svg-charts';
+import { impactAsync, ImpactFeedbackStyle } from 'expo-haptics';
 
 import { TRedux } from '@reducers';
 import { _auth, _kappa } from '@reducers/actions';
@@ -183,6 +184,8 @@ const EventDrawer: React.FC = () => {
 
   const onOpenStart = () => {
     setSnapPoint(0);
+
+    impactAsync(ImpactFeedbackStyle.Medium);
   };
 
   const onOpenEnd = () => {
@@ -191,6 +194,8 @@ const EventDrawer: React.FC = () => {
 
   const onCloseStart = () => {
     setSnapPoint(1);
+
+    impactAsync(ImpactFeedbackStyle.Medium);
   };
 
   const onCloseEnd = () => {

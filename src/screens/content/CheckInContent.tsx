@@ -117,7 +117,7 @@ const CheckInContent: React.FC<{
     [checkInExcuse, dispatchSetCheckInEvent]
   );
 
-  const askForPermission = async () => {
+  const askForPermission = React.useCallback(async () => {
     const { status } = await BarCodeScanner.requestPermissionsAsync();
 
     if (status === 'granted') {
@@ -130,7 +130,7 @@ const CheckInContent: React.FC<{
 
       Alert.alert('You must enable camera access from phone settings to scan');
     }
-  };
+  }, []);
 
   const onPressScan = React.useCallback(() => {
     Keyboard.dismiss();
@@ -141,7 +141,7 @@ const CheckInContent: React.FC<{
     } else {
       askForPermission();
     }
-  }, [hasPermission]);
+  }, [askForPermission, hasPermission]);
 
   const onPressCheckIn = React.useCallback(() => {
     Keyboard.dismiss();
