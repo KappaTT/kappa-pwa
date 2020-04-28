@@ -221,7 +221,7 @@ const styles = StyleSheet.create({
   content: {
     minHeight: '100%',
     paddingBottom: 64,
-    paddingHorizontal: 24
+    paddingHorizontal: 20
   },
   eventIdContainer: {
     marginTop: 16

@@ -1,21 +1,15 @@
 import React from 'react';
-import {
-  StyleSheet,
-  Dimensions,
-  KeyboardAvoidingView,
-  ScrollView,
-  TouchableWithoutFeedback,
-  TouchableOpacity,
-  ActivityIndicator
-} from 'react-native';
+import { StyleSheet, Dimensions, ScrollView, TouchableWithoutFeedback } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { useSafeArea } from 'react-native-safe-area-context';
 
 import { TRedux } from '@reducers';
 import { _auth } from '@reducers/actions';
 import { theme } from '@constants';
+import { HeaderHeight } from '@services/utils';
 import { prettyPhone } from '@services/kappaService';
 import {
+  Header,
   Block,
   Ghost,
   Text,
@@ -103,7 +97,16 @@ const OnboardingPage: React.FC = () => {
   const renderMainContent = () => {
     return (
       <Block style={styles.inputArea}>
-        <Text style={styles.heading}>CONTACT</Text>
+        <Text
+          style={[
+            styles.heading,
+            {
+              marginTop: 8
+            }
+          ]}
+        >
+          CONTACT
+        </Text>
         <ListButton keyText="Full Name" valueText={`${user.givenName} ${user.familyName}`} disabled={true} />
         <ListButton keyText="Illinois Email" valueText={user.email} disabled={true} />
         <ListButton keyText="Phone" valueText={prettyPhoneValue} onPress={() => setEditing('Phone')} />
@@ -126,7 +129,16 @@ const OnboardingPage: React.FC = () => {
   const renderPhoneContent = () => {
     return (
       <Block>
-        <Text style={styles.heading}>PHONE NUMBER</Text>
+        <Text
+          style={[
+            styles.heading,
+            {
+              marginTop: 8
+            }
+          ]}
+        >
+          PHONE NUMBER
+        </Text>
 
         <FormattedInput
           style={styles.input}
@@ -152,7 +164,16 @@ const OnboardingPage: React.FC = () => {
   const renderGraduationYearContent = () => {
     return (
       <Block>
-        <Text style={styles.heading}>GRADUATION YEAR</Text>
+        <Text
+          style={[
+            styles.heading,
+            {
+              marginTop: 8
+            }
+          ]}
+        >
+          GRADUATION YEAR
+        </Text>
 
         <RadioList options={getGradYearOptions()} selected={gradYear} onChange={(chosen) => setGradYear(chosen)} />
 
@@ -177,92 +198,74 @@ const OnboardingPage: React.FC = () => {
 
   const renderEditingContent = () => {
     return (
-      <KeyboardAvoidingView behavior="padding" enabled>
+      <Block flex>
+        <Header
+          title="Edit Profile"
+          subtitle={editing}
+          showBackButton={true}
+          onPressBackButton={() => setEditing('')}
+          rightButton={<EndCapButton label="Save" onPress={() => setEditing('')} />}
+        />
+
         <Block
           style={[
-            styles.fgEditing,
+            styles.wrapper,
             {
-              paddingTop: insets.top
+              top: insets.top + HeaderHeight
             }
           ]}
         >
-          <Block style={styles.editingHeader}>
-            <BackButton onPress={() => setEditing('')} />
-
-            <Text style={styles.editingTitle}>{editing}</Text>
-
-            <EndCapButton label="Done" onPress={() => setEditing('')} />
-          </Block>
-
           <ScrollView contentContainerStyle={styles.scrollContent}>
             <TouchableWithoutFeedback>
               <Block style={styles.content}>{renderSwitchContent()}</Block>
             </TouchableWithoutFeedback>
           </ScrollView>
         </Block>
-      </KeyboardAvoidingView>
+      </Block>
     );
   };
 
   const renderContent = () => {
     return (
-      <KeyboardAvoidingView behavior="position" enabled>
+      <Block flex>
+        <Header
+          title="Edit Profile"
+          showBackButton={isEditingUser}
+          onPressBackButton={dispatchHideOnboarding}
+          rightButton={
+            <EndCapButton label="Save" loading={isUpdatingUser} disabled={submitDisabled} onPress={onPressSubmit} />
+          }
+        />
+
         <Block
           style={[
-            styles.fg,
+            styles.wrapper,
             {
-              paddingTop: insets.top
+              top: insets.top + HeaderHeight
             }
           ]}
         >
-          <Block style={styles.header}>
-            <Block style={styles.headerText}>
-              <Text style={styles.subtitle}>Hi {user.givenName}</Text>
-              <Text style={styles.title}>{isEditingUser ? 'Edit your profile' : "Let's finish setting up"}</Text>
-            </Block>
-            <Block style={styles.headerButtons}>
-              {isEditingUser && (
-                <TouchableOpacity disabled={isUpdatingUser} onPress={dispatchHideOnboarding}>
-                  <Block style={styles.closeButtonContianer}>
-                    <Icon family="Feather" name="x" color={theme.COLORS.PRIMARY} size={32} />
-                  </Block>
-                </TouchableOpacity>
-              )}
-            </Block>
-          </Block>
-
           <ScrollView contentContainerStyle={styles.scrollContent}>
             <TouchableWithoutFeedback>
-              <Block style={styles.content}>{renderMainContent()}</Block>
+              <Block
+                style={[
+                  styles.content,
+                  {
+                    paddingBottom: insets.bottom
+                  }
+                ]}
+              >
+                {renderMainContent()}
+              </Block>
             </TouchableWithoutFeedback>
           </ScrollView>
-
-          <Ghost
-            style={[
-              styles.buttonWrapper,
-              {
-                bottom: insets.bottom
-              }
-            ]}
-          >
-            {isUpdatingUser ? (
-              <ActivityIndicator style={styles.activityIndicator} />
-            ) : (
-              <FAB
-                iconFamily="Feather"
-                iconName="arrow-right"
-                bgColor={submitDisabled ? theme.COLORS.GRAY : theme.COLORS.PRIMARY}
-                onPress={() => !submitDisabled && onPressSubmit()}
-              />
-            )}
-          </Ghost>
         </Block>
-      </KeyboardAvoidingView>
+      </Block>
     );
   };
 
   return (
-    <Block>
+    <Block flex>
       <Block flex>{renderContent()}</Block>
 
       <SlideModal transparent={false} visible={editing !== ''}>
@@ -273,15 +276,11 @@ const OnboardingPage: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  fg: {
-    width,
-    height,
-    backgroundColor: theme.COLORS.WHITE
-  },
-  fgEditing: {
-    width,
-    height,
-    backgroundColor: theme.COLORS.WHITE
+  wrapper: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0
   },
   header: {
     paddingHorizontal: 20,
@@ -309,15 +308,14 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase'
   },
   scrollContent: {
-    flexGrow: 1,
-    paddingHorizontal: 20
+    flexGrow: 1
   },
   heading: {
     marginTop: 32,
-    marginBottom: 8,
-    fontFamily: 'OpenSans',
-    fontSize: 12,
-    color: theme.COLORS.DARK_GRAY
+    marginBottom: 4,
+    fontFamily: 'OpenSans-SemiBold',
+    fontSize: 13,
+    color: theme.COLORS.GRAY
   },
   description: {
     marginTop: 12,
@@ -327,8 +325,7 @@ const styles = StyleSheet.create({
   },
   content: {
     minHeight: '100%',
-    display: 'flex',
-    justifyContent: 'space-between'
+    paddingHorizontal: 20
   },
   inputArea: {},
   buttonWrapper: {
