@@ -36,7 +36,7 @@ const phoneFormatter = (text: string) => {
 };
 
 const getGradYearOptions = () => {
-  let options = [];
+  const options = [];
 
   const year = new Date().getFullYear();
 
@@ -64,7 +64,7 @@ const getGradYearOptions = () => {
   return options;
 };
 
-const OnboardingPage: React.FC<{}> = ({}) => {
+const OnboardingPage: React.FC = () => {
   const user = useSelector((state: TRedux) => state.auth.user);
   const isEditingUser = useSelector((state: TRedux) => state.auth.isEditingUser);
   const isUpdatingUser = useSelector((state: TRedux) => state.auth.isUpdatingUser);
@@ -82,7 +82,7 @@ const OnboardingPage: React.FC<{}> = ({}) => {
           gradYear
         })
       ),
-    [dispatch, phone, gradYear]
+    [dispatch, user, phone, gradYear]
   );
   const dispatchHideOnboarding = React.useCallback(() => dispatch(_auth.hideOnboarding()), [dispatch]);
 
@@ -98,7 +98,7 @@ const OnboardingPage: React.FC<{}> = ({}) => {
 
   const onPressSubmit = React.useCallback(() => {
     dispatchUpdateUser();
-  }, [user, phone, gradYear]);
+  }, [dispatchUpdateUser]);
 
   const renderMainContent = () => {
     return (
@@ -138,8 +138,8 @@ const OnboardingPage: React.FC<{}> = ({}) => {
           maxLength={10}
           defaultValue={phone}
           formatter={phoneFormatter}
-          onChangeText={text => setPhone(text)}
-          onSubmit={text => setEditing('')}
+          onChangeText={(text) => setPhone(text)}
+          onSubmit={(text) => setEditing('')}
         />
 
         <Text style={styles.description}>
@@ -154,7 +154,7 @@ const OnboardingPage: React.FC<{}> = ({}) => {
       <Block>
         <Text style={styles.heading}>GRADUATION YEAR</Text>
 
-        <RadioList options={getGradYearOptions()} selected={gradYear} onChange={chosen => setGradYear(chosen)} />
+        <RadioList options={getGradYearOptions()} selected={gradYear} onChange={(chosen) => setGradYear(chosen)} />
 
         <Text style={styles.description}>
           Choose the term that you will graduate in, not by credit hours, this is used to determine your points

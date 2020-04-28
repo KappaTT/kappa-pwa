@@ -47,7 +47,7 @@ import {
 import { TUser } from '@backend/auth';
 import { TEvent, TPoint, TExcuse } from '@backend/kappa';
 
-export const setGlobalError = data => {
+export const setGlobalError = (data) => {
   return {
     type: SET_GLOBAL_ERROR_MESSAGE,
     message: data.message,
@@ -67,14 +67,14 @@ const gettingEvents = () => {
   };
 };
 
-const getEventsSuccess = data => {
+const getEventsSuccess = (data) => {
   return {
     type: GET_EVENTS_SUCCESS,
     events: data.events
   };
 };
 
-const getEventsFailure = err => {
+const getEventsFailure = (err) => {
   return {
     type: GET_EVENTS_FAILURE,
     error: err
@@ -82,10 +82,10 @@ const getEventsFailure = err => {
 };
 
 export const getEvents = (user: TUser) => {
-  return dispatch => {
+  return (dispatch) => {
     dispatch(gettingEvents());
 
-    Kappa.getEvents({ user }).then(res => {
+    Kappa.getEvents({ user }).then((res) => {
       if (res.success) {
         dispatch(getEventsSuccess(res.data));
       } else {
@@ -101,14 +101,14 @@ const gettingDirectory = () => {
   };
 };
 
-const getDirectorySuccess = data => {
+const getDirectorySuccess = (data) => {
   return {
     type: GET_DIRECTORY_SUCCESS,
     users: data.users
   };
 };
 
-const getDirectoryFailure = err => {
+const getDirectoryFailure = (err) => {
   return {
     type: GET_DIRECTORY_FAILURE,
     error: err
@@ -116,10 +116,10 @@ const getDirectoryFailure = err => {
 };
 
 export const getDirectory = (user: TUser) => {
-  return dispatch => {
+  return (dispatch) => {
     dispatch(gettingDirectory());
 
-    Kappa.getUsers({ user }).then(res => {
+    Kappa.getUsers({ user }).then((res) => {
       if (res.success) {
         dispatch(getDirectorySuccess(res.data));
       } else {
@@ -145,7 +145,7 @@ const getAttendanceSuccess = (data, loadKey?: string, overwrite: boolean = false
   };
 };
 
-const getAttendanceFailure = err => {
+const getAttendanceFailure = (err) => {
   return {
     type: GET_ATTENDANCE_FAILURE,
     error: err
@@ -157,10 +157,10 @@ export const getMyAttendance = (user: TUser, overwrite: boolean = false) => {
 };
 
 export const getUserAttendance = (user: TUser, target: string, overwrite: boolean = false) => {
-  return dispatch => {
+  return (dispatch) => {
     dispatch(gettingAttendance());
 
-    Kappa.getAttendanceByUser({ user, target }).then(res => {
+    Kappa.getAttendanceByUser({ user, target }).then((res) => {
       if (res.success) {
         dispatch(getAttendanceSuccess(res.data, `user-${target}`, overwrite));
       } else {
@@ -171,10 +171,10 @@ export const getUserAttendance = (user: TUser, target: string, overwrite: boolea
 };
 
 export const getEventAttendance = (user: TUser, target: string, overwrite: boolean = false) => {
-  return dispatch => {
+  return (dispatch) => {
     dispatch(gettingAttendance());
 
-    Kappa.getAttendanceByEvent({ user, target }).then(res => {
+    Kappa.getAttendanceByEvent({ user, target }).then((res) => {
       if (res.success) {
         dispatch(getAttendanceSuccess(res.data, `event-${target}`, overwrite));
       } else {
@@ -190,14 +190,14 @@ const gettingExcuses = () => {
   };
 };
 
-const getExcusesSuccess = data => {
+const getExcusesSuccess = (data) => {
   return {
     type: GET_EXCUSES_SUCCESS,
     pending: data.pending
   };
 };
 
-const getExcusesFailure = err => {
+const getExcusesFailure = (err) => {
   return {
     type: GET_EXCUSES_FAILURE,
     error: err
@@ -205,10 +205,10 @@ const getExcusesFailure = err => {
 };
 
 export const getExcuses = (user: TUser) => {
-  return dispatch => {
+  return (dispatch) => {
     dispatch(gettingExcuses());
 
-    Kappa.getPendingExcuses({ user }).then(res => {
+    Kappa.getPendingExcuses({ user }).then((res) => {
       if (res.success) {
         dispatch(getExcusesSuccess(res.data));
       } else {
@@ -269,26 +269,26 @@ const savingEditEvent = () => {
   };
 };
 
-const saveEditEventSuccess = data => {
+const saveEditEventSuccess = (data) => {
   return {
     type: SAVE_EDIT_EVENT_SUCCESS,
     event: data.event
   };
 };
 
-const saveEditEventFailure = err => {
+const saveEditEventFailure = (err) => {
   return {
     type: SAVE_EDIT_EVENT_FAILURE,
     error: err
   };
 };
 
-export const saveEditEvent = (user: TUser, event: Partial<TEvent>, points: Array<Partial<TPoint>>) => {
-  return dispatch => {
+export const saveEditEvent = (user: TUser, event: Partial<TEvent>, points: Partial<TPoint>[]) => {
+  return (dispatch) => {
     dispatch(savingEditEvent());
 
     if (event.id) {
-      Kappa.updateEvent({ user, event, points }).then(res => {
+      Kappa.updateEvent({ user, event, points }).then((res) => {
         if (res.success) {
           dispatch(saveEditEventSuccess(res.data));
         } else {
@@ -296,7 +296,7 @@ export const saveEditEvent = (user: TUser, event: Partial<TEvent>, points: Array
         }
       });
     } else {
-      Kappa.createEvent({ user, event, points }).then(res => {
+      Kappa.createEvent({ user, event, points }).then((res) => {
         if (res.success) {
           dispatch(saveEditEventSuccess(res.data));
         } else {
@@ -313,14 +313,14 @@ const deletingEvent = () => {
   };
 };
 
-const deleteEventSuccess = data => {
+const deleteEventSuccess = (data) => {
   return {
     type: DELETE_EVENT_SUCCESS,
     event: data.event
   };
 };
 
-const deleteEventFailure = err => {
+const deleteEventFailure = (err) => {
   return {
     type: DELETE_EVENT_FAILURE,
     error: err
@@ -328,10 +328,10 @@ const deleteEventFailure = err => {
 };
 
 export const deleteEvent = (user: TUser, event: TEvent) => {
-  return dispatch => {
+  return (dispatch) => {
     dispatch(deletingEvent());
 
-    Kappa.deleteEvent({ user, event }).then(res => {
+    Kappa.deleteEvent({ user, event }).then((res) => {
       if (res.success) {
         dispatch(deleteEventSuccess(res.data));
       } else {
@@ -355,14 +355,14 @@ const checkingIn = () => {
   };
 };
 
-const checkInSuccess = data => {
+const checkInSuccess = (data) => {
   return {
     type: CHECK_IN_SUCCESS,
     attended: data.attended
   };
 };
 
-const checkInFailure = err => {
+const checkInFailure = (err) => {
   return {
     type: CHECK_IN_FAILURE,
     error: err
@@ -370,10 +370,10 @@ const checkInFailure = err => {
 };
 
 export const checkIn = (user: TUser, event_id: string, event_code: string) => {
-  return dispatch => {
+  return (dispatch) => {
     dispatch(checkingIn());
 
-    Kappa.createAttendance({ user, event_id, event_code }).then(res => {
+    Kappa.createAttendance({ user, event_id, event_code }).then((res) => {
       if (res.success) {
         dispatch(checkInSuccess(res.data));
       } else {
@@ -389,7 +389,7 @@ const creatingExcuse = () => {
   };
 };
 
-const createExcuseSuccess = data => {
+const createExcuseSuccess = (data) => {
   return {
     type: CREATE_EXCUSE_SUCCESS,
     excused: data.excused,
@@ -397,7 +397,7 @@ const createExcuseSuccess = data => {
   };
 };
 
-const createExcuseFailure = err => {
+const createExcuseFailure = (err) => {
   return {
     type: CREATE_EXCUSE_FAILURE,
     error: err
@@ -412,10 +412,10 @@ export const createExcuse = (
     late: 0 | 1;
   }
 ) => {
-  return dispatch => {
+  return (dispatch) => {
     dispatch(creatingExcuse());
 
-    Kappa.createExcuse({ user, event, excuse }).then(res => {
+    Kappa.createExcuse({ user, event, excuse }).then((res) => {
       if (res.success) {
         dispatch(createExcuseSuccess(res.data));
       } else {
@@ -431,14 +431,14 @@ const approvingExcuse = () => {
   };
 };
 
-const approveExcuseSuccess = data => {
+const approveExcuseSuccess = (data) => {
   return {
     type: APPROVE_EXCUSE_SUCCESS,
     excused: data.excused
   };
 };
 
-const approveExcuseFailure = err => {
+const approveExcuseFailure = (err) => {
   return {
     type: APPROVE_EXCUSE_FAILURE,
     error: err
@@ -446,10 +446,10 @@ const approveExcuseFailure = err => {
 };
 
 export const approveExcuse = (user: TUser, excuse: TExcuse) => {
-  return dispatch => {
+  return (dispatch) => {
     dispatch(approvingExcuse());
 
-    Kappa.updateExcuse({ user, excuse }).then(res => {
+    Kappa.updateExcuse({ user, excuse }).then((res) => {
       if (res.success) {
         dispatch(approveExcuseSuccess(res.data));
       } else {
@@ -465,14 +465,14 @@ const rejectingExcuse = () => {
   };
 };
 
-const rejectExcuseSuccess = data => {
+const rejectExcuseSuccess = (data) => {
   return {
     type: REJECT_EXCUSE_SUCCESS,
     excused: data.excused
   };
 };
 
-const rejectExcuseFailure = err => {
+const rejectExcuseFailure = (err) => {
   return {
     type: REJECT_EXCUSE_FAILURE,
     error: err
@@ -480,10 +480,10 @@ const rejectExcuseFailure = err => {
 };
 
 export const rejectExcuse = (user: TUser, excuse: TExcuse) => {
-  return dispatch => {
+  return (dispatch) => {
     dispatch(rejectingExcuse());
 
-    Kappa.updateExcuse({ user, excuse }).then(res => {
+    Kappa.updateExcuse({ user, excuse }).then((res) => {
       if (res.success) {
         dispatch(rejectExcuseSuccess(res.data));
       } else {
@@ -507,7 +507,7 @@ const getPointsSuccess = (data, target: string) => {
   };
 };
 
-const getPointsFailure = err => {
+const getPointsFailure = (err) => {
   return {
     type: GET_POINTS_FAILURE,
     error: err
@@ -515,10 +515,10 @@ const getPointsFailure = err => {
 };
 
 export const getPointsByUser = (user: TUser, target: string) => {
-  return dispatch => {
+  return (dispatch) => {
     dispatch(gettingPoints());
 
-    Kappa.getPointsByUser({ user, target }).then(res => {
+    Kappa.getPointsByUser({ user, target }).then((res) => {
       if (res.success) {
         dispatch(getPointsSuccess(res.data, target));
       } else {

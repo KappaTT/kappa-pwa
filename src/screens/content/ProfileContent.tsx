@@ -56,14 +56,14 @@ const ProfileContent: React.FC<{
       if (force || shouldLoad(loadHistory, `user-${user.email}`)) dispatchGetMyAttendance(force);
       if (force || shouldLoad(loadHistory, `points-${user.email}`)) dispatchGetPoints();
     },
-    [user, loadHistory]
+    [loadHistory, dispatchGetEvents, user.email, dispatchGetMyAttendance, dispatchGetPoints]
   );
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
 
     loadData(true);
-  }, [user, refreshing]);
+  }, [loadData]);
 
   const onPressEdit = () => {
     impactAsync(ImpactFeedbackStyle.Medium);
@@ -92,10 +92,10 @@ const ProfileContent: React.FC<{
   }, [isGettingEvents, isGettingAttendance, isGettingPoints]);
 
   React.useEffect(() => {
-    if (isFocused && user?.sessionToken) {
+    if (isFocused && user.sessionToken) {
       loadData(false);
     }
-  }, [user, isFocused]);
+  }, [isFocused, loadData, user.sessionToken]);
 
   const renderEvent = (event: TEvent) => {
     return (

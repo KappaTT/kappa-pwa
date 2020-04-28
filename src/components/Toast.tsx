@@ -33,7 +33,7 @@ const Toast: React.FC<{
   const opacityBase = new Animated.Value(1);
   const [progress, setProgress] = React.useState<Animated.Value>(new Animated.Value(1));
 
-  const handleClose = () => {
+  const handleClose = React.useCallback(() => {
     Animated.timing(progress, {
       toValue: 1,
       easing: Easing.out(Easing.poly(4)),
@@ -42,7 +42,7 @@ const Toast: React.FC<{
     }).start(() => {
       onDoneClosing();
     });
-  };
+  }, [onDoneClosing, progress]);
 
   React.useEffect(() => {
     Animated.timing(progress, {
@@ -51,28 +51,28 @@ const Toast: React.FC<{
       duration: 400,
       useNativeDriver: true
     }).start();
-  }, []);
+  });
 
   React.useEffect(() => {
     if (shouldClose) {
       handleClose();
     }
-  }, [shouldClose]);
+  }, [handleClose, shouldClose]);
 
   React.useEffect(() => {
     if (timer > 0) {
       const t = setTimeout(handleClose, timer);
       return () => clearTimeout(t);
     }
-  }, [timer]);
+  }, [handleClose, timer]);
 
   return (
     <Animated.View
       style={{
         position: 'absolute',
         top: 0,
-        width: width,
-        height: height,
+        width,
+        height,
         opacity: Animated.subtract(opacityBase, progress),
         backgroundColor: 'rgba(0, 0, 0, 0.5)'
       }}
@@ -85,8 +85,8 @@ const Toast: React.FC<{
               translateY: Animated.multiply(heightBase, progress)
             }
           ],
-          width: width,
-          height: height,
+          width,
+          height,
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center'
@@ -98,7 +98,7 @@ const Toast: React.FC<{
           onPress={() => {
             allowClose && handleClose();
           }}
-        ></TouchableOpacity>
+        />
 
         <Block style={styles.wrapper}>
           <Block style={styles.container}>
@@ -112,7 +112,7 @@ const Toast: React.FC<{
             >
               {title}
             </Text>
-            {<Text style={styles.message}>{message}</Text>}
+            <Text style={styles.message}>{message}</Text>
             {children !== null && <Block style={styles.contentWrapper}>{children}</Block>}
           </Block>
         </Block>
@@ -125,8 +125,8 @@ const styles = StyleSheet.create({
   background: {
     position: 'absolute',
     top: 0,
-    width: width,
-    height: height
+    width,
+    height
   },
   wrapper: {
     width: width - 40,

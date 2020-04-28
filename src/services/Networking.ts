@@ -41,7 +41,7 @@ export const attachQueryParams = (url: string, queryParams: any) => {
       (url.indexOf('?') === -1 ? '?' : '&') +
       keys
         .map(
-          key =>
+          (key) =>
             encodeURIComponent(key) +
             '=' +
             (typeof queryParams[key] === 'object'
@@ -63,12 +63,14 @@ export const jsonRequest = async <T>(
   headers: any,
   queryParams: any,
   body: any
-): Promise<TRequestResponse & {
-  data?: T;
-  error?: {
-    message: string;
-  };
-}> => {
+): Promise<
+  TRequestResponse & {
+    data?: T;
+    error?: {
+      message: string;
+    };
+  }
+> => {
   const url = attachQueryParams(buildUrl(baseUrl, port, endpoint, secure), queryParams);
 
   log(`Requesting via ${method}`, url);

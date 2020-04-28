@@ -22,18 +22,18 @@ const GlobalErrorPage: React.FC<{ errorMessage: string; errorCode: number }> = (
     if (errorCode !== 401) {
       dispatchClearError();
     }
-  }, [errorCode]);
+  }, [dispatchClearError, errorCode]);
 
   const onPressSignOut = React.useCallback(() => {
     dispatchClearError();
     dispatchSignOut();
-  }, []);
+  }, [dispatchClearError, dispatchSignOut]);
 
   React.useEffect(() => {
     if (errorMessage !== '' && errorCode !== 401) {
       setTimeout(dispatchClearError, 3000);
     }
-  }, [errorMessage]);
+  }, [dispatchClearError, errorCode, errorMessage]);
 
   const renderBackground = () => {
     return (

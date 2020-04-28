@@ -10,7 +10,7 @@ const HorizontalBar: React.FC<{
   label: string;
   units: number;
   total?: number;
-  gradient?: Array<string>;
+  gradient?: string[];
   rightHandLabel?: string;
 }> = ({ label, units, total = 100, gradient = undefined, rightHandLabel = undefined }) => {
   const percent = (units / total) * 100;

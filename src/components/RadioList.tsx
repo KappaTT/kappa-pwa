@@ -6,18 +6,18 @@ import Block from '@components/Block';
 import CheckListButton from '@components/CheckListButton';
 
 const RadioList: React.FC<{
-  options: Array<{
+  options: {
     id: string;
     title: string;
     subtitle?: string;
-  }>;
+  }[];
   selected: string;
   renderItem?(id: string): React.ReactElement;
   onChange?(chosen: string): void;
 }> = ({ options, selected, renderItem, onChange = (chosen: string) => {} }) => {
   return (
     <Block style={styles.wrapper}>
-      {options.map(option => (
+      {options.map((option) => (
         <CheckListButton
           key={option.id}
           label={option}

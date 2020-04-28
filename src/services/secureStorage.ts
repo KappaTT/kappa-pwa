@@ -38,8 +38,8 @@ export const setItem = async (key: string, value: any) => {
     const res = await SecureStore.setItemAsync(key, castToString(value));
 
     return {
-      key: key,
-      value: value
+      key,
+      value
     };
   } catch (error) {
     log(error);
@@ -48,7 +48,7 @@ export const setItem = async (key: string, value: any) => {
 };
 
 export const setBatch = async (parent: string, data: any) => {
-  let promises = [];
+  const promises = [];
 
   for (const [key, value] of Object.entries(data)) {
     promises.push(setItem(`${parent}.${key}`, value));
@@ -71,7 +71,7 @@ export const getItem = async (key: string) => {
     const res = await SecureStore.getItemAsync(key);
 
     return {
-      key: key,
+      key,
       value: res
     };
   } catch (error) {
@@ -81,14 +81,14 @@ export const getItem = async (key: string) => {
 };
 
 export const getBatch = async (parent: string, defaultData: any, force: boolean = false) => {
-  let promises = [];
+  const promises = [];
 
-  let loaded: typeof defaultData = {};
+  const loaded: typeof defaultData = {};
 
   for (const [key, defaultValue] of Object.entries(defaultData)) {
     promises.push(
       new Promise((resolve, reject) => {
-        getItem(`${parent}.${key}`).then(res => {
+        getItem(`${parent}.${key}`).then((res) => {
           if (res && res.value) {
             loaded[key] = castTo(res.value, typeof defaultValue);
             resolve();
@@ -96,7 +96,7 @@ export const getBatch = async (parent: string, defaultData: any, force: boolean 
             loaded[key] = defaultValue;
             resolve();
           } else {
-            reject();
+            reject(new Error(`Could not load ${parent}.${key}`));
           }
         });
       })
@@ -120,7 +120,7 @@ export const deleteItem = async (key: string) => {
     const res = await SecureStore.deleteItemAsync(key);
 
     return {
-      key: key,
+      key,
       value: undefined
     };
   } catch (error) {
@@ -130,7 +130,7 @@ export const deleteItem = async (key: string) => {
 };
 
 export const deleteBatch = async (parent: string, data: any) => {
-  let promises = [];
+  const promises = [];
 
   for (const [key, value] of Object.entries(data)) {
     promises.push(deleteItem(`${parent}.${key}`));

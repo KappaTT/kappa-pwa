@@ -19,8 +19,8 @@ import { log } from '@services/logService';
 export const netidToEmail = (netid: string) =>
   netid === 'thetataudemo' ? 'thetataudemo@gmail.com' : `${netid}@illinois.edu`;
 
-export const separateByEventId = (events: Array<TEvent>) => {
-  let separated = {};
+export const separateByEventId = (events: TEvent[]) => {
+  const separated = {};
 
   for (const event of events) {
     separated[event.id] = event;
@@ -29,8 +29,8 @@ export const separateByEventId = (events: Array<TEvent>) => {
   return separated;
 };
 
-export const separateByDate = (events: Array<TEvent>) => {
-  let separated = {};
+export const separateByDate = (events: TEvent[]) => {
+  const separated = {};
 
   for (const event of events) {
     const date = moment(event.start).format('YYYY-MM-DD');
@@ -45,8 +45,8 @@ export const separateByDate = (events: Array<TEvent>) => {
   return separated;
 };
 
-export const separateByEmail = (users: Array<TUser>) => {
-  let separated = {};
+export const separateByEmail = (users: TUser[]) => {
+  const separated = {};
 
   for (const user of users) {
     separated[user.email] = user;
@@ -71,8 +71,8 @@ export const getUserByEmail = (directory: TDirectory, email: string) => {
   return null;
 };
 
-export const mergeEvents = (events: TEventDict, newEvents: Array<TEvent>) => {
-  let mergedEvents = events;
+export const mergeEvents = (events: TEventDict, newEvents: TEvent[]) => {
+  const mergedEvents = events;
 
   for (const event of newEvents) {
     mergedEvents[event.id] = event;
@@ -81,8 +81,8 @@ export const mergeEvents = (events: TEventDict, newEvents: Array<TEvent>) => {
   return mergedEvents;
 };
 
-export const mergeEventDates = (eventDateDict: TEventDateDict, newEvents: Array<TEvent>) => {
-  let separated = eventDateDict;
+export const mergeEventDates = (eventDateDict: TEventDateDict, newEvents: TEvent[]) => {
+  const separated = eventDateDict;
 
   for (const event of newEvents) {
     const date = moment(event.start).format('YYYY-MM-DD');
@@ -100,12 +100,12 @@ export const mergeEventDates = (eventDateDict: TEventDateDict, newEvents: Array<
 export const mergeRecords = (
   records: TRecords,
   newRecords: {
-    attended: Array<TAttendance>;
-    excused: Array<TExcuse>;
+    attended: TAttendance[];
+    excused: TExcuse[];
   },
   overwrite: boolean = false
 ) => {
-  let mergedRecords = overwrite
+  const mergedRecords = overwrite
     ? {
         attended: {},
         excused: {}
@@ -297,7 +297,7 @@ export const hasValidCheckIn = (records: TRecords, email: string, event_id: stri
 };
 
 export const getMandatoryEvents = (events: TEventDict) => {
-  let mandatory = {};
+  const mandatory = {};
 
   const now = moment();
 
@@ -313,7 +313,7 @@ export const getMandatoryEvents = (events: TEventDict) => {
 };
 
 export const getMissedMandatoryByUser = (records: TRecords, mandatoryEvents: TEventDict, email: string) => {
-  let missed = {};
+  const missed = {};
 
   for (const event of Object.values(mandatoryEvents)) {
     if (!hasValidCheckIn(records, email, event.id, true)) {
@@ -325,7 +325,7 @@ export const getMissedMandatoryByUser = (records: TRecords, mandatoryEvents: TEv
 };
 
 export const getMissedMandatory = (records: TRecords, mandatoryEvents: TEventDict, directory: TDirectory) => {
-  let missed = {};
+  const missed = {};
 
   for (const user of Object.values(directory)) {
     missed[user.email] = getMissedMandatoryByUser(records, mandatoryEvents, user.email);
@@ -335,7 +335,7 @@ export const getMissedMandatory = (records: TRecords, mandatoryEvents: TEventDic
 };
 
 export const getMissedMandatoryByEvent = (missedMandatory: TUserEventDict, directory: TDirectory, event_id: string) => {
-  let missed = {};
+  const missed = {};
 
   for (const [email, events] of Object.entries(missedMandatory)) {
     if (events.hasOwnProperty(event_id)) {
@@ -432,10 +432,10 @@ export const extractPoints = (points: string, type: string) => {
 };
 
 export const getFutureDateIndex = (
-  eventSections: Array<{
+  eventSections: {
     title: string;
-    data: Array<TEvent>;
-  }>
+    data: TEvent[];
+  }[]
 ) => {
   if (eventSections.length === 0) {
     return -1;
@@ -488,7 +488,7 @@ export const recomputeKappaState = ({
 }) => {
   const eventArray = Object.values(events);
   const now = moment();
-  const futureEventArray = eventArray.filter(event => moment(event.start).isSameOrAfter(now, 'day'));
+  const futureEventArray = eventArray.filter((event) => moment(event.start).isSameOrAfter(now, 'day'));
   const futureEvents = separateByEventId(futureEventArray);
   const eventsSize = Object.keys(events).length;
   const directorySize = Object.keys(directory).length;
@@ -498,7 +498,7 @@ export const recomputeKappaState = ({
   const gmCount = getTypeCount(events, 'GM');
   const eventSections = Object.entries(eventsByDate)
     .sort((a, b) => (moment(a[0]).isBefore(moment(b[0])) ? -1 : 1))
-    .map((entry: [string, Array<TEvent>]) => ({ title: entry[0], data: entry[1] }));
+    .map((entry: [string, TEvent[]]) => ({ title: entry[0], data: entry[1] }));
   const futureIndex = getFutureDateIndex(eventSections);
   const upcomingSections = futureIndex >= 0 ? eventSections.slice(futureIndex) : [];
 

@@ -39,14 +39,14 @@ const MessagesContent: React.FC<{
     (force: boolean) => {
       if (force || shouldLoad(loadHistory, 'excuses')) dispatchGetExcuses();
     },
-    [user, loadHistory]
+    [loadHistory, dispatchGetExcuses]
   );
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
 
     loadData(true);
-  }, [user, refreshing]);
+  }, [loadData]);
 
   const onSelectExcuse = React.useCallback(
     (excuse: TPendingExcuse) => {
@@ -76,10 +76,10 @@ const MessagesContent: React.FC<{
   }, [isGettingExcuses]);
 
   React.useEffect(() => {
-    if (isFocused && user?.sessionToken) {
+    if (isFocused && user.sessionToken) {
       loadData(false);
     }
-  }, [user, isFocused]);
+  }, [user.sessionToken, isFocused, loadData]);
 
   const getExcuseRequester = (excuse: TPendingExcuse) => {
     const email = `${excuse.netid}@illinois.edu`;

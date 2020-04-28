@@ -58,7 +58,7 @@ const Header: React.FC<{
   navigation?: NavigationTypes.ParamType;
   optionLeft?: string;
   optionRight?: string;
-  tabs?: Array<any>;
+  tabs?: any[];
   tabIndex?: number;
   search?: boolean;
   searchText?: string;
@@ -87,7 +87,7 @@ const Header: React.FC<{
         color="black"
         style={styles.search}
         placeholder={searchText || 'What are you looking for?'}
-        placeholderTextColor={'#8898AA'}
+        placeholderTextColor="#8898AA"
         onFocus={() => {}}
         onChangeText={(text: string) => navigation.setParams({ searchValue: text })}
         iconContent={<Icon size={16} color={theme.COLORS.MUTED} name="search-zoom-in" family="ArgonExtra" />}
@@ -126,7 +126,7 @@ const Header: React.FC<{
       <Tabs
         data={tabs || []}
         initialIndex={tabIndex || defaultTab}
-        onChange={id => navigation.setParams({ tabId: id })}
+        onChange={(id) => navigation.setParams({ tabId: id })}
       />
     );
   };

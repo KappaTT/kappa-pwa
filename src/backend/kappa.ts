@@ -27,7 +27,7 @@ export interface TEventDict {
 }
 
 export interface TEventDateDict {
-  [date: string]: Array<TEvent>;
+  [date: string]: TEvent[];
 }
 
 export interface TUserEventDict {
@@ -96,12 +96,12 @@ export interface TGetEventsPayload {
 }
 
 interface TGetEventsRequestResponse {
-  events: Array<TEvent>;
+  events: TEvent[];
 }
 
 interface TGetEventsResponse extends TResponse {
   data?: {
-    events: Array<TEvent>;
+    events: TEvent[];
   };
 }
 
@@ -138,7 +138,7 @@ export const getEvents = async (payload: TGetEventsPayload): Promise<TGetEventsR
 export interface TCreateEventPayload {
   user: TUser;
   event: Partial<TEvent>;
-  points: Array<Partial<TPoint>>;
+  points: Partial<TPoint>[];
 }
 
 interface TCreateEventRequestResponse {
@@ -189,7 +189,7 @@ export const createEvent = async (payload: TCreateEventPayload): Promise<TCreate
 export interface TUpdateEventPayload {
   user: TUser;
   event: Partial<TEvent>;
-  points: Array<Partial<TPoint>>;
+  points: Partial<TPoint>[];
 }
 
 interface TUpdateEventRequestResponse {
@@ -293,12 +293,12 @@ export interface TGetUsersPayload {
 }
 
 interface TGetUsersRequestResponse {
-  users: Array<TUser>;
+  users: TUser[];
 }
 
 interface TGetUsersResponse extends TResponse {
   data?: {
-    users: Array<TUser>;
+    users: TUser[];
   };
 }
 
@@ -338,14 +338,14 @@ export interface TGetAttendancePayload {
 }
 
 interface TGetAttendanceRequestResponse {
-  attended: Array<TAttendance>;
-  excused: Array<TExcuse>;
+  attended: TAttendance[];
+  excused: TExcuse[];
 }
 
 interface TGetAttendanceResponse extends TResponse {
   data?: {
-    attended: Array<TAttendance>;
-    excused: Array<TExcuse>;
+    attended: TAttendance[];
+    excused: TExcuse[];
   };
 }
 
@@ -418,12 +418,12 @@ export interface TCreateAttendancePayload {
 }
 
 interface TCreateAttendanceRequestResponse {
-  attended: Array<TAttendance>;
+  attended: TAttendance[];
 }
 
 interface TCreateAttendanceResponse extends TResponse {
   data?: {
-    attended: Array<TAttendance>;
+    attended: TAttendance[];
   };
 }
 
@@ -467,12 +467,12 @@ export interface TGetPendingExcusesPayload {
 }
 
 interface TGetPendingExcusesRequestResponse {
-  pending: Array<TPendingExcuse>;
+  pending: TPendingExcuse[];
 }
 
 interface TGetPendingExcusesResponse extends TResponse {
   data?: {
-    pending: Array<TPendingExcuse>;
+    pending: TPendingExcuse[];
   };
 }
 
@@ -516,13 +516,13 @@ export interface TCreateExcusePayload {
 }
 
 export interface TCreateExcuseRequestResponse {
-  excused: Array<TEvent>;
+  excused: TEvent[];
 }
 
 export interface TCreateExcuseResponse extends TResponse {
   data?: {
-    excused: Array<TExcuse>;
-    pending: Array<TPendingExcuse>;
+    excused: TExcuse[];
+    pending: TPendingExcuse[];
   };
 }
 
@@ -576,12 +576,12 @@ export interface TUpdateExcusePayload {
 }
 
 interface TUpdateExcuseRequestResponse {
-  excused: Array<TExcuse>;
+  excused: TExcuse[];
 }
 
 interface TUpdateExcuseResponse extends TResponse {
   data?: {
-    excused: Array<TExcuse>;
+    excused: TExcuse[];
   };
 }
 

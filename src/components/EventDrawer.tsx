@@ -41,7 +41,7 @@ import Switch from '@components/Switch';
 
 const { width, height } = Dimensions.get('screen');
 
-const EventDrawer: React.FC<{}> = ({}) => {
+const EventDrawer: React.FC = () => {
   const user = useSelector((state: TRedux) => state.auth.user);
   const loadHistory = useSelector((state: TRedux) => state.kappa.loadHistory);
   const directory = useSelector((state: TRedux) => state.kappa.directory);
@@ -119,7 +119,7 @@ const EventDrawer: React.FC<{}> = ({}) => {
   }, [user, selectedEventId, refreshing]);
 
   const snapTo = React.useCallback(
-    newSnap => {
+    (newSnap) => {
       sheetRef?.current?.snapTo(newSnap);
       sheetRef?.current?.snapTo(newSnap);
     },
@@ -337,7 +337,7 @@ const EventDrawer: React.FC<{}> = ({}) => {
         {selectedEvent !== null && (
           <React.Fragment>
             <ScrollView
-              ref={ref => (scrollRef.current = ref)}
+              ref={(ref) => (scrollRef.current = ref)}
               refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
               scrollIndicatorInsets={{ right: 1 }}
             >
@@ -489,7 +489,7 @@ const EventDrawer: React.FC<{}> = ({}) => {
       </TouchableWithoutFeedback>
 
       <BottomSheet
-        ref={ref => (sheetRef.current = ref)}
+        ref={(ref) => (sheetRef.current = ref)}
         snapPoints={[sheetHeight, 0]}
         initialSnap={1}
         callbackNode={callbackNode}

@@ -58,8 +58,8 @@ const FadeBasedPopupModal: React.FC<{
         style={{
           position: 'absolute',
           top: Animated.multiply(heightBase, progress),
-          width: width,
-          height: height,
+          width,
+          height,
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center'
@@ -82,15 +82,15 @@ const FadeBasedPopupModal: React.FC<{
 
 const styles = StyleSheet.create({
   bg: {
-    width: width,
-    height: height,
+    width,
+    height,
     backgroundColor: 'rgba(0, 0, 0, 0.5)'
   },
   background: {
     position: 'absolute',
     top: 0,
-    width: width,
-    height: height
+    width,
+    height
   },
   wrapper: {
     width: width - 60,

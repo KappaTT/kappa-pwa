@@ -48,7 +48,7 @@ const FormattedInput: React.FC<{
   blurOnSubmit = !multiline,
   error = false,
   editable = true,
-  getRef = ref => {},
+  getRef = (ref) => {},
   formatter = (text: string) => text,
   onChangeText = (text: string) => {},
   onSubmit = (text: string) => {}
@@ -62,7 +62,7 @@ const FormattedInput: React.FC<{
   }, [defaultValue]);
 
   return (
-    <Block style={{ width: width }}>
+    <Block style={{ width }}>
       <Input
         getRef={getRef}
         style={[styles.input, style]}

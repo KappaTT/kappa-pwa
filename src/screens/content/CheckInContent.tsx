@@ -103,7 +103,7 @@ const CheckInContent: React.FC<{
         title: event.title,
         subtitle: moment(event.start).format('ddd LLL')
       }));
-  }, [user, records.attended, records.excused, futureEventArray]);
+  }, [futureEventArray, records, user.email]);
 
   const onPressBackButton = () => {
     setChoosingEvent(false);
@@ -114,7 +114,7 @@ const CheckInContent: React.FC<{
       dispatchSetCheckInEvent(chosen, checkInExcuse);
       setChoosingEvent(false);
     },
-    [checkInExcuse]
+    [checkInExcuse, dispatchSetCheckInEvent]
   );
 
   const askForPermission = async () => {
@@ -149,7 +149,7 @@ const CheckInContent: React.FC<{
     if (checkInEventId && code) {
       dispatchCheckIn(checkInEventId, code);
     }
-  }, [checkInEventId, code]);
+  }, [checkInEventId, code, dispatchCheckIn]);
 
   const handleCodeScanned = React.useCallback(
     ({ type, data }) => {
@@ -166,7 +166,7 @@ const CheckInContent: React.FC<{
           const pieces = data.split(':');
 
           let event_id = '';
-          let event_code = pieces[0];
+          const event_code = pieces[0];
 
           for (const event of eventOptions) {
             if (event.id === pieces[0]) {
@@ -185,7 +185,7 @@ const CheckInContent: React.FC<{
         }
       }
     },
-    [eventOptions, checkInEventId]
+    [checkInEventId, dispatchCheckIn, eventOptions, dispatchSetCheckInEvent]
   );
 
   const numberFormatter = (text: string) => {
@@ -201,13 +201,13 @@ const CheckInContent: React.FC<{
     ) {
       dispatchGetMyAttendance();
     }
-  }, [user, loadHistory, isGettingAttendance, isFocused]);
+  }, [user, loadHistory, isGettingAttendance, isFocused, getAttendanceErrorMessage, dispatchGetMyAttendance]);
 
   React.useEffect(() => {
     if (selectedEvent === null && checkInEventId !== '') {
       dispatchSetCheckInEvent('', checkInExcuse);
     }
-  }, [selectedEvent, checkInEventId, checkInExcuse]);
+  }, [selectedEvent, checkInEventId, checkInExcuse, dispatchSetCheckInEvent]);
 
   React.useEffect(() => {
     if (checkInEventId !== '') {
@@ -220,7 +220,7 @@ const CheckInContent: React.FC<{
       dispatchSetCheckInEvent('', false);
       setCode('');
     }
-  }, [checkInEventId, code, eventOptions]);
+  }, [checkInEventId, code, dispatchSetCheckInEvent, eventOptions]);
 
   React.useEffect(() => {
     if (
@@ -239,7 +239,7 @@ const CheckInContent: React.FC<{
 
       setCode('');
     }
-  }, [openDate, checkInRequestDate, checkInSuccessDate]);
+  }, [openDate, checkInRequestDate, checkInSuccessDate, dispatchShowToast]);
 
   React.useEffect(() => {
     if (
@@ -258,7 +258,7 @@ const CheckInContent: React.FC<{
 
       setReason('');
     }
-  }, [openDate, createExcuseRequestDate, createExcuseSuccessDate]);
+  }, [openDate, createExcuseRequestDate, createExcuseSuccessDate, dispatchShowToast]);
 
   const renderChoosingEvent = () => {
     return (

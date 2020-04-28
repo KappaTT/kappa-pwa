@@ -30,7 +30,7 @@ import GeneralMeetingChart from '@components/GeneralMeetingChart';
 
 const { width, height } = Dimensions.get('screen');
 
-const BrotherDrawer: React.FC<{}> = ({}) => {
+const BrotherDrawer: React.FC = () => {
   const user = useSelector((state: TRedux) => state.auth.user);
   const loadHistory = useSelector((state: TRedux) => state.kappa.loadHistory);
   const events = useSelector((state: TRedux) => state.kappa.events);
@@ -90,7 +90,7 @@ const BrotherDrawer: React.FC<{}> = ({}) => {
   }, [user, selectedUserEmail, refreshing]);
 
   const snapTo = React.useCallback(
-    newSnap => {
+    (newSnap) => {
       sheetRef?.current?.snapTo(newSnap);
       sheetRef?.current?.snapTo(newSnap);
     },
@@ -279,7 +279,7 @@ const BrotherDrawer: React.FC<{}> = ({}) => {
         {selectedUser !== null && (
           <React.Fragment>
             <ScrollView
-              ref={ref => (scrollRef.current = ref)}
+              ref={(ref) => (scrollRef.current = ref)}
               refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
               scrollIndicatorInsets={{ right: 1 }}
             >
@@ -351,7 +351,7 @@ const BrotherDrawer: React.FC<{}> = ({}) => {
       </TouchableWithoutFeedback>
 
       <BottomSheet
-        ref={ref => (sheetRef.current = ref)}
+        ref={(ref) => (sheetRef.current = ref)}
         snapPoints={[sheetHeight, 0]}
         initialSnap={1}
         callbackNode={callbackNode}

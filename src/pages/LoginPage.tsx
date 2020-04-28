@@ -7,7 +7,7 @@ import { _auth } from '@reducers/actions';
 import { theme, Images } from '@constants';
 import { Block, Text, GoogleSignInButton } from '@components';
 
-const LoginPage: React.FC<{}> = ({}) => {
+const LoginPage: React.FC = () => {
   const authorized = useSelector((state: TRedux) => state.auth.authorized);
   const isAuthenticating = useSelector((state: TRedux) => state.auth.isAuthenticating);
   const isSigningInWithGoogle = useSelector((state: TRedux) => state.auth.isSigningInWithGoogle);
@@ -22,7 +22,7 @@ const LoginPage: React.FC<{}> = ({}) => {
     if (authorized) {
       dispatchHideModal();
     }
-  }, [authorized]);
+  }, [authorized, dispatchHideModal]);
 
   React.useEffect(() => {
     if (signInWithGoogleErrorMessage) {

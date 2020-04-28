@@ -43,14 +43,14 @@ const LateExcusePage: React.FC<{
     const now = moment();
 
     return eventArray
-      .filter(event => moment(event.start).isBefore(now) && !hasValidCheckIn(records, user.email, event.id, true))
+      .filter((event) => moment(event.start).isBefore(now) && !hasValidCheckIn(records, user.email, event.id, true))
       .sort(sortEventByDate)
-      .map(event => ({
+      .map((event) => ({
         id: event.id,
         title: event.title,
         subtitle: moment(event.start).format('ddd LLL')
       }));
-  }, [user, records.attended, records.excused, eventArray]);
+  }, [user, records, eventArray]);
 
   const onChangeEventList = React.useCallback(
     (chosen: string) => {
@@ -77,7 +77,7 @@ const LateExcusePage: React.FC<{
 
       onRequestClose();
     }
-  }, [openDate, createExcuseRequestDate, createExcuseSuccessDate]);
+  }, [openDate, createExcuseRequestDate, createExcuseSuccessDate, dispatchShowToast, onRequestClose]);
 
   const renderChoosingEvent = () => {
     return (

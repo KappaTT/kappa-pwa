@@ -44,12 +44,12 @@ const ToastController: React.FC = () => {
     if (toastCode > 0) {
       dispatchClearError();
     }
-  }, [toastCode]);
+  }, [dispatchClearError, dispatchDoneHidingToast, toastCode]);
 
   const onPressSignOut = React.useCallback(() => {
     dispatchHideToast();
     dispatchSignOut();
-  }, []);
+  }, [dispatchHideToast, dispatchSignOut]);
 
   const onPressReload = async () => {
     await Updates.reloadAsync();
@@ -59,7 +59,7 @@ const ToastController: React.FC = () => {
     setAppState(nextAppState);
   };
 
-  const checkForUpdates = async () => {
+  const checkForUpdates = React.useCallback(async () => {
     log('Checking for updates');
 
     try {
@@ -80,7 +80,7 @@ const ToastController: React.FC = () => {
     } catch (error) {
       log(error.message);
     }
-  };
+  }, [dispatchShowToast]);
 
   React.useEffect(() => {
     if (globalErrorMessage !== '') {
@@ -94,13 +94,13 @@ const ToastController: React.FC = () => {
         toastHapticType: NotificationFeedbackType.Warning
       });
     }
-  }, [globalErrorMessage, globalErrorCode, globalErrorDate]);
+  }, [globalErrorMessage, globalErrorCode, globalErrorDate, dispatchShowToast]);
 
   React.useEffect(() => {
     if (appState === 'active') {
       checkForUpdates();
     }
-  }, [appState]);
+  }, [appState, checkForUpdates]);
 
   React.useEffect(() => {
     if (isShowingToast) {

@@ -15,7 +15,7 @@ import { log } from '@services/logService';
 import { TUser } from '@backend/auth';
 import { sortUserByName, shouldLoad } from '@services/kappaService';
 
-const UserSkeleton: React.FC<{}> = ({}) => {
+const UserSkeleton: React.FC = () => {
   return (
     <Block style={styles.skeletonWrapper}>
       <Placeholder Animation={Fade}>
@@ -63,14 +63,14 @@ const DirectoryContent: React.FC<{
       if (force || shouldLoad(loadHistory, `user-${user.email}`)) dispatchGetMyAttendance(force);
       if (force || shouldLoad(loadHistory, 'excuses')) dispatchGetExcuses();
     },
-    [user, loadHistory]
+    [loadHistory, dispatchGetEvents, dispatchGetDirectory, user.email, dispatchGetMyAttendance, dispatchGetExcuses]
   );
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
 
     loadData(true);
-  }, [user, refreshing]);
+  }, [loadData]);
 
   React.useEffect(() => {
     if (!isGettingEvents && !isGettingDirectory && !isGettingAttendance) {
@@ -79,10 +79,10 @@ const DirectoryContent: React.FC<{
   }, [isGettingEvents, isGettingDirectory, isGettingAttendance]);
 
   React.useEffect(() => {
-    if (isFocused && user?.sessionToken) {
+    if (isFocused && user.sessionToken) {
       loadData(false);
     }
-  }, [user, isFocused]);
+  }, [isFocused, loadData, user.sessionToken]);
 
   const keyExtractor = (item: TUser) => item._id;
 
@@ -156,7 +156,7 @@ const DirectoryContent: React.FC<{
           </Block>
         ) : (
           <FlatList
-            ref={ref => (scrollRef.current = ref)}
+            ref={(ref) => (scrollRef.current = ref)}
             data={Object.values(directory).sort(sortUserByName)}
             keyExtractor={keyExtractor}
             renderItem={renderItem}

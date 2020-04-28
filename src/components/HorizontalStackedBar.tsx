@@ -31,7 +31,7 @@ const HorizontalLabel: React.FC<{
 
 const HorizontalBar: React.FC<{
   percent: number;
-  gradient: Array<string>;
+  gradient: string[];
   wrapperStyle: ViewStyle;
 }> = ({ percent, gradient, wrapperStyle }) => {
   return (
@@ -44,11 +44,11 @@ const HorizontalBar: React.FC<{
 };
 
 const HorizontalStackedBar: React.FC<{
-  data: Array<{
+  data: {
     units: number;
     label: string;
-    gradient: Array<string>;
-  }>;
+    gradient: string[];
+  }[];
 }> = ({ data }) => {
   let totalUnits = 0;
   data.map((section: any) => {

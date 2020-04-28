@@ -63,14 +63,16 @@ export const getDemoEndpoint = (endpoint: string, method: string) => {
 export const jsonDemoRequest = async <T>(
   endpoint: string,
   method: string
-): Promise<TRequestResponse & {
-  data?: T;
-}> => {
+): Promise<
+  TRequestResponse & {
+    data?: T;
+  }
+> => {
   log(`DEMO via ${method}`, endpoint);
 
   return {
     success: true,
     code: 200,
-    data: <T>(<unknown>getDemoEndpoint(endpoint, method))
+    data: (getDemoEndpoint(endpoint, method) as unknown) as T
   };
 };

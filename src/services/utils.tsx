@@ -13,7 +13,7 @@ export const NavigationHeight = iPhoneX() ? 16 : 0;
 export const deviceId = Constants.installationId;
 
 export const sleep = (time: number) => {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     setTimeout(() => {
       resolve();
     }, time);

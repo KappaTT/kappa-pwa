@@ -17,7 +17,7 @@ import { log } from '@services/logService';
 import { TEvent, TPoint } from '@backend/kappa';
 import { hasValidCheckIn, getEventById, shouldLoad } from '@services/kappaService';
 
-const EventSkeleton: React.FC<{}> = ({}) => {
+const EventSkeleton: React.FC = () => {
   return (
     <Block style={styles.skeletonWrapper}>
       <Placeholder Animation={Fade}>
@@ -63,7 +63,7 @@ const EventsContent: React.FC<{
   const dispatchSelectEvent = React.useCallback((eventId: string) => dispatch(_kappa.selectEvent(eventId)), [dispatch]);
   const dispatchEditNewEvent = React.useCallback(() => dispatch(_kappa.editNewEvent()), [dispatch]);
   const dispatchSaveEditEvent = React.useCallback(
-    (event: Partial<TEvent>, points: Array<Partial<TPoint>>) => dispatch(_kappa.saveEditEvent(user, event, points)),
+    (event: Partial<TEvent>, points: Partial<TPoint>[]) => dispatch(_kappa.saveEditEvent(user, event, points)),
     [dispatch, user]
   );
   const dispatchCancelEditEvent = React.useCallback(() => dispatch(_kappa.cancelEditEvent()), [dispatch]);
@@ -74,23 +74,19 @@ const EventsContent: React.FC<{
 
   const loadData = React.useCallback(
     (force: boolean) => {
-      if (user.sessionToken) {
-        if (force || shouldLoad(loadHistory, 'events')) dispatchGetEvents();
-        if (force || shouldLoad(loadHistory, 'directory')) dispatchGetDirectory();
-        if (force || shouldLoad(loadHistory, `user-${user.email}`)) dispatchGetMyAttendance(force);
-        if (force || shouldLoad(loadHistory, 'excuses')) dispatchGetExcuses();
-      } else {
-        log('Bad user request');
-      }
+      if (force || shouldLoad(loadHistory, 'events')) dispatchGetEvents();
+      if (force || shouldLoad(loadHistory, 'directory')) dispatchGetDirectory();
+      if (force || shouldLoad(loadHistory, `user-${user.email}`)) dispatchGetMyAttendance(force);
+      if (force || shouldLoad(loadHistory, 'excuses')) dispatchGetExcuses();
     },
-    [user, loadHistory]
+    [user.email, loadHistory, dispatchGetEvents, dispatchGetDirectory, dispatchGetMyAttendance, dispatchGetExcuses]
   );
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
 
     loadData(true);
-  }, [user, refreshing]);
+  }, [loadData]);
 
   const toggleShowing = React.useCallback(() => {
     if (
@@ -114,10 +110,10 @@ const EventsContent: React.FC<{
   }, [isGettingEvents, isGettingDirectory, isGettingAttendance]);
 
   React.useEffect(() => {
-    if (isFocused && user?.sessionToken) {
+    if (isFocused && user.sessionToken) {
       loadData(false);
     }
-  }, [user, isFocused]);
+  }, [isFocused, loadData, user.sessionToken]);
 
   const keyExtractor = (item: TEvent, index) => {
     return `${item.id}-${index}`;
@@ -202,7 +198,7 @@ const EventsContent: React.FC<{
           </Block>
         ) : (
           <SectionList
-            ref={ref => (scrollRef.current = ref)}
+            ref={(ref) => (scrollRef.current = ref)}
             sections={showing === 'Upcoming' ? upcomingSections : eventSections}
             keyExtractor={keyExtractor}
             renderSectionHeader={renderSectionHeader}

@@ -130,7 +130,7 @@ export const makeAuthorizedRequest = async <T>(
 };
 
 export const flattenBlame = (blameObj: TBlame): TFlatBlame => {
-  let blame = {};
+  const blame = {};
 
   for (const [key, value] of Object.entries(blameObj)) {
     for (const [key2, value2] of Object.entries(value)) {

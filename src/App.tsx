@@ -81,13 +81,13 @@ const App = () => {
     if (!loadedUser) {
       dispatchLoadUser();
     }
-  }, [loadedUser]);
+  }, [dispatchLoadUser, loadedUser]);
 
   React.useEffect(() => {
     if (loadedUser && !authorized) {
       dispatchShowLogin();
     }
-  }, [loadedUser, authorized]);
+  }, [loadedUser, authorized, dispatchShowLogin]);
 
   React.useEffect(() => {
     if (!authorized || !user) {
@@ -116,13 +116,13 @@ const App = () => {
     } else if (!incomplete && onboardingVisible) {
       dispatchHideOnboarding();
     }
-  }, [authorized, user, onboardingVisible, isEditingUser]);
+  }, [authorized, user, onboardingVisible, isEditingUser, dispatchHideOnboarding, dispatchShowOnboarding]);
 
   React.useEffect(() => {
     if (!loadedPrefs) {
       dispatchLoadPrefs();
     }
-  }, [loadedPrefs]);
+  }, [dispatchLoadPrefs, loadedPrefs]);
 
   if (!isLoadingComplete) {
     return (
@@ -136,7 +136,7 @@ const App = () => {
         <SafeAreaProvider>
           <Block flex>
             <AppNavigator
-              ref={navigatorRef => {
+              ref={(navigatorRef) => {
                 setTopLevelNavigator(navigatorRef);
                 setIsNavigatorReady(true);
               }}

@@ -42,7 +42,7 @@ const TabBar: React.FC<{
     >
       <View style={styles.container}>
         {routes
-          .filter(route => !getLabelText({ route }).endsWith('Stack'))
+          .filter((route) => !getLabelText({ route }).endsWith('Stack'))
           .map((route, routeIndex) => {
             const isRouteActive = routeIndex === activeRouteIndex;
             const labelText = getLabelText({ route });

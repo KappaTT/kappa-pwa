@@ -39,7 +39,7 @@ const { width, height } = Dimensions.get('screen');
 const EditEventPage: React.FC<{
   initialEvent: TEvent;
   onPressBack(): void;
-  onPressSave(event: Partial<TEvent>, points: Array<Partial<TPoint>>): void;
+  onPressSave(event: Partial<TEvent>, points: Partial<TPoint>[]): void;
 }> = ({ initialEvent, onPressBack, onPressSave }) => {
   const isSavingEvent = useSelector((state: TRedux) => state.kappa.isSavingEvent);
 
@@ -90,7 +90,7 @@ const EditEventPage: React.FC<{
       title,
       description,
       start: startDate.toDate().toString(),
-      duration: parseInt(duration || '0'),
+      duration: parseInt(duration || '0', 10),
       location,
 
       id: initialEvent ? initialEvent.id : '',
@@ -104,44 +104,46 @@ const EditEventPage: React.FC<{
       return;
     }
 
-    const points: Array<Partial<TPoint>> = [
+    const points: Partial<TPoint>[] = [
       {
         category: 'PROF',
-        count: parseInt(profPoints || '0')
+        count: parseInt(profPoints || '0', 10)
       },
       {
         category: 'PHIL',
-        count: parseInt(philPoints || '0')
+        count: parseInt(philPoints || '0', 10)
       },
       {
         category: 'BRO',
-        count: parseInt(broPoints || '0')
+        count: parseInt(broPoints || '0', 10)
       },
       {
         category: 'RUSH',
-        count: parseInt(rushPoints || '0')
+        count: parseInt(rushPoints || '0', 10)
       },
       {
         category: 'ANY',
-        count: parseInt(anyPoints || '0')
+        count: parseInt(anyPoints || '0', 10)
       }
     ];
 
     onPressSave(event, points);
   }, [
     type,
+    mandatory,
+    excusable,
     title,
     description,
     startDate,
     duration,
     location,
-    mandatory,
-    excusable,
+    initialEvent,
     profPoints,
     philPoints,
     broPoints,
     rushPoints,
-    anyPoints
+    anyPoints,
+    onPressSave
   ]);
 
   const onPressBackButton = React.useCallback(() => {
@@ -150,7 +152,7 @@ const EditEventPage: React.FC<{
     } else {
       onPressBack();
     }
-  }, [choosingType]);
+  }, [choosingType, onPressBack]);
 
   const onPressStartDate = () => {
     setPickerMode('date');
@@ -169,7 +171,7 @@ const EditEventPage: React.FC<{
   };
 
   const onChangeDate = React.useCallback(
-    (e, selectedDate) => {
+    (_event, selectedDate) => {
       if (Platform.OS === 'android') {
         setPickerMode(null);
       }
@@ -208,7 +210,7 @@ const EditEventPage: React.FC<{
                 { id: 'Misc', title: 'Misc' }
               ]}
               selected={type}
-              onChange={chosen => {
+              onChange={(chosen) => {
                 setType(chosen);
                 setChoosingType(false);
               }}
@@ -377,7 +379,7 @@ const EditEventPage: React.FC<{
 
                       <Block style={styles.separator} />
 
-                      <Block style={styles.column}></Block>
+                      <Block style={styles.column} />
                     </Block>
 
                     <Block style={styles.propertyHeaderContainer}>
@@ -519,7 +521,7 @@ const EditEventPage: React.FC<{
 
                       <Block style={styles.column}>
                         <Block style={styles.propertyHeaderContainer}>
-                          <Text style={styles.propertyHeader}></Text>
+                          <Text style={styles.propertyHeader} />
                         </Block>
                         <Text style={styles.description}>
                           Points in "Any" count for whatever category the brother is missing

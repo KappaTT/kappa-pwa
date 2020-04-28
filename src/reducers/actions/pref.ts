@@ -15,10 +15,10 @@ const loadedPreferences = (prefs: Prefs.TPrefs) => {
 };
 
 export const loadPrefs = () => {
-  return dispatch => {
+  return (dispatch) => {
     dispatch(loadingPreferences());
 
-    Prefs.loadPrefs().then(res => {
+    Prefs.loadPrefs().then((res) => {
       dispatch(loadedPreferences(res.data.prefs));
     });
   };
@@ -39,10 +39,10 @@ const savedPreference = () => {
 };
 
 export const savePref = (prefKey: string, prefValue: any) => {
-  return dispatch => {
+  return (dispatch) => {
     dispatch(savingPreference(prefKey, prefValue));
 
-    Prefs.savePref(prefKey, prefValue).then(res => {
+    Prefs.savePref(prefKey, prefValue).then((res) => {
       dispatch(savedPreference());
     });
   };

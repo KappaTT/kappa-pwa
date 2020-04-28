@@ -105,9 +105,9 @@ export interface TKappaState {
   getPointsErrorMessage: string;
 
   loadHistory: TLoadHistory;
-  eventArray: Array<TEvent>;
+  eventArray: TEvent[];
   events: TEventDict;
-  futureEventArray: Array<TEvent>;
+  futureEventArray: TEvent[];
   futureEvents: TEventDict;
   eventsByDate: TEventDateDict;
   mandatoryEvents: TEventDict;
@@ -115,15 +115,15 @@ export interface TKappaState {
   records: TRecords;
   directory: TDirectory;
   points: TPointsUserDict;
-  pendingExcusesArray: Array<TPendingExcuse>;
-  eventSections: Array<{
+  pendingExcusesArray: TPendingExcuse[];
+  eventSections: {
     title: string;
-    data: Array<TEvent>;
-  }>;
-  upcomingSections: Array<{
+    data: TEvent[];
+  }[];
+  upcomingSections: {
     title: string;
-    data: Array<TEvent>;
-  }>;
+    data: TEvent[];
+  }[];
   futureIndex: number;
 
   eventsSize: number;
@@ -337,7 +337,7 @@ export default (state = initialState, action: any): TKappaState => {
         getAttendanceError: false,
         getAttendanceErrorMessage: ''
       };
-    case GET_ATTENDANCE_SUCCESS:
+    case GET_ATTENDANCE_SUCCESS: {
       let newLoadHistory = {};
 
       if (action.overwrite) {
@@ -374,6 +374,7 @@ export default (state = initialState, action: any): TKappaState => {
           directory: state.directory
         })
       };
+    }
     case GET_ATTENDANCE_FAILURE:
       return {
         ...state,
@@ -485,7 +486,7 @@ export default (state = initialState, action: any): TKappaState => {
         deleteEventError: false,
         deleteEventErrorMessage: ''
       };
-    case DELETE_EVENT_SUCCESS:
+    case DELETE_EVENT_SUCCESS: {
       const remainingEvents = state.events;
       delete remainingEvents[action.event.id];
 
@@ -500,6 +501,7 @@ export default (state = initialState, action: any): TKappaState => {
           directory: state.directory
         })
       };
+    }
     case DELETE_EVENT_FAILURE:
       return {
         ...state,

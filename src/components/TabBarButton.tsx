@@ -43,8 +43,8 @@ const TabBarButton: React.FC<{
             <Icon name="user-check" family="Feather" color={tintColor} size={28} />
           ) : (
             <React.Fragment>
-              {renderIcon({ route, focused: isRouteActive, tintColor: tintColor })}
-              <Badge active={badge}></Badge>
+              {renderIcon({ route, focused: isRouteActive, tintColor })}
+              <Badge active={badge} />
             </React.Fragment>
           )}
         </Block>

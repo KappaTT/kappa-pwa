@@ -4,7 +4,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 const GradientView: React.FC<{
   style: ViewStyle;
-  colors: Array<string>;
+  colors: string[];
 }> = ({ style, colors, children }) => {
   return (
     <LinearGradient style={style} colors={colors} start={[0, 0]} end={[1, 1]}>

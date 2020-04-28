@@ -23,7 +23,7 @@ const PopupModal: React.FC<{
   const opacityBase = new Animated.Value(1);
   const [progress, setProgress] = React.useState<Animated.Value>(new Animated.Value(1));
 
-  const handleClose = () => {
+  const handleClose = React.useCallback(() => {
     Animated.timing(progress, {
       toValue: 1,
       easing: Easing.out(Easing.poly(4)),
@@ -32,7 +32,7 @@ const PopupModal: React.FC<{
     }).start(() => {
       onPressClose();
     });
-  };
+  }, [onPressClose, progress]);
 
   React.useEffect(() => {
     Animated.timing(progress, {
@@ -41,21 +41,21 @@ const PopupModal: React.FC<{
       duration: 400,
       useNativeDriver: true
     }).start();
-  }, []);
+  });
 
   React.useEffect(() => {
     if (shouldClose) {
       handleClose();
     }
-  }, [shouldClose]);
+  }, [handleClose, shouldClose]);
 
   return (
     <Animated.View
       style={{
         position: 'absolute',
         top: 0,
-        width: width,
-        height: height,
+        width,
+        height,
         opacity: Animated.subtract(opacityBase, progress),
         backgroundColor: 'rgba(0, 0, 0, 0.5)'
       }}
@@ -68,8 +68,8 @@ const PopupModal: React.FC<{
               translateY: Animated.multiply(heightBase, progress)
             }
           ],
-          width: width,
-          height: height,
+          width,
+          height,
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center'
@@ -81,7 +81,7 @@ const PopupModal: React.FC<{
           onPress={() => {
             allowClose && handleClose();
           }}
-        ></TouchableOpacity>
+        />
 
         <KeyboardAvoidingView behavior="padding" enabled>
           <KeyboardDismissView>
@@ -113,8 +113,8 @@ const styles = StyleSheet.create({
   background: {
     position: 'absolute',
     top: 0,
-    width: width,
-    height: height
+    width,
+    height
   },
   wrapper: {
     width: width - 60,

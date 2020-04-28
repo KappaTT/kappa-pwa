@@ -11,7 +11,7 @@ const GradientBlobButton: React.FC<{
   alarmCount: number;
   title: string;
   subtitle: string;
-  gradient: Array<string>;
+  gradient: string[];
   onPress(): void;
 }> = ({ alarmCount, title, subtitle, gradient, onPress }) => {
   return (

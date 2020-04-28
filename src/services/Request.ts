@@ -25,7 +25,7 @@ export const request = async (url: string, method: MethodType, headers: any, bod
 
     return {
       success: false,
-      error: error
+      error
     };
   }
 
@@ -44,7 +44,7 @@ export const customFetch = async (uri: string, options: any) => {
 
   return RNFetchBlob.config({ trusty: true })
     .fetch('POST', uri, headers, body)
-    .then(blobResponse => {
+    .then((blobResponse) => {
       return new Response(blobResponse.data);
     });
 };

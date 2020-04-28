@@ -79,7 +79,7 @@ export const modifyUser = (changes: Partial<TUser>) => {
 };
 
 export const loadUser = () => {
-  return dispatch => {
+  return (dispatch) => {
     getBatch('user', initialUser, true).then((user: TUser | undefined) => {
       if (user?.email) {
         dispatch(setUser(user));
@@ -110,7 +110,7 @@ const signInSuccess = () => {
   };
 };
 
-const signInFailure = err => {
+const signInFailure = (err) => {
   return {
     type: SIGN_IN_FAILURE,
     error: err
@@ -118,10 +118,10 @@ const signInFailure = err => {
 };
 
 export const authenticate = (email: string, idToken: string, googleUser: TGoogleUser) => {
-  return dispatch => {
+  return (dispatch) => {
     dispatch(signingIn());
 
-    Auth.signIn({ email, idToken }).then(res => {
+    Auth.signIn({ email, idToken }).then((res) => {
       if (res.success) {
         const user = res.data.user;
 
@@ -148,7 +148,7 @@ const signInWithGoogleSuccess = () => {
   };
 };
 
-const signInWithGoogleFailure = err => {
+const signInWithGoogleFailure = (err) => {
   return {
     type: SIGN_IN_WITH_GOOGLE_FAILURE,
     error: err
@@ -156,10 +156,10 @@ const signInWithGoogleFailure = err => {
 };
 
 export const signInWithGoogle = () => {
-  return dispatch => {
+  return (dispatch) => {
     dispatch(signingInWithGoogle());
 
-    GoogleService.login().then(res => {
+    GoogleService.login().then((res) => {
       if (res.success) {
         if (res.data.email.endsWith('@illinois.edu')) {
           dispatch(signInWithGoogleSuccess());
@@ -198,7 +198,7 @@ const updateUserSuccess = () => {
   };
 };
 
-const updateUserFailure = err => {
+const updateUserFailure = (err) => {
   return {
     type: UPDATE_USER_FAILURE,
     error: err
@@ -206,10 +206,10 @@ const updateUserFailure = err => {
 };
 
 export const updateUser = (user: TUser, changes: Partial<TUser>) => {
-  return dispatch => {
+  return (dispatch) => {
     dispatch(updatingUser());
 
-    Auth.updateUser({ user, changes }).then(res => {
+    Auth.updateUser({ user, changes }).then((res) => {
       if (res.success) {
         dispatch(modifyUser(res.data.changes));
         dispatch(updateUserSuccess());
