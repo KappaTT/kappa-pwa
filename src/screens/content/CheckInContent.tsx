@@ -14,6 +14,7 @@ import { useSafeArea } from 'react-native-safe-area-context';
 import moment from 'moment';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { useIsFocused } from 'react-navigation-hooks';
+import { NotificationFeedbackType } from 'expo-haptics';
 
 import { theme } from '@constants';
 import { TRedux } from '@reducers';
@@ -232,7 +233,8 @@ const CheckInContent: React.FC<{
         toastTitle: 'Success',
         toastMessage: 'You have been checked in to the event!',
         toastTimer: 2000,
-        toastTitleColor: theme.COLORS.PRIMARY_GREEN
+        toastTitleColor: theme.COLORS.PRIMARY_GREEN,
+        toastHapticType: NotificationFeedbackType.Success
       });
 
       setCode('');
@@ -250,7 +252,8 @@ const CheckInContent: React.FC<{
         toastTitle: 'Success',
         toastMessage: 'Your excuse has been submitted!',
         toastTimer: 2000,
-        toastTitleColor: theme.COLORS.PRIMARY_GREEN
+        toastTitleColor: theme.COLORS.PRIMARY_GREEN,
+        toastHapticType: NotificationFeedbackType.Success
       });
 
       setReason('');

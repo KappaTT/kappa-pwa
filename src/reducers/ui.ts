@@ -1,3 +1,5 @@
+import { NotificationFeedbackType } from 'expo-haptics';
+
 export const SHOW_TOAST = 'SHOW_TOAST';
 export const HIDE_TOAST = 'HIDE_TOAST';
 export const DONE_HIDING_TOAST = 'DONE_HIDING_TOAST';
@@ -10,6 +12,7 @@ export interface TToast {
   toastCode: number;
   toastTitleColor: string;
   toastChildren: React.ReactNode;
+  toastHapticType: NotificationFeedbackType;
 }
 
 export interface TUIState extends TToast {
@@ -26,7 +29,8 @@ const initialState: TUIState = {
   toastTimer: -1,
   toastCode: -1,
   toastTitleColor: 'black',
-  toastChildren: null
+  toastChildren: null,
+  toastHapticType: null
 };
 
 export default (state = initialState, action: any): TUIState => {
@@ -48,7 +52,14 @@ export default (state = initialState, action: any): TUIState => {
         toastTimer: action.toast.toastTimer !== undefined ? action.toast.toastTimer : -1,
         toastCode: action.toast.toastCode !== undefined ? action.toast.toastCode : -1,
         toastTitleColor: action.toast.toastTitleColor || 'black',
-        toastChildren: action.toast.toastChildren !== null ? action.toast.toastChildren : null
+        toastChildren:
+          action.toast.toastChildren !== null && action.toast.toastChildren !== undefined
+            ? action.toast.toastChildren
+            : null,
+        toastHapticType:
+          action.toast.toastHapticType !== null && action.toast.toastHapticType !== undefined
+            ? action.toast.toastHapticType
+            : null
       };
     case HIDE_TOAST:
       return {
@@ -66,7 +77,8 @@ export default (state = initialState, action: any): TUIState => {
         toastTimer: -1,
         toastCode: -1,
         toastTitleColor: 'black',
-        toastChildren: null
+        toastChildren: null,
+        toastHapticType: null
       };
     default:
       return state;

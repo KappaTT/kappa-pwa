@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, Keyboard, AppState, AppStateStatus } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import * as Updates from 'expo-updates';
+import { notificationAsync, NotificationFeedbackType } from 'expo-haptics';
 
 import { TRedux } from '@reducers';
 import { TToast } from '@reducers/ui';
@@ -26,6 +27,7 @@ const ToastController: React.FC<{}> = ({}) => {
   const toastCode = useSelector((state: TRedux) => state.ui.toastCode);
   const toastTitleColor = useSelector((state: TRedux) => state.ui.toastTitleColor);
   const toastChildren = useSelector((state: TRedux) => state.ui.toastChildren);
+  const toastHapticType = useSelector((state: TRedux) => state.ui.toastHapticType);
 
   const [appState, setAppState] = React.useState<AppStateStatus>(AppState.currentState);
 
@@ -53,6 +55,10 @@ const ToastController: React.FC<{}> = ({}) => {
     await Updates.reloadAsync();
   };
 
+  const handleAppStateChange = (nextAppState: AppStateStatus) => {
+    setAppState(nextAppState);
+  };
+
   const checkForUpdates = async () => {
     log('Checking for updates');
 
@@ -67,23 +73,14 @@ const ToastController: React.FC<{}> = ({}) => {
           toastMessage: 'The latest version has been downloaded, please reload the app to use it!',
           toastAllowClose: false,
           toastTimer: -1,
-          toastCode: 426
+          toastCode: 426,
+          toastHapticType: NotificationFeedbackType.Warning
         });
       }
     } catch (error) {
       log(error.message);
     }
   };
-
-  const handleAppStateChange = (nextAppState: AppStateStatus) => {
-    setAppState(nextAppState);
-  };
-
-  React.useEffect(() => {
-    if (isShowingToast) {
-      Keyboard.dismiss();
-    }
-  }, [isShowingToast]);
 
   React.useEffect(() => {
     if (globalErrorMessage !== '') {
@@ -93,7 +90,8 @@ const ToastController: React.FC<{}> = ({}) => {
         toastAllowClose: globalErrorCode !== 401,
         toastTimer: globalErrorCode !== 401 ? 3000 : -1,
         toastTitleColor: theme.COLORS.PRIMARY,
-        toastCode: globalErrorCode
+        toastCode: globalErrorCode,
+        toastHapticType: NotificationFeedbackType.Warning
       });
     }
   }, [globalErrorMessage, globalErrorCode, globalErrorDate]);
@@ -103,6 +101,18 @@ const ToastController: React.FC<{}> = ({}) => {
       checkForUpdates();
     }
   }, [appState]);
+
+  React.useEffect(() => {
+    if (isShowingToast) {
+      Keyboard.dismiss();
+    }
+  }, [isShowingToast]);
+
+  React.useEffect(() => {
+    if (toastHapticType !== null) {
+      notificationAsync(toastHapticType);
+    }
+  }, [toastHapticType]);
 
   React.useEffect(() => {
     AppState.addEventListener('change', handleAppStateChange);

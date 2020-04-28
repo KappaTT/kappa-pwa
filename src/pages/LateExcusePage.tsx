@@ -3,6 +3,7 @@ import { StyleSheet, ScrollView, TouchableWithoutFeedback } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { useSafeArea } from 'react-native-safe-area-context';
 import moment from 'moment';
+import { NotificationFeedbackType } from 'expo-haptics';
 
 import { TRedux } from '@reducers';
 import { _kappa, _ui } from '@reducers/actions';
@@ -70,7 +71,8 @@ const LateExcusePage: React.FC<{
         toastTitle: 'Success',
         toastMessage: 'Your excuse has been submitted',
         toastTimer: 2000,
-        toastTitleColor: theme.COLORS.PRIMARY_GREEN
+        toastTitleColor: theme.COLORS.PRIMARY_GREEN,
+        toastHapticType: NotificationFeedbackType.Success
       });
 
       onRequestClose();
