@@ -43,7 +43,9 @@ const LateExcusePage: React.FC<{
     const now = moment();
 
     return eventArray
-      .filter((event) => moment(event.start).isBefore(now) && !hasValidCheckIn(records, user.email, event.id, true))
+      .filter(
+        (event) => moment(event.start).isBefore(now, 'day') && !hasValidCheckIn(records, user.email, event.id, true)
+      )
       .sort(sortEventByDate)
       .map((event) => ({
         id: event.id,

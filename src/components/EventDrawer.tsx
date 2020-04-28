@@ -146,10 +146,15 @@ const EventDrawer: React.FC = () => {
 
   const onPressExcuse = React.useCallback(() => {
     dispatchCheckIn(true);
-    navigate('CheckInStack', {});
+
+    if (selectedEvent !== null && moment(selectedEvent.start).isBefore(moment(), 'day')) {
+      navigate('MessagesStack', {});
+    } else {
+      navigate('CheckInStack', {});
+    }
 
     onPressClose();
-  }, [dispatchCheckIn, onPressClose]);
+  }, [dispatchCheckIn, onPressClose, selectedEvent]);
 
   const onPressCheckIn = React.useCallback(() => {
     dispatchCheckIn(false);
@@ -515,6 +520,7 @@ const EventDrawer: React.FC = () => {
         callbackNode={callbackNode}
         overdragResistanceFactor={1.5}
         enabledBottomClamp={true}
+        enabledContentGestureInteraction={false}
         renderHeader={renderHeader}
         renderContent={renderContent}
         onOpenStart={onOpenStart}

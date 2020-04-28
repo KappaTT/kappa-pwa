@@ -379,6 +379,7 @@ const BrotherDrawer: React.FC = () => {
         callbackNode={callbackNode}
         overdragResistanceFactor={1.5}
         enabledBottomClamp={true}
+        enabledContentGestureInteraction={false}
         renderHeader={renderHeader}
         renderContent={renderContent}
         onOpenStart={onOpenStart}
