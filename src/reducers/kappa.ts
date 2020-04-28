@@ -150,16 +150,24 @@ export interface TKappaState {
   isCheckingIn: boolean;
   checkInError: boolean;
   checkInErrorMessage: string;
+  checkInRequestDate: moment.Moment;
+  checkInSuccessDate: moment.Moment;
   isCreatingExcuse: boolean;
   createExcuseError: boolean;
   createExcuseErrorMessage: string;
+  createExcuseRequestDate: moment.Moment;
+  createExcuseSuccessDate: moment.Moment;
 
   isApprovingExcuse: boolean;
   approveExcuseError: boolean;
   approveExcuseErrorMessage: string;
+  approveExcuseRequestDate: moment.Moment;
+  approveExcuseSuccessDate: moment.Moment;
   isRejectingExcuse: boolean;
   rejectExcuseError: boolean;
   rejectExcuseErrorMessage: string;
+  rejectExcuseRequestDate: moment.Moment;
+  rejectExcuseSuccessDate: moment.Moment;
 }
 
 const initialState: TKappaState = {
@@ -230,16 +238,24 @@ const initialState: TKappaState = {
   isCheckingIn: false,
   checkInError: false,
   checkInErrorMessage: '',
+  checkInRequestDate: null,
+  checkInSuccessDate: null,
   isCreatingExcuse: false,
   createExcuseError: false,
   createExcuseErrorMessage: '',
+  createExcuseRequestDate: null,
+  createExcuseSuccessDate: null,
 
   isApprovingExcuse: false,
   approveExcuseError: false,
   approveExcuseErrorMessage: '',
+  approveExcuseRequestDate: null,
+  approveExcuseSuccessDate: null,
   isRejectingExcuse: false,
   rejectExcuseError: false,
-  rejectExcuseErrorMessage: ''
+  rejectExcuseErrorMessage: '',
+  rejectExcuseRequestDate: null,
+  rejectExcuseSuccessDate: null
 };
 
 export default (state = initialState, action: any): TKappaState => {
@@ -503,12 +519,14 @@ export default (state = initialState, action: any): TKappaState => {
         ...state,
         isCheckingIn: true,
         checkInError: false,
-        checkInErrorMessage: ''
+        checkInErrorMessage: '',
+        checkInRequestDate: moment()
       };
     case CHECK_IN_SUCCESS:
       return {
         ...state,
         isCheckingIn: false,
+        checkInSuccessDate: moment(),
         ...recomputeKappaState({
           events: state.events,
           records: mergeRecords(state.records, {
@@ -532,12 +550,14 @@ export default (state = initialState, action: any): TKappaState => {
         ...state,
         isCreatingExcuse: true,
         createExcuseError: false,
-        createExcuseErrorMessage: ''
+        createExcuseErrorMessage: '',
+        createExcuseRequestDate: moment()
       };
     case CREATE_EXCUSE_SUCCESS:
       return {
         ...state,
         isCreatingExcuse: false,
+        createExcuseSuccessDate: moment(),
         pendingExcusesArray: state.pendingExcusesArray.concat(action.pending),
         ...recomputeKappaState({
           events: state.events,
@@ -561,12 +581,14 @@ export default (state = initialState, action: any): TKappaState => {
         ...state,
         isApprovingExcuse: true,
         approveExcuseError: false,
-        approveExcuseErrorMessage: ''
+        approveExcuseErrorMessage: '',
+        approveExcuseRequestDate: moment()
       };
     case APPROVE_EXCUSE_SUCCESS:
       return {
         ...state,
         isApprovingExcuse: false,
+        approveExcuseSuccessDate: moment(),
         pendingExcusesArray: state.pendingExcusesArray.filter(
           (excuse: TPendingExcuse) =>
             excuse.event_id !== action.excused[0].event_id || excuse.netid !== action.excused[0].netid
@@ -593,12 +615,14 @@ export default (state = initialState, action: any): TKappaState => {
         ...state,
         isRejectingExcuse: true,
         rejectExcuseError: false,
-        rejectExcuseErrorMessage: ''
+        rejectExcuseErrorMessage: '',
+        rejectExcuseRequestDate: moment()
       };
     case REJECT_EXCUSE_SUCCESS:
       return {
         ...state,
         isRejectingExcuse: false,
+        rejectExcuseSuccessDate: moment(),
         pendingExcusesArray: state.pendingExcusesArray.filter(
           (excuse: TPendingExcuse) =>
             excuse.event_id !== action.excused[0].event_id || excuse.netid !== action.excused[0].netid

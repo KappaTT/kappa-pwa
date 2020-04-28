@@ -50,9 +50,11 @@ const CheckInContent: React.FC<{
   const checkInEventId = useSelector((state: TRedux) => state.kappa.checkInEventId);
   const checkInExcuse = useSelector((state: TRedux) => state.kappa.checkInExcuse);
   const isCheckingIn = useSelector((state: TRedux) => state.kappa.isCheckingIn);
-  const checkinErrorMessage = useSelector((state: TRedux) => state.kappa.checkInErrorMessage);
+  const checkInRequestDate = useSelector((state: TRedux) => state.kappa.checkInRequestDate);
+  const checkInSuccessDate = useSelector((state: TRedux) => state.kappa.checkInSuccessDate);
   const isCreatingExcuse = useSelector((state: TRedux) => state.kappa.isCreatingExcuse);
-  const createExcuseErrorMessage = useSelector((state: TRedux) => state.kappa.createExcuseErrorMessage);
+  const createExcuseRequestDate = useSelector((state: TRedux) => state.kappa.createExcuseRequestDate);
+  const createExcuseSuccessDate = useSelector((state: TRedux) => state.kappa.createExcuseSuccessDate);
 
   const [choosingEvent, setChoosingEvent] = React.useState<boolean>(false);
   const [code, setCode] = React.useState<string>('');
@@ -61,8 +63,7 @@ const CheckInContent: React.FC<{
   const [hasPermission, setHasPermission] = React.useState<boolean>(false);
   const [scanned, setScanned] = React.useState<boolean>(false);
   const [scanning, setScanning] = React.useState<boolean>(false);
-  const [waitingForCheckIn, setWaitingForCheckIn] = React.useState<boolean>(false);
-  const [waitingForExcuse, setWaitingForExcuse] = React.useState<boolean>(false);
+  const [openDate, setOpenDate] = React.useState<moment.Moment>(moment());
 
   const dispatch = useDispatch();
   const dispatchSetCheckInEvent = React.useCallback(
@@ -221,42 +222,40 @@ const CheckInContent: React.FC<{
   }, [checkInEventId, code, eventOptions]);
 
   React.useEffect(() => {
-    if (isCheckingIn) {
-      setWaitingForCheckIn(true);
-    } else if (waitingForCheckIn) {
-      setWaitingForCheckIn(false);
+    if (
+      checkInRequestDate !== null &&
+      checkInSuccessDate !== null &&
+      checkInRequestDate.isAfter(openDate) &&
+      checkInSuccessDate.isAfter(checkInRequestDate)
+    ) {
+      dispatchShowToast({
+        toastTitle: 'Success',
+        toastMessage: 'You have been checked in to the event!',
+        toastTimer: 2000,
+        toastTitleColor: theme.COLORS.PRIMARY_GREEN
+      });
 
-      if (checkinErrorMessage === '') {
-        dispatchShowToast({
-          toastTitle: 'Success',
-          toastMessage: 'You have been checked in to the event!',
-          toastTimer: 2000,
-          toastTitleColor: theme.COLORS.PRIMARY_GREEN
-        });
-
-        setCode('');
-      }
+      setCode('');
     }
-  }, [isCheckingIn, waitingForCheckIn, checkinErrorMessage]);
+  }, [openDate, checkInRequestDate, checkInSuccessDate]);
 
   React.useEffect(() => {
-    if (isCreatingExcuse) {
-      setWaitingForExcuse(true);
-    } else if (waitingForExcuse) {
-      setWaitingForExcuse(false);
+    if (
+      createExcuseRequestDate !== null &&
+      createExcuseSuccessDate !== null &&
+      createExcuseRequestDate.isAfter(openDate) &&
+      createExcuseSuccessDate.isAfter(createExcuseRequestDate)
+    ) {
+      dispatchShowToast({
+        toastTitle: 'Success',
+        toastMessage: 'Your excuse has been submitted!',
+        toastTimer: 2000,
+        toastTitleColor: theme.COLORS.PRIMARY_GREEN
+      });
 
-      if (createExcuseErrorMessage === '') {
-        dispatchShowToast({
-          toastTitle: 'Success',
-          toastMessage: 'Your excuse has been submitted!',
-          toastTimer: 2000,
-          toastTitleColor: theme.COLORS.PRIMARY_GREEN
-        });
-
-        setReason('');
-      }
+      setReason('');
     }
-  }, [isCreatingExcuse, waitingForExcuse, createExcuseErrorMessage]);
+  }, [openDate, createExcuseRequestDate, createExcuseSuccessDate]);
 
   const renderChoosingEvent = () => {
     return (

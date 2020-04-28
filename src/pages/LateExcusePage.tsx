@@ -21,12 +21,13 @@ const LateExcusePage: React.FC<{
   const events = useSelector((state: TRedux) => state.kappa.events);
   const eventArray = useSelector((state: TRedux) => state.kappa.eventArray);
   const isCreatingExcuse = useSelector((state: TRedux) => state.kappa.isCreatingExcuse);
-  const createExcuseErrorMessage = useSelector((state: TRedux) => state.kappa.createExcuseErrorMessage);
+  const createExcuseRequestDate = useSelector((state: TRedux) => state.kappa.createExcuseRequestDate);
+  const createExcuseSuccessDate = useSelector((state: TRedux) => state.kappa.createExcuseSuccessDate);
 
   const [choosingEvent, setChoosingEvent] = React.useState<boolean>(false);
   const [selectedEvent, setSelectedEvent] = React.useState<TEvent>(null);
   const [reason, setReason] = React.useState<string>('');
-  const [waitingForExcuse, setWaitingForExcuse] = React.useState<boolean>(false);
+  const [openDate, setOpenDate] = React.useState<moment.Moment>(moment());
 
   const dispatch = useDispatch();
   const dispatchCreateExcuse = React.useCallback(
@@ -59,23 +60,22 @@ const LateExcusePage: React.FC<{
   );
 
   React.useEffect(() => {
-    if (isCreatingExcuse) {
-      setWaitingForExcuse(true);
-    } else if (waitingForExcuse) {
-      setWaitingForExcuse(false);
+    if (
+      createExcuseRequestDate !== null &&
+      createExcuseSuccessDate !== null &&
+      createExcuseRequestDate.isAfter(openDate) &&
+      createExcuseSuccessDate.isAfter(createExcuseRequestDate)
+    ) {
+      dispatchShowToast({
+        toastTitle: 'Success',
+        toastMessage: 'Your excuse has been submitted',
+        toastTimer: 2000,
+        toastTitleColor: theme.COLORS.PRIMARY_GREEN
+      });
 
-      if (createExcuseErrorMessage === '') {
-        dispatchShowToast({
-          toastTitle: 'Success',
-          toastMessage: 'Your excuse has been submitted',
-          toastTimer: 2000,
-          toastTitleColor: theme.COLORS.PRIMARY_GREEN
-        });
-
-        onRequestClose();
-      }
+      onRequestClose();
     }
-  }, [isCreatingExcuse, waitingForExcuse, createExcuseErrorMessage]);
+  }, [openDate, createExcuseRequestDate, createExcuseSuccessDate]);
 
   const renderChoosingEvent = () => {
     return (
