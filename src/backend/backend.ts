@@ -12,12 +12,11 @@ export const M_PATCH = 'PATCH';
 export const M_DELETE = 'DELETE';
 export type TMethod = typeof M_GET | typeof M_POST | typeof M_PUT | typeof M_PATCH | typeof M_DELETE;
 
-export const BASE_URL = 'https://80ala1muig.execute-api.us-east-1.amazonaws.com/dev/';
-export const BASE_URL_DEV = 'http://127.0.0.1:3000/dev/';
+export const BASE_URL_PRODUCTION = 'https://80ala1muig.execute-api.us-east-1.amazonaws.com/dev/';
+export const BASE_URL_DEVELOPMENT = 'http://127.0.0.1:3000/dev/';
 
-export const BASE_URL_IP = process.env.NODE_ENV === 'development' && Platform.OS === 'ios' ? BASE_URL_DEV : BASE_URL;
-
-log('Built base url', BASE_URL_IP);
+export const BASE_URL =
+  process.env.NODE_ENV === 'development' && Platform.OS === 'ios' ? BASE_URL_DEVELOPMENT : BASE_URL_PRODUCTION;
 
 export const ENDPOINTS: {
   [key: string]: (config?: any) => string;
@@ -92,16 +91,7 @@ export const makeRequest = async <T>(
     body?: any;
   }
 ) => {
-  return jsonRequest<T>(
-    BASE_URL_IP,
-    undefined,
-    endpoint,
-    true,
-    method,
-    params.headers,
-    params.queryParams,
-    params.body
-  );
+  return jsonRequest<T>(BASE_URL, undefined, endpoint, true, method, params.headers, params.queryParams, params.body);
 };
 
 export const makeAuthorizedRequest = async <T>(
@@ -119,7 +109,7 @@ export const makeAuthorizedRequest = async <T>(
   }
 
   return jsonAuthorizedRequest<T>(
-    BASE_URL_IP,
+    BASE_URL,
     undefined,
     endpoint,
     true,
