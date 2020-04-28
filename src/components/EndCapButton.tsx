@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { impactAsync, ImpactFeedbackStyle } from 'expo-haptics';
 
 import { theme } from '@constants';
 import Block from '@components/Block';
@@ -11,6 +12,7 @@ const EndCapButton: React.FC<{
   color?: string;
   loading?: boolean;
   disabled?: boolean;
+  haptic?: boolean;
   onPress?(): void;
 }> = ({
   label,
@@ -18,6 +20,7 @@ const EndCapButton: React.FC<{
   color = theme.COLORS.PRIMARY,
   loading = false,
   disabled = false,
+  haptic = true,
   onPress = () => {}
 }) => {
   const computedOpacity = disabled ? 0.5 : 1;
@@ -40,7 +43,17 @@ const EndCapButton: React.FC<{
       {loading ? (
         <ActivityIndicator style={styles.button} />
       ) : (
-        <TouchableOpacity style={styles.button} disabled={disabled} onPress={onPress}>
+        <TouchableOpacity
+          style={styles.button}
+          disabled={disabled}
+          onPress={() => {
+            if (haptic) {
+              impactAsync(ImpactFeedbackStyle.Medium);
+            }
+
+            onPress();
+          }}
+        >
           <Text
             style={[
               styles.text,

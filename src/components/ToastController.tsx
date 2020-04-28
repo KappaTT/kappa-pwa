@@ -14,7 +14,7 @@ import Ghost from '@components/Ghost';
 import Toast from '@components/Toast';
 import RoundButton from '@components/RoundButton';
 
-const ToastController: React.FC<{}> = ({}) => {
+const ToastController: React.FC = () => {
   const globalErrorMessage = useSelector((state: TRedux) => state.kappa.globalErrorMessage);
   const globalErrorCode = useSelector((state: TRedux) => state.kappa.globalErrorCode);
   const globalErrorDate = useSelector((state: TRedux) => state.kappa.globalErrorDate);

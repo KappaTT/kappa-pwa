@@ -5,6 +5,7 @@ import { useSafeArea } from 'react-native-safe-area-context';
 import moment from 'moment';
 import Constants from 'expo-constants';
 import { useIsFocused } from 'react-navigation-hooks';
+import { impactAsync, ImpactFeedbackStyle } from 'expo-haptics';
 
 import { TRedux } from '@reducers';
 import { _auth, _kappa } from '@reducers/actions';
@@ -64,6 +65,18 @@ const ProfileContent: React.FC<{
     loadData(true);
   }, [user, refreshing]);
 
+  const onPressEdit = () => {
+    impactAsync(ImpactFeedbackStyle.Medium);
+
+    dispatchEdit();
+  };
+
+  const onPressSignOut = () => {
+    impactAsync(ImpactFeedbackStyle.Medium);
+
+    dispatchSignOut();
+  };
+
   const mandatory = React.useMemo(() => {
     if (!user.privileged) return [];
 
@@ -111,10 +124,10 @@ const ProfileContent: React.FC<{
             </Block>
 
             <Block style={styles.headerButtons}>
-              <TouchableOpacity onPress={dispatchEdit}>
+              <TouchableOpacity onPress={onPressEdit}>
                 <Icon style={styles.headerButton} family="MaterialIcons" name="edit" size={24} />
               </TouchableOpacity>
-              <TouchableOpacity onPress={dispatchSignOut}>
+              <TouchableOpacity onPress={onPressSignOut}>
                 <Icon style={styles.headerButtonEnd} family="MaterialIcons" name="lock-outline" size={24} />
               </TouchableOpacity>
             </Block>

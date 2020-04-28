@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
+import { impactAsync, ImpactFeedbackStyle } from 'expo-haptics';
 
 import { theme } from '@constants';
 import Block from '@components/Block';
@@ -14,6 +15,7 @@ const RoundButton: React.FC<{
   disabled?: boolean;
   right?: boolean;
   alt?: boolean;
+  haptic?: boolean;
   onPress?(): void;
 }> = ({
   color = theme.COLORS.PRIMARY,
@@ -23,6 +25,7 @@ const RoundButton: React.FC<{
   disabled = false,
   right = false,
   alt = false,
+  haptic = true,
   onPress = () => {}
 }) => {
   const buttonStyle = StyleSheet.flatten([
@@ -45,7 +48,13 @@ const RoundButton: React.FC<{
       shadowless
       disabled={disabled}
       onPress={() => {
-        !loading && onPress();
+        if (!loading) {
+          if (haptic) {
+            impactAsync(ImpactFeedbackStyle.Medium);
+          }
+
+          onPress();
+        }
       }}
       loading={loading}
     >
@@ -58,7 +67,7 @@ const RoundButton: React.FC<{
             icon && styles.buttonTextWithIcon,
             alt
               ? {
-                  color: color
+                  color
                 }
               : {
                   color: theme.COLORS.WHITE

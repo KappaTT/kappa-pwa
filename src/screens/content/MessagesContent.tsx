@@ -132,7 +132,7 @@ const MessagesContent: React.FC<{
       >
         <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
           <Block style={styles.content}>
-            {pendingExcusesArray.sort(sortEventByDate).map(excuse => renderExcuse(excuse))}
+            {pendingExcusesArray.sort(sortEventByDate).map((excuse) => renderExcuse(excuse))}
           </Block>
         </ScrollView>
       </Block>

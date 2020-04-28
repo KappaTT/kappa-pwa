@@ -96,9 +96,9 @@ const CheckInContent: React.FC<{
 
   const eventOptions = React.useMemo(() => {
     return futureEventArray
-      .filter(event => !hasValidCheckIn(records, user.email, event.id, true))
+      .filter((event) => !hasValidCheckIn(records, user.email, event.id, true))
       .sort(sortEventByDate)
-      .map(event => ({
+      .map((event) => ({
         id: event.id,
         title: event.title,
         subtitle: moment(event.start).format('ddd LLL')
