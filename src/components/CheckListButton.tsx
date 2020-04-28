@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
+import { impactAsync, ImpactFeedbackStyle } from 'expo-haptics';
 
 import { theme } from '@constants';
 import Block from '@components/Block';
@@ -14,8 +15,9 @@ const CheckListButton: React.FC<{
   selected: boolean;
   valueColor?: string;
   disabled?: boolean;
+  haptic?: boolean;
   onPress?(): void;
-}> = ({ label, selected, valueColor = theme.COLORS.PRIMARY, disabled = false, onPress = () => {} }) => {
+}> = ({ label, selected, valueColor = theme.COLORS.PRIMARY, disabled = false, haptic = true, onPress = () => {} }) => {
   const computedOpacity = disabled ? 0.5 : 1;
 
   return (
@@ -28,7 +30,13 @@ const CheckListButton: React.FC<{
           }
         ]}
         disabled={disabled}
-        onPress={onPress}
+        onPress={() => {
+          if (haptic) {
+            impactAsync(ImpactFeedbackStyle.Medium);
+          }
+
+          onPress();
+        }}
       >
         <Block>
           <Text style={styles.label}>{label.title}</Text>
