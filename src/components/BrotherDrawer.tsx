@@ -40,7 +40,9 @@ const BrotherDrawer: React.FC = () => {
   const missedMandatory = useSelector((state: TRedux) => state.kappa.missedMandatory);
   const points = useSelector((state: TRedux) => state.kappa.points);
   const isGettingPoints = useSelector((state: TRedux) => state.kappa.isGettingPoints);
+  const getPointsError = useSelector((state: TRedux) => state.kappa.getPointsError);
   const isGettingAttendance = useSelector((state: TRedux) => state.kappa.isGettingAttendance);
+  const getAttendanceError = useSelector((state: TRedux) => state.kappa.getAttendanceError);
   const selectedUserEmail = useSelector((state: TRedux) => state.kappa.selectedUserEmail);
   const selectedUser = useSelector((state: TRedux) => state.kappa.selectedUser);
 
@@ -77,18 +79,24 @@ const BrotherDrawer: React.FC = () => {
   const loadData = React.useCallback(
     (force: boolean) => {
       if (user.privileged) {
-        if (!isGettingAttendance && (force || shouldLoad(loadHistory, `user-${selectedUserEmail}`)))
+        if (
+          !isGettingAttendance &&
+          (force || (!getAttendanceError && shouldLoad(loadHistory, `user-${selectedUserEmail}`)))
+        )
           dispatchGetAttendance(force);
-        if (!isGettingPoints && (force || shouldLoad(loadHistory, `points-${selectedUserEmail}`))) dispatchGetPoints();
+        if (!isGettingPoints && (force || (!getPointsError && shouldLoad(loadHistory, `points-${selectedUserEmail}`))))
+          dispatchGetPoints();
       }
     },
     [
       user.privileged,
       isGettingAttendance,
+      getAttendanceError,
       loadHistory,
       selectedUserEmail,
       dispatchGetAttendance,
       isGettingPoints,
+      getPointsError,
       dispatchGetPoints
     ]
   );

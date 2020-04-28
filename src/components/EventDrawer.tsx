@@ -50,6 +50,7 @@ const EventDrawer: React.FC = () => {
   const records = useSelector((state: TRedux) => state.kappa.records);
   const missedMandatory = useSelector((state: TRedux) => state.kappa.missedMandatory);
   const isGettingAttendance = useSelector((state: TRedux) => state.kappa.isGettingAttendance);
+  const getAttendanceError = useSelector((state: TRedux) => state.kappa.getAttendanceError);
   const selectedEventId = useSelector((state: TRedux) => state.kappa.selectedEventId);
   const selectedEvent = useSelector((state: TRedux) => state.kappa.selectedEvent);
   const isDeletingEvent = useSelector((state: TRedux) => state.kappa.isDeletingEvent);
@@ -99,13 +100,16 @@ const EventDrawer: React.FC = () => {
   const loadData = React.useCallback(
     (force: boolean) => {
       if (user.privileged) {
-        if (!isGettingAttendance && (force || shouldLoad(loadHistory, `event-${selectedEventId}`))) {
+        if (
+          !isGettingAttendance &&
+          (force || (!getAttendanceError && shouldLoad(loadHistory, `event-${selectedEventId}`)))
+        ) {
           dispatchGetAttendance(force);
         }
 
         setReadyToDelete(false);
       } else {
-        if (!isGettingAttendance && (force || shouldLoad(loadHistory, `user-${user.email}`))) {
+        if (!isGettingAttendance && (force || (!getAttendanceError && shouldLoad(loadHistory, `user-${user.email}`)))) {
           dispatchGetMyAttendance(force);
         }
       }
@@ -114,6 +118,7 @@ const EventDrawer: React.FC = () => {
       user.privileged,
       user.email,
       isGettingAttendance,
+      getAttendanceError,
       loadHistory,
       selectedEventId,
       dispatchGetAttendance,
@@ -354,101 +359,103 @@ const EventDrawer: React.FC = () => {
               refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
               scrollIndicatorInsets={{ right: 1 }}
             >
-              <Block style={styles.eventWrapper}>
-                <Block style={styles.eventHeader}>
-                  <Text style={styles.eventDate}>{moment(selectedEvent.start).format('ddd LL h:mm A')}</Text>
-                  <Text style={styles.eventTitle}>{selectedEvent.title}</Text>
+              <TouchableWithoutFeedback>
+                <Block style={styles.eventWrapper}>
+                  <Block style={styles.eventHeader}>
+                    <Text style={styles.eventDate}>{moment(selectedEvent.start).format('ddd LL h:mm A')}</Text>
+                    <Text style={styles.eventTitle}>{selectedEvent.title}</Text>
 
-                  {selectedEvent.mandatory === 1 && (
-                    <Block style={styles.propertyWrapper}>
-                      <Icon
-                        style={styles.propertyIcon}
-                        family="Feather"
-                        name="alert-circle"
-                        size={14}
-                        color={theme.COLORS.PRIMARY}
-                      />
+                    {selectedEvent.mandatory === 1 && (
+                      <Block style={styles.propertyWrapper}>
+                        <Icon
+                          style={styles.propertyIcon}
+                          family="Feather"
+                          name="alert-circle"
+                          size={14}
+                          color={theme.COLORS.PRIMARY}
+                        />
 
-                      <Text style={[styles.propertyText, { color: theme.COLORS.PRIMARY }]}>Mandatory</Text>
-                    </Block>
-                  )}
-                  {attended !== undefined && (
-                    <Block style={styles.propertyWrapper}>
-                      <Icon
-                        style={styles.propertyIcon}
-                        family="Feather"
-                        name="check"
-                        size={14}
-                        color={theme.COLORS.PRIMARY_GREEN}
-                      />
+                        <Text style={[styles.propertyText, { color: theme.COLORS.PRIMARY }]}>Mandatory</Text>
+                      </Block>
+                    )}
+                    {attended !== undefined && (
+                      <Block style={styles.propertyWrapper}>
+                        <Icon
+                          style={styles.propertyIcon}
+                          family="Feather"
+                          name="check"
+                          size={14}
+                          color={theme.COLORS.PRIMARY_GREEN}
+                        />
 
-                      <Text style={[styles.propertyText, { color: theme.COLORS.PRIMARY_GREEN }]}>Checked In</Text>
-                    </Block>
-                  )}
-                  {excused !== undefined && excused.approved === 1 && (
-                    <Block style={styles.propertyWrapper}>
-                      <Icon
-                        style={styles.propertyIcon}
-                        family="Feather"
-                        name="check"
-                        size={14}
-                        color={theme.COLORS.PRIMARY_GREEN}
-                      />
+                        <Text style={[styles.propertyText, { color: theme.COLORS.PRIMARY_GREEN }]}>Checked In</Text>
+                      </Block>
+                    )}
+                    {excused !== undefined && excused.approved === 1 && (
+                      <Block style={styles.propertyWrapper}>
+                        <Icon
+                          style={styles.propertyIcon}
+                          family="Feather"
+                          name="check"
+                          size={14}
+                          color={theme.COLORS.PRIMARY_GREEN}
+                        />
 
-                      <Text style={[styles.propertyText, { color: theme.COLORS.PRIMARY_GREEN }]}>Excused</Text>
-                    </Block>
-                  )}
-                  {excused !== undefined && excused.approved === 0 && (
-                    <Block style={styles.propertyWrapper}>
-                      <Icon
-                        style={styles.propertyIcon}
-                        family="Feather"
-                        name="clock"
-                        size={14}
-                        color={theme.COLORS.YELLOW_GRADIENT_END}
-                      />
+                        <Text style={[styles.propertyText, { color: theme.COLORS.PRIMARY_GREEN }]}>Excused</Text>
+                      </Block>
+                    )}
+                    {excused !== undefined && excused.approved === 0 && (
+                      <Block style={styles.propertyWrapper}>
+                        <Icon
+                          style={styles.propertyIcon}
+                          family="Feather"
+                          name="clock"
+                          size={14}
+                          color={theme.COLORS.YELLOW_GRADIENT_END}
+                        />
 
-                      <Text style={[styles.propertyText, { color: theme.COLORS.YELLOW_GRADIENT_END }]}>
-                        Excuse under review
-                      </Text>
-                    </Block>
-                  )}
-                </Block>
-
-                <Block style={styles.eventBody}>
-                  <Text style={styles.eventDescription}>{selectedEvent.description}</Text>
-
-                  <Block style={styles.splitPropertyRow}>
-                    <Block style={styles.splitProperty}>
-                      <Text style={styles.propertyHeader}>Location</Text>
-                      <Text style={styles.propertyValue}>{selectedEvent.location}</Text>
-                    </Block>
-                    {user.privileged === true && (
-                      <Block style={styles.splitProperty}>
-                        <Text style={styles.propertyHeader}>Check-In Code</Text>
-                        <Text style={styles.propertyValue}>{selectedEvent.event_code}</Text>
+                        <Text style={[styles.propertyText, { color: theme.COLORS.YELLOW_GRADIENT_END }]}>
+                          Excuse under review
+                        </Text>
                       </Block>
                     )}
                   </Block>
 
-                  <Block style={styles.splitPropertyRow}>
-                    <Block style={styles.splitProperty}>
-                      <Text style={styles.propertyHeader}>Duration</Text>
-                      <Text style={styles.propertyValue}>
-                        {selectedEvent.duration < 60
-                          ? `${selectedEvent.duration} minutes`
-                          : moment.duration(selectedEvent.duration, 'minutes').humanize()}
-                      </Text>
-                    </Block>
-                    <Block style={styles.splitProperty}>
-                      <Text style={styles.propertyHeader}>Points</Text>
-                      <Text style={styles.propertyValue}>{prettyPoints(selectedEvent.points)}</Text>
-                    </Block>
-                  </Block>
+                  <Block style={styles.eventBody}>
+                    <Text style={styles.eventDescription}>{selectedEvent.description}</Text>
 
-                  {user.privileged === true && renderAdmin()}
+                    <Block style={styles.splitPropertyRow}>
+                      <Block style={styles.splitProperty}>
+                        <Text style={styles.propertyHeader}>Location</Text>
+                        <Text style={styles.propertyValue}>{selectedEvent.location}</Text>
+                      </Block>
+                      {user.privileged === true && (
+                        <Block style={styles.splitProperty}>
+                          <Text style={styles.propertyHeader}>Check-In Code</Text>
+                          <Text style={styles.propertyValue}>{selectedEvent.event_code}</Text>
+                        </Block>
+                      )}
+                    </Block>
+
+                    <Block style={styles.splitPropertyRow}>
+                      <Block style={styles.splitProperty}>
+                        <Text style={styles.propertyHeader}>Duration</Text>
+                        <Text style={styles.propertyValue}>
+                          {selectedEvent.duration < 60
+                            ? `${selectedEvent.duration} minutes`
+                            : moment.duration(selectedEvent.duration, 'minutes').humanize()}
+                        </Text>
+                      </Block>
+                      <Block style={styles.splitProperty}>
+                        <Text style={styles.propertyHeader}>Points</Text>
+                        <Text style={styles.propertyValue}>{prettyPoints(selectedEvent.points)}</Text>
+                      </Block>
+                    </Block>
+
+                    {user.privileged === true && renderAdmin()}
+                  </Block>
                 </Block>
-              </Block>
+              </TouchableWithoutFeedback>
             </ScrollView>
 
             <Block

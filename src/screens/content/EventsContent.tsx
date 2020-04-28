@@ -39,9 +39,13 @@ const EventsContent: React.FC<{
   const loadHistory = useSelector((state: TRedux) => state.kappa.loadHistory);
   const records = useSelector((state: TRedux) => state.kappa.records);
   const isGettingEvents = useSelector((state: TRedux) => state.kappa.isGettingEvents);
+  const getEventsError = useSelector((state: TRedux) => state.kappa.getEventsError);
   const isGettingDirectory = useSelector((state: TRedux) => state.kappa.isGettingDirectory);
+  const getDirectoryError = useSelector((state: TRedux) => state.kappa.getDirectoryError);
   const isGettingAttendance = useSelector((state: TRedux) => state.kappa.isGettingAttendance);
+  const getAttendanceError = useSelector((state: TRedux) => state.kappa.getAttendanceError);
   const isGettingExcuses = useSelector((state: TRedux) => state.kappa.isGettingExcuses);
+  const getExcusesError = useSelector((state: TRedux) => state.kappa.getExcusesError);
   const events = useSelector((state: TRedux) => state.kappa.events);
   const eventSections = useSelector((state: TRedux) => state.kappa.eventSections);
   const upcomingSections = useSelector((state: TRedux) => state.kappa.upcomingSections);
@@ -75,22 +79,28 @@ const EventsContent: React.FC<{
 
   const loadData = React.useCallback(
     (force: boolean) => {
-      if (!isGettingEvents && (force || shouldLoad(loadHistory, 'events'))) dispatchGetEvents();
-      if (!isGettingDirectory && (force || shouldLoad(loadHistory, 'directory'))) dispatchGetDirectory();
-      if (!isGettingAttendance && (force || shouldLoad(loadHistory, `user-${user.email}`)))
+      if (!isGettingEvents && (force || (!getEventsError && shouldLoad(loadHistory, 'events')))) dispatchGetEvents();
+      if (!isGettingDirectory && (force || (!getDirectoryError && shouldLoad(loadHistory, 'directory'))))
+        dispatchGetDirectory();
+      if (!isGettingAttendance && (force || (!getAttendanceError && shouldLoad(loadHistory, `user-${user.email}`))))
         dispatchGetMyAttendance(force);
-      if (!isGettingExcuses && (force || shouldLoad(loadHistory, 'excuses'))) dispatchGetExcuses();
+      if (!isGettingExcuses && (force || (!getExcusesError && shouldLoad(loadHistory, 'excuses'))))
+        dispatchGetExcuses();
     },
     [
       isGettingEvents,
+      getEventsError,
       loadHistory,
       dispatchGetEvents,
       isGettingDirectory,
+      getDirectoryError,
       dispatchGetDirectory,
       isGettingAttendance,
+      getAttendanceError,
       user.email,
       dispatchGetMyAttendance,
       isGettingExcuses,
+      getExcusesError,
       dispatchGetExcuses
     ]
   );

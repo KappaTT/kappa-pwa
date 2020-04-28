@@ -25,6 +25,7 @@ const MessagesContent: React.FC<{
   const directory = useSelector((state: TRedux) => state.kappa.directory);
   const pendingExcusesArray = useSelector((state: TRedux) => state.kappa.pendingExcusesArray);
   const isGettingExcuses = useSelector((state: TRedux) => state.kappa.isGettingExcuses);
+  const getExcusesError = useSelector((state: TRedux) => state.kappa.getExcusesError);
 
   const [refreshing, setRefreshing] = React.useState<boolean>(false);
   const [selectedExcuse, setSelectedExcuse] = React.useState<TPendingExcuse>(null);
@@ -37,9 +38,10 @@ const MessagesContent: React.FC<{
 
   const loadData = React.useCallback(
     (force: boolean) => {
-      if (!isGettingExcuses && (force || shouldLoad(loadHistory, 'excuses'))) dispatchGetExcuses();
+      if (!isGettingExcuses && (force || (!getExcusesError && shouldLoad(loadHistory, 'excuses'))))
+        dispatchGetExcuses();
     },
-    [isGettingExcuses, loadHistory, dispatchGetExcuses]
+    [isGettingExcuses, getExcusesError, loadHistory, dispatchGetExcuses]
   );
 
   const onRefresh = React.useCallback(() => {

@@ -26,12 +26,15 @@ const ProfileContent: React.FC<{
   const loadHistory = useSelector((state: TRedux) => state.kappa.loadHistory);
   const events = useSelector((state: TRedux) => state.kappa.events);
   const isGettingEvents = useSelector((state: TRedux) => state.kappa.isGettingEvents);
+  const getEventsError = useSelector((state: TRedux) => state.kappa.getEventsError);
   const gmCount = useSelector((state: TRedux) => state.kappa.gmCount);
   const records = useSelector((state: TRedux) => state.kappa.records);
   const isGettingAttendance = useSelector((state: TRedux) => state.kappa.isGettingAttendance);
+  const getAttendanceError = useSelector((state: TRedux) => state.kappa.getAttendanceError);
   const missedMandatory = useSelector((state: TRedux) => state.kappa.missedMandatory);
   const points = useSelector((state: TRedux) => state.kappa.points);
   const isGettingPoints = useSelector((state: TRedux) => state.kappa.isGettingPoints);
+  const getPointsError = useSelector((state: TRedux) => state.kappa.getPointsError);
 
   const [refreshing, setRefreshing] = React.useState<boolean>(false);
 
@@ -52,19 +55,23 @@ const ProfileContent: React.FC<{
 
   const loadData = React.useCallback(
     (force: boolean) => {
-      if (!isGettingEvents && (force || shouldLoad(loadHistory, 'events'))) dispatchGetEvents();
-      if (!isGettingAttendance && (force || shouldLoad(loadHistory, `user-${user.email}`)))
+      if (!isGettingEvents && (force || (!getEventsError && shouldLoad(loadHistory, 'events')))) dispatchGetEvents();
+      if (!isGettingAttendance && (force || (!getAttendanceError && shouldLoad(loadHistory, `user-${user.email}`))))
         dispatchGetMyAttendance(force);
-      if (!isGettingPoints && (force || shouldLoad(loadHistory, `points-${user.email}`))) dispatchGetPoints();
+      if (!isGettingPoints && (force || (!getPointsError && shouldLoad(loadHistory, `points-${user.email}`))))
+        dispatchGetPoints();
     },
     [
       isGettingEvents,
+      getEventsError,
       loadHistory,
       dispatchGetEvents,
       isGettingAttendance,
+      getAttendanceError,
       user.email,
       dispatchGetMyAttendance,
       isGettingPoints,
+      getPointsError,
       dispatchGetPoints
     ]
   );
