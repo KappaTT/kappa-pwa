@@ -2,8 +2,9 @@ import React from 'react';
 import { StyleSheet, Keyboard, AppState, AppStateStatus } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import * as Updates from 'expo-updates';
-import { notificationAsync, NotificationFeedbackType } from 'expo-haptics';
+import { NotificationFeedbackType } from 'expo-haptics';
 
+import { hapticNotification } from '@services/hapticService';
 import { TRedux } from '@reducers';
 import { TToast } from '@reducers/ui';
 import { _auth, _kappa, _ui } from '@reducers/actions';
@@ -110,7 +111,7 @@ const ToastController: React.FC = () => {
 
   React.useEffect(() => {
     if (toastHapticType !== null) {
-      notificationAsync(toastHapticType);
+      hapticNotification(toastHapticType);
     }
   }, [toastHapticType]);
 

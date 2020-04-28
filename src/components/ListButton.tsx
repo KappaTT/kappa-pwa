@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
-import { impactAsync, ImpactFeedbackStyle } from 'expo-haptics';
 
+import { hapticImpact } from '@services/hapticService';
 import { theme } from '@constants';
 import Block from '@components/Block';
 import Icon from '@components/Icon';
@@ -31,7 +31,7 @@ const ListButton: React.FC<{
         disabled={disabled}
         onPress={() => {
           if (haptic) {
-            impactAsync(ImpactFeedbackStyle.Medium);
+            hapticImpact();
           }
 
           onPress();

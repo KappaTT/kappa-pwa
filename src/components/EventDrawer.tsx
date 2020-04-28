@@ -14,7 +14,6 @@ import BottomSheet from 'reanimated-bottom-sheet';
 import { useSafeArea } from 'react-native-safe-area-context';
 import moment from 'moment';
 import { ProgressCircle } from 'react-native-svg-charts';
-import { impactAsync, ImpactFeedbackStyle } from 'expo-haptics';
 
 import { TRedux } from '@reducers';
 import { _auth, _kappa } from '@reducers/actions';
@@ -30,6 +29,7 @@ import {
 } from '@services/kappaService';
 import { theme } from '@constants';
 import { TabBarHeight, isEmpty } from '@services/utils';
+import { hapticImpact } from '@services/hapticService';
 import { navigate } from '@navigation/NavigationService';
 import { TEvent } from '@backend/kappa';
 import { TUser } from '@backend/auth';
@@ -195,7 +195,7 @@ const EventDrawer: React.FC = () => {
   const onOpenStart = () => {
     setSnapPoint(0);
 
-    impactAsync(ImpactFeedbackStyle.Medium);
+    hapticImpact();
   };
 
   const onOpenEnd = () => {
@@ -205,7 +205,7 @@ const EventDrawer: React.FC = () => {
   const onCloseStart = () => {
     setSnapPoint(1);
 
-    impactAsync(ImpactFeedbackStyle.Medium);
+    hapticImpact();
   };
 
   const onCloseEnd = () => {

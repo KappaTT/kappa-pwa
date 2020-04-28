@@ -157,8 +157,8 @@ const App = () => {
             <SlideModal
               transparent={false}
               visible={onboardingVisible}
-              onRequestClose={() => {}}
-              disableAndroidBack={true}
+              onRequestClose={dispatchHideOnboarding}
+              disableAndroidBack={!isEditingUser}
             >
               <OnboardingPage />
             </SlideModal>

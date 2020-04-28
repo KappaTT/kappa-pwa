@@ -5,8 +5,8 @@ import { useSafeArea } from 'react-native-safe-area-context';
 import moment from 'moment';
 import Constants from 'expo-constants';
 import { useIsFocused } from 'react-navigation-hooks';
-import { impactAsync, ImpactFeedbackStyle } from 'expo-haptics';
 
+import { hapticImpact } from '@services/hapticService';
 import { TRedux } from '@reducers';
 import { _auth, _kappa } from '@reducers/actions';
 import { theme } from '@constants';
@@ -83,13 +83,13 @@ const ProfileContent: React.FC<{
   }, [loadData]);
 
   const onPressEdit = () => {
-    impactAsync(ImpactFeedbackStyle.Medium);
+    hapticImpact();
 
     dispatchEdit();
   };
 
   const onPressSignOut = () => {
-    impactAsync(ImpactFeedbackStyle.Medium);
+    hapticImpact();
 
     dispatchSignOut();
   };

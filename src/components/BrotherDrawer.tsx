@@ -14,13 +14,13 @@ import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
 import { useSafeArea } from 'react-native-safe-area-context';
 import moment from 'moment';
-import { impactAsync, ImpactFeedbackStyle } from 'expo-haptics';
 
 import { TRedux } from '@reducers';
 import { TToast } from '@reducers/ui';
 import { _kappa, _ui } from '@reducers/actions';
 import { log } from '@services/logService';
 import { prettyPhone, sortEventByDate, shouldLoad } from '@services/kappaService';
+import { hapticImpact } from '@services/hapticService';
 import { theme } from '@constants';
 import { TabBarHeight, isEmpty } from '@services/utils';
 import { TEvent } from '@backend/kappa';
@@ -150,7 +150,7 @@ const BrotherDrawer: React.FC = () => {
   const onOpenStart = () => {
     setSnapPoint(0);
 
-    impactAsync(ImpactFeedbackStyle.Medium);
+    hapticImpact();
   };
 
   const onOpenEnd = () => {
@@ -160,7 +160,7 @@ const BrotherDrawer: React.FC = () => {
   const onCloseStart = () => {
     setSnapPoint(1);
 
-    impactAsync(ImpactFeedbackStyle.Medium);
+    hapticImpact();
   };
 
   const onCloseEnd = () => {

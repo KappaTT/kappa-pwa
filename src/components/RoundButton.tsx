@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { impactAsync, ImpactFeedbackStyle } from 'expo-haptics';
 
+import { hapticImpact } from '@services/hapticService';
 import { theme } from '@constants';
 import Block from '@components/Block';
 import Text from '@components/Text';
@@ -50,7 +50,7 @@ const RoundButton: React.FC<{
       onPress={() => {
         if (!loading) {
           if (haptic) {
-            impactAsync(ImpactFeedbackStyle.Medium);
+            hapticImpact();
           }
 
           onPress();
