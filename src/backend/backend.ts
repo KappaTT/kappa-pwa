@@ -1,3 +1,5 @@
+import { Platform } from 'react-native';
+
 import { jsonRequest, jsonAuthorizedRequest } from '@services/Networking';
 import { jsonDemoRequest, DEMO_TOKEN } from '@services/demoService';
 import { log } from '@services/logService';
@@ -11,9 +13,9 @@ export const M_DELETE = 'DELETE';
 export type TMethod = typeof M_GET | typeof M_POST | typeof M_PUT | typeof M_PATCH | typeof M_DELETE;
 
 export const BASE_URL = 'https://80ala1muig.execute-api.us-east-1.amazonaws.com/dev/';
-export const BASE_URL_DEV = 'http://localhost:3000/dev/';
+export const BASE_URL_DEV = 'http://127.0.0.1:3000/dev/';
 
-export const BASE_URL_IP = process.env.NODE_ENV === 'development' ? 'http://127.0.0.1:3000/dev/' : BASE_URL;
+export const BASE_URL_IP = process.env.NODE_ENV === 'development' && Platform.OS === 'ios' ? BASE_URL_DEV : BASE_URL;
 
 log('Built base url', BASE_URL_IP);
 
