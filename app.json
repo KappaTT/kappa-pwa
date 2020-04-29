@@ -18,7 +18,7 @@
       "checkAutomatically": "ON_ERROR_RECOVERY"
     },
     "assetBundlePatterns": ["**/*"],
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "automatic",
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.jefftc.kappa",
