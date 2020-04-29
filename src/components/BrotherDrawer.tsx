@@ -22,7 +22,7 @@ import { log } from '@services/logService';
 import { prettyPhone, sortEventByDate, shouldLoad } from '@services/kappaService';
 import { hapticImpact } from '@services/hapticService';
 import { theme } from '@constants';
-import { TabBarHeight, isEmpty } from '@services/utils';
+import { TabBarHeight, isEmpty, HORIZONTAL_PADDING } from '@services/utils';
 import { TEvent } from '@backend/kappa';
 import Block from '@components/Block';
 import Ghost from '@components/Ghost';
@@ -416,7 +416,7 @@ const styles = StyleSheet.create({
   },
   headerControls: {
     flex: 1,
-    marginHorizontal: 16,
+    marginHorizontal: HORIZONTAL_PADDING,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -426,7 +426,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.COLORS.WHITE
   },
   userWrapper: {
-    paddingHorizontal: 24
+    paddingHorizontal: HORIZONTAL_PADDING
   },
   userHeader: {},
   userDate: {

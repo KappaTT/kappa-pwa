@@ -6,7 +6,7 @@ import { useSafeArea } from 'react-native-safe-area-context';
 import { TRedux } from '@reducers';
 import { _auth } from '@reducers/actions';
 import { theme } from '@constants';
-import { HeaderHeight } from '@services/utils';
+import { HeaderHeight, HORIZONTAL_PADDING } from '@services/utils';
 import { prettyPhone } from '@services/kappaService';
 import {
   Header,
@@ -282,21 +282,6 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0
   },
-  header: {
-    paddingHorizontal: 20,
-    flexDirection: 'row',
-    justifyContent: 'space-between'
-  },
-  headerText: {},
-  headerButtons: {},
-  closeButtonContianer: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
   title: {
     fontFamily: 'OpenSans',
     fontSize: 24,
@@ -325,33 +310,11 @@ const styles = StyleSheet.create({
   },
   content: {
     minHeight: '100%',
-    paddingHorizontal: 20
+    paddingHorizontal: HORIZONTAL_PADDING
   },
   inputArea: {},
-  buttonWrapper: {
-    position: 'absolute',
-    left: 20,
-    right: 20,
-    display: 'flex',
-    justifyContent: 'flex-end',
-    alignItems: 'center'
-  },
-  editingHeader: {
-    height: 42,
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  editingTitle: {
-    fontFamily: 'OpenSans',
-    fontSize: 15
-  },
   input: {
     backgroundColor: theme.COLORS.SUPER_LIGHT_BLUE_GRAY
-  },
-  activityIndicator: {
-    height: 56
   }
 });
 

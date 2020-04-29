@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
 
 import { hapticImpact } from '@services/hapticService';
+import { HORIZONTAL_PADDING } from '@services/utils';
 import { theme } from '@constants';
 import Block from '@components/Block';
 import Text from '@components/Text';
@@ -31,11 +32,11 @@ const EndCapButton: React.FC<{
         styles.wrapper,
         direction === 'right'
           ? {
-              right: 16
+              right: HORIZONTAL_PADDING
             }
           : direction === 'left'
           ? {
-              left: 16
+              left: HORIZONTAL_PADDING
             }
           : {}
       ]}

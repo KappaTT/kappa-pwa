@@ -13,7 +13,7 @@ import { theme } from '@constants';
 import { Block, Text, Icon, GeneralMeetingChart } from '@components';
 import { NavigationTypes } from '@types';
 import { prettyPhone, sortEventByDate, shouldLoad } from '@services/kappaService';
-import { isEmpty } from '@services/utils';
+import { isEmpty, HORIZONTAL_PADDING } from '@services/utils';
 import { log } from '@services/logService';
 import { TEvent } from '@backend/kappa';
 
@@ -254,7 +254,7 @@ const ProfileContent: React.FC<{
 const styles = StyleSheet.create({
   content: {
     minHeight: '100%',
-    paddingHorizontal: 20
+    paddingHorizontal: HORIZONTAL_PADDING
   },
   header: {
     display: 'flex',

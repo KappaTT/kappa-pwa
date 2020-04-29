@@ -7,6 +7,7 @@ import { TRedux } from '@reducers';
 import { _kappa, _ui } from '@reducers/actions';
 import { TPendingExcuse } from '@backend/kappa';
 import { theme } from '@constants';
+import { HORIZONTAL_PADDING } from '@services/utils';
 import { Block, Text, Switch, Icon, TextButton } from '@components';
 
 const ExcusePage: React.FC<{
@@ -157,7 +158,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 1
   },
   excusePageContent: {
-    paddingHorizontal: 20
+    paddingHorizontal: HORIZONTAL_PADDING
   },
   topBar: {
     height: 48,
@@ -167,7 +168,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   backButton: {
-    paddingHorizontal: 20,
+    paddingHorizontal: HORIZONTAL_PADDING,
     fontFamily: 'OpenSans-SemiBold',
     fontSize: 16,
     color: theme.COLORS.PRIMARY
@@ -178,7 +179,7 @@ const styles = StyleSheet.create({
     fontSize: 12
   },
   dangerZone: {
-    padding: 20,
+    padding: HORIZONTAL_PADDING,
     borderRadius: 20,
     backgroundColor: theme.COLORS.INPUT_ERROR_LIGHT
   },
@@ -208,7 +209,7 @@ const styles = StyleSheet.create({
   },
   enableDeleteContainer: {
     marginTop: 8,
-    marginLeft: 16,
+    marginLeft: HORIZONTAL_PADDING,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center'

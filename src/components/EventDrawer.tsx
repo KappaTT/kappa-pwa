@@ -28,7 +28,7 @@ import {
   shouldLoad
 } from '@services/kappaService';
 import { theme } from '@constants';
-import { TabBarHeight, isEmpty } from '@services/utils';
+import { TabBarHeight, isEmpty, HORIZONTAL_PADDING } from '@services/utils';
 import { hapticImpact } from '@services/hapticService';
 import { navigate } from '@navigation/NavigationService';
 import { TEvent } from '@backend/kappa';
@@ -557,7 +557,7 @@ const styles = StyleSheet.create({
   },
   headerControls: {
     flex: 1,
-    marginHorizontal: 16,
+    marginHorizontal: HORIZONTAL_PADDING,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -567,7 +567,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.COLORS.WHITE
   },
   eventWrapper: {
-    paddingHorizontal: 24
+    paddingHorizontal: HORIZONTAL_PADDING
   },
   eventHeader: {},
   eventDate: {
@@ -680,7 +680,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 64,
     backgroundColor: theme.COLORS.WHITE,
-    paddingHorizontal: 24,
+    paddingHorizontal: HORIZONTAL_PADDING,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
@@ -716,7 +716,7 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase'
   },
   dangerZone: {
-    padding: 20,
+    padding: HORIZONTAL_PADDING,
     borderRadius: 20,
     backgroundColor: theme.COLORS.INPUT_ERROR_LIGHT
   },
@@ -727,7 +727,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   deleteZone: {
-    marginTop: 16,
+    marginTop: HORIZONTAL_PADDING,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -751,7 +751,7 @@ const styles = StyleSheet.create({
   },
   enableDeleteContainer: {
     marginTop: 8,
-    marginLeft: 16,
+    marginLeft: HORIZONTAL_PADDING,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center'

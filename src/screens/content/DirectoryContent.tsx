@@ -217,13 +217,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   separator: {
-    marginHorizontal: 24,
+    marginHorizontal: 16,
     marginBottom: 16,
     borderBottomColor: theme.COLORS.LIGHT_BORDER,
     borderBottomWidth: 1
   },
   userContainer: {
-    marginHorizontal: 24,
+    marginHorizontal: 16,
     height: 48,
     borderBottomColor: theme.COLORS.LIGHT_BORDER,
     borderBottomWidth: 1

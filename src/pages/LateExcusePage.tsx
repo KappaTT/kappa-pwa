@@ -9,7 +9,7 @@ import { TRedux } from '@reducers';
 import { _kappa, _ui } from '@reducers/actions';
 import { theme } from '@constants';
 import { Block, Header, EndCapButton, ListButton, SlideModal, Text, RadioList, FormattedInput } from '@components';
-import { HeaderHeight } from '@services/utils';
+import { HeaderHeight, HORIZONTAL_PADDING } from '@services/utils';
 import { TEvent } from '@backend/kappa';
 import { getEventById, hasValidCheckIn, sortEventByDate } from '@services/kappaService';
 import { TToast } from '@reducers/ui';
@@ -221,7 +221,7 @@ const styles = StyleSheet.create({
   content: {
     minHeight: '100%',
     paddingBottom: 64,
-    paddingHorizontal: 20
+    paddingHorizontal: HORIZONTAL_PADDING
   },
   eventIdContainer: {
     marginTop: 16

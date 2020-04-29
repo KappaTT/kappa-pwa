@@ -31,7 +31,7 @@ import {
   FadeModal,
   TextButton
 } from '@components';
-import { HeaderHeight } from '@services/utils';
+import { HeaderHeight, HORIZONTAL_PADDING } from '@services/utils';
 import { extractPoints } from '@services/kappaService';
 
 const { width, height } = Dimensions.get('screen');
@@ -555,7 +555,7 @@ const styles = StyleSheet.create({
   },
   content: {
     flexGrow: 1,
-    paddingHorizontal: 24
+    paddingHorizontal: HORIZONTAL_PADDING
   },
   scrollContent: {
     flexGrow: 1
@@ -600,7 +600,7 @@ const styles = StyleSheet.create({
     width: '60%'
   },
   separator: {
-    width: 16
+    width: HORIZONTAL_PADDING
   },
   switchContainer: {
     marginTop: 8
@@ -652,7 +652,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   pickerDoneButton: {
-    paddingHorizontal: 20,
+    paddingHorizontal: HORIZONTAL_PADDING,
     fontFamily: 'OpenSans-SemiBold',
     fontSize: 16,
     color: theme.COLORS.PRIMARY

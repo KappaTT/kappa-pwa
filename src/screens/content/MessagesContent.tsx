@@ -11,7 +11,7 @@ import { theme } from '@constants';
 import { Block, Text, Header, FadeModal, SlideModal, EndCapButton } from '@components';
 import { NavigationTypes } from '@types';
 import { sortEventByDate, shouldLoad } from '@services/kappaService';
-import { HeaderHeight } from '@services/utils';
+import { HeaderHeight, HORIZONTAL_PADDING } from '@services/utils';
 import { TPendingExcuse } from '@backend/kappa';
 import { ExcusePage, LateExcusePage } from '@pages';
 
@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
   },
   content: {
     minHeight: '100%',
-    paddingHorizontal: 20
+    paddingHorizontal: HORIZONTAL_PADDING
   },
   excuseContainer: {
     paddingBottom: 16

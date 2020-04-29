@@ -274,18 +274,18 @@ const styles = StyleSheet.create({
   sectionHeaderText: {
     marginTop: 4,
     marginBottom: 8,
-    marginLeft: 24,
+    marginLeft: 16,
     fontFamily: 'OpenSans-Bold',
     fontSize: 17
   },
   separator: {
-    marginHorizontal: 24,
+    marginHorizontal: 16,
     marginBottom: 16,
     borderBottomColor: theme.COLORS.LIGHT_BORDER,
     borderBottomWidth: 1
   },
   eventContainer: {
-    paddingHorizontal: 24,
+    paddingHorizontal: 16,
     paddingTop: 8,
     paddingBottom: 16
   },

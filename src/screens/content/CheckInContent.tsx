@@ -33,7 +33,7 @@ import {
   FormattedInput,
   KeyboardDismissView
 } from '@components';
-import { HeaderHeight, TabBarHeight } from '@services/utils';
+import { HeaderHeight, TabBarHeight, HORIZONTAL_PADDING } from '@services/utils';
 import { getEventById, hasValidCheckIn, shouldLoad, sortEventByDate } from '@services/kappaService';
 
 const CheckInContent: React.FC<{
@@ -507,7 +507,7 @@ const styles = StyleSheet.create({
   content: {
     minHeight: '100%',
     paddingBottom: 64,
-    paddingHorizontal: 24
+    paddingHorizontal: HORIZONTAL_PADDING
   },
   eventIdContainer: {
     marginTop: 16
@@ -534,7 +534,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 64,
     backgroundColor: theme.COLORS.WHITE,
-    paddingHorizontal: 24,
+    paddingHorizontal: HORIZONTAL_PADDING,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
@@ -583,7 +583,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   scanButton: {
-    marginLeft: 24,
+    marginLeft: HORIZONTAL_PADDING,
     width: 128
   },
   dividerWrapper: {
