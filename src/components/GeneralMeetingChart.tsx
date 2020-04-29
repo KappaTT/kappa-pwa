@@ -9,22 +9,16 @@ import { getAttendedEvents, getExcusedEvents, getTypeCounts } from '@services/ka
 import Text from './Text';
 
 const GeneralMeetingChart: React.FC<{
-  user: TUser;
+  email: string;
   records: TRecords;
   events: TEventDict;
   gmCount: number;
-}> = ({ user, records, events, gmCount }) => {
-  const attended = React.useMemo(() => {
-    return getAttendedEvents(records, user.email);
-  }, [user, records.attended]);
+}> = ({ email, records, events, gmCount }) => {
+  const attended = getAttendedEvents(records, email);
 
-  const excused = React.useMemo(() => {
-    return getExcusedEvents(records, user.email);
-  }, [user, records.excused]);
+  const excused = getExcusedEvents(records, email);
 
-  const gmCounts = React.useMemo(() => {
-    return getTypeCounts(events, attended, excused, 'GM');
-  }, [events, attended, JSON.stringify(excused)]);
+  const gmCounts = getTypeCounts(events, attended, excused, 'GM');
 
   const gmStats = React.useMemo(() => {
     const fraction = gmCount === 0 ? 0 : gmCounts.sum / gmCount;

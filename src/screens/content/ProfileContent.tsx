@@ -230,7 +230,7 @@ const ProfileContent: React.FC<{
           </Block>
 
           <Block style={styles.adminContainer}>
-            <GeneralMeetingChart user={user} records={records} events={events} gmCount={gmCount} />
+            <GeneralMeetingChart email={user.email} records={records} events={events} gmCount={gmCount} />
 
             <Block style={styles.eventList}>
               {mandatory.length > 0 && (

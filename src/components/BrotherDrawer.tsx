@@ -120,14 +120,14 @@ const BrotherDrawer: React.FC = () => {
   }, [snapTo]);
 
   const onPressEmail = React.useCallback(() => {
-    Clipboard.setString(selectedUser ? selectedUser.email : '');
+    Clipboard.setString(selectedUserEmail);
 
     dispatchShowToast({
       toastTitle: 'Copied',
       toastMessage: 'The email was saved to your clipboard',
       toastTimer: 1500
     });
-  }, [dispatchShowToast, selectedUser]);
+  }, [dispatchShowToast, selectedUserEmail]);
 
   const onPressPhone = React.useCallback(() => {
     Clipboard.setString(selectedUser ? selectedUser.phone : '');
@@ -213,7 +213,7 @@ const BrotherDrawer: React.FC = () => {
                 <ActivityIndicator style={styles.propertyLoader} />
               ) : (
                 <Text style={styles.propertyValue}>
-                  {points.hasOwnProperty(user.email) ? points[user.email].PROF : '0'}
+                  {points.hasOwnProperty(selectedUserEmail) ? points[selectedUserEmail].PROF : '0'}
                 </Text>
               )}
             </Block>
@@ -223,7 +223,7 @@ const BrotherDrawer: React.FC = () => {
                 <ActivityIndicator style={styles.propertyLoader} />
               ) : (
                 <Text style={styles.propertyValue}>
-                  {points.hasOwnProperty(user.email) ? points[user.email].PHIL : '0'}
+                  {points.hasOwnProperty(selectedUserEmail) ? points[selectedUserEmail].PHIL : '0'}
                 </Text>
               )}
             </Block>
@@ -233,7 +233,7 @@ const BrotherDrawer: React.FC = () => {
                 <ActivityIndicator style={styles.propertyLoader} />
               ) : (
                 <Text style={styles.propertyValue}>
-                  {points.hasOwnProperty(user.email) ? points[user.email].BRO : '0'}
+                  {points.hasOwnProperty(selectedUserEmail) ? points[selectedUserEmail].BRO : '0'}
                 </Text>
               )}
             </Block>
@@ -243,7 +243,7 @@ const BrotherDrawer: React.FC = () => {
                 <ActivityIndicator style={styles.propertyLoader} />
               ) : (
                 <Text style={styles.propertyValue}>
-                  {points.hasOwnProperty(user.email) ? points[user.email].RUSH : '0'}
+                  {points.hasOwnProperty(selectedUserEmail) ? points[selectedUserEmail].RUSH : '0'}
                 </Text>
               )}
             </Block>
@@ -253,14 +253,14 @@ const BrotherDrawer: React.FC = () => {
                 <ActivityIndicator style={styles.propertyLoader} />
               ) : (
                 <Text style={styles.propertyValue}>
-                  {points.hasOwnProperty(user.email) ? points[user.email].ANY : '0'}
+                  {points.hasOwnProperty(selectedUserEmail) ? points[selectedUserEmail].ANY : '0'}
                 </Text>
               )}
             </Block>
           </Block>
         </Block>
 
-        <GeneralMeetingChart user={user} records={records} events={events} gmCount={gmCount} />
+        <GeneralMeetingChart email={selectedUserEmail} records={records} events={events} gmCount={gmCount} />
 
         <Block style={styles.eventList}>
           {mandatory.length > 0 && (
