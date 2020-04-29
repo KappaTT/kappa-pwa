@@ -159,8 +159,6 @@ const BrotherDrawer: React.FC = () => {
 
   const onCloseStart = () => {
     setSnapPoint(1);
-
-    hapticImpact();
   };
 
   const onCloseEnd = () => {

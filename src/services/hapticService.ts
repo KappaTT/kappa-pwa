@@ -10,7 +10,7 @@ export const hapticNotification = (type: TNotificationHaptic = NotificationFeedb
   }
 };
 
-export const hapticImpact = (type: TImpactHaptic = ImpactFeedbackStyle.Medium) => {
+export const hapticImpact = (type: TImpactHaptic = ImpactFeedbackStyle.Light) => {
   if (Platform.OS === 'ios') {
     impactAsync(type);
   }

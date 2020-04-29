@@ -204,8 +204,6 @@ const EventDrawer: React.FC = () => {
 
   const onCloseStart = () => {
     setSnapPoint(1);
-
-    hapticImpact();
   };
 
   const onCloseEnd = () => {
