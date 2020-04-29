@@ -115,11 +115,17 @@ const DirectoryContent: React.FC<{
         <TouchableOpacity onPress={() => dispatchSelectUser(item.email)}>
           <Block style={styles.userContainer}>
             <Block style={styles.userHeader}>
-              <Block style={styles.userNameContainer}>
-                <Text style={styles.userName}>
-                  {item.familyName}, {item.givenName}
-                </Text>
-                {/* {user.privileged === true && !isEmpty(missedMandatory[item.email]) && (
+              <Block style={styles.selectIcon}>
+                <Text style={styles.userRole}>{item.role}</Text>
+                <Icon family="MaterialIcons" name="keyboard-arrow-right" size={36} color={theme.COLORS.PRIMARY} />
+              </Block>
+            </Block>
+
+            <Block style={styles.userNameContainer}>
+              <Text style={styles.userName}>
+                {item.familyName}, {item.givenName}
+              </Text>
+              {/* {user.privileged === true && !isEmpty(missedMandatory[item.email]) && (
                   <Icon
                     style={styles.mandatoryIcon}
                     family="Feather"
@@ -128,12 +134,6 @@ const DirectoryContent: React.FC<{
                     color={theme.COLORS.PRIMARY}
                   />
                 )} */}
-              </Block>
-
-              <Block style={styles.selectIcon}>
-                <Text style={styles.userRole}>{item.role}</Text>
-                <Icon family="MaterialIcons" name="keyboard-arrow-right" size={36} color={theme.COLORS.PRIMARY} />
-              </Block>
             </Block>
           </Block>
         </TouchableOpacity>
@@ -232,7 +232,7 @@ const styles = StyleSheet.create({
     flex: 1,
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
     alignItems: 'center'
   },
   userName: {
@@ -241,9 +241,15 @@ const styles = StyleSheet.create({
     color: theme.COLORS.BLACK
   },
   userNameContainer: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
+    paddingRight: 4,
+    backgroundColor: theme.COLORS.WHITE
   },
   mandatoryIcon: {
     marginLeft: 4
