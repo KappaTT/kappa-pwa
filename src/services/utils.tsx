@@ -21,11 +21,12 @@ export const sleep = (time: number) => {
 };
 
 export const isEmpty = (obj: any) => {
-  if (obj === undefined || obj === null || obj.constructor !== Object) return true;
+  if (obj === undefined || obj === null) return true;
+  if (obj.constructor !== Object) return false;
 
   for (const key in obj) {
-    return true;
+    return false;
   }
 
-  return false;
+  return true;
 };
