@@ -89,7 +89,7 @@ const EditEventPage: React.FC<{
       excusable: excusable ? 1 : 0,
       title,
       description,
-      start: startDate.toDate().toString(),
+      start: startDate.toISOString(),
       duration: parseInt(duration || '0', 10),
       location,
 
