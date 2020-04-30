@@ -171,9 +171,7 @@ const EventDrawer: React.FC = () => {
     return getExcuse(records, user.email, selectedEventId);
   }, [records, user, selectedEventId]);
 
-  const recordCounts = React.useMemo(() => {
-    return getEventRecordCounts(records, selectedEventId);
-  }, [records, selectedEventId]);
+  const recordCounts = getEventRecordCounts(records, selectedEventId);
 
   const recordStats = React.useMemo(() => {
     const fraction = directorySize === 0 ? 0 : recordCounts.sum / directorySize;
@@ -261,8 +259,14 @@ const EventDrawer: React.FC = () => {
               endAngle={Math.PI * 0.8}
             />
             <Block style={styles.circleChartLabels}>
-              <Text style={styles.circleChartValue}>{recordStats.percent}</Text>
-              <Text style={styles.circleChartTitle}>Headcount</Text>
+              {isGettingAttendance ? (
+                <ActivityIndicator />
+              ) : (
+                <React.Fragment>
+                  <Text style={styles.circleChartValue}>{recordStats.percent}</Text>
+                  <Text style={styles.circleChartTitle}>Headcount</Text>
+                </React.Fragment>
+              )}
             </Block>
           </Block>
 
