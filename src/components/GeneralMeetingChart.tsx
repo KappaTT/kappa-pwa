@@ -34,7 +34,7 @@ const GeneralMeetingChart: React.FC<{
       <View style={styles.circleChartContainer}>
         <ProgressCircle
           style={styles.circleChart}
-          progress={gmStats.raw}
+          progress={isGettingAttendance ? 0 : gmStats.raw}
           progressColor={theme.COLORS.PRIMARY}
           startAngle={-Math.PI * 0.8}
           endAngle={Math.PI * 0.8}

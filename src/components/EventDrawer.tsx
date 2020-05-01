@@ -373,7 +373,7 @@ const EventDrawer: React.FC = () => {
         style={[
           styles.contentWrapper,
           {
-            height: maxSheetHeight - 48
+            height: (user.privileged ? maxSheetHeight : intermediateSheetHeight) - 48
           }
         ]}
       >

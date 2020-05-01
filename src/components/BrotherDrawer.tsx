@@ -19,7 +19,7 @@ import { TRedux } from '@reducers';
 import { TToast } from '@reducers/ui';
 import { _kappa, _ui } from '@reducers/actions';
 import { log } from '@services/logService';
-import { prettyPhone, sortEventByDate, shouldLoad } from '@services/kappaService';
+import { prettyPhone, sortEventByDate, shouldLoad, sortEventsByDateReverse } from '@services/kappaService';
 import { hapticImpact } from '@services/hapticService';
 import { theme } from '@constants';
 import { TabBarHeight, isEmpty, HORIZONTAL_PADDING } from '@services/utils';
@@ -145,7 +145,7 @@ const BrotherDrawer: React.FC = () => {
 
     if (isEmpty(missedMandatory[selectedUserEmail])) return [];
 
-    return Object.values(missedMandatory[selectedUserEmail]).sort(sortEventByDate);
+    return Object.values(missedMandatory[selectedUserEmail]).sort(sortEventsByDateReverse);
   }, [user, missedMandatory, selectedUserEmail]);
 
   const onOpenStart = () => {
@@ -268,7 +268,7 @@ const BrotherDrawer: React.FC = () => {
         />
 
         <Block style={styles.eventList}>
-          {mandatory.length > 0 && (
+          {!isGettingAttendance && mandatory.length > 0 && (
             <React.Fragment>
               <Text style={styles.mandatoryLabel}>Missed Mandatory</Text>
               {mandatory.map((event: TEvent) => renderEvent(event))}
@@ -297,7 +297,7 @@ const BrotherDrawer: React.FC = () => {
         style={[
           styles.contentWrapper,
           {
-            height: maxSheetHeight - 48
+            height: (user.privileged ? maxSheetHeight : intermediateSheetHeight) - 48
           }
         ]}
       >
