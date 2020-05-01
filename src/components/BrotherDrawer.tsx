@@ -260,7 +260,13 @@ const BrotherDrawer: React.FC = () => {
           </Block>
         </Block>
 
-        <GeneralMeetingChart email={selectedUserEmail} records={records} events={events} gmCount={gmCount} />
+        <GeneralMeetingChart
+          isGettingAttendance={isGettingAttendance}
+          email={selectedUserEmail}
+          records={records}
+          events={events}
+          gmCount={gmCount}
+        />
 
         <Block style={styles.eventList}>
           {mandatory.length > 0 && (

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, ActivityIndicator } from 'react-native';
 import { ProgressCircle } from 'react-native-svg-charts';
 
 import { theme } from '@constants';
@@ -9,11 +9,12 @@ import { getAttendedEvents, getExcusedEvents, getTypeCounts } from '@services/ka
 import Text from './Text';
 
 const GeneralMeetingChart: React.FC<{
+  isGettingAttendance: boolean;
   email: string;
   records: TRecords;
   events: TEventDict;
   gmCount: number;
-}> = ({ email, records, events, gmCount }) => {
+}> = ({ isGettingAttendance, email, records, events, gmCount }) => {
   const attended = getAttendedEvents(records, email);
 
   const excused = getExcusedEvents(records, email);
@@ -40,8 +41,14 @@ const GeneralMeetingChart: React.FC<{
           endAngle={Math.PI * 0.8}
         />
         <View style={styles.circleChartLabels}>
-          <Text style={styles.circleChartValue}>{gmStats.percent}</Text>
-          <Text style={styles.circleChartTitle}>GM</Text>
+          {isGettingAttendance ? (
+            <ActivityIndicator />
+          ) : (
+            <React.Fragment>
+              <Text style={styles.circleChartValue}>{gmStats.percent}</Text>
+              <Text style={styles.circleChartTitle}>GM</Text>
+            </React.Fragment>
+          )}
         </View>
       </View>
 
