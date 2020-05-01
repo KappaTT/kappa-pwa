@@ -87,7 +87,8 @@ const EventDrawer: React.FC = () => {
   const sheetRef = React.useRef(undefined);
   const scrollRef = React.useRef(undefined);
 
-  const sheetHeight = user.privileged ? (height - insets.top) * 0.75 : 400 + insets.bottom;
+  const maxSheetHeight = (height - insets.top) * 0.75 + insets.bottom;
+  const intermediateSheetHeight = 400 + insets.bottom;
 
   const [snapPoint, setSnapPoint] = React.useState<number>(1);
   const [callbackNode, setCallbackNode] = React.useState(new Animated.Value(1));
@@ -141,7 +142,7 @@ const EventDrawer: React.FC = () => {
   );
 
   const onPressClose = React.useCallback(() => {
-    snapTo(1);
+    snapTo(2);
   }, [snapTo]);
 
   const onPressExcuse = React.useCallback(() => {
@@ -191,9 +192,7 @@ const EventDrawer: React.FC = () => {
   }, [user, missedMandatory, directory, selectedEventId]);
 
   const onOpenStart = () => {
-    setSnapPoint(0);
-
-    hapticImpact();
+    setSnapPoint(1);
   };
 
   const onOpenEnd = () => {
@@ -205,7 +204,7 @@ const EventDrawer: React.FC = () => {
   };
 
   const onCloseEnd = () => {
-    setSnapPoint(1);
+    setSnapPoint(2);
 
     dispatchUnselectEvent();
   };
@@ -218,13 +217,13 @@ const EventDrawer: React.FC = () => {
 
   React.useEffect(() => {
     if (selectedEventId === '') {
-      snapTo(1);
+      snapTo(2);
     } else {
-      snapTo(0);
+      snapTo(user.privileged ? 0 : 1);
 
       loadData(false);
     }
-  }, [loadData, selectedEventId, snapTo]);
+  }, [user, loadData, selectedEventId, snapTo]);
 
   const renderHeader = () => {
     return (
@@ -296,7 +295,13 @@ const EventDrawer: React.FC = () => {
               </Text>
             </Block>
 
-            <TouchableOpacity onPress={dispatchEditEvent}>
+            <TouchableOpacity
+              onPress={() => {
+                hapticImpact();
+
+                dispatchEditEvent();
+              }}
+            >
               <Icon style={styles.zoneIcon} family="Feather" name="edit" size={32} color={theme.COLORS.PRIMARY} />
             </TouchableOpacity>
           </Block>
@@ -315,14 +320,27 @@ const EventDrawer: React.FC = () => {
               <TouchableOpacity
                 style={!readyToDelete && styles.disabledButton}
                 disabled={!readyToDelete}
-                onPress={dispatchDeleteEvent}
+                onPress={() => {
+                  hapticImpact();
+
+                  dispatchDeleteEvent();
+                }}
               >
                 <Icon style={styles.zoneIcon} family="Feather" name="trash-2" size={32} color={theme.COLORS.PRIMARY} />
               </TouchableOpacity>
             )}
           </Block>
           <Block style={styles.enableDeleteContainer}>
-            <Switch value={readyToDelete} onValueChange={(newValue: boolean) => setReadyToDelete(newValue)} />
+            <Switch
+              value={readyToDelete}
+              onValueChange={(newValue: boolean) => {
+                if (newValue) {
+                  hapticImpact();
+                }
+
+                setReadyToDelete(newValue);
+              }}
+            />
             <Text style={styles.readyToDelete}>I am ready to delete this event</Text>
           </Block>
         </Block>
@@ -355,7 +373,7 @@ const EventDrawer: React.FC = () => {
         style={[
           styles.contentWrapper,
           {
-            height: sheetHeight - 48
+            height: maxSheetHeight - 48
           }
         ]}
       >
@@ -517,8 +535,8 @@ const EventDrawer: React.FC = () => {
 
       <BottomSheet
         ref={(ref) => (sheetRef.current = ref)}
-        snapPoints={[sheetHeight, 0]}
-        initialSnap={1}
+        snapPoints={[maxSheetHeight, intermediateSheetHeight, 0]}
+        initialSnap={2}
         callbackNode={callbackNode}
         overdragResistanceFactor={1.5}
         enabledBottomClamp={true}

@@ -16,6 +16,7 @@ import { HeaderHeight, isEmpty, HORIZONTAL_PADDING } from '@services/utils';
 import { log } from '@services/logService';
 import { TEvent, TPoint } from '@backend/kappa';
 import { hasValidCheckIn, getEventById, shouldLoad } from '@services/kappaService';
+import { hapticImpact } from '@services/hapticService';
 
 const EventSkeleton: React.FC = () => {
   return (
@@ -153,7 +154,13 @@ const EventsContent: React.FC<{
   const renderItem = ({ item }: { item: TEvent }) => {
     return (
       <React.Fragment>
-        <TouchableOpacity onPress={() => dispatchSelectEvent(item.id)}>
+        <TouchableOpacity
+          onPress={() => {
+            hapticImpact();
+
+            dispatchSelectEvent(item.id);
+          }}
+        >
           <Block style={styles.eventContainer}>
             <Block style={styles.eventHeader}>
               <Text style={styles.eventTitle}>{item.title}</Text>

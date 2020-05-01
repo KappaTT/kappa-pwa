@@ -66,7 +66,8 @@ const BrotherDrawer: React.FC = () => {
   const sheetRef = React.useRef(undefined);
   const scrollRef = React.useRef(undefined);
 
-  const sheetHeight = user.privileged ? (height - insets.top) * 0.75 : 256 + insets.bottom;
+  const maxSheetHeight = (height - insets.top) * 0.75 + insets.bottom;
+  const intermediateSheetHeight = 256 + insets.bottom;
 
   const [snapPoint, setSnapPoint] = React.useState<number>(1);
   const [callbackNode, setCallbackNode] = React.useState(new Animated.Value(1));
@@ -116,7 +117,7 @@ const BrotherDrawer: React.FC = () => {
   );
 
   const onPressClose = React.useCallback(() => {
-    snapTo(1);
+    snapTo(2);
   }, [snapTo]);
 
   const onPressEmail = React.useCallback(() => {
@@ -148,9 +149,7 @@ const BrotherDrawer: React.FC = () => {
   }, [user, missedMandatory, selectedUserEmail]);
 
   const onOpenStart = () => {
-    setSnapPoint(0);
-
-    hapticImpact();
+    setSnapPoint(1);
   };
 
   const onOpenEnd = () => {
@@ -162,7 +161,7 @@ const BrotherDrawer: React.FC = () => {
   };
 
   const onCloseEnd = () => {
-    setSnapPoint(1);
+    setSnapPoint(2);
 
     dispatchUnselectUser();
   };
@@ -175,13 +174,13 @@ const BrotherDrawer: React.FC = () => {
 
   React.useEffect(() => {
     if (selectedUserEmail === '') {
-      snapTo(1);
+      snapTo(2);
     } else {
-      snapTo(0);
+      snapTo(user.privileged ? 0 : 1);
 
       loadData(false);
     }
-  }, [loadData, selectedUserEmail, snapTo]);
+  }, [user, loadData, selectedUserEmail, snapTo]);
 
   const renderHeader = () => {
     return (
@@ -298,7 +297,7 @@ const BrotherDrawer: React.FC = () => {
         style={[
           styles.contentWrapper,
           {
-            height: sheetHeight - 48
+            height: maxSheetHeight - 48
           }
         ]}
       >
@@ -378,8 +377,8 @@ const BrotherDrawer: React.FC = () => {
 
       <BottomSheet
         ref={(ref) => (sheetRef.current = ref)}
-        snapPoints={[sheetHeight, 0]}
-        initialSnap={1}
+        snapPoints={[maxSheetHeight, intermediateSheetHeight, 0]}
+        initialSnap={2}
         callbackNode={callbackNode}
         overdragResistanceFactor={1.5}
         enabledBottomClamp={true}
