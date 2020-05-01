@@ -10,7 +10,7 @@ import { TRedux } from '@reducers';
 import { _kappa } from '@reducers/actions';
 import { Block, Header, Text, Icon } from '@components';
 import { NavigationTypes } from '@types';
-import { HeaderHeight, isEmpty } from '@services/utils';
+import { HeaderHeight, isEmpty, HORIZONTAL_PADDING } from '@services/utils';
 import { log } from '@services/logService';
 import { TUser } from '@backend/auth';
 import { sortUserByName, shouldLoad } from '@services/kappaService';
@@ -208,7 +208,7 @@ const styles = StyleSheet.create({
   skeletonWrapper: {
     marginHorizontal: 8,
     marginVertical: 4,
-    paddingHorizontal: 16,
+    paddingHorizontal: HORIZONTAL_PADDING,
     paddingVertical: 8,
     backgroundColor: theme.COLORS.WHITE
   },
@@ -217,13 +217,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   separator: {
-    marginHorizontal: 16,
+    marginHorizontal: HORIZONTAL_PADDING,
     marginBottom: 16,
     borderBottomColor: theme.COLORS.LIGHT_BORDER,
     borderBottomWidth: 1
   },
   userContainer: {
-    marginHorizontal: 16,
+    marginHorizontal: HORIZONTAL_PADDING,
     height: 48,
     borderBottomColor: theme.COLORS.LIGHT_BORDER,
     borderBottomWidth: 1

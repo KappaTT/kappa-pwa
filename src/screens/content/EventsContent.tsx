@@ -12,7 +12,7 @@ import { _kappa } from '@reducers/actions';
 import { Block, Header, EndCapButton, Text, Icon, SlideModal } from '@components';
 import { EditEventPage } from '@pages';
 import { NavigationTypes } from '@types';
-import { HeaderHeight, isEmpty } from '@services/utils';
+import { HeaderHeight, isEmpty, HORIZONTAL_PADDING } from '@services/utils';
 import { log } from '@services/logService';
 import { TEvent, TPoint } from '@backend/kappa';
 import { hasValidCheckIn, getEventById, shouldLoad } from '@services/kappaService';
@@ -260,7 +260,7 @@ const styles = StyleSheet.create({
   skeletonWrapper: {
     marginHorizontal: 8,
     marginVertical: 4,
-    paddingHorizontal: 16,
+    paddingHorizontal: HORIZONTAL_PADDING,
     paddingVertical: 16,
     backgroundColor: theme.COLORS.WHITE
   },
@@ -274,18 +274,18 @@ const styles = StyleSheet.create({
   sectionHeaderText: {
     marginTop: 4,
     marginBottom: 8,
-    marginLeft: 16,
+    marginLeft: HORIZONTAL_PADDING,
     fontFamily: 'OpenSans-Bold',
     fontSize: 17
   },
   separator: {
-    marginHorizontal: 16,
+    marginHorizontal: HORIZONTAL_PADDING,
     marginBottom: 16,
     borderBottomColor: theme.COLORS.LIGHT_BORDER,
     borderBottomWidth: 1
   },
   eventContainer: {
-    paddingHorizontal: 16,
+    paddingHorizontal: HORIZONTAL_PADDING,
     paddingTop: 8,
     paddingBottom: 16
   },

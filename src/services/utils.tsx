@@ -9,7 +9,7 @@ export const HeaderHeight = 42;
 export const iPhoneX = () => Platform.OS === 'ios' && (height === 812 || width === 812);
 export const TabBarHeight = 48;
 export const NavigationHeight = iPhoneX() ? 16 : 0;
-export const HORIZONTAL_PADDING = 16;
+export const HORIZONTAL_PADDING = 20;
 
 export const deviceId = Constants.installationId;
 
