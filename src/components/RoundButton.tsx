@@ -57,6 +57,7 @@ const RoundButton: React.FC<{
         }
       }}
       loading={loading}
+      loadingColor={alt ? color : theme.COLORS.WHITE}
     >
       <Block style={styles.buttonContent}>
         {!right && icon}

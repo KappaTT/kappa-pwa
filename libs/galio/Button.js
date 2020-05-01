@@ -23,6 +23,7 @@ class Button extends React.Component {
       capitalize,
       textStyle,
       styles,
+      loadingColor,
       theme
     } = this.props;
 
@@ -45,7 +46,7 @@ class Button extends React.Component {
       content = <Text style={textStyles}>{content}</Text>;
     }
 
-    if (loading) content = <ActivityIndicator size={loadingSize} color={theme.COLORS.WHITE} />;
+    if (loading) content = <ActivityIndicator size={loadingSize} color={loadingColor} />;
 
     return content;
   };
@@ -106,6 +107,7 @@ class Button extends React.Component {
 Button.defaultProps = {
   color: 'primary',
   size: 'large',
+  loadingColor: 'white',
   disabled: false,
   radius: 0,
   uppercase: false,
@@ -133,6 +135,7 @@ Button.propTypes = {
   ]),
   size: PropTypes.oneOfType([PropTypes.oneOf(['large', 'small']), PropTypes.number]),
   iconColor: PropTypes.string,
+  loadingColor: PropTypes.string,
   disabled: PropTypes.bool,
   radius: PropTypes.number,
   uppercase: PropTypes.bool,
@@ -151,7 +154,7 @@ Button.propTypes = {
   theme: PropTypes.any
 };
 
-const styles = theme =>
+const styles = (theme) =>
   StyleSheet.create({
     defaultButton: {
       borderRadius: 3,
