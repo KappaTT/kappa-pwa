@@ -153,9 +153,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    backgroundColor: theme.COLORS.WHITE,
-    borderTopColor: theme.COLORS.LIGHT_BORDER,
-    borderTopWidth: 1
+    backgroundColor: theme.COLORS.WHITE
   },
   excusePageContent: {
     paddingHorizontal: HORIZONTAL_PADDING
