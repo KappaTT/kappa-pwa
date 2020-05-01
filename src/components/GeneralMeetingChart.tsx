@@ -3,8 +3,7 @@ import { StyleSheet, View, ActivityIndicator } from 'react-native';
 import { ProgressCircle } from 'react-native-svg-charts';
 
 import { theme } from '@constants';
-import { TUser } from '@backend/auth';
-import { TRecords, TEventDict, TPendingExcuse } from '@backend/kappa';
+import { TRecords, TEventDict } from '@backend/kappa';
 import { getAttendedEvents, getExcusedEvents, getTypeCounts } from '@services/kappaService';
 import Text from './Text';
 

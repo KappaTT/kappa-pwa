@@ -12,9 +12,8 @@ const RadioList: React.FC<{
     subtitle?: string;
   }[];
   selected: string;
-  renderItem?(id: string): React.ReactElement;
   onChange?(chosen: string): void;
-}> = ({ options, selected, renderItem, onChange = (chosen: string) => {} }) => {
+}> = ({ options, selected, onChange = (chosen: string) => {} }) => {
   return (
     <Block style={styles.wrapper}>
       {options.map((option) => (

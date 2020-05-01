@@ -10,9 +10,9 @@ import { _auth, _kappa } from '@reducers/actions';
 import { theme } from '@constants';
 import { Block, Text, Header, FadeModal, SlideModal, EndCapButton } from '@components';
 import { NavigationTypes } from '@types';
-import { sortEventByDate, shouldLoad } from '@services/kappaService';
+import { shouldLoad, sortEventsByDateReverse, getExcusedEvents, getEventById } from '@services/kappaService';
 import { HeaderHeight, HORIZONTAL_PADDING } from '@services/utils';
-import { TPendingExcuse } from '@backend/kappa';
+import { TPendingExcuse, TExcuse, TEvent } from '@backend/kappa';
 import { ExcusePage, LateExcusePage } from '@pages';
 
 const MessagesContent: React.FC<{
@@ -23,6 +23,8 @@ const MessagesContent: React.FC<{
   const user = useSelector((state: TRedux) => state.auth.user);
   const loadHistory = useSelector((state: TRedux) => state.kappa.loadHistory);
   const directory = useSelector((state: TRedux) => state.kappa.directory);
+  const events = useSelector((state: TRedux) => state.kappa.events);
+  const records = useSelector((state: TRedux) => state.kappa.records);
   const pendingExcusesArray = useSelector((state: TRedux) => state.kappa.pendingExcusesArray);
   const isGettingExcuses = useSelector((state: TRedux) => state.kappa.isGettingExcuses);
   const getExcusesError = useSelector((state: TRedux) => state.kappa.getExcusesError);
@@ -35,6 +37,22 @@ const MessagesContent: React.FC<{
   const dispatchGetExcuses = React.useCallback(() => dispatch(_kappa.getExcuses(user)), [dispatch, user]);
 
   const insets = useSafeArea();
+
+  const excused = getExcusedEvents(records, user.email);
+  const excusedArray = React.useMemo(() => {
+    return Object.values(excused)
+      .map((excuse: TExcuse) => {
+        const event = getEventById(events, excuse.event_id);
+
+        return {
+          ...excuse,
+          title: event.title,
+          start: event.start,
+          prettyStart: moment(event.start).format('ddd LLL')
+        };
+      })
+      .sort(sortEventsByDateReverse);
+  }, [excused, events]);
 
   const loadData = React.useCallback(
     (force: boolean) => {
@@ -134,7 +152,34 @@ const MessagesContent: React.FC<{
       >
         <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
           <Block style={styles.content}>
-            {pendingExcusesArray.sort(sortEventByDate).map((excuse) => renderExcuse(excuse))}
+            <Text style={styles.propertyHeader}>Pending</Text>
+            {pendingExcusesArray.length === 0 ? (
+              <Text style={styles.description}>You have no pending excuses</Text>
+            ) : (
+              pendingExcusesArray.sort(sortEventsByDateReverse).map((excuse) => renderExcuse(excuse))
+            )}
+
+            <Text
+              style={[
+                styles.propertyHeader,
+                {
+                  marginTop: 16,
+                  marginBottom: 0
+                }
+              ]}
+            >
+              Approved
+            </Text>
+            {excusedArray.length === 0 ? (
+              <Text style={styles.description}>You have no approved excuses</Text>
+            ) : (
+              excusedArray.map((excuse) => (
+                <Block key={`${excuse.event_id}:${excuse.netid}`} style={styles.approvedWrapper}>
+                  <Text style={styles.approvedTitle}>{excuse.title}</Text>
+                  <Text style={styles.approvedStart}>{excuse.prettyStart}</Text>
+                </Block>
+              ))
+            )}
           </Block>
         </ScrollView>
       </Block>
@@ -200,6 +245,36 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     borderBottomColor: theme.COLORS.LIGHT_BORDER,
     borderBottomWidth: 1
+  },
+  propertyHeader: {
+    marginBottom: 8,
+    fontFamily: 'OpenSans-SemiBold',
+    fontSize: 13,
+    textTransform: 'uppercase',
+    color: theme.COLORS.GRAY
+  },
+  description: {
+    fontFamily: 'OpenSans',
+    fontSize: 12
+  },
+  approvedWrapper: {
+    width: '100%',
+    height: 48,
+    borderBottomColor: theme.COLORS.LIGHT_GRAY,
+    borderBottomWidth: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center'
+  },
+  approvedTitle: {
+    fontFamily: 'OpenSans',
+    fontSize: 15,
+    color: theme.COLORS.BLACK
+  },
+  approvedStart: {
+    fontFamily: 'OpenSans',
+    fontSize: 12,
+    color: theme.COLORS.DARK_GRAY
   }
 });
 
