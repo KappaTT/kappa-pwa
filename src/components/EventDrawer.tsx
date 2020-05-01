@@ -87,7 +87,7 @@ const EventDrawer: React.FC = () => {
   const sheetRef = React.useRef(undefined);
   const scrollRef = React.useRef(undefined);
 
-  const sheetHeight = Math.max((height - insets.top) * 0.67 + insets.bottom, 600);
+  const sheetHeight = user.privileged ? (height - insets.top) * 0.75 : 400 + insets.bottom;
 
   const [snapPoint, setSnapPoint] = React.useState<number>(1);
   const [callbackNode, setCallbackNode] = React.useState(new Animated.Value(1));
