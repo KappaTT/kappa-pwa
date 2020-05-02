@@ -34,7 +34,7 @@
     },
     "android": {
       "package": "com.jefftc.kappa",
-      "versionCode": 2,
+      "versionCode": 1,
       "config": {
         "googleSignIn": {
           "apiKey": "AIzaSyDmoH0YM6EXxjparli9yfzxWnglMIpJfZo",
