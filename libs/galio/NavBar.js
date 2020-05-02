@@ -8,7 +8,7 @@ import Text from './Text';
 import Icon from './Icon';
 import GalioTheme, { withGalio } from './theme';
 
-const { height } = Dimensions.get('screen');
+const { height } = Dimensions.get('window');
 
 class NavBar extends React.Component {
   renderTitle = () => {
@@ -106,7 +106,7 @@ NavBar.propTypes = {
   theme: PropTypes.any
 };
 
-const styles = theme =>
+const styles = (theme) =>
   StyleSheet.create({
     navBar: {
       width: 'auto',

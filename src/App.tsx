@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Image, StatusBar } from 'react-native';
+import { StyleSheet, Image, StatusBar, Dimensions, Platform } from 'react-native';
 import { AppLoading } from 'expo';
 import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
@@ -40,6 +40,8 @@ const App = () => {
   const loadedPrefs = useSelector((state: TRedux) => state.prefs.loaded);
   const onboardingVisible = useSelector((state: TRedux) => state.auth.onboardingVisible);
   const isEditingUser = useSelector((state: TRedux) => state.auth.isEditingUser);
+  const selectedEventId = useSelector((state: TRedux) => state.kappa.selectedEventId);
+  const selectedUserEmail = useSelector((state: TRedux) => state.kappa.selectedUserEmail);
 
   const [isLoadingComplete, setIsLoadingComplete] = React.useState<boolean>(false);
   const [isNavigatorReady, setIsNavigatorReady] = React.useState<boolean>(false);
@@ -124,6 +126,24 @@ const App = () => {
     }
   }, [dispatchLoadPrefs, loadedPrefs]);
 
+  const renderOverlay = () => {
+    if (Platform.OS === 'ios' || selectedEventId !== '' || selectedUserEmail !== '') {
+      return (
+        <React.Fragment>
+          <Ghost style={styles.overlay}>
+            <EventDrawer />
+          </Ghost>
+
+          <Ghost style={styles.overlay}>
+            <BrotherDrawer />
+          </Ghost>
+        </React.Fragment>
+      );
+    } else {
+      return <React.Fragment />;
+    }
+  };
+
   if (!isLoadingComplete) {
     return (
       <AppLoading startAsync={_loadResourcesAsync} onError={_handleLoadingError} onFinish={_handleFinishLoading} />
@@ -142,13 +162,7 @@ const App = () => {
               }}
             />
 
-            <Ghost style={styles.overlay}>
-              <EventDrawer />
-            </Ghost>
-
-            <Ghost style={styles.overlay}>
-              <BrotherDrawer />
-            </Ghost>
+            {renderOverlay()}
 
             <FadeModal transparent={false} visible={loginVisible} disableAndroidBack={true} onRequestClose={() => {}}>
               <LoginPage />

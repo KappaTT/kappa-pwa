@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Dimensions, FlatList, Animated } from 'react-native';
 import { Block, theme } from '../galio';
 
-const { width } = Dimensions.get('screen');
+const { width } = Dimensions.get('window');
 import argonTheme from '../../src/constants/Theme';
 
 const defaultMenu = [
@@ -48,11 +48,11 @@ export default class Tabs extends React.Component {
     });
   };
 
-  selectMenu = id => {
+  selectMenu = (id) => {
     this.setState({ active: id });
 
     this.menuRef.current.scrollToIndex({
-      index: this.props.data.findIndex(item => item.id === id),
+      index: this.props.data.findIndex((item) => item.id === id),
       viewPosition: 0.5
     });
 
@@ -60,7 +60,7 @@ export default class Tabs extends React.Component {
     this.props.onChange && this.props.onChange(id);
   };
 
-  renderItem = item => {
+  renderItem = (item) => {
     const isActive = this.state.active === item.id;
 
     const textColor = this.animatedValue.interpolate({
@@ -94,7 +94,7 @@ export default class Tabs extends React.Component {
         horizontal={true}
         ref={this.menuRef}
         extraData={this.state}
-        keyExtractor={item => item.id}
+        keyExtractor={(item) => item.id}
         showsHorizontalScrollIndicator={false}
         onScrollToIndexFailed={this.onScrollToIndexFailed}
         renderItem={({ item }) => this.renderItem(item)}

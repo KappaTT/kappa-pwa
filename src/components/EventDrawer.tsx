@@ -40,7 +40,7 @@ import RoundButton from '@components/RoundButton';
 import Icon from '@components/Icon';
 import Switch from '@components/Switch';
 
-const { width, height } = Dimensions.get('screen');
+const { width, height } = Dimensions.get('window');
 
 const EventDrawer: React.FC = () => {
   const user = useSelector((state: TRedux) => state.auth.user);

@@ -34,7 +34,7 @@ import {
 import { HeaderHeight, HORIZONTAL_PADDING } from '@services/utils';
 import { extractPoints } from '@services/kappaService';
 
-const { width, height } = Dimensions.get('screen');
+const { width, height } = Dimensions.get('window');
 
 const EditEventPage: React.FC<{
   initialEvent: TEvent;

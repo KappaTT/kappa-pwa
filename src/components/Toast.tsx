@@ -6,7 +6,7 @@ import Block from '@components/Block';
 import Icon from '@components/Icon';
 import Text from '@components/Text';
 
-const { width, height } = Dimensions.get('screen');
+const { width, height } = Dimensions.get('window');
 
 const Toast: React.FC<{
   title?: string;

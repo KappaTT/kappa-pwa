@@ -2,7 +2,7 @@ import { Platform, StatusBar, Dimensions } from 'react-native';
 import Constants from 'expo-constants';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 
-const { width, height } = Dimensions.get('screen');
+const { width, height } = Dimensions.get('window');
 
 export const StatusHeight = StatusBar.currentHeight || getStatusBarHeight();
 export const HeaderHeight = 42;

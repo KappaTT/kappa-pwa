@@ -23,7 +23,7 @@ import {
   Icon
 } from '@components';
 
-const { width, height } = Dimensions.get('screen');
+const { width, height } = Dimensions.get('window');
 
 const phoneFormatter = (text: string) => {
   return text.trim().replace(/\D/g, '');

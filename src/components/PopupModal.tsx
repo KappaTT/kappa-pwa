@@ -8,7 +8,7 @@ import Icon from '@components/Icon';
 import CloseButton from '@components/CloseButton';
 import KeyboardDismissView from '@components/KeyboardDismissView';
 
-const { width, height } = Dimensions.get('screen');
+const { width, height } = Dimensions.get('window');
 
 const PopupModal: React.FC<{
   title: string;

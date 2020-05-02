@@ -1,6 +1,6 @@
 import { Dimensions } from 'react-native';
 
-const { height, width } = Dimensions.get('screen');
+const { height, width } = Dimensions.get('window');
 
 const SIZES = {
   BASE: 16,

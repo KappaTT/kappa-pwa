@@ -29,7 +29,7 @@ import Ghost from '@components/Ghost';
 import Text from '@components/Text';
 import GeneralMeetingChart from '@components/GeneralMeetingChart';
 
-const { width, height } = Dimensions.get('screen');
+const { width, height } = Dimensions.get('window');
 
 const BrotherDrawer: React.FC = () => {
   const user = useSelector((state: TRedux) => state.auth.user);
