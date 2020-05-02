@@ -8,7 +8,7 @@ export const login = async () => {
       iosClientId: '223233671218-ceilcecpn0t04ec5or3tk680pfoomf4v.apps.googleusercontent.com',
       androidClientId: '223233671218-joevmt53u95c0o70mttjrodcbd5nj23j.apps.googleusercontent.com',
       iosStandaloneAppClientId: '223233671218-v5meaa316pd8mgar3mgcvsmg3td7qnl6.apps.googleusercontent.com',
-      androidStandaloneAppClientId: ''
+      androidStandaloneAppClientId: '223233671218-6pfiu8hqonhkhugvf2jb4burtij54tru.apps.googleusercontent.com'
     });
 
     if (loginResult.type === 'success') {
