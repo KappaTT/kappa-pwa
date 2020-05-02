@@ -11,7 +11,8 @@
     "uploadios": "expo upload:ios",
     "fixsim": "xattr -cr kappa-theta-tau.app",
     "installsim": "xcrun simctl install booted kappa-theta-tau.app",
-    "launchsim": "xcrun simctl launch booted kappa-theta-tau.app"
+    "launchsim": "xcrun simctl launch booted kappa-theta-tau.app",
+    "installandroid": "adb install-multiple ./*"
   },
   "dependencies": {
     "@expo/vector-icons": "^10.0.0",
