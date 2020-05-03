@@ -11,7 +11,7 @@ import { theme } from '@constants';
 import { Block, Text, Header, FadeModal, SlideModal, EndCapButton } from '@components';
 import { NavigationTypes } from '@types';
 import { shouldLoad, sortEventsByDateReverse, getExcusedEvents, getEventById } from '@services/kappaService';
-import { HeaderHeight, HORIZONTAL_PADDING } from '@services/utils';
+import { HeaderHeight, HORIZONTAL_PADDING, isEmpty } from '@services/utils';
 import { TPendingExcuse, TExcuse, TEvent } from '@backend/kappa';
 import { ExcusePage, LateExcusePage } from '@pages';
 
@@ -39,20 +39,22 @@ const MessagesContent: React.FC<{
   const insets = useSafeArea();
 
   const excused = getExcusedEvents(records, user.email);
-  const excusedArray = React.useMemo(() => {
-    return Object.values(excused)
-      .map((excuse: TExcuse) => {
-        const event = getEventById(events, excuse.event_id);
+  const excusedArray = Object.values(excused)
+    .filter((excuse) => excuse.approved === 1)
+    .map((excuse: TExcuse) => {
+      const event = getEventById(events, excuse.event_id);
 
-        return {
-          ...excuse,
-          title: event.title,
-          start: event.start,
-          prettyStart: moment(event.start).format('ddd LLL')
-        };
-      })
-      .sort(sortEventsByDateReverse);
-  }, [excused, events]);
+      if (isEmpty(event)) return null;
+
+      return {
+        ...excuse,
+        title: event.title,
+        start: event.start,
+        prettyStart: moment(event.start).format('ddd LLL')
+      };
+    })
+    .filter((excuse) => excuse !== null)
+    .sort(sortEventsByDateReverse);
 
   const loadData = React.useCallback(
     (force: boolean) => {
