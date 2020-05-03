@@ -20,7 +20,9 @@ import {
   separateByEventId,
   mergeEvents,
   recomputeKappaState,
-  setGlobalError
+  setGlobalError,
+  excludeFromHistory,
+  netidToEmail
 } from '@services/kappaService';
 import { TUser } from '@backend/auth';
 import moment from 'moment';
@@ -341,13 +343,10 @@ export default (state = initialState, action: any): TKappaState => {
       let newLoadHistory = {};
 
       if (action.overwrite) {
-        for (const [key, value] of Object.entries(state.loadHistory)) {
-          if (key.startsWith('user-') || key.startsWith('event-')) {
-            continue;
-          }
-
-          newLoadHistory[key] = value;
-        }
+        newLoadHistory = excludeFromHistory(
+          state.loadHistory,
+          (key: string) => key.startsWith('user-') || key.startsWith('event-')
+        );
 
         newLoadHistory[action.loadKey] = moment();
       } else {
@@ -465,6 +464,7 @@ export default (state = initialState, action: any): TKappaState => {
         selectedEventId: '',
         selectedEvent: null,
         editingEventId: '',
+        loadHistory: excludeFromHistory(state.loadHistory, (key: string) => key.startsWith('points-')),
         ...recomputeKappaState({
           events: mergeEvents(state.events, [action.event]),
           records: state.records,
@@ -495,6 +495,7 @@ export default (state = initialState, action: any): TKappaState => {
         isDeletingEvent: false,
         selectedEventId: '',
         selectedEvent: null,
+        loadHistory: excludeFromHistory(state.loadHistory, (key: string) => key.startsWith('points-')),
         ...recomputeKappaState({
           events: remainingEvents,
           records: state.records,
@@ -529,6 +530,10 @@ export default (state = initialState, action: any): TKappaState => {
         ...state,
         isCheckingIn: false,
         checkInSuccessDate: moment(),
+        loadHistory: excludeFromHistory(
+          state.loadHistory,
+          (key: string) => key === `points-${netidToEmail(action.attended[0].netid)}`
+        ),
         ...recomputeKappaState({
           events: state.events,
           records: mergeRecords(state.records, {
@@ -594,6 +599,10 @@ export default (state = initialState, action: any): TKappaState => {
         pendingExcusesArray: state.pendingExcusesArray.filter(
           (excuse: TPendingExcuse) =>
             excuse.event_id !== action.excused[0].event_id || excuse.netid !== action.excused[0].netid
+        ),
+        loadHistory: excludeFromHistory(
+          state.loadHistory,
+          (key: string) => key === `points-${netidToEmail(action.excused[0].netid)}`
         ),
         ...recomputeKappaState({
           events: state.events,

@@ -465,6 +465,20 @@ export const setGlobalError = (message: string, code: number) => {
   };
 };
 
+export const excludeFromHistory = (loadHistory: TLoadHistory, exclude?: (key: string) => boolean) => {
+  const newLoadHistory = {};
+
+  for (const [key, value] of Object.entries(loadHistory)) {
+    if (exclude(key)) {
+      continue;
+    }
+
+    newLoadHistory[key] = value;
+  }
+
+  return newLoadHistory;
+};
+
 export const shouldLoad = (loadHistory: TLoadHistory, key: string) => {
   if (!loadHistory.hasOwnProperty(key)) {
     return true;
