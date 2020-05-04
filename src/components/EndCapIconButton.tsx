@@ -40,7 +40,7 @@ const EndCapIconButton: React.FC<{
         styles.wrapper,
         direction === 'right'
           ? {
-              right: HORIZONTAL_PADDING + (size + 16) * position
+              right: HORIZONTAL_PADDING + (size + 12) * position
             }
           : direction === 'left'
           ? {
