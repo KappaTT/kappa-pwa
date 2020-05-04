@@ -81,6 +81,10 @@ export const REJECT_EXCUSE = 'REJECT_EXCUSE';
 export const REJECT_EXCUSE_SUCCESS = 'REJECT_EXCUSE_SUCCESS';
 export const REJECT_EXCUSE_FAILURE = 'REJECT_EXCUSE_FAILURE';
 
+export const GET_EVENT_SEARCH_RESULTS = 'GET_EVENT_SEARCH_RESULTS';
+export const GET_EVENT_SEARCH_RESULTS_SUCCESS = 'GET_EVENT_SEARCH_RESULTS_SUCCESS';
+export const GET_EVENT_SEARCH_RESULTS_FAILURE = 'GET_EVENT_SEARCH_RESULTS_FAILURE';
+
 export interface TKappaState {
   globalErrorMessage: string;
   globalErrorCode: number;
@@ -170,6 +174,11 @@ export interface TKappaState {
   rejectExcuseErrorMessage: string;
   rejectExcuseRequestDate: moment.Moment;
   rejectExcuseSuccessDate: moment.Moment;
+
+  isSearchingEvents: boolean;
+  searchEventsError: boolean;
+  searchEventsErrorMessage: string;
+  eventSearchResults: TEvent[];
 }
 
 const initialState: TKappaState = {
@@ -257,7 +266,12 @@ const initialState: TKappaState = {
   rejectExcuseError: false,
   rejectExcuseErrorMessage: '',
   rejectExcuseRequestDate: null,
-  rejectExcuseSuccessDate: null
+  rejectExcuseSuccessDate: null,
+
+  isSearchingEvents: false,
+  searchEventsError: false,
+  searchEventsErrorMessage: '',
+  eventSearchResults: []
 };
 
 export default (state = initialState, action: any): TKappaState => {
@@ -681,6 +695,27 @@ export default (state = initialState, action: any): TKappaState => {
         isGettingPoints: false,
         getPointsError: true,
         getPointsErrorMessage: action.error.message,
+        ...setGlobalError(action.error.message, action.error.code)
+      };
+    case GET_EVENT_SEARCH_RESULTS:
+      return {
+        ...state,
+        isSearchingEvents: true,
+        searchEventsError: false,
+        searchEventsErrorMessage: ''
+      };
+    case GET_EVENT_SEARCH_RESULTS_SUCCESS:
+      return {
+        ...state,
+        isSearchingEvents: false,
+        eventSearchResults: action.events
+      };
+    case GET_EVENT_SEARCH_RESULTS_FAILURE:
+      return {
+        ...state,
+        isSearchingEvents: false,
+        searchEventsError: true,
+        searchEventsErrorMessage: action.error.message,
         ...setGlobalError(action.error.message, action.error.code)
       };
     default:

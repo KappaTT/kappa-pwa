@@ -91,6 +91,21 @@ export interface TPointsUserDict {
   [email: string]: TPointsDict;
 }
 
+export interface TEventSearch {
+  title: string;
+  profPoints: string;
+  philPoints: string;
+  broPoints: string;
+  rushPoints: string;
+  anyPoints: string;
+}
+
+export interface TEventSearchResult extends TEvent {
+  attended?: boolean;
+  excused?: boolean;
+  pending?: boolean;
+}
+
 export interface TGetEventsPayload {
   user: TUser;
 }
@@ -657,6 +672,57 @@ export const getPointsByUser = async (payload: TGetPointsByUserPayload): Promise
 
     return pass({
       points: response.data.points
+    });
+  } catch (error) {
+    log(error);
+    return fail({}, "that wasn't supposed to happen", -1);
+  }
+};
+
+export interface TGetEventSearchResultsPayload {
+  user: TUser;
+  search: TEventSearch;
+}
+
+interface TGetEventSearchResultsRequestResponse {
+  events: TEventSearchResult[];
+}
+
+interface TGetEventSearchResultsResponse extends TResponse {
+  data?: {
+    events: TEventSearchResult[];
+  };
+}
+
+export const getEventSearchResults = async (
+  payload: TGetEventSearchResultsPayload
+): Promise<TGetEventSearchResultsResponse> => {
+  try {
+    const response = await makeAuthorizedRequest<TGetEventSearchResultsRequestResponse>(
+      ENDPOINTS.GET_EVENT_SEARCH_RESULTS(),
+      METHODS.GET_EVENT_SEARCH_RESULTS,
+      {
+        body: {
+          search: payload.search
+        }
+      },
+      payload.user.sessionToken
+    );
+
+    log('Get event search response', response.code);
+
+    if (!response.success || response.code === 500) {
+      return fail({}, 'issue connecting to the server', 500);
+    } else if (response.code !== 200) {
+      if (response.code === 401) {
+        return fail({}, 'your credentials were invalid', response.code);
+      }
+
+      return fail({}, response.error?.message, response.code);
+    }
+
+    return pass({
+      events: response.data.events
     });
   } catch (error) {
     log(error);

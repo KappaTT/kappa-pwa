@@ -34,7 +34,8 @@ export const ENDPOINTS: {
   GET_EXCUSES: () => 'excuse',
   CREATE_EXCUSE: () => 'excuse',
   UPDATE_EXCUSE: () => 'excuse',
-  GET_POINTS_BY_USER: (config: { email: string }) => `points/${config.email}`
+  GET_POINTS_BY_USER: (config: { email: string }) => `points/${config.email}`,
+  GET_EVENT_SEARCH_RESULTS: () => 'search/events'
 };
 
 export const METHODS: {
@@ -53,7 +54,8 @@ export const METHODS: {
   GET_EXCUSES: M_GET,
   CREATE_EXCUSE: M_POST,
   UPDATE_EXCUSE: M_PATCH,
-  GET_POINTS_BY_USER: M_GET
+  GET_POINTS_BY_USER: M_GET,
+  GET_EVENT_SEARCH_RESULTS: M_POST
 };
 
 export interface TResponse {

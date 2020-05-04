@@ -42,10 +42,13 @@ import {
   APPROVE_EXCUSE_FAILURE,
   REJECT_EXCUSE,
   REJECT_EXCUSE_SUCCESS,
-  REJECT_EXCUSE_FAILURE
+  REJECT_EXCUSE_FAILURE,
+  GET_EVENT_SEARCH_RESULTS,
+  GET_EVENT_SEARCH_RESULTS_SUCCESS,
+  GET_EVENT_SEARCH_RESULTS_FAILURE
 } from '@reducers/kappa';
 import { TUser } from '@backend/auth';
-import { TEvent, TPoint, TExcuse } from '@backend/kappa';
+import { TEvent, TPoint, TExcuse, TEventSearch } from '@backend/kappa';
 
 export const setGlobalError = (data) => {
   return {
@@ -523,6 +526,40 @@ export const getPointsByUser = (user: TUser, target: string) => {
         dispatch(getPointsSuccess(res.data, target));
       } else {
         dispatch(getPointsFailure(res.error));
+      }
+    });
+  };
+};
+
+const gettingEventSearchResults = () => {
+  return {
+    type: GET_EVENT_SEARCH_RESULTS
+  };
+};
+
+const getEventSearchResultsSuccess = (data) => {
+  return {
+    type: GET_EVENT_SEARCH_RESULTS_SUCCESS,
+    events: data.events
+  };
+};
+
+const getEventSearchResultsFailure = (err) => {
+  return {
+    type: GET_EVENT_SEARCH_RESULTS_FAILURE,
+    error: err
+  };
+};
+
+export const getEventSearchResults = (user: TUser, search: TEventSearch) => {
+  return (dispatch) => {
+    dispatch(gettingEventSearchResults());
+
+    Kappa.getEventSearchResults({ user, search }).then((res) => {
+      if (res.success) {
+        dispatch(getEventSearchResultsSuccess(res.data));
+      } else {
+        dispatch(getEventSearchResultsFailure(res.error));
       }
     });
   };

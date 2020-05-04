@@ -9,8 +9,8 @@ import { useIsFocused } from 'react-navigation-hooks';
 import { theme } from '@constants';
 import { TRedux } from '@reducers';
 import { _kappa } from '@reducers/actions';
-import { Block, Header, EndCapButton, Text, Icon, SlideModal } from '@components';
-import { EditEventPage } from '@pages';
+import { Block, Header, EndCapButton, EndCapIconButton, Text, Icon, SlideModal } from '@components';
+import { EditEventPage, EventSearchPage } from '@pages';
 import { NavigationTypes } from '@types';
 import { HeaderHeight, isEmpty, HORIZONTAL_PADDING } from '@services/utils';
 import { log } from '@services/logService';
@@ -57,6 +57,7 @@ const EventsContent: React.FC<{
     isGettingEvents || isGettingDirectory || isGettingAttendance
   );
   const [showing, setShowing] = React.useState<'Full Year' | 'Upcoming'>('Upcoming');
+  const [isShowingEventSearch, setIsShowingEventSearch] = React.useState<boolean>(false);
 
   const dispatch = useDispatch();
   const dispatchGetEvents = React.useCallback(() => dispatch(_kappa.getEvents(user)), [dispatch, user]);
@@ -203,7 +204,19 @@ const EventsContent: React.FC<{
       <Header
         title="Events"
         leftButton={<EndCapButton direction="left" label={showing} onPress={toggleShowing} />}
-        rightButton={user.privileged === true && <EndCapButton label="New Event" onPress={dispatchEditNewEvent} />}
+        rightButton={
+          <React.Fragment>
+            <EndCapIconButton
+              iconFamily="Feather"
+              iconName="search"
+              position={0}
+              onPress={() => setIsShowingEventSearch(true)}
+            />
+            {user.privileged === true && (
+              <EndCapIconButton iconFamily="Feather" iconName="plus" position={1} onPress={dispatchEditNewEvent} />
+            )}
+          </React.Fragment>
+        }
       />
 
       <Block
@@ -251,6 +264,10 @@ const EventsContent: React.FC<{
           onPressBack={dispatchCancelEditEvent}
           onPressSave={dispatchSaveEditEvent}
         />
+      </SlideModal>
+
+      <SlideModal visible={isShowingEventSearch}>
+        <EventSearchPage onRequestClose={() => setIsShowingEventSearch(false)} />
       </SlideModal>
     </Block>
   );
