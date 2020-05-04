@@ -7,6 +7,7 @@ import Checkbox from './Checkbox';
 import CheckListButton from './CheckListButton';
 import CloseButton from './CloseButton';
 import EndCapButton from './EndCapButton';
+import EndCapIconButton from './EndCapIconButton';
 import EventDrawer from './EventDrawer';
 import FAB from './FAB';
 import FadeModal from './FadeModal';
@@ -47,6 +48,7 @@ export {
   CheckListButton,
   CloseButton,
   EndCapButton,
+  EndCapIconButton,
   EventDrawer,
   FAB,
   FadeModal,
