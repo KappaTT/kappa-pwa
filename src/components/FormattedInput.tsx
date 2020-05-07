@@ -55,12 +55,6 @@ const FormattedInput: React.FC<{
 }) => {
   const [value, setValue] = React.useState<string>(defaultValue);
 
-  React.useEffect(() => {
-    const newText = formatter(defaultValue);
-    setValue(newText);
-    onChangeText(newText);
-  }, [defaultValue, formatter, onChangeText]);
-
   return (
     <Block style={{ width }}>
       <Input
