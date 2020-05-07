@@ -59,7 +59,7 @@ const FormattedInput: React.FC<{
     const newText = formatter(defaultValue);
     setValue(newText);
     onChangeText(newText);
-  }, [defaultValue]);
+  }, [defaultValue, formatter, onChangeText]);
 
   return (
     <Block style={{ width }}>
