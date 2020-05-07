@@ -151,7 +151,7 @@ const App = () => {
   } else {
     return (
       <GalioProvider theme={theme}>
-        <StatusBar barStyle="dark-content" />
+        <StatusBar translucent={true} backgroundColor="white" barStyle="dark-content" />
 
         <SafeAreaProvider>
           <Block flex>
