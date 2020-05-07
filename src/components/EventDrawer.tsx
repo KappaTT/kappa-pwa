@@ -191,23 +191,23 @@ const EventDrawer: React.FC = () => {
     return Object.values(getMissedMandatoryByEvent(missedMandatory, directory, selectedEventId)).sort(sortUserByName);
   }, [user, missedMandatory, directory, selectedEventId]);
 
-  const onOpenStart = () => {
+  const onOpenStart = React.useCallback(() => {
     setSnapPoint(1);
-  };
+  }, []);
 
-  const onOpenEnd = () => {
+  const onOpenEnd = React.useCallback(() => {
     setSnapPoint(0);
-  };
+  }, []);
 
-  const onCloseStart = () => {
+  const onCloseStart = React.useCallback(() => {
     setSnapPoint(1);
-  };
+  }, []);
 
-  const onCloseEnd = () => {
+  const onCloseEnd = React.useCallback(() => {
     setSnapPoint(2);
 
     dispatchUnselectEvent();
-  };
+  }, [dispatchUnselectEvent]);
 
   React.useEffect(() => {
     if (!isGettingAttendance) {

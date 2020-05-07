@@ -148,23 +148,23 @@ const BrotherDrawer: React.FC = () => {
     return Object.values(missedMandatory[selectedUserEmail]).sort(sortEventsByDateReverse);
   }, [user, missedMandatory, selectedUserEmail]);
 
-  const onOpenStart = () => {
+  const onOpenStart = React.useCallback(() => {
     setSnapPoint(1);
-  };
+  }, []);
 
-  const onOpenEnd = () => {
+  const onOpenEnd = React.useCallback(() => {
     setSnapPoint(0);
-  };
+  }, []);
 
-  const onCloseStart = () => {
+  const onCloseStart = React.useCallback(() => {
     setSnapPoint(1);
-  };
+  }, []);
 
-  const onCloseEnd = () => {
+  const onCloseEnd = React.useCallback(() => {
     setSnapPoint(2);
 
     dispatchUnselectUser();
-  };
+  }, [dispatchUnselectUser]);
 
   React.useEffect(() => {
     if (!isGettingAttendance) {
