@@ -42,7 +42,7 @@ export default (state = initialState, action: any): TPrefState => {
         saving: true,
         data: {
           ...state.data,
-          [action.prefKey]: action.prefValue
+          ...action.prefs
         }
       };
     case SAVED_PREFERENCE:

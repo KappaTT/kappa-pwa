@@ -24,26 +24,26 @@ export const loadPrefs = () => {
   };
 };
 
-const savingPreference = (prefKey: string, prefValue: any) => {
+const savingPreferences = (prefs) => {
   return {
     type: SAVING_PREFERENCE,
-    prefKey,
-    prefValue
+    prefs
   };
 };
 
-const savedPreference = () => {
+const savedPreference = (success: boolean) => {
   return {
-    type: SAVED_PREFERENCE
+    type: SAVED_PREFERENCE,
+    success
   };
 };
 
-export const savePref = (prefKey: string, prefValue: any) => {
+export const savePref = (prefs: Partial<Prefs.TPrefs>) => {
   return (dispatch) => {
-    dispatch(savingPreference(prefKey, prefValue));
+    dispatch(savingPreferences(prefs));
 
-    Prefs.savePref(prefKey, prefValue).then((res) => {
-      dispatch(savedPreference());
+    Prefs.savePref(prefs).then((res) => {
+      dispatch(savedPreference(res.success));
     });
   };
 };

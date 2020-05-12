@@ -96,7 +96,7 @@ export const getBatch = async (parent: string, defaultData: any, force: boolean 
             loaded[key] = defaultValue;
             resolve();
           } else {
-            reject(new Error(`Could not load ${parent}.${key}`));
+            reject(`${parent}.${key} not found`);
           }
         });
       })
@@ -106,11 +106,13 @@ export const getBatch = async (parent: string, defaultData: any, force: boolean 
   try {
     await Promise.all(promises);
 
-    log('Batch retrieved', { [parent]: loaded });
+    log('Batch retrieved full', { [parent]: loaded });
 
     return loaded;
   } catch (error) {
+    log('Batch retrieved partial', { [parent]: loaded });
     log(error);
+
     return undefined;
   }
 };

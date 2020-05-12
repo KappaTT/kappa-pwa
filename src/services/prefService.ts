@@ -1,11 +1,15 @@
-import { getBatch, setItem } from '@services/secureStorage';
+import { getBatch, setItem, setBatch } from '@services/secureStorage';
 
 export interface TPrefs {
   onboarded: boolean;
+  agreedToTerms: boolean;
+  usernameVisible: boolean;
 }
 
 export const initialPrefs: TPrefs = {
-  onboarded: false
+  onboarded: false,
+  agreedToTerms: false,
+  usernameVisible: true
 };
 
 export const loadPrefs = async () => {
@@ -19,10 +23,13 @@ export const loadPrefs = async () => {
   };
 };
 
-export const savePref = async (prefKey: string, prefValue: string) => {
-  await setItem(`preferences.${prefKey}`, prefValue);
+export const savePref = async (prefs: Partial<TPrefs>) => {
+  await setBatch('preferences', prefs);
 
   return {
-    success: true
+    success: true,
+    data: {
+      prefs
+    }
   };
 };
