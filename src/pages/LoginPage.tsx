@@ -25,7 +25,7 @@ const LoginPage: React.FC = () => {
   }, [authorized, dispatchHideModal]);
 
   React.useEffect(() => {
-    if (signInWithGoogleErrorMessage) {
+    if (signInWithGoogleErrorMessage && signInWithGoogleErrorMessage !== 'Canceled') {
       Alert.alert('Could not sign in!', signInWithGoogleErrorMessage);
     }
   }, [signInWithGoogleErrorMessage]);

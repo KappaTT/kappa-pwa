@@ -178,7 +178,7 @@ export const signInWithGoogle = () => {
       } else {
         dispatch(
           signInWithGoogleFailure({
-            message: 'sign in failed'
+            message: 'Canceled'
           })
         );
       }
