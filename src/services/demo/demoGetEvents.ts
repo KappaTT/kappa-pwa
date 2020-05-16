@@ -1,10 +1,10 @@
 export default {
   events: [
     {
-      id: '1',
+      _id: '1',
       creator: 'jjt4',
-      event_type: 'GM',
-      event_code: '6473',
+      eventType: 'GM',
+      eventCode: '6473',
       mandatory: 0,
       excusable: 1,
       title: 'General Meeting',
@@ -15,10 +15,10 @@ export default {
       points: null
     },
     {
-      id: '2',
+      _id: '2',
       creator: 'jjt4',
-      event_type: 'GM',
-      event_code: '6473',
+      eventType: 'GM',
+      eventCode: '6473',
       mandatory: 0,
       excusable: 1,
       title: 'General Meeting',
@@ -29,10 +29,10 @@ export default {
       points: null
     },
     {
-      id: '3',
+      _id: '3',
       creator: 'jjt4',
-      event_type: 'GM',
-      event_code: '6473',
+      eventType: 'GM',
+      eventCode: '6473',
       mandatory: 0,
       excusable: 1,
       title: 'General Meeting',
@@ -43,10 +43,10 @@ export default {
       points: null
     },
     {
-      id: '4',
+      _id: '4',
       creator: 'jjt4',
-      event_type: 'Brotherhood',
-      event_code: '6473',
+      eventType: 'Brotherhood',
+      eventCode: '6473',
       mandatory: 0,
       excusable: 0,
       title: 'Happy Hour',
@@ -57,10 +57,10 @@ export default {
       points: 'BRO:1'
     },
     {
-      id: '5',
+      _id: '5',
       creator: 'jjt4',
-      event_type: 'GM',
-      event_code: '6473',
+      eventType: 'GM',
+      eventCode: '6473',
       mandatory: 1,
       excusable: 1,
       title: 'General Meeting',
@@ -72,10 +72,10 @@ export default {
       points: null
     },
     {
-      id: '6',
+      _id: '6',
       creator: 'jjt4',
-      event_type: 'Brotherhood',
-      event_code: '6473',
+      eventType: 'Brotherhood',
+      eventCode: '6473',
       mandatory: 0,
       excusable: 0,
       title: 'Talent Show',
@@ -86,10 +86,10 @@ export default {
       points: 'BRO:1'
     },
     {
-      id: '7',
+      _id: '7',
       creator: 'jjt4',
-      event_type: 'Brotherhood',
-      event_code: '6473',
+      eventType: 'Brotherhood',
+      eventCode: '6473',
       mandatory: 0,
       excusable: 0,
       title: 'Happy Hour Bar Crawl',
@@ -100,10 +100,10 @@ export default {
       points: 'BRO:1'
     },
     {
-      id: '8',
+      _id: '8',
       creator: 'jjt4',
-      event_type: 'GM',
-      event_code: '6473',
+      eventType: 'GM',
+      eventCode: '6473',
       mandatory: 1,
       excusable: 1,
       title: 'General Meeting',

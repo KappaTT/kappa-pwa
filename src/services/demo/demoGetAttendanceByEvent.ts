@@ -1,32 +1,32 @@
-export default (event_id: string) =>
-  event_id === '1'
+export default (eventId: string) =>
+  eventId === '1'
     ? {
         attended: [
           {
-            event_id,
+            eventId,
             netid: 'jjt4'
           }
         ],
         excused: []
       }
-    : event_id === '2'
+    : eventId === '2'
     ? {
         attended: [],
         excused: [
           {
-            event_id: '2',
+            eventId: '2',
             netid: 'jjt4',
             reason: 'I was sick',
             approved: 1
           }
         ]
       }
-    : event_id === '4'
+    : eventId === '4'
     ? {
         attended: [],
         excused: [
           {
-            event_id: '4',
+            eventId: '4',
             netid: 'jjt4',
             reason: 'I was sick',
             approved: 0
