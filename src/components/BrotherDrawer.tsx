@@ -70,8 +70,7 @@ const BrotherDrawer: React.FC = () => {
   const maxSheetHeight = (height - insets.top) * 0.75 + insets.bottom;
   const intermediateSheetHeight = 256 + insets.bottom;
 
-  const [snapPoint, setSnapPoint] = React.useState<number>(1);
-  const [transitioning, setTransitioning] = React.useState<boolean>(false);
+  const [snapPoint, setSnapPoint] = React.useState<number>(2);
   const [callbackNode, setCallbackNode] = React.useState(new Animated.Value(1));
 
   const backgroundOpacity = callbackNode.interpolate({
@@ -151,27 +150,31 @@ const BrotherDrawer: React.FC = () => {
   }, [user, missedMandatory, selectedUserEmail]);
 
   const lightStatusBar = React.useMemo(() => {
-    return (snapPoint === 0 && !transitioning) || (snapPoint !== 0 && transitioning);
-  }, [snapPoint, transitioning]);
+    return snapPoint !== 2;
+  }, [snapPoint]);
 
   const onOpenStart = React.useCallback(() => {
     setSnapPoint(1);
-    setTransitioning(true);
-  }, []);
+
+    if (user.privileged) {
+      snapTo(0);
+    }
+  }, [snapTo, user.privileged]);
 
   const onOpenEnd = React.useCallback(() => {
     setSnapPoint(0);
-    setTransitioning(false);
   }, []);
 
   const onCloseStart = React.useCallback(() => {
-    setSnapPoint(1);
-    setTransitioning(true);
-  }, []);
+    setSnapPoint(2);
+
+    if (user.privileged) {
+      snapTo(2);
+    }
+  }, [snapTo, user.privileged]);
 
   const onCloseEnd = React.useCallback(() => {
     setSnapPoint(2);
-    setTransitioning(false);
 
     dispatchUnselectUser();
   }, [dispatchUnselectUser]);
