@@ -11,19 +11,17 @@ import {
   TAttendanceEventDict,
   TExcuseEventDict,
   TUserEventDict,
-  TLoadHistory
+  TLoadHistory,
+  TPointsDict
 } from '@backend/kappa';
 import { TUser } from '@backend/auth';
 import { log } from '@services/logService';
-
-export const netidToEmail = (netid: string) =>
-  netid === 'thetataudemo' ? 'thetataudemo@gmail.com' : `${netid}@illinois.edu`;
 
 export const separateByEventId = (events: TEvent[]) => {
   const separated = {};
 
   for (const event of events) {
-    separated[event.id] = event;
+    separated[event._id] = event;
   }
 
   return separated;
@@ -75,7 +73,7 @@ export const mergeEvents = (events: TEventDict, newEvents: TEvent[]) => {
   const mergedEvents = events;
 
   for (const event of newEvents) {
-    mergedEvents[event.id] = event;
+    mergedEvents[event._id] = event;
   }
 
   return mergedEvents;
@@ -113,48 +111,48 @@ export const mergeRecords = (
     : records;
 
   for (const attend of newRecords.attended) {
-    const email = netidToEmail(attend.netid);
-    const event_id = attend.event_id;
+    const email = attend.email;
+    const eventId = attend.eventId;
 
     if (!mergedRecords.attended.hasOwnProperty(email)) {
       mergedRecords.attended[email] = {};
     }
 
-    mergedRecords.attended[email][event_id] = attend;
+    mergedRecords.attended[email][eventId] = attend;
   }
 
   for (const excuse of newRecords.excused) {
-    const email = netidToEmail(excuse.netid);
-    const event_id = excuse.event_id;
+    const email = excuse.email;
+    const eventId = excuse.eventId;
 
     if (!mergedRecords.excused.hasOwnProperty(email)) {
       mergedRecords.excused[email] = {};
     }
 
     if (excuse.approved === -1) {
-      delete mergedRecords.excused[email][event_id];
+      delete mergedRecords.excused[email][eventId];
     } else {
-      mergedRecords.excused[email][event_id] = excuse;
+      mergedRecords.excused[email][eventId] = excuse;
     }
   }
 
   return mergedRecords;
 };
 
-export const getAttendance = (records: TRecords, email: string, event_id: string) => {
+export const getAttendance = (records: TRecords, email: string, eventId: string) => {
   if (!records.attended.hasOwnProperty(email)) {
     return undefined;
   }
 
-  return records.attended[email][event_id];
+  return records.attended[email][eventId];
 };
 
-export const getExcuse = (records: TRecords, email: string, event_id: string) => {
+export const getExcuse = (records: TRecords, email: string, eventId: string) => {
   if (!records.excused.hasOwnProperty(email)) {
     return undefined;
   }
 
-  return records.excused[email][event_id];
+  return records.excused[email][eventId];
 };
 
 export const getAttendedEvents = (records: TRecords, email: string) => {
@@ -173,20 +171,20 @@ export const getExcusedEvents = (records: TRecords, email: string) => {
   return records.excused[email];
 };
 
-export const getEventRecordCounts = (records: TRecords, event_id: string) => {
+export const getEventRecordCounts = (records: TRecords, eventId: string) => {
   let attended = 0;
   let excused = 0;
   let pending = 0;
 
   for (const record of Object.values(records.attended)) {
-    if (record.hasOwnProperty(event_id)) {
+    if (record.hasOwnProperty(eventId)) {
       attended++;
     }
   }
 
   for (const record of Object.values(records.excused)) {
-    if (record.hasOwnProperty(event_id)) {
-      if (record[event_id].approved) {
+    if (record.hasOwnProperty(eventId)) {
+      if (record[eventId].approved) {
         excused++;
       } else {
         pending++;
@@ -235,7 +233,7 @@ export const getTypeCount = (events: TEventDict, type: string, allowFuture: bool
   const now = moment();
 
   for (const event of Object.values(events)) {
-    if (event.event_type === type) {
+    if (event.eventType === type) {
       if (allowFuture || moment(event.start).isSameOrBefore(now, 'day')) {
         count++;
       }
@@ -258,17 +256,17 @@ export const getTypeCounts = (
 
   const now = moment();
 
-  for (const event_id of Object.keys(attended)) {
-    if (events.hasOwnProperty(event_id) && events[event_id].event_type === type) {
-      if (allowFuture || moment(events[event_id].start).isSameOrBefore(now, 'day')) {
+  for (const eventId of Object.keys(attended)) {
+    if (events.hasOwnProperty(eventId) && events[eventId].eventType === type) {
+      if (allowFuture || moment(events[eventId].start).isSameOrBefore(now, 'day')) {
         attendedCount++;
       }
     }
   }
 
-  for (const [event_id, excuse] of Object.entries(excused)) {
-    if (events.hasOwnProperty(event_id) && events[event_id].event_type === type) {
-      if (allowFuture || moment(events[event_id].start).isSameOrBefore(now, 'day')) {
+  for (const [eventId, excuse] of Object.entries(excused)) {
+    if (events.hasOwnProperty(eventId) && events[eventId].eventType === type) {
+      if (allowFuture || moment(events[eventId].start).isSameOrBefore(now, 'day')) {
         if (excuse.approved) {
           excusedCount++;
         } else {
@@ -286,12 +284,12 @@ export const getTypeCounts = (
   };
 };
 
-export const hasValidCheckIn = (records: TRecords, email: string, event_id: string, allowPending: boolean = false) => {
-  const attend = getAttendance(records, email, event_id);
+export const hasValidCheckIn = (records: TRecords, email: string, eventId: string, allowPending: boolean = false) => {
+  const attend = getAttendance(records, email, eventId);
 
   if (attend) return true;
 
-  const excuse = getExcuse(records, email, event_id);
+  const excuse = getExcuse(records, email, eventId);
 
   return excuse !== undefined && (allowPending || excuse.approved === 1);
 };
@@ -304,7 +302,7 @@ export const getMandatoryEvents = (events: TEventDict) => {
   for (const event of Object.values(events)) {
     if (event.mandatory) {
       if (moment(event.start).isBefore(now, 'day')) {
-        mandatory[event.id] = event;
+        mandatory[event._id] = event;
       }
     }
   }
@@ -316,8 +314,8 @@ export const getMissedMandatoryByUser = (records: TRecords, mandatoryEvents: TEv
   const missed = {};
 
   for (const event of Object.values(mandatoryEvents)) {
-    if (!hasValidCheckIn(records, email, event.id, true)) {
-      missed[event.id] = event;
+    if (!hasValidCheckIn(records, email, event._id, true)) {
+      missed[event._id] = event;
     }
   }
 
@@ -334,11 +332,11 @@ export const getMissedMandatory = (records: TRecords, mandatoryEvents: TEventDic
   return missed;
 };
 
-export const getMissedMandatoryByEvent = (missedMandatory: TUserEventDict, directory: TDirectory, event_id: string) => {
+export const getMissedMandatoryByEvent = (missedMandatory: TUserEventDict, directory: TDirectory, eventId: string) => {
   const missed = {};
 
   for (const [email, events] of Object.entries(missedMandatory)) {
-    if (events.hasOwnProperty(event_id)) {
+    if (events.hasOwnProperty(eventId)) {
       missed[email] = directory[email];
     }
   }
@@ -388,50 +386,30 @@ export const getCategoryLongName = (category: string) => {
   }
 };
 
-export const prettyPoints = (points: string) => {
+export const prettyPoints = (points: TPointsDict) => {
   if (!points) {
     return 'N/A';
   }
 
-  const pointsPieces = points.split(',');
-
   let pretty = '';
 
-  for (const piece of pointsPieces) {
-    const pointPieces = piece.split(':');
-
+  for (const [category, count] of Object.entries(points)) {
     if (pretty !== '') {
       pretty += '\n';
     }
 
-    pretty += `${pointPieces[1]} ${getCategoryLongName(pointPieces[0])}`;
+    pretty += `${count} ${getCategoryLongName(category)}`;
   }
 
   return pretty;
 };
 
-export const extractPoints = (points: string, type: string) => {
-  if (!points) {
+export const extractPoints = (points: TPointsDict, type: string) => {
+  if (!points || !points.hasOwnProperty(type)) {
     return '0';
   }
 
-  const index = points.indexOf(type);
-
-  if (index === -1) {
-    return '0';
-  }
-
-  const startIndex = index + type.length + 1;
-
-  let cutPoints = points.substring(startIndex);
-
-  const commaIndex = cutPoints.indexOf(',');
-
-  if (commaIndex > 0) {
-    cutPoints = cutPoints.substring(0, commaIndex);
-  }
-
-  return cutPoints;
+  return `${points[type]}`;
 };
 
 export const getFutureDateIndex = (

@@ -48,7 +48,7 @@ import {
   GET_EVENT_SEARCH_RESULTS_FAILURE
 } from '@reducers/kappa';
 import { TUser } from '@backend/auth';
-import { TEvent, TPoint, TExcuse, TEventSearch } from '@backend/kappa';
+import { TEvent, TExcuse, TEventSearch } from '@backend/kappa';
 
 export const setGlobalError = (data) => {
   return {
@@ -221,10 +221,10 @@ export const getExcuses = (user: TUser) => {
   };
 };
 
-export const selectEvent = (event_id: string) => {
+export const selectEvent = (eventId: string) => {
   return {
     type: SELECT_EVENT,
-    event_id
+    eventId
   };
 };
 
@@ -253,10 +253,10 @@ export const editNewEvent = () => {
   };
 };
 
-export const editExistingEvent = (event_id: string) => {
+export const editExistingEvent = (eventId: string) => {
   return {
     type: EDIT_EXISTING_EVENT,
-    event_id
+    eventId
   };
 };
 
@@ -286,12 +286,12 @@ const saveEditEventFailure = (err) => {
   };
 };
 
-export const saveEditEvent = (user: TUser, event: Partial<TEvent>, points: Partial<TPoint>[]) => {
+export const saveEditEvent = (user: TUser, event: Partial<TEvent>, eventId?: string) => {
   return (dispatch) => {
     dispatch(savingEditEvent());
 
-    if (event.id) {
-      Kappa.updateEvent({ user, event, points }).then((res) => {
+    if (eventId) {
+      Kappa.updateEvent({ user, eventId, changes: event }).then((res) => {
         if (res.success) {
           dispatch(saveEditEventSuccess(res.data));
         } else {
@@ -299,7 +299,7 @@ export const saveEditEvent = (user: TUser, event: Partial<TEvent>, points: Parti
         }
       });
     } else {
-      Kappa.createEvent({ user, event, points }).then((res) => {
+      Kappa.createEvent({ user, event }).then((res) => {
         if (res.success) {
           dispatch(saveEditEventSuccess(res.data));
         } else {
@@ -344,10 +344,10 @@ export const deleteEvent = (user: TUser, event: TEvent) => {
   };
 };
 
-export const setCheckInEvent = (event_id: string, excuse: boolean) => {
+export const setCheckInEvent = (eventId: string, excuse: boolean) => {
   return {
     type: SET_CHECK_IN_EVENT,
-    event_id,
+    eventId,
     excuse
   };
 };
@@ -372,11 +372,11 @@ const checkInFailure = (err) => {
   };
 };
 
-export const checkIn = (user: TUser, event_id: string, event_code: string) => {
+export const checkIn = (user: TUser, eventId: string, eventCode: string) => {
   return (dispatch) => {
     dispatch(checkingIn());
 
-    Kappa.createAttendance({ user, event_id, event_code }).then((res) => {
+    Kappa.createAttendance({ user, eventId, eventCode }).then((res) => {
       if (res.success) {
         dispatch(checkInSuccess(res.data));
       } else {
@@ -448,11 +448,11 @@ const approveExcuseFailure = (err) => {
   };
 };
 
-export const approveExcuse = (user: TUser, excuse: TExcuse) => {
+export const approveExcuse = (user: TUser, excuseId: string) => {
   return (dispatch) => {
     dispatch(approvingExcuse());
 
-    Kappa.updateExcuse({ user, excuse }).then((res) => {
+    Kappa.updateExcuse({ user, excuse: { _id: excuseId, approved: 1 } }).then((res) => {
       if (res.success) {
         dispatch(approveExcuseSuccess(res.data));
       } else {
@@ -482,11 +482,11 @@ const rejectExcuseFailure = (err) => {
   };
 };
 
-export const rejectExcuse = (user: TUser, excuse: TExcuse) => {
+export const rejectExcuse = (user: TUser, excuseId: string) => {
   return (dispatch) => {
     dispatch(rejectingExcuse());
 
-    Kappa.updateExcuse({ user, excuse }).then((res) => {
+    Kappa.updateExcuse({ user, excuse: { _id: excuseId, approved: 0 } }).then((res) => {
       if (res.success) {
         dispatch(rejectExcuseSuccess(res.data));
       } else {

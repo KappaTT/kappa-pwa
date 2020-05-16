@@ -21,8 +21,7 @@ import {
   mergeEvents,
   recomputeKappaState,
   setGlobalError,
-  excludeFromHistory,
-  netidToEmail
+  excludeFromHistory
 } from '@services/kappaService';
 import { TUser } from '@backend/auth';
 import moment from 'moment';
@@ -424,8 +423,8 @@ export default (state = initialState, action: any): TKappaState => {
     case SELECT_EVENT:
       return {
         ...state,
-        selectedEventId: action.event_id,
-        selectedEvent: getEventById(state.events, action.event_id)
+        selectedEventId: action.eventId,
+        selectedEvent: getEventById(state.events, action.eventId)
       };
     case UNSELECT_EVENT:
       return {
@@ -455,7 +454,7 @@ export default (state = initialState, action: any): TKappaState => {
     case EDIT_EXISTING_EVENT:
       return {
         ...state,
-        editingEventId: action.event_id,
+        editingEventId: action.eventId,
         saveEventError: false,
         saveEventErrorMessage: ''
       };
@@ -528,7 +527,7 @@ export default (state = initialState, action: any): TKappaState => {
     case SET_CHECK_IN_EVENT:
       return {
         ...state,
-        checkInEventId: action.event_id,
+        checkInEventId: action.eventId,
         checkInExcuse: action.excuse
       };
     case CHECK_IN:
@@ -546,7 +545,7 @@ export default (state = initialState, action: any): TKappaState => {
         checkInSuccessDate: moment(),
         loadHistory: excludeFromHistory(
           state.loadHistory,
-          (key: string) => key === `points-${netidToEmail(action.attended[0].netid)}`
+          (key: string) => key === `points-${action.attended[0].email}`
         ),
         ...recomputeKappaState({
           events: state.events,
@@ -612,11 +611,11 @@ export default (state = initialState, action: any): TKappaState => {
         approveExcuseSuccessDate: moment(),
         pendingExcusesArray: state.pendingExcusesArray.filter(
           (excuse: TPendingExcuse) =>
-            excuse.event_id !== action.excused[0].event_id || excuse.netid !== action.excused[0].netid
+            excuse.eventId !== action.excused[0].eventId || excuse.email !== action.excused[0].email
         ),
         loadHistory: excludeFromHistory(
           state.loadHistory,
-          (key: string) => key === `points-${netidToEmail(action.excused[0].netid)}`
+          (key: string) => key === `points-${action.excused[0].email}`
         ),
         ...recomputeKappaState({
           events: state.events,
@@ -650,7 +649,7 @@ export default (state = initialState, action: any): TKappaState => {
         rejectExcuseSuccessDate: moment(),
         pendingExcusesArray: state.pendingExcusesArray.filter(
           (excuse: TPendingExcuse) =>
-            excuse.event_id !== action.excused[0].event_id || excuse.netid !== action.excused[0].netid
+            excuse.eventId !== action.excused[0].eventId || excuse.email !== action.excused[0].email
         ),
         ...recomputeKappaState({
           events: state.events,

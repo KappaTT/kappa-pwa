@@ -8,10 +8,10 @@ export interface TLoadHistory {
 }
 
 export interface TEvent {
-  id: string;
+  _id: string;
   creator: string;
-  event_type: string;
-  event_code?: string;
+  eventType: string;
+  eventCode?: string;
   mandatory: 0 | 1;
   excusable: 0 | 1;
   title: string;
@@ -19,11 +19,11 @@ export interface TEvent {
   start: string;
   duration: number;
   location: string;
-  points: string;
+  points: TPointsDict;
 }
 
 export interface TEventDict {
-  [event_id: string]: TEvent;
+  [eventId: string]: TEvent;
 }
 
 export interface TEventDateDict {
@@ -39,12 +39,13 @@ export interface TDirectory {
 }
 
 export interface TAttendance {
-  event_id: string;
-  netid: string;
+  _id: string;
+  eventId: string;
+  email: string;
 }
 
 export interface TAttendanceEventDict {
-  [event_id: string]: TAttendance;
+  [eventId: string]: TAttendance;
 }
 
 export interface TAttendanceUserDict {
@@ -52,8 +53,9 @@ export interface TAttendanceUserDict {
 }
 
 export interface TExcuse {
-  event_id: string;
-  netid: string;
+  _id: string;
+  eventId: string;
+  email: string;
   reason: string;
   late: 0 | 1;
   approved: -1 | 0 | 1;
@@ -65,7 +67,7 @@ export interface TPendingExcuse extends TExcuse {
 }
 
 export interface TExcuseEventDict {
-  [event_id: string]: TExcuse;
+  [eventId: string]: TExcuse;
 }
 
 export interface TExcuseUserDict {
@@ -75,12 +77,6 @@ export interface TExcuseUserDict {
 export interface TRecords {
   attended: TAttendanceUserDict;
   excused: TExcuseUserDict;
-}
-
-export interface TPoint {
-  event_id: string;
-  category: string;
-  count: number;
 }
 
 export interface TPointsDict {
@@ -153,7 +149,6 @@ export const getEvents = async (payload: TGetEventsPayload): Promise<TGetEventsR
 export interface TCreateEventPayload {
   user: TUser;
   event: Partial<TEvent>;
-  points: Partial<TPoint>[];
 }
 
 interface TCreateEventRequestResponse {
@@ -173,8 +168,7 @@ export const createEvent = async (payload: TCreateEventPayload): Promise<TCreate
       METHODS.CREATE_EVENT,
       {
         body: {
-          event: payload.event,
-          points: payload.points
+          event: payload.event
         }
       },
       payload.user.sessionToken
@@ -203,8 +197,8 @@ export const createEvent = async (payload: TCreateEventPayload): Promise<TCreate
 
 export interface TUpdateEventPayload {
   user: TUser;
-  event: Partial<TEvent>;
-  points: Partial<TPoint>[];
+  eventId: string;
+  changes: Partial<TEvent>;
 }
 
 interface TUpdateEventRequestResponse {
@@ -220,12 +214,11 @@ interface TUpdateEventResponse extends TResponse {
 export const updateEvent = async (payload: TUpdateEventPayload): Promise<TUpdateEventResponse> => {
   try {
     const response = await makeAuthorizedRequest<TUpdateEventRequestResponse>(
-      ENDPOINTS.UPDATE_EVENT({ event_id: payload.event.id }),
+      ENDPOINTS.UPDATE_EVENT({ eventId: payload.eventId }),
       METHODS.UPDATE_EVENT,
       {
         body: {
-          event: payload.event,
-          points: payload.points
+          changes: payload.changes
         }
       },
       payload.user.sessionToken
@@ -259,14 +252,14 @@ export interface TDeleteEventPayload {
 
 interface TDeleteEventRequestResponse {
   event: {
-    id: string;
+    _id: string;
   };
 }
 
 interface TDeleteEventResponse extends TResponse {
   data?: {
     event: {
-      id: string;
+      _id: string;
     };
   };
 }
@@ -274,7 +267,7 @@ interface TDeleteEventResponse extends TResponse {
 export const deleteEvent = async (payload: TDeleteEventPayload): Promise<TDeleteEventResponse> => {
   try {
     const response = await makeAuthorizedRequest<TDeleteEventRequestResponse>(
-      ENDPOINTS.DELETE_EVENT({ event_id: payload.event.id }),
+      ENDPOINTS.DELETE_EVENT({ eventId: payload.event._id }),
       METHODS.DELETE_EVENT,
       {},
       payload.user.sessionToken
@@ -294,7 +287,7 @@ export const deleteEvent = async (payload: TDeleteEventPayload): Promise<TDelete
 
     return pass({
       event: {
-        id: response.data.event.id
+        _id: response.data.event._id
       }
     });
   } catch (error) {
@@ -398,7 +391,7 @@ export const getAttendanceByUser = async (payload: TGetAttendancePayload): Promi
 export const getAttendanceByEvent = async (payload: TGetAttendancePayload): Promise<TGetAttendanceResponse> => {
   try {
     const response = await makeAuthorizedRequest<TGetAttendanceRequestResponse>(
-      ENDPOINTS.GET_ATTENDANCE_BY_EVENT({ event_id: payload.target }),
+      ENDPOINTS.GET_ATTENDANCE_BY_EVENT({ eventId: payload.target }),
       METHODS.GET_ATTENDANCE_BY_EVENT,
       {},
       payload.user.sessionToken
@@ -428,8 +421,8 @@ export const getAttendanceByEvent = async (payload: TGetAttendancePayload): Prom
 
 export interface TCreateAttendancePayload {
   user: TUser;
-  event_id: string;
-  event_code: string;
+  eventId: string;
+  eventCode: string;
 }
 
 interface TCreateAttendanceRequestResponse {
@@ -449,8 +442,8 @@ export const createAttendance = async (payload: TCreateAttendancePayload): Promi
       METHODS.CREATE_ATTENDANCE,
       {
         body: {
-          event_id: payload.event_id,
-          event_code: payload.event_code
+          eventId: payload.eventId,
+          eventCode: payload.eventCode
         }
       },
       payload.user.sessionToken
@@ -550,7 +543,7 @@ export const createExcuse = async (payload: TCreateExcusePayload): Promise<TCrea
         body: {
           excuse: {
             ...payload.excuse,
-            event_id: payload.event.id
+            eventId: payload.event._id
           }
         }
       },
@@ -587,7 +580,10 @@ export const createExcuse = async (payload: TCreateExcusePayload): Promise<TCrea
 
 export interface TUpdateExcusePayload {
   user: TUser;
-  excuse: TExcuse;
+  excuse: {
+    _id: string;
+    approved: 0 | 1;
+  };
 }
 
 interface TUpdateExcuseRequestResponse {
