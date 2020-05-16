@@ -206,14 +206,8 @@ const EventsContent: React.FC<{
         leftButton={<EndCapButton direction="left" label={showing} onPress={toggleShowing} />}
         rightButton={
           <React.Fragment>
-            <EndCapIconButton
-              iconFamily="Feather"
-              iconName="search"
-              position={0}
-              onPress={() => setIsShowingEventSearch(true)}
-            />
             {user.privileged === true && (
-              <EndCapIconButton iconFamily="Feather" iconName="plus" position={1} onPress={dispatchEditNewEvent} />
+              <EndCapButton direction="right" label="New Event" onPress={dispatchEditNewEvent} />
             )}
           </React.Fragment>
         }
