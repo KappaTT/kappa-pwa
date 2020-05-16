@@ -184,7 +184,12 @@ const MessagesContent: React.FC<{
         </ScrollView>
       </Block>
 
-      <FadeModal transparent={true} visible={selectedExcuse !== null} onRequestClose={() => onSelectExcuse(null)}>
+      <FadeModal
+        statusBarStyle="light-content"
+        transparent={true}
+        visible={selectedExcuse !== null}
+        onRequestClose={() => onSelectExcuse(null)}
+      >
         <ExcusePage
           excuse={selectedExcuse}
           renderExcuse={renderExcuse(selectedExcuse, false, true)}

@@ -7,7 +7,8 @@ import {
   ScrollView,
   RefreshControl,
   ActivityIndicator,
-  Clipboard
+  Clipboard,
+  StatusBar
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import Animated from 'react-native-reanimated';
@@ -70,6 +71,7 @@ const BrotherDrawer: React.FC = () => {
   const intermediateSheetHeight = 256 + insets.bottom;
 
   const [snapPoint, setSnapPoint] = React.useState<number>(1);
+  const [transitioning, setTransitioning] = React.useState<boolean>(false);
   const [callbackNode, setCallbackNode] = React.useState(new Animated.Value(1));
 
   const backgroundOpacity = callbackNode.interpolate({
@@ -148,20 +150,28 @@ const BrotherDrawer: React.FC = () => {
     return Object.values(missedMandatory[selectedUserEmail]).sort(sortEventsByDateReverse);
   }, [user, missedMandatory, selectedUserEmail]);
 
+  const lightStatusBar = React.useMemo(() => {
+    return (snapPoint === 0 && !transitioning) || (snapPoint !== 0 && transitioning);
+  }, [snapPoint, transitioning]);
+
   const onOpenStart = React.useCallback(() => {
     setSnapPoint(1);
+    setTransitioning(true);
   }, []);
 
   const onOpenEnd = React.useCallback(() => {
     setSnapPoint(0);
+    setTransitioning(false);
   }, []);
 
   const onCloseStart = React.useCallback(() => {
     setSnapPoint(1);
+    setTransitioning(true);
   }, []);
 
   const onCloseEnd = React.useCallback(() => {
     setSnapPoint(2);
+    setTransitioning(false);
 
     dispatchUnselectUser();
   }, [dispatchUnselectUser]);
@@ -363,6 +373,10 @@ const BrotherDrawer: React.FC = () => {
 
   return (
     <Ghost style={styles.container}>
+      {lightStatusBar && (
+        <StatusBar animated={true} translucent={true} backgroundColor="transparent" barStyle="light-content" />
+      )}
+
       <TouchableWithoutFeedback onPress={onPressClose}>
         <Animated.View
           pointerEvents={selectedUserEmail === '' ? 'none' : 'auto'}
