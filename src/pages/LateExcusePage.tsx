@@ -44,11 +44,11 @@ const LateExcusePage: React.FC<{
 
     return eventArray
       .filter(
-        (event) => moment(event.start).isBefore(now, 'day') && !hasValidCheckIn(records, user.email, event.id, true)
+        (event) => moment(event.start).isBefore(now, 'day') && !hasValidCheckIn(records, user.email, event._id, true)
       )
       .sort(sortEventByDate)
       .map((event) => ({
-        id: event.id,
+        id: event._id,
         title: event.title,
         subtitle: moment(event.start).format('ddd LLL')
       }));
@@ -112,7 +112,7 @@ const LateExcusePage: React.FC<{
 
                     <RadioList
                       options={eventOptions}
-                      selected={selectedEvent ? selectedEvent.id : ''}
+                      selected={selectedEvent ? selectedEvent._id : ''}
                       onChange={onChangeEventList}
                     />
                   </React.Fragment>

@@ -194,7 +194,7 @@ const BrotherDrawer: React.FC = () => {
 
   const renderEvent = (event: TEvent) => {
     return (
-      <Block key={event.id} style={styles.eventContainer}>
+      <Block key={event._id} style={styles.eventContainer}>
         <Text style={styles.eventTitle}>{event.title}</Text>
         <Text style={styles.eventDate}>{moment(event.start).format('M/D/Y')}</Text>
       </Block>

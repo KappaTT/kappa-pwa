@@ -68,12 +68,12 @@ const CheckInContent: React.FC<{
 
   const dispatch = useDispatch();
   const dispatchSetCheckInEvent = React.useCallback(
-    (event_id: string, excuse: boolean) => dispatch(_kappa.setCheckInEvent(event_id, excuse)),
+    (eventId: string, excuse: boolean) => dispatch(_kappa.setCheckInEvent(eventId, excuse)),
     [dispatch]
   );
   const dispatchGetMyAttendance = React.useCallback(() => dispatch(_kappa.getMyAttendance(user)), [dispatch, user]);
   const dispatchCheckIn = React.useCallback(
-    (event_id: string, event_code: string) => dispatch(_kappa.checkIn(user, event_id, event_code)),
+    (eventId: string, eventCode: string) => dispatch(_kappa.checkIn(user, eventId, eventCode)),
     [dispatch, user]
   );
   const dispatchCreateExcuse = React.useCallback(
@@ -91,15 +91,15 @@ const CheckInContent: React.FC<{
   const alreadyCheckedIn = React.useMemo(() => {
     if (!selectedEvent) return false;
 
-    return hasValidCheckIn(records, user.email, selectedEvent.id, true);
+    return hasValidCheckIn(records, user.email, selectedEvent._id, true);
   }, [user, records, selectedEvent]);
 
   const eventOptions = React.useMemo(() => {
     return futureEventArray
-      .filter((event) => !hasValidCheckIn(records, user.email, event.id, true))
+      .filter((event) => !hasValidCheckIn(records, user.email, event._id, true))
       .sort(sortEventByDate)
       .map((event) => ({
-        id: event.id,
+        id: event._id,
         title: event.title,
         subtitle: moment(event.start).format('ddd LLL')
       }));
@@ -165,22 +165,22 @@ const CheckInContent: React.FC<{
         } else if (data.indexOf(':') > 0) {
           const pieces = data.split(':');
 
-          let event_id = '';
-          const event_code = pieces[0];
+          let eventId = '';
+          const eventCode = pieces[0];
 
           for (const event of eventOptions) {
             if (event.id === pieces[0]) {
-              event_id = pieces[0];
+              eventId = pieces[0];
               break;
             }
           }
 
-          if (event_id !== '' && numberFormatter(event_code) === event_code && event_code.length === 4) {
+          if (eventId !== '' && numberFormatter(eventCode) === eventCode && eventCode.length === 4) {
             setScanning(false);
             setScanned(true);
-            setCode(event_code);
-            dispatchSetCheckInEvent(event_id, false);
-            dispatchCheckIn(event_id, event_code);
+            setCode(eventCode);
+            dispatchSetCheckInEvent(eventId, false);
+            dispatchCheckIn(eventId, eventCode);
           }
         }
       }

@@ -16,7 +16,7 @@ import { useColorScheme } from 'react-native-appearance';
 import moment from 'moment';
 
 import { TRedux } from '@reducers';
-import { TEvent, TPoint } from '@backend/kappa';
+import { TEvent, TPointsDict } from '@backend/kappa';
 import { theme } from '@constants';
 import {
   Block,
@@ -39,7 +39,7 @@ const { width, height } = Dimensions.get('window');
 const EditEventPage: React.FC<{
   initialEvent: TEvent;
   onPressBack(): void;
-  onPressSave(event: Partial<TEvent>, points: Partial<TPoint>[]): void;
+  onPressSave(event: Partial<TEvent>, eventId?: string): void;
 }> = ({ initialEvent, onPressBack, onPressSave }) => {
   const isSavingEvent = useSelector((state: TRedux) => state.kappa.isSavingEvent);
 
@@ -47,7 +47,7 @@ const EditEventPage: React.FC<{
   const colorScheme = useColorScheme();
 
   const [choosingType, setChoosingType] = React.useState<boolean>(false);
-  const [type, setType] = React.useState<string>(initialEvent ? initialEvent.event_type : '');
+  const [type, setType] = React.useState<string>(initialEvent ? initialEvent.eventType : '');
 
   const [showErrors, setShowErrors] = React.useState<boolean>(false);
   const [title, setTitle] = React.useState<string>(initialEvent ? initialEvent.title : '');
@@ -84,7 +84,7 @@ const EditEventPage: React.FC<{
 
   const onPressSaveButton = React.useCallback(() => {
     const event: Partial<TEvent> = {
-      event_type: type,
+      eventType: type,
       mandatory: mandatory ? 1 : 0,
       excusable: excusable ? 1 : 0,
       title,
@@ -93,9 +93,9 @@ const EditEventPage: React.FC<{
       duration: parseInt(duration || '0', 10),
       location,
 
-      id: initialEvent ? initialEvent.id : '',
+      _id: initialEvent ? initialEvent._id : '',
       creator: initialEvent ? initialEvent.creator : '',
-      event_code: initialEvent ? initialEvent.event_code : ''
+      eventCode: initialEvent ? initialEvent.eventCode : ''
     };
 
     if (event.title === '' || event.duration === 0) {
@@ -104,30 +104,17 @@ const EditEventPage: React.FC<{
       return;
     }
 
-    const points: Partial<TPoint>[] = [
-      {
-        category: 'PROF',
-        count: parseInt(profPoints || '0', 10)
-      },
-      {
-        category: 'PHIL',
-        count: parseInt(philPoints || '0', 10)
-      },
-      {
-        category: 'BRO',
-        count: parseInt(broPoints || '0', 10)
-      },
-      {
-        category: 'RUSH',
-        count: parseInt(rushPoints || '0', 10)
-      },
-      {
-        category: 'ANY',
-        count: parseInt(anyPoints || '0', 10)
-      }
-    ];
+    const points: TPointsDict = {
+      PROF: parseInt(profPoints || '0', 10),
+      PHIL: parseInt(philPoints || '0', 10),
+      BRO: parseInt(broPoints || '0', 10),
+      RUSH: parseInt(rushPoints || '0', 10),
+      ANY: parseInt(anyPoints || '0', 10)
+    };
 
-    onPressSave(event, points);
+    event.points = points;
+
+    onPressSave(event, event._id);
   }, [
     type,
     mandatory,

@@ -33,9 +33,7 @@ const EventSearchPage: React.FC<{
   const [anyPoints, setAnyPoints] = React.useState<string>('');
 
   const dispatch = useDispatch();
-  const dispatchSelectEvent = React.useCallback((event_id: string) => dispatch(_kappa.selectEvent(event_id)), [
-    dispatch
-  ]);
+  const dispatchSelectEvent = React.useCallback((eventId: string) => dispatch(_kappa.selectEvent(eventId)), [dispatch]);
   const dispatchGetEventSearchResults = React.useCallback(
     () =>
       dispatch(
@@ -54,13 +52,11 @@ const EventSearchPage: React.FC<{
   const insets = useSafeArea();
 
   const eventOptions = React.useMemo(() => {
-    const now = moment();
-
     return eventSearchResults
-      .filter((event) => getEventById(events, event.id) !== null)
+      .filter((event) => getEventById(events, event._id) !== null)
       .sort(sortEventByDate)
       .map((event) => ({
-        id: event.id,
+        id: event._id,
         title: event.title,
         subtitle: moment(event.start).format('ddd LLL')
       }));

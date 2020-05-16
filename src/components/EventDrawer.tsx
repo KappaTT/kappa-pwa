@@ -457,7 +457,7 @@ const EventDrawer: React.FC = () => {
                       {user.privileged === true && (
                         <Block style={styles.splitProperty}>
                           <Text style={styles.propertyHeader}>Check-In Code</Text>
-                          <Text style={styles.propertyValue}>{selectedEvent.event_code}</Text>
+                          <Text style={styles.propertyValue}>{selectedEvent.eventCode}</Text>
                         </Block>
                       )}
                     </Block>

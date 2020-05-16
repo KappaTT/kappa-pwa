@@ -42,7 +42,7 @@ const MessagesContent: React.FC<{
   const excusedArray = Object.values(excused)
     .filter((excuse) => excuse.approved === 1)
     .map((excuse: TExcuse) => {
-      const event = getEventById(events, excuse.event_id);
+      const event = getEventById(events, excuse.eventId);
 
       if (isEmpty(event)) return null;
 
@@ -84,7 +84,7 @@ const MessagesContent: React.FC<{
 
     if (
       pendingExcusesArray.findIndex(
-        (excuse: TPendingExcuse) => excuse.event_id === selectedExcuse.event_id && excuse.netid === selectedExcuse.netid
+        (excuse: TPendingExcuse) => excuse.eventId === selectedExcuse.eventId && excuse.email === selectedExcuse.email
       ) === -1
     ) {
       setSelectedExcuse(null);
@@ -104,20 +104,18 @@ const MessagesContent: React.FC<{
   }, [user.sessionToken, isFocused, loadData]);
 
   const getExcuseRequester = (excuse: TPendingExcuse) => {
-    const email = `${excuse.netid}@illinois.edu`;
-
-    if (directory.hasOwnProperty(email)) {
-      return `${directory[email].givenName} ${directory[email].familyName}`;
+    if (directory.hasOwnProperty(excuse.email)) {
+      return `${directory[excuse.email].givenName} ${directory[excuse.email].familyName}`;
     }
 
-    return excuse.netid;
+    return excuse.email;
   };
 
   const renderExcuse = (excuse: TPendingExcuse, separator: boolean = true, disable: boolean = false) => {
     if (excuse === null) return <React.Fragment />;
 
     return (
-      <React.Fragment key={`${excuse.event_id}:${excuse.netid}`}>
+      <React.Fragment key={`${excuse.eventId}:${excuse.email}`}>
         <TouchableOpacity disabled={!user.privileged || disable} onPress={() => onSelectExcuse(excuse)}>
           <Block style={styles.excuseContainer}>
             <Text style={styles.excuseRequester}>{getExcuseRequester(excuse)}</Text>
@@ -176,7 +174,7 @@ const MessagesContent: React.FC<{
               <Text style={styles.description}>You have no approved excuses</Text>
             ) : (
               excusedArray.map((excuse) => (
-                <Block key={`${excuse.event_id}:${excuse.netid}`} style={styles.approvedWrapper}>
+                <Block key={`${excuse.eventId}:${excuse.email}`} style={styles.approvedWrapper}>
                   <Text style={styles.approvedTitle}>{excuse.title}</Text>
                   <Text style={styles.approvedStart}>{excuse.prettyStart}</Text>
                 </Block>

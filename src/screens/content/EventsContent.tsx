@@ -14,7 +14,7 @@ import { EditEventPage, EventSearchPage } from '@pages';
 import { NavigationTypes } from '@types';
 import { HeaderHeight, isEmpty, HORIZONTAL_PADDING } from '@services/utils';
 import { log } from '@services/logService';
-import { TEvent, TPoint } from '@backend/kappa';
+import { TEvent } from '@backend/kappa';
 import { hasValidCheckIn, getEventById, shouldLoad } from '@services/kappaService';
 import { hapticImpact } from '@services/hapticService';
 
@@ -70,7 +70,7 @@ const EventsContent: React.FC<{
   const dispatchSelectEvent = React.useCallback((eventId: string) => dispatch(_kappa.selectEvent(eventId)), [dispatch]);
   const dispatchEditNewEvent = React.useCallback(() => dispatch(_kappa.editNewEvent()), [dispatch]);
   const dispatchSaveEditEvent = React.useCallback(
-    (event: Partial<TEvent>, points: Partial<TPoint>[]) => dispatch(_kappa.saveEditEvent(user, event, points)),
+    (event: Partial<TEvent>, eventId?: string) => dispatch(_kappa.saveEditEvent(user, event, eventId)),
     [dispatch, user]
   );
   const dispatchCancelEditEvent = React.useCallback(() => dispatch(_kappa.cancelEditEvent()), [dispatch]);
@@ -141,7 +141,7 @@ const EventsContent: React.FC<{
   }, [isFocused, loadData, user.sessionToken]);
 
   const keyExtractor = (item: TEvent, index) => {
-    return `${item.id}-${index}`;
+    return `${item._id}-${index}`;
   };
 
   const renderSectionHeader = ({ section: { title, data } }) => {
@@ -159,7 +159,7 @@ const EventsContent: React.FC<{
           onPress={() => {
             hapticImpact();
 
-            dispatchSelectEvent(item.id);
+            dispatchSelectEvent(item._id);
           }}
         >
           <Block style={styles.eventContainer}>
@@ -177,7 +177,7 @@ const EventsContent: React.FC<{
                 />
               )}
 
-              {hasValidCheckIn(records, user.email, item.id) && (
+              {hasValidCheckIn(records, user.email, item._id) && (
                 <Icon
                   style={styles.checkIcon}
                   family="Feather"

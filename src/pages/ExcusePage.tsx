@@ -22,32 +22,16 @@ const ExcusePage: React.FC<{
   const [readyToDelete, setReadyToDelete] = React.useState<boolean>(false);
 
   const dispatch = useDispatch();
-  const dispatchApproveExcuse = React.useCallback(
-    () =>
-      dispatch(
-        _kappa.approveExcuse(user, {
-          event_id: excuse.event_id,
-          netid: excuse.netid,
-          reason: excuse.reason,
-          late: excuse.late,
-          approved: 1
-        })
-      ),
-    [dispatch, user, excuse]
-  );
-  const dispatchRejectExcuse = React.useCallback(
-    () =>
-      dispatch(
-        _kappa.rejectExcuse(user, {
-          event_id: excuse.event_id,
-          netid: excuse.netid,
-          reason: excuse.reason,
-          late: excuse.late,
-          approved: 0
-        })
-      ),
-    [dispatch, user, excuse]
-  );
+  const dispatchApproveExcuse = React.useCallback(() => dispatch(_kappa.approveExcuse(user, excuse._id)), [
+    dispatch,
+    user,
+    excuse
+  ]);
+  const dispatchRejectExcuse = React.useCallback(() => dispatch(_kappa.rejectExcuse(user, excuse._id)), [
+    dispatch,
+    user,
+    excuse
+  ]);
 
   const insets = useSafeArea();
 
