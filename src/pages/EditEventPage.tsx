@@ -58,8 +58,8 @@ const EditEventPage: React.FC<{
   );
   const [duration, setDuration] = React.useState<string>(initialEvent ? initialEvent.duration.toString() : '');
   const [location, setLocation] = React.useState<string>(initialEvent ? initialEvent.location : '');
-  const [mandatory, setMandatory] = React.useState<boolean>(initialEvent ? initialEvent.mandatory === 1 : false);
-  const [excusable, setExcusable] = React.useState<boolean>(initialEvent ? initialEvent.excusable === 1 : true);
+  const [mandatory, setMandatory] = React.useState<boolean>(initialEvent ? initialEvent.mandatory : false);
+  const [excusable, setExcusable] = React.useState<boolean>(initialEvent ? initialEvent.excusable : true);
   const [profPoints, setProfPoints] = React.useState<string>(
     initialEvent ? extractPoints(initialEvent.points, 'PROF') : ''
   );
@@ -85,8 +85,8 @@ const EditEventPage: React.FC<{
   const onPressSaveButton = React.useCallback(() => {
     const event: Partial<TEvent> = {
       eventType: type,
-      mandatory: mandatory ? 1 : 0,
-      excusable: excusable ? 1 : 0,
+      mandatory,
+      excusable,
       title,
       description,
       start: startDate.toISOString(),

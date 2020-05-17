@@ -77,7 +77,7 @@ const CheckInContent: React.FC<{
     [dispatch, user]
   );
   const dispatchCreateExcuse = React.useCallback(
-    () => dispatch(_kappa.createExcuse(user, getEventById(futureEvents, checkInEventId), { reason, late: 0 })),
+    () => dispatch(_kappa.createExcuse(user, getEventById(futureEvents, checkInEventId), { reason, late: false })),
     [dispatch, user, futureEvents, checkInEventId, reason]
   );
   const dispatchShowToast = React.useCallback((toast: Partial<TToast>) => dispatch(_ui.showToast(toast)), [dispatch]);
@@ -364,7 +364,7 @@ const CheckInContent: React.FC<{
                     style={[
                       styles.excuseContainer,
                       selectedEvent !== null &&
-                        selectedEvent.excusable === 0 && {
+                        !selectedEvent.excusable && {
                           opacity: 0.5
                         }
                     ]}
@@ -374,7 +374,7 @@ const CheckInContent: React.FC<{
                     </Block>
 
                     <FormattedInput
-                      editable={selectedEvent === null || selectedEvent.excusable === 1}
+                      editable={selectedEvent === null || selectedEvent.excusable}
                       style={styles.multiInput}
                       multiline={true}
                       placeholderText="reason"
@@ -450,7 +450,7 @@ const CheckInContent: React.FC<{
                       isCheckingIn ||
                       isCreatingExcuse ||
                       selectedEvent === null ||
-                      selectedEvent.excusable === 0 ||
+                      !selectedEvent.excusable ||
                       alreadyCheckedIn ||
                       reason.trim() === ''
                     }

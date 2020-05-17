@@ -17,7 +17,7 @@ export default (eventId: string) =>
             eventId: '2',
             netid: 'jjt4',
             reason: 'I was sick',
-            approved: 1
+            approved: true
           }
         ]
       }
@@ -29,7 +29,7 @@ export default (eventId: string) =>
             eventId: '4',
             netid: 'jjt4',
             reason: 'I was sick',
-            approved: 0
+            approved: false
           }
         ]
       }

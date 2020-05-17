@@ -167,7 +167,7 @@ const EventsContent: React.FC<{
               <Text style={styles.eventTitle}>{item.title}</Text>
               <Text style={styles.eventDate}>{moment(item.start).format('h:mm A')}</Text>
 
-              {item.mandatory === 1 && (
+              {item.mandatory && (
                 <Icon
                   style={styles.mandatoryIcon}
                   family="Feather"

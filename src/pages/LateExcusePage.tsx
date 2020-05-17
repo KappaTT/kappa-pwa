@@ -32,7 +32,7 @@ const LateExcusePage: React.FC<{
 
   const dispatch = useDispatch();
   const dispatchCreateExcuse = React.useCallback(
-    () => dispatch(_kappa.createExcuse(user, selectedEvent, { reason, late: 1 })),
+    () => dispatch(_kappa.createExcuse(user, selectedEvent, { reason, late: true })),
     [dispatch, user, selectedEvent, reason]
   );
   const dispatchShowToast = React.useCallback((toast: Partial<TToast>) => dispatch(_ui.showToast(toast)), [dispatch]);

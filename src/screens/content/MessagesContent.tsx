@@ -40,7 +40,7 @@ const MessagesContent: React.FC<{
 
   const excused = getExcusedEvents(records, user.email);
   const excusedArray = Object.values(excused)
-    .filter((excuse) => excuse.approved === 1)
+    .filter((excuse) => excuse.approved)
     .map((excuse: TExcuse) => {
       const event = getEventById(events, excuse.eventId);
 
@@ -123,7 +123,7 @@ const MessagesContent: React.FC<{
             <Block style={styles.excuseEvent}>
               <Text style={styles.excuseEventTitle}>{excuse.title}</Text>
               <Text style={styles.excuseEventStart}>{moment(excuse.start).format('MM/DD')}</Text>
-              {excuse.late === 1 && <Text style={styles.excuseLate}>LATE</Text>}
+              {excuse.late && <Text style={styles.excuseLate}>LATE</Text>}
             </Block>
 
             <Text style={styles.excuseReason}>{excuse.reason}</Text>

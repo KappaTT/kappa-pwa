@@ -22,12 +22,12 @@ const ExcusePage: React.FC<{
   const [readyToDelete, setReadyToDelete] = React.useState<boolean>(false);
 
   const dispatch = useDispatch();
-  const dispatchApproveExcuse = React.useCallback(() => dispatch(_kappa.approveExcuse(user, excuse._id)), [
+  const dispatchApproveExcuse = React.useCallback(() => dispatch(_kappa.approveExcuse(user, excuse)), [
     dispatch,
     user,
     excuse
   ]);
-  const dispatchRejectExcuse = React.useCallback(() => dispatch(_kappa.rejectExcuse(user, excuse._id)), [
+  const dispatchRejectExcuse = React.useCallback(() => dispatch(_kappa.rejectExcuse(user, excuse)), [
     dispatch,
     user,
     excuse
