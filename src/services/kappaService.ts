@@ -129,7 +129,7 @@ export const mergeRecords = (
       mergedRecords.excused[email] = {};
     }
 
-    if (excuse.approved === -1) {
+    if (excuse.approved === null) {
       delete mergedRecords.excused[email][eventId];
     } else {
       mergedRecords.excused[email][eventId] = excuse;
@@ -291,7 +291,7 @@ export const hasValidCheckIn = (records: TRecords, email: string, eventId: strin
 
   const excuse = getExcuse(records, email, eventId);
 
-  return excuse !== undefined && (allowPending || excuse.approved === 1);
+  return excuse !== undefined && (allowPending || excuse.approved);
 };
 
 export const getMandatoryEvents = (events: TEventDict) => {

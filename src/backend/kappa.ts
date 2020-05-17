@@ -12,8 +12,8 @@ export interface TEvent {
   creator: string;
   eventType: string;
   eventCode?: string;
-  mandatory: 0 | 1;
-  excusable: 0 | 1;
+  mandatory: boolean;
+  excusable: boolean;
   title: string;
   description: string;
   start: string;
@@ -57,8 +57,8 @@ export interface TExcuse {
   eventId: string;
   email: string;
   reason: string;
-  late: 0 | 1;
-  approved: -1 | 0 | 1;
+  late: boolean;
+  approved: boolean;
 }
 
 export interface TPendingExcuse extends TExcuse {
@@ -519,7 +519,7 @@ export interface TCreateExcusePayload {
   event: TEvent;
   excuse: {
     reason: string;
-    late: 0 | 1;
+    late: boolean;
   };
 }
 
@@ -582,7 +582,9 @@ export interface TUpdateExcusePayload {
   user: TUser;
   excuse: {
     _id: string;
-    approved: 0 | 1;
+    eventId: string;
+    email: string;
+    approved: boolean;
   };
 }
 
@@ -609,7 +611,7 @@ export const updateExcuse = async (payload: TUpdateExcusePayload): Promise<TUpda
       payload.user.sessionToken
     );
 
-    log('Approve excuse response', response.code);
+    log('Modify excuse response', response);
 
     if (!response.success || response.code === 500) {
       return fail({}, 'issue connecting to the server', 500);

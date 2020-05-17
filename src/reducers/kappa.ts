@@ -610,8 +610,7 @@ export default (state = initialState, action: any): TKappaState => {
         isApprovingExcuse: false,
         approveExcuseSuccessDate: moment(),
         pendingExcusesArray: state.pendingExcusesArray.filter(
-          (excuse: TPendingExcuse) =>
-            excuse.eventId !== action.excused[0].eventId || excuse.email !== action.excused[0].email
+          (excuse: TPendingExcuse) => excuse._id !== action.excused[0]._id
         ),
         loadHistory: excludeFromHistory(
           state.loadHistory,
@@ -648,8 +647,7 @@ export default (state = initialState, action: any): TKappaState => {
         isRejectingExcuse: false,
         rejectExcuseSuccessDate: moment(),
         pendingExcusesArray: state.pendingExcusesArray.filter(
-          (excuse: TPendingExcuse) =>
-            excuse.eventId !== action.excused[0].eventId || excuse.email !== action.excused[0].email
+          (excuse: TPendingExcuse) => excuse._id !== action.excused[0]._id
         ),
         ...recomputeKappaState({
           events: state.events,

@@ -412,7 +412,7 @@ export const createExcuse = (
   event: TEvent,
   excuse: {
     reason: string;
-    late: 0 | 1;
+    late: boolean;
   }
 ) => {
   return (dispatch) => {
@@ -448,11 +448,11 @@ const approveExcuseFailure = (err) => {
   };
 };
 
-export const approveExcuse = (user: TUser, excuseId: string) => {
+export const approveExcuse = (user: TUser, excuse: TExcuse) => {
   return (dispatch) => {
     dispatch(approvingExcuse());
 
-    Kappa.updateExcuse({ user, excuse: { _id: excuseId, approved: 1 } }).then((res) => {
+    Kappa.updateExcuse({ user, excuse: { ...excuse, approved: true } }).then((res) => {
       if (res.success) {
         dispatch(approveExcuseSuccess(res.data));
       } else {
@@ -482,11 +482,11 @@ const rejectExcuseFailure = (err) => {
   };
 };
 
-export const rejectExcuse = (user: TUser, excuseId: string) => {
+export const rejectExcuse = (user: TUser, excuse: TExcuse) => {
   return (dispatch) => {
     dispatch(rejectingExcuse());
 
-    Kappa.updateExcuse({ user, excuse: { _id: excuseId, approved: 0 } }).then((res) => {
+    Kappa.updateExcuse({ user, excuse: { ...excuse, approved: false } }).then((res) => {
       if (res.success) {
         dispatch(rejectExcuseSuccess(res.data));
       } else {
