@@ -501,7 +501,7 @@ export default (state = initialState, action: any): TKappaState => {
       };
     case DELETE_EVENT_SUCCESS: {
       const remainingEvents = state.events;
-      delete remainingEvents[action.event.id];
+      delete remainingEvents[action.event._id];
 
       return {
         ...state,
