@@ -611,7 +611,7 @@ export const updateExcuse = async (payload: TUpdateExcusePayload): Promise<TUpda
       payload.user.sessionToken
     );
 
-    log('Modify excuse response', response);
+    log('Modify excuse response', response.code);
 
     if (!response.success || response.code === 500) {
       return fail({}, 'issue connecting to the server', 500);
