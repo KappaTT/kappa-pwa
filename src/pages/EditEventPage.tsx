@@ -93,7 +93,6 @@ const EditEventPage: React.FC<{
       duration: parseInt(duration || '0', 10),
       location,
 
-      _id: initialEvent ? initialEvent._id : '',
       creator: initialEvent ? initialEvent.creator : '',
       eventCode: initialEvent ? initialEvent.eventCode : ''
     };
@@ -114,7 +113,7 @@ const EditEventPage: React.FC<{
 
     event.points = points;
 
-    onPressSave(event, event._id);
+    onPressSave(event, initialEvent ? initialEvent._id : '');
   }, [
     type,
     mandatory,
