@@ -394,6 +394,8 @@ export const prettyPoints = (points: TPointsDict) => {
   let pretty = '';
 
   for (const [category, count] of Object.entries(points)) {
+    if (count === 0) continue;
+
     if (pretty !== '') {
       pretty += '\n';
     }
