@@ -6,15 +6,11 @@ import {
   AntDesign,
   Octicons,
   MaterialIcons,
-  MaterialCommunityIcons,
-  createIconSetFromIcoMoon
+  MaterialCommunityIcons
 } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
 
 import GalioTheme, { withGalio } from './theme';
-
-import galioConfig from '../../assets/font/galio.json';
-const IconGalioExtra = createIconSetFromIcoMoon(galioConfig, 'Galio');
 
 class Icon extends React.Component {
   render() {
@@ -22,16 +18,6 @@ class Icon extends React.Component {
 
     if (name) {
       switch (family) {
-        case 'Galio':
-          return (
-            <IconGalioExtra
-              name={name}
-              family={family}
-              size={size || theme.SIZES.BASE}
-              color={color || theme.COLORS.BLACK}
-              {...rest}
-            />
-          );
         case 'FontAwesome':
           return (
             <FontAwesome name={name} size={size || theme.SIZES.BASE} color={color || theme.COLORS.BLACK} {...rest} />

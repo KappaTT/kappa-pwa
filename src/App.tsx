@@ -62,9 +62,7 @@ const App = () => {
         'OpenSans-Bold': require('../assets/font/OpenSans-Bold.ttf'),
         'OpenSans-SemiBold': require('../assets/font/OpenSans-SemiBold.ttf'),
         'OpenSans-Light': require('../assets/font/OpenSans-Light.ttf'),
-        'PlayfairDisplay-Bold': require('../assets/font/PlayfairDisplay-Bold.ttf'),
-        Galio: require('../assets/font/galio.ttf'),
-        ArgonExtra: require('../assets/font/argon.ttf')
+        'PlayfairDisplay-Bold': require('../assets/font/PlayfairDisplay-Bold.ttf')
       })
     ]);
   };
