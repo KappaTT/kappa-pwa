@@ -22,7 +22,7 @@ enableScreens();
 
 const assetImages = [Images.Kappa];
 
-function cacheImages(images: any) {
+const cacheImages = (images: any) => {
   return images.map((image: any) => {
     if (typeof image === 'string') {
       return Image.prefetch(image);
@@ -30,7 +30,26 @@ function cacheImages(images: any) {
       return Asset.fromModule(image).downloadAsync();
     }
   });
-}
+};
+
+const _loadResourcesAsync = async () => {
+  await Promise.all([
+    ...cacheImages(assetImages),
+    Font.loadAsync({
+      OpenSans: require('../assets/font/OpenSans-Regular.ttf'),
+      'OpenSans-Bold': require('../assets/font/OpenSans-Bold.ttf'),
+      'OpenSans-SemiBold': require('../assets/font/OpenSans-SemiBold.ttf'),
+      'OpenSans-Light': require('../assets/font/OpenSans-Light.ttf'),
+      'PlayfairDisplay-Bold': require('../assets/font/PlayfairDisplay-Bold.ttf')
+    })
+  ]);
+};
+
+const _handleLoadingError = (error: any) => {
+  // In this case, you might want to report the error to your error
+  // reporting service, for example Sentry
+  console.warn(error);
+};
 
 const App = () => {
   const loadedUser = useSelector((state: TRedux) => state.auth.loadedUser);
@@ -54,28 +73,9 @@ const App = () => {
   const dispatchLoadUser = React.useCallback(() => dispatch(_auth.loadUser()), [dispatch]);
   const dispatchLoadPrefs = React.useCallback(() => dispatch(_prefs.loadPrefs()), [dispatch]);
 
-  const _loadResourcesAsync = async () => {
-    await Promise.all([
-      ...cacheImages(assetImages),
-      Font.loadAsync({
-        OpenSans: require('../assets/font/OpenSans-Regular.ttf'),
-        'OpenSans-Bold': require('../assets/font/OpenSans-Bold.ttf'),
-        'OpenSans-SemiBold': require('../assets/font/OpenSans-SemiBold.ttf'),
-        'OpenSans-Light': require('../assets/font/OpenSans-Light.ttf'),
-        'PlayfairDisplay-Bold': require('../assets/font/PlayfairDisplay-Bold.ttf')
-      })
-    ]);
-  };
-
-  const _handleLoadingError = (error: any) => {
-    // In this case, you might want to report the error to your error
-    // reporting service, for example Sentry
-    console.warn(error);
-  };
-
-  const _handleFinishLoading = () => {
+  const _handleFinishLoading = React.useCallback(() => {
     setIsLoadingComplete(true);
-  };
+  }, []);
 
   React.useEffect(() => {
     if (!loadedUser) {
