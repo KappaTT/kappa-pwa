@@ -6,6 +6,7 @@
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
+    "resolveJsonModule": true,
     "baseUrl": "src",
     "paths": {
       "@backend": ["backend"],
