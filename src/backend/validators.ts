@@ -1,7 +1,3 @@
-import Filter from 'bad-words';
-
-export const FILTER = new Filter();
-
 export const TYPE_EMAIL = 'email';
 export const TYPE_NUMBER = 'number';
 export type TYPE = typeof TYPE_EMAIL | typeof TYPE_NUMBER;
@@ -44,8 +40,6 @@ export const validate = (value: string, requirements: TRequirement, regex_fail?:
     return `must be at least ${requirements.minLength} characters`;
   if (!(requirements.maxLength === undefined || value.length <= requirements.maxLength))
     return `must be less than ${requirements.maxLength} characters`;
-
-  if (requirements.clean && FILTER.isProfane(value)) return 'contains bad words';
 
   return '';
 };
