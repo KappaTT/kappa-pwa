@@ -51,7 +51,7 @@ const Toast: React.FC<{
       duration: 400,
       useNativeDriver: true
     }).start();
-  });
+  }, [progress]);
 
   React.useEffect(() => {
     if (shouldClose) {
