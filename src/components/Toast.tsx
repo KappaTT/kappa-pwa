@@ -44,6 +44,12 @@ const Toast: React.FC<{
     });
   }, [onDoneClosing, progress]);
 
+  const onPressBackground = React.useCallback(() => {
+    if (allowClose) {
+      handleClose();
+    }
+  }, [allowClose, handleClose]);
+
   React.useEffect(() => {
     Animated.timing(progress, {
       toValue: 0,
@@ -92,13 +98,7 @@ const Toast: React.FC<{
           alignItems: 'center'
         }}
       >
-        <TouchableOpacity
-          style={styles.background}
-          activeOpacity={1}
-          onPress={() => {
-            allowClose && handleClose();
-          }}
-        />
+        <TouchableOpacity style={styles.background} activeOpacity={1} onPress={onPressBackground} />
 
         <Block style={styles.wrapper}>
           <Block style={styles.container}>
