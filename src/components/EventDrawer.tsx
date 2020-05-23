@@ -92,7 +92,7 @@ const EventDrawer: React.FC = () => {
   const intermediateSheetHeight = 400 + insets.bottom;
 
   const [snapPoint, setSnapPoint] = React.useState<number>(2);
-  const [callbackNode, setCallbackNode] = React.useState(new Animated.Value(1));
+  const callbackNode = React.useRef(new Animated.Value(1)).current;
 
   const backgroundOpacity = callbackNode.interpolate({
     inputRange: [0, 1],

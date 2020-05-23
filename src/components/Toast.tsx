@@ -31,7 +31,8 @@ const Toast: React.FC<{
 }) => {
   const heightBase = new Animated.Value(height * 0.05);
   const opacityBase = new Animated.Value(1);
-  const [progress, setProgress] = React.useState<Animated.Value>(new Animated.Value(1));
+
+  const progress = React.useRef<Animated.Value>(new Animated.Value(1)).current;
 
   const handleClose = React.useCallback(() => {
     Animated.timing(progress, {
