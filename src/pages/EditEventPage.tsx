@@ -36,6 +36,10 @@ import { extractPoints } from '@services/kappaService';
 
 const { width, height } = Dimensions.get('window');
 
+const numberFormatter = (text: string) => {
+  return text !== undefined ? text.replace(/\D/g, '') : '';
+};
+
 const EditEventPage: React.FC<{
   initialEvent: TEvent;
   onPressBack(): void;
@@ -140,21 +144,17 @@ const EditEventPage: React.FC<{
     }
   }, [choosingType, onPressBack]);
 
-  const onPressStartDate = () => {
+  const onPressStartDate = React.useCallback(() => {
     setPickerMode('date');
-  };
+  }, []);
 
-  const onPressStartTime = () => {
+  const onPressStartTime = React.useCallback(() => {
     setPickerMode('time');
-  };
+  }, []);
 
-  const onPressClosePicker = () => {
+  const onPressClosePicker = React.useCallback(() => {
     setPickerMode(null);
-  };
-
-  const numberFormatter = (text: string) => {
-    return text !== undefined ? text.replace(/\D/g, '') : '';
-  };
+  }, []);
 
   const onChangeDate = React.useCallback(
     (_event, selectedDate) => {
