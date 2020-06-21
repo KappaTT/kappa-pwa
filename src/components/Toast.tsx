@@ -8,6 +8,9 @@ import Text from '@components/Text';
 
 const { width, height } = Dimensions.get('window');
 
+const heightBase = new Animated.Value(height * 0.05);
+const opacityBase = new Animated.Value(1);
+
 const Toast: React.FC<{
   title?: string;
   message?: string;
@@ -29,9 +32,6 @@ const Toast: React.FC<{
   onDoneClosing,
   children
 }) => {
-  const heightBase = new Animated.Value(height * 0.05);
-  const opacityBase = new Animated.Value(1);
-
   const progress = React.useRef<Animated.Value>(new Animated.Value(1)).current;
 
   const handleClose = React.useCallback(() => {

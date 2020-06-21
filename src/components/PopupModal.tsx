@@ -10,6 +10,9 @@ import KeyboardDismissView from '@components/KeyboardDismissView';
 
 const { width, height } = Dimensions.get('window');
 
+const heightBase = new Animated.Value(height * 0.05);
+const opacityBase = new Animated.Value(1);
+
 const PopupModal: React.FC<{
   title: string;
   subtitle?: string;
@@ -19,9 +22,6 @@ const PopupModal: React.FC<{
   onPressClose(): void;
   children?: React.ReactNode;
 }> = ({ title, subtitle, allowClose = true, shouldClose = false, showClose = false, onPressClose, children }) => {
-  const heightBase = new Animated.Value(height * 0.05);
-  const opacityBase = new Animated.Value(1);
-
   const progress = React.useRef<Animated.Value>(new Animated.Value(1)).current;
 
   const handleClose = React.useCallback(() => {
