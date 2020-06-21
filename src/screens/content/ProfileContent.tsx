@@ -159,7 +159,7 @@ const ProfileContent: React.FC<{
               </Block>
               <Block style={styles.splitProperty}>
                 <Text style={styles.propertyHeader}>Phone</Text>
-                <Text style={styles.propertyValue}>{user.phone ? prettyPhone(user.phone) : ''}</Text>
+                <Text style={styles.propertyValue}>{prettyPhone(user.phone)}</Text>
               </Block>
             </Block>
           </Block>
