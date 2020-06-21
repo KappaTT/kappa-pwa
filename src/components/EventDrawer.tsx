@@ -359,7 +359,7 @@ const EventDrawer: React.FC = () => {
         </Block>
 
         <Block style={styles.userList}>
-          {mandatory.length > 0 && (
+          {!isGettingAttendance && mandatory.length > 0 && (
             <React.Fragment>
               <Text
                 style={[
