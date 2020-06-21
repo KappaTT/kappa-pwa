@@ -12,7 +12,7 @@ import { _auth, _kappa } from '@reducers/actions';
 import { theme } from '@constants';
 import { Block, Text, Icon, GeneralMeetingChart } from '@components';
 import { NavigationTypes } from '@types';
-import { prettyPhone, sortEventByDate, shouldLoad } from '@services/kappaService';
+import { prettyPhone, shouldLoad, sortEventsByDateReverse } from '@services/kappaService';
 import { isEmpty, HORIZONTAL_PADDING } from '@services/utils';
 import { log } from '@services/logService';
 import { TEvent } from '@backend/kappa';
@@ -82,24 +82,24 @@ const ProfileContent: React.FC<{
     loadData(true);
   }, [loadData]);
 
-  const onPressEdit = () => {
+  const onPressEdit = React.useCallback(() => {
     hapticImpact();
 
     dispatchEdit();
-  };
+  }, [dispatchEdit]);
 
-  const onPressSignOut = () => {
+  const onPressSignOut = React.useCallback(() => {
     hapticImpact();
 
     dispatchSignOut();
-  };
+  }, [dispatchSignOut]);
 
   const mandatory = React.useMemo(() => {
     if (!user.privileged) return [];
 
     if (isEmpty(missedMandatory[user.email])) return [];
 
-    return Object.values(missedMandatory[user.email]).sort(sortEventByDate);
+    return Object.values(missedMandatory[user.email]).sort(sortEventsByDateReverse);
   }, [user, missedMandatory]);
 
   React.useEffect(() => {
@@ -113,15 +113,6 @@ const ProfileContent: React.FC<{
       loadData(false);
     }
   }, [isFocused, loadData, user.sessionToken]);
-
-  const renderEvent = (event: TEvent) => {
-    return (
-      <Block key={event._id} style={styles.eventContainer}>
-        <Text style={styles.eventTitle}>{event.title}</Text>
-        <Text style={styles.eventDate}>{moment(event.start).format('M/D/Y')}</Text>
-      </Block>
-    );
-  };
 
   return (
     <Block flex>
@@ -242,7 +233,12 @@ const ProfileContent: React.FC<{
               {mandatory.length > 0 && (
                 <React.Fragment>
                   <Text style={styles.mandatoryLabel}>Missed Mandatory</Text>
-                  {mandatory.map((event: TEvent) => renderEvent(event))}
+                  {mandatory.map((event: TEvent) => (
+                    <Block key={event._id} style={styles.eventContainer}>
+                      <Text style={styles.eventTitle}>{event.title}</Text>
+                      <Text style={styles.eventDate}>{moment(event.start).format('M/D/Y')}</Text>
+                    </Block>
+                  ))}
                 </React.Fragment>
               )}
             </Block>

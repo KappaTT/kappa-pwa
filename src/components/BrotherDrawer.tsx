@@ -205,15 +205,6 @@ const BrotherDrawer: React.FC = () => {
     );
   };
 
-  const renderEvent = (event: TEvent) => {
-    return (
-      <Block key={event._id} style={styles.eventContainer}>
-        <Text style={styles.eventTitle}>{event.title}</Text>
-        <Text style={styles.eventDate}>{moment(event.start).format('M/D/Y')}</Text>
-      </Block>
-    );
-  };
-
   const renderAdmin = () => {
     return (
       <Block style={styles.adminContainer}>
@@ -284,7 +275,12 @@ const BrotherDrawer: React.FC = () => {
           {!isGettingAttendance && mandatory.length > 0 && (
             <React.Fragment>
               <Text style={styles.mandatoryLabel}>Missed Mandatory</Text>
-              {mandatory.map((event: TEvent) => renderEvent(event))}
+              {mandatory.map((event: TEvent) => (
+                <Block key={event._id} style={styles.eventContainer}>
+                  <Text style={styles.eventTitle}>{event.title}</Text>
+                  <Text style={styles.eventDate}>{moment(event.start).format('M/D/Y')}</Text>
+                </Block>
+              ))}
             </React.Fragment>
           )}
 
@@ -357,9 +353,7 @@ const BrotherDrawer: React.FC = () => {
                     <Block style={styles.splitProperty}>
                       <TouchableOpacity onPress={onPressPhone}>
                         <Text style={styles.propertyHeader}>Phone</Text>
-                        <Text style={styles.propertyValue}>
-                          {selectedUser.phone ? prettyPhone(selectedUser.phone) : ''}
-                        </Text>
+                        <Text style={styles.propertyValue}>{prettyPhone(selectedUser.phone)}</Text>
                       </TouchableOpacity>
                     </Block>
                   </Block>
