@@ -334,11 +334,15 @@ const BrotherDrawer: React.FC = () => {
 
                 <Block style={styles.userBody}>
                   <Block style={styles.splitPropertyRow}>
-                    <Block style={styles.splitProperty}>
+                    <Block style={styles.splitPropertyThirds}>
+                      <Text style={styles.propertyHeader}>Freshman Year</Text>
+                      <Text style={styles.propertyValue}>{selectedUser.firstYear}</Text>
+                    </Block>
+                    <Block style={styles.splitPropertyThirds}>
                       <Text style={styles.propertyHeader}>Grad Year</Text>
                       <Text style={styles.propertyValue}>{selectedUser.gradYear}</Text>
                     </Block>
-                    <Block style={styles.splitProperty}>
+                    <Block style={styles.splitPropertyThirds}>
                       <Text style={styles.propertyHeader}>Pledge Class</Text>
                       <Text style={styles.propertyValue}>{selectedUser.semester}</Text>
                     </Block>
@@ -496,6 +500,9 @@ const styles = StyleSheet.create({
   },
   splitProperty: {
     width: '50%'
+  },
+  splitPropertyThirds: {
+    width: '33%'
   },
   splitPropertyFifths: {
     width: '20%'

@@ -143,11 +143,15 @@ const ProfileContent: React.FC<{
 
           <Block>
             <Block style={styles.splitPropertyRow}>
-              <Block style={styles.splitProperty}>
+              <Block style={styles.splitPropertyThirds}>
+                <Text style={styles.propertyHeader}>Freshman Year</Text>
+                <Text style={styles.propertyValue}>{user.firstYear}</Text>
+              </Block>
+              <Block style={styles.splitPropertyThirds}>
                 <Text style={styles.propertyHeader}>Grad Year</Text>
                 <Text style={styles.propertyValue}>{user.gradYear}</Text>
               </Block>
-              <Block style={styles.splitProperty}>
+              <Block style={styles.splitPropertyThirds}>
                 <Text style={styles.propertyHeader}>Pledge Class</Text>
                 <Text style={styles.propertyValue}>{user.semester}</Text>
               </Block>
