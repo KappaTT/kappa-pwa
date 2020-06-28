@@ -42,6 +42,7 @@ const styles = StyleSheet.create({
   badgeContainer: {
     borderColor: theme.COLORS.WHITE,
     borderWidth: 3,
+    borderRadius: 7,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center'
