@@ -103,13 +103,16 @@ const MessagesContent: React.FC<{
     }
   }, [user.sessionToken, isFocused, loadData]);
 
-  const getExcuseRequester = (excuse: TPendingExcuse) => {
-    if (directory.hasOwnProperty(excuse.email)) {
-      return `${directory[excuse.email].givenName} ${directory[excuse.email].familyName}`;
-    }
+  const getExcuseRequester = React.useCallback(
+    (excuse: TPendingExcuse) => {
+      if (directory.hasOwnProperty(excuse.email)) {
+        return `${directory[excuse.email].givenName} ${directory[excuse.email].familyName}`;
+      }
 
-    return excuse.email;
-  };
+      return excuse.email;
+    },
+    [directory]
+  );
 
   const renderExcuse = (excuse: TPendingExcuse, separator: boolean = true, disable: boolean = false) => {
     if (excuse === null) return <React.Fragment />;
