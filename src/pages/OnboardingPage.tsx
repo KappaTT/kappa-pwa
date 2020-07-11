@@ -108,7 +108,7 @@ const OnboardingPage: React.FC = () => {
           CONTACT
         </Text>
         <ListButton keyText="Full Name" valueText={`${user.givenName} ${user.familyName}`} disabled={true} />
-        <ListButton keyText="Illinois Email" valueText={user.email} disabled={true} />
+        <ListButton keyText="Email" valueText={user.email} disabled={true} />
         <ListButton keyText="Phone" valueText={prettyPhoneValue} onPress={() => setEditing('Phone')} />
 
         <Text style={styles.heading}>PROFILE</Text>

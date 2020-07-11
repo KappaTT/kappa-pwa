@@ -161,19 +161,13 @@ export const signInWithGoogle = () => {
 
     GoogleService.login().then((res) => {
       if (res.success) {
-        if (res.data.email.endsWith('@illinois.edu')) {
-          dispatch(signInWithGoogleSuccess());
-          dispatch(authenticate(res.data.email, res.data.idToken, res.data));
-        } else if (res.data.email === 'thetataudemo@gmail.com') {
+        if (res.data.email === 'thetataudemo@gmail.com') {
           dispatch(signInWithGoogleSuccess());
           dispatch(setUser(DEMO_USER));
           dispatch(signInSuccess());
         } else {
-          dispatch(
-            signInWithGoogleFailure({
-              message: 'must use a valid illinois.edu email'
-            })
-          );
+          dispatch(signInWithGoogleSuccess());
+          dispatch(authenticate(res.data.email, res.data.idToken, res.data));
         }
       } else {
         dispatch(
