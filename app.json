@@ -5,7 +5,6 @@
     "privacy": "unlisted",
     "platforms": ["ios", "android"],
     "version": "1.0.6",
-    "sdkVersion": "37.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {

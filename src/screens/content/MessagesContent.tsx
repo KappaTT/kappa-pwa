@@ -3,7 +3,7 @@ import { StyleSheet, ScrollView, RefreshControl, TouchableOpacity } from 'react-
 import { useSelector, useDispatch } from 'react-redux';
 import { useSafeArea } from 'react-native-safe-area-context';
 import moment from 'moment';
-import { useIsFocused } from 'react-navigation-hooks';
+import { useIsFocused } from '@react-navigation/native';
 
 import { TRedux } from '@reducers';
 import { _auth, _kappa } from '@reducers/actions';

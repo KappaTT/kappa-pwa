@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useSafeArea } from 'react-native-safe-area-context';
 import moment from 'moment';
 import Constants from 'expo-constants';
-import { useIsFocused } from 'react-navigation-hooks';
+import { useIsFocused } from '@react-navigation/native';
 
 import { hapticImpact } from '@services/hapticService';
 import { TRedux } from '@reducers';

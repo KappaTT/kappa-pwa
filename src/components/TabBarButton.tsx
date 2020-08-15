@@ -10,7 +10,7 @@ import { TUser } from '@backend/auth';
 
 const TabBarButton: React.FC<{
   route: any;
-  renderIcon(props: any): React.ReactNode;
+  renderIcon({ focused, color, size }: { focused: boolean; color: string; size: number }): React.ReactNode;
   label: string;
   isRouteActive: boolean;
   activeTintColor: string;
@@ -31,9 +31,13 @@ const TabBarButton: React.FC<{
   user,
   badge
 }) => {
-  const tintColor = isRouteActive ? activeTintColor : inactiveTintColor;
+  const tintColor = React.useMemo(() => (isRouteActive ? activeTintColor : inactiveTintColor), [
+    activeTintColor,
+    inactiveTintColor,
+    isRouteActive
+  ]);
 
-  const isProfile = label === 'Profile';
+  const isProfile = React.useMemo(() => label === 'Profile', [label]);
 
   return (
     <TouchableWithoutFeedback style={styles.wrapper} onPress={onTabPress} onLongPress={onTabLongPress}>
@@ -43,7 +47,7 @@ const TabBarButton: React.FC<{
             <Icon name="user-check" family="Feather" color={tintColor} size={28} />
           ) : (
             <React.Fragment>
-              {renderIcon({ route, focused: isRouteActive, tintColor })}
+              {renderIcon({ focused: isRouteActive, color: tintColor, size: 28 })}
               <Badge active={badge} />
             </React.Fragment>
           )}

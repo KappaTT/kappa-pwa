@@ -13,7 +13,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useSafeArea } from 'react-native-safe-area-context';
 import moment from 'moment';
 import { BarCodeScanner } from 'expo-barcode-scanner';
-import { useIsFocused } from 'react-navigation-hooks';
+import { useIsFocused } from '@react-navigation/native';
 import { NotificationFeedbackType } from 'expo-haptics';
 
 import { theme } from '@constants';

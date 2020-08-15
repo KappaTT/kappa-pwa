@@ -3,7 +3,7 @@ import { StyleSheet, FlatList, ScrollView, RefreshControl, TouchableOpacity } fr
 import { useSelector, useDispatch } from 'react-redux';
 import { Placeholder, PlaceholderLine, Fade } from 'rn-placeholder';
 import { useSafeArea } from 'react-native-safe-area-context';
-import { useIsFocused } from 'react-navigation-hooks';
+import { useIsFocused } from '@react-navigation/native';
 
 import { theme } from '@constants';
 import { TRedux } from '@reducers';

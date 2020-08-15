@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Image, StatusBar, Dimensions, Platform } from 'react-native';
+import { StyleSheet, Image, StatusBar, Platform } from 'react-native';
 import { AppLoading } from 'expo';
 import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
@@ -14,8 +14,7 @@ import { _auth, _prefs, _ui } from '@reducers/actions';
 import { incompleteUser } from '@backend/auth';
 import { Block, Ghost, FadeModal, SlideModal, EventDrawer, BrotherDrawer, ToastController } from '@components';
 import { Images, theme } from '@constants';
-import AppNavigator from '@navigation/TabAppNavigator';
-import { setTopLevelNavigator } from '@navigation/NavigationService';
+import AppNavigator from '@navigation/AppNavigator';
 import { LoginPage, OnboardingPage } from '@pages';
 
 enableScreens();
@@ -63,7 +62,6 @@ const App = () => {
   const selectedUserEmail = useSelector((state: TRedux) => state.kappa.selectedUserEmail);
 
   const [isLoadingComplete, setIsLoadingComplete] = React.useState<boolean>(false);
-  const [isNavigatorReady, setIsNavigatorReady] = React.useState<boolean>(false);
 
   const dispatch = useDispatch();
   const dispatchShowLogin = React.useCallback(() => dispatch(_auth.showModal()), [dispatch]);
@@ -153,12 +151,7 @@ const App = () => {
 
         <SafeAreaProvider>
           <Block flex>
-            <AppNavigator
-              ref={(navigatorRef) => {
-                setTopLevelNavigator(navigatorRef);
-                setIsNavigatorReady(true);
-              }}
-            />
+            <AppNavigator />
 
             {renderOverlay()}
 

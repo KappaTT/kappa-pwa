@@ -8,17 +8,16 @@ import TabBarButton from '@components/TabBarButton';
 import { NavigationTypes } from '@types';
 import { TRedux } from '@reducers';
 import { TabBarHeight } from '@services/utils';
+import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 
-const TabBar: React.FC<{
-  renderIcon(props: any): React.ReactNode;
-  getLabelText(route: any): string;
-  activeTintColor: string;
-  inactiveTintColor: string;
-  onTabPress(route: any): void;
-  onTabLongPress(route: any): void;
-  navigation: NavigationTypes.ParamType;
-}> = ({ renderIcon, getLabelText, activeTintColor, inactiveTintColor, onTabPress, onTabLongPress, navigation }) => {
-  const { routes, index: activeRouteIndex } = navigation.state;
+const TabBar: React.FC<BottomTabBarProps> = ({
+  state,
+  descriptors,
+  navigation,
+  activeTintColor,
+  inactiveTintColor
+}) => {
+  const focusedOptions = descriptors[state.routes[state.index].key].options;
 
   const user = useSelector((state: TRedux) => state.auth.user);
   const pendingExcusesArray = useSelector((state: TRedux) => state.kappa.pendingExcusesArray);
@@ -41,34 +40,49 @@ const TabBar: React.FC<{
       ]}
     >
       <View style={styles.container}>
-        {routes
-          .filter((route) => !getLabelText({ route }).endsWith('Stack'))
-          .map((route, routeIndex) => {
-            const isRouteActive = routeIndex === activeRouteIndex;
-            const labelText = getLabelText({ route });
+        {state.routes.map((route, routeIndex) => {
+          const { options } = descriptors[route.key];
 
-            const isMessages = labelText === 'Messages';
+          const isRouteActive = routeIndex === state.index;
+          const labelText = options.title || route.name;
 
-            const onPress = () => onTabPress({ route });
+          const isMessages = labelText === 'Messages';
 
-            const onLongPress = () => onTabLongPress({ route });
+          const onPress = () => {
+            const event = navigation.emit({
+              type: 'tabPress',
+              target: route.key,
+              canPreventDefault: true
+            });
 
-            return (
-              <TabBarButton
-                key={routeIndex}
-                route={route}
-                renderIcon={renderIcon}
-                label={labelText}
-                isRouteActive={isRouteActive}
-                activeTintColor={activeTintColor}
-                inactiveTintColor={inactiveTintColor}
-                onTabPress={onPress}
-                onTabLongPress={onLongPress}
-                user={user}
-                badge={isMessages && unreadMessages}
-              />
-            );
-          })}
+            if (!isRouteActive && !event.defaultPrevented) {
+              navigation.navigate(route.name);
+            }
+          };
+
+          const onLongPress = () => {
+            navigation.emit({
+              type: 'tabLongPress',
+              target: route.key
+            });
+          };
+
+          return (
+            <TabBarButton
+              key={routeIndex}
+              route={route}
+              renderIcon={options.tabBarIcon}
+              label={labelText}
+              isRouteActive={isRouteActive}
+              activeTintColor={activeTintColor}
+              inactiveTintColor={inactiveTintColor}
+              onTabPress={onPress}
+              onTabLongPress={onLongPress}
+              user={user}
+              badge={isMessages && unreadMessages}
+            />
+          );
+        })}
       </View>
     </View>
   );
