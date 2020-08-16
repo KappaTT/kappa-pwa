@@ -143,25 +143,25 @@ const ProfileContent: React.FC<{
 
           <Block>
             <Block style={styles.splitPropertyRow}>
-              <Block style={styles.splitPropertyThirds}>
+              <Block style={styles.splitPropertyAuto}>
                 <Text style={styles.propertyHeader}>Freshman Year</Text>
                 <Text style={styles.propertyValue}>{user.firstYear}</Text>
               </Block>
-              <Block style={styles.splitPropertyThirds}>
+              <Block style={styles.splitPropertyAuto}>
                 <Text style={styles.propertyHeader}>Grad Year</Text>
                 <Text style={styles.propertyValue}>{user.gradYear}</Text>
               </Block>
-              <Block style={styles.splitPropertyThirds}>
+              <Block style={styles.splitPropertyAuto}>
                 <Text style={styles.propertyHeader}>Pledge Class</Text>
                 <Text style={styles.propertyValue}>{user.semester}</Text>
               </Block>
             </Block>
             <Block style={styles.splitPropertyRow}>
-              <Block style={styles.splitProperty}>
+              <Block style={styles.splitPropertyAuto}>
                 <Text style={styles.propertyHeader}>Email</Text>
                 <Text style={styles.propertyValue}>{user.email}</Text>
               </Block>
-              <Block style={styles.splitProperty}>
+              <Block style={styles.splitPropertyAuto}>
                 <Text style={styles.propertyHeader}>Phone</Text>
                 <Text style={styles.propertyValue}>{prettyPhone(user.phone)}</Text>
               </Block>
@@ -307,6 +307,9 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'flex-start'
+  },
+  splitPropertyAuto: {
+    marginRight: 20
   },
   splitProperty: {
     width: '50%'
