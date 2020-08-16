@@ -272,7 +272,7 @@ const EventDrawer: React.FC = () => {
             />
             <Block style={styles.circleChartLabels}>
               {isGettingAttendance ? (
-                <ActivityIndicator />
+                <ActivityIndicator color={theme.COLORS.PRIMARY} />
               ) : (
                 <React.Fragment>
                   <Text style={styles.circleChartValue}>{recordStats.percent}</Text>

@@ -42,7 +42,7 @@ const EndCapButton: React.FC<{
       ]}
     >
       {loading ? (
-        <ActivityIndicator style={styles.button} />
+        <ActivityIndicator style={styles.button} color={theme.COLORS.PRIMARY} />
       ) : (
         <TouchableOpacity
           style={styles.button}

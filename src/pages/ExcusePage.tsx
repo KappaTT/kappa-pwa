@@ -66,7 +66,7 @@ const ExcusePage: React.FC<{
               </Block>
 
               {isApprovingExcuse ? (
-                <ActivityIndicator style={styles.zoneIcon} />
+                <ActivityIndicator style={styles.zoneIcon} color={theme.COLORS.PRIMARY} />
               ) : (
                 <TouchableOpacity disabled={isApprovingExcuse || isRejectingExcuse} onPress={dispatchApproveExcuse}>
                   <Icon
@@ -89,7 +89,7 @@ const ExcusePage: React.FC<{
               </Block>
 
               {isRejectingExcuse ? (
-                <ActivityIndicator style={styles.zoneIcon} />
+                <ActivityIndicator style={styles.zoneIcon} color={theme.COLORS.PRIMARY} />
               ) : (
                 <TouchableOpacity
                   style={
