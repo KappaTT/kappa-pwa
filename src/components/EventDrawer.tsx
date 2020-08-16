@@ -150,9 +150,9 @@ const EventDrawer: React.FC = () => {
     dispatchCheckIn(true);
 
     if (selectedEvent !== null && moment(selectedEvent.start).isBefore(moment(), 'day')) {
-      navigate('MessagesStack', {});
+      navigate('Messages', {});
     } else {
-      navigate('CheckInStack', {});
+      navigate('Check In', {});
     }
 
     onPressClose();
@@ -160,7 +160,7 @@ const EventDrawer: React.FC = () => {
 
   const onPressCheckIn = React.useCallback(() => {
     dispatchCheckIn(false);
-    navigate('CheckInStack', {});
+    navigate('Check In', {});
 
     onPressClose();
   }, [dispatchCheckIn, onPressClose]);
