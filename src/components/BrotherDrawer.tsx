@@ -326,23 +326,23 @@ const BrotherDrawer: React.FC = () => {
                 ]}
               >
                 <Block style={styles.userHeader}>
-                  {selectedUser.role !== undefined && <Text style={styles.userDate}>{selectedUser.role}</Text>}
                   <Text style={styles.userTitle}>
                     {selectedUser.familyName}, {selectedUser.givenName}
                   </Text>
+                  {selectedUser.role !== undefined && <Text style={styles.userDate}>{selectedUser.role}</Text>}
                 </Block>
 
                 <Block style={styles.userBody}>
                   <Block style={styles.splitPropertyRow}>
-                    <Block style={styles.splitPropertyThirds}>
-                      <Text style={styles.propertyHeader}>Freshman Year</Text>
+                    <Block style={styles.splitPropertyAuto}>
+                      <Text style={styles.propertyHeader}>First Year</Text>
                       <Text style={styles.propertyValue}>{selectedUser.firstYear}</Text>
                     </Block>
-                    <Block style={styles.splitPropertyThirds}>
+                    <Block style={styles.splitPropertyAuto}>
                       <Text style={styles.propertyHeader}>Grad Year</Text>
                       <Text style={styles.propertyValue}>{selectedUser.gradYear}</Text>
                     </Block>
-                    <Block style={styles.splitPropertyThirds}>
+                    <Block style={styles.splitPropertyAuto}>
                       <Text style={styles.propertyHeader}>Pledge Class</Text>
                       <Text style={styles.propertyValue}>{selectedUser.semester}</Text>
                     </Block>
@@ -497,6 +497,9 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between'
+  },
+  splitPropertyAuto: {
+    marginRight: 20
   },
   splitProperty: {
     width: '50%'

@@ -144,7 +144,7 @@ const ProfileContent: React.FC<{
           <Block>
             <Block style={styles.splitPropertyRow}>
               <Block style={styles.splitPropertyAuto}>
-                <Text style={styles.propertyHeader}>Freshman Year</Text>
+                <Text style={styles.propertyHeader}>First Year</Text>
                 <Text style={styles.propertyValue}>{user.firstYear}</Text>
               </Block>
               <Block style={styles.splitPropertyAuto}>
