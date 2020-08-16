@@ -41,21 +41,23 @@ const RoundButton: React.FC<{
         }
   ]);
 
+  const onButtonPress = React.useCallback(() => {
+    if (!loading) {
+      if (haptic) {
+        hapticImpact();
+      }
+
+      onPress();
+    }
+  }, [haptic, loading, onPress]);
+
   return (
     <Button
       style={buttonStyle}
       round
       shadowless
       disabled={disabled}
-      onPress={() => {
-        if (!loading) {
-          if (haptic) {
-            hapticImpact();
-          }
-
-          onPress();
-        }
-      }}
+      onPress={onButtonPress}
       loading={loading}
       loadingColor={alt ? color : theme.COLORS.WHITE}
     >
