@@ -174,7 +174,7 @@ const ProfileContent: React.FC<{
               <Block style={styles.splitPropertyFifths}>
                 <Text style={styles.propertyHeader}>Prof</Text>
                 {isGettingPoints ? (
-                  <ActivityIndicator style={styles.propertyLoader} color={theme.COLORS.PRIMARY} />
+                  <ActivityIndicator style={styles.propertyLoader} color={theme.COLORS.DARK_GRAY} />
                 ) : (
                   <Text style={styles.propertyValue}>
                     {points.hasOwnProperty(user.email) ? points[user.email].PROF : '0'}
@@ -184,7 +184,7 @@ const ProfileContent: React.FC<{
               <Block style={styles.splitPropertyFifths}>
                 <Text style={styles.propertyHeader}>Phil</Text>
                 {isGettingPoints ? (
-                  <ActivityIndicator style={styles.propertyLoader} color={theme.COLORS.PRIMARY} />
+                  <ActivityIndicator style={styles.propertyLoader} color={theme.COLORS.DARK_GRAY} />
                 ) : (
                   <Text style={styles.propertyValue}>
                     {points.hasOwnProperty(user.email) ? points[user.email].PHIL : '0'}
@@ -194,7 +194,7 @@ const ProfileContent: React.FC<{
               <Block style={styles.splitPropertyFifths}>
                 <Text style={styles.propertyHeader}>Bro</Text>
                 {isGettingPoints ? (
-                  <ActivityIndicator style={styles.propertyLoader} color={theme.COLORS.PRIMARY} />
+                  <ActivityIndicator style={styles.propertyLoader} color={theme.COLORS.DARK_GRAY} />
                 ) : (
                   <Text style={styles.propertyValue}>
                     {points.hasOwnProperty(user.email) ? points[user.email].BRO : '0'}
@@ -204,7 +204,7 @@ const ProfileContent: React.FC<{
               <Block style={styles.splitPropertyFifths}>
                 <Text style={styles.propertyHeader}>Rush</Text>
                 {isGettingPoints ? (
-                  <ActivityIndicator style={styles.propertyLoader} color={theme.COLORS.PRIMARY} />
+                  <ActivityIndicator style={styles.propertyLoader} color={theme.COLORS.DARK_GRAY} />
                 ) : (
                   <Text style={styles.propertyValue}>
                     {points.hasOwnProperty(user.email) ? points[user.email].RUSH : '0'}
@@ -214,7 +214,7 @@ const ProfileContent: React.FC<{
               <Block style={styles.splitPropertyFifths}>
                 <Text style={styles.propertyHeader}>Any</Text>
                 {isGettingPoints ? (
-                  <ActivityIndicator style={styles.propertyLoader} color={theme.COLORS.PRIMARY} />
+                  <ActivityIndicator style={styles.propertyLoader} color={theme.COLORS.DARK_GRAY} />
                 ) : (
                   <Text style={styles.propertyValue}>
                     {points.hasOwnProperty(user.email) ? points[user.email].ANY : '0'}

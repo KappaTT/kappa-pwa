@@ -328,7 +328,7 @@ const EventDrawer: React.FC = () => {
             </Block>
 
             {isDeletingEvent ? (
-              <ActivityIndicator style={styles.zoneIcon} />
+              <ActivityIndicator style={styles.zoneIcon} color={theme.COLORS.PRIMARY} />
             ) : (
               <TouchableOpacity
                 style={!readyToDelete && styles.disabledButton}

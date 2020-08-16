@@ -19,7 +19,7 @@ const GoogleSignInButton: React.FC<{ loading?: boolean; disabled?: boolean; onPr
     <TouchableOpacity disabled={loading || disabled} activeOpacity={0.6} style={styles.button} onPress={onPress}>
       <Block style={styles.content}>
         {loading ? (
-          <ActivityIndicator style={styles.icon} color={theme.COLORS.PRIMARY} />
+          <ActivityIndicator style={styles.icon} color={theme.COLORS.DARK_GRAY} />
         ) : (
           <Image source={googleLogo} style={styles.icon} />
         )}
