@@ -121,7 +121,7 @@ const ProfileContent: React.FC<{
           style={[
             styles.content,
             {
-              paddingTop: insets.top + 20
+              paddingTop: insets.top > 0 ? insets.top + 10 : 20
             }
           ]}
         >

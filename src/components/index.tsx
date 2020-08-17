@@ -23,6 +23,7 @@ import Interceptor from './Interceptor';
 import KeyboardDismissView from './KeyboardDismissView';
 import ListButton from './ListButton';
 import PageSection from './PageSection';
+import PopupButton from './PopupButton';
 import PopupModal from './PopupModal';
 import RadioList from './RadioList';
 import RefreshWrapper from './RefreshWrapper';
@@ -64,6 +65,7 @@ export {
   KeyboardDismissView,
   ListButton,
   PageSection,
+  PopupButton,
   PopupModal,
   RadioList,
   RefreshWrapper,

@@ -5,10 +5,11 @@ import { useSafeArea } from 'react-native-safe-area-context';
 
 import { theme } from '@constants';
 import TabBarButton from '@components/TabBarButton';
-import { NavigationTypes } from '@types';
 import { TRedux } from '@reducers';
 import { TabBarHeight } from '@services/utils';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
+import PopupButton from '@components/PopupButton';
+import Icon from '@components/Icon';
 
 const TabBar: React.FC<BottomTabBarProps> = ({
   state,
@@ -39,7 +40,7 @@ const TabBar: React.FC<BottomTabBarProps> = ({
         }
       ]}
     >
-      <View style={styles.container}>
+      <View style={[styles.container, { paddingRight: 0 }]}>
         {state.routes.map((route, routeIndex) => {
           const { options } = descriptors[route.key];
 
@@ -83,6 +84,11 @@ const TabBar: React.FC<BottomTabBarProps> = ({
             />
           );
         })}
+
+        <PopupButton
+          label="Vote"
+          icon={<Icon family="MaterialIcons" name="open-in-new" color={theme.COLORS.WHITE} size={20} />}
+        />
       </View>
     </View>
   );
@@ -95,8 +101,10 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     height: TabBarHeight,
-    paddingHorizontal: 32,
-    justifyContent: 'center'
+    paddingLeft: 32,
+    paddingRight: 32,
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 });
 
