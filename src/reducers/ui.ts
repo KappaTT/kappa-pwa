@@ -5,38 +5,43 @@ export const HIDE_TOAST = 'HIDE_TOAST';
 export const DONE_HIDING_TOAST = 'DONE_HIDING_TOAST';
 
 export interface TToast {
-  toastTitle: string;
-  toastMessage: string;
-  toastAllowClose: boolean;
-  toastTimer: number;
-  toastCode: number;
-  toastTitleColor: string;
-  toastChildren: React.ReactNode;
-  toastHapticType: NotificationFeedbackType;
+  title: string;
+  message: string;
+  allowClose: boolean;
+  timer: number;
+  code: number;
+  titleColor: string;
+  children: React.ReactNode;
+  hapticType: NotificationFeedbackType;
 }
 
-export interface TUIState extends TToast {
+export interface TUIState {
   isShowingToast: boolean;
   isHidingToast: boolean;
+  toast: TToast;
 }
+
+const initialToast: TToast = {
+  title: '',
+  message: '',
+  allowClose: true,
+  timer: -1,
+  code: -1,
+  titleColor: 'black',
+  children: null,
+  hapticType: null
+};
 
 const initialState: TUIState = {
   isShowingToast: false,
   isHidingToast: false,
-  toastTitle: '',
-  toastMessage: '',
-  toastAllowClose: true,
-  toastTimer: -1,
-  toastCode: -1,
-  toastTitleColor: 'black',
-  toastChildren: null,
-  toastHapticType: null
+  toast: initialToast
 };
 
 export default (state = initialState, action: any): TUIState => {
   switch (action.type) {
     case SHOW_TOAST:
-      if (state.toastAllowClose === false && state.toastTitle !== '') {
+      if (state.toast.allowClose === false && state.toast.title !== '') {
         return {
           ...state
         };
@@ -46,20 +51,16 @@ export default (state = initialState, action: any): TUIState => {
         ...state,
         isShowingToast: true,
         isHidingToast: false,
-        toastTitle: action.toast.toastTitle || '',
-        toastMessage: action.toast.toastMessage || '',
-        toastAllowClose: action.toast.toastAllowClose !== false,
-        toastTimer: action.toast.toastTimer !== undefined ? action.toast.toastTimer : -1,
-        toastCode: action.toast.toastCode !== undefined ? action.toast.toastCode : -1,
-        toastTitleColor: action.toast.toastTitleColor || 'black',
-        toastChildren:
-          action.toast.toastChildren !== null && action.toast.toastChildren !== undefined
-            ? action.toast.toastChildren
-            : null,
-        toastHapticType:
-          action.toast.toastHapticType !== null && action.toast.toastHapticType !== undefined
-            ? action.toast.toastHapticType
-            : null
+        toast: {
+          title: action.toast.title || initialToast.title,
+          message: action.toast.message || initialToast.message,
+          allowClose: action.toast.allowClose !== false,
+          timer: action.toast.timer !== undefined ? action.toast.timer : initialToast.timer,
+          code: action.toast.code !== undefined ? action.toast.code : initialToast.code,
+          titleColor: action.toast.titleColor || initialToast.titleColor,
+          children: action.toast.children || initialToast.children,
+          hapticType: action.toast.hapticType || initialToast.hapticType
+        }
       };
     case HIDE_TOAST:
       return {
@@ -71,14 +72,7 @@ export default (state = initialState, action: any): TUIState => {
         ...state,
         isShowingToast: false,
         isHidingToast: false,
-        toastTitle: '',
-        toastMessage: '',
-        toastAllowClose: true,
-        toastTimer: -1,
-        toastCode: -1,
-        toastTitleColor: 'black',
-        toastChildren: null,
-        toastHapticType: null
+        toast: initialToast
       };
     default:
       return state;

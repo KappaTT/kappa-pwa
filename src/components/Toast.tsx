@@ -1,9 +1,9 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity, TouchableWithoutFeedback, Animated, Easing, Dimensions } from 'react-native';
+import { StyleSheet, TouchableOpacity, Animated, Easing, Dimensions } from 'react-native';
 
+import { TToast } from '@reducers/ui';
 import { theme } from '@constants';
 import Block from '@components/Block';
-import Icon from '@components/Icon';
 import Text from '@components/Text';
 
 const { width, height } = Dimensions.get('window');
@@ -12,26 +12,12 @@ const heightBase = new Animated.Value(height * 0.05);
 const opacityBase = new Animated.Value(1);
 
 const Toast: React.FC<{
-  title?: string;
-  message?: string;
-  titleColor?: string;
-  timer?: number;
-  allowClose?: boolean;
+  toast: TToast;
   shouldClose?: boolean;
   showClose?: boolean;
   onDoneClosing(): void;
   children?: React.ReactNode;
-}> = ({
-  title = '',
-  message = '',
-  titleColor = 'black',
-  timer = -1,
-  allowClose = true,
-  shouldClose = false,
-  showClose = false,
-  onDoneClosing,
-  children
-}) => {
+}> = ({ toast, shouldClose = false, showClose = false, onDoneClosing, children }) => {
   const progress = React.useRef<Animated.Value>(new Animated.Value(1)).current;
 
   const handleClose = React.useCallback(() => {
@@ -46,10 +32,10 @@ const Toast: React.FC<{
   }, [onDoneClosing, progress]);
 
   const onPressBackground = React.useCallback(() => {
-    if (allowClose) {
+    if (toast.allowClose) {
       handleClose();
     }
-  }, [allowClose, handleClose]);
+  }, [handleClose, toast.allowClose]);
 
   React.useEffect(() => {
     Animated.timing(progress, {
@@ -67,11 +53,11 @@ const Toast: React.FC<{
   }, [handleClose, shouldClose]);
 
   React.useEffect(() => {
-    if (timer > 0) {
-      const t = setTimeout(handleClose, timer);
+    if (toast.timer > 0) {
+      const t = setTimeout(handleClose, toast.timer);
       return () => clearTimeout(t);
     }
-  }, [handleClose, timer]);
+  }, [handleClose, toast.timer]);
 
   return (
     <Animated.View
@@ -107,13 +93,13 @@ const Toast: React.FC<{
               style={[
                 styles.title,
                 {
-                  color: titleColor
+                  color: toast.titleColor
                 }
               ]}
             >
-              {title}
+              {toast.title}
             </Text>
-            <Text style={styles.message}>{message}</Text>
+            <Text style={styles.message}>{toast.message}</Text>
             {children !== null && <Block style={styles.contentWrapper}>{children}</Block>}
           </Block>
         </Block>

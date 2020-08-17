@@ -70,11 +70,11 @@ const LateExcusePage: React.FC<{
       createExcuseSuccessDate.isAfter(createExcuseRequestDate)
     ) {
       dispatchShowToast({
-        toastTitle: 'Success',
-        toastMessage: 'Your excuse has been submitted',
-        toastTimer: 2000,
-        toastTitleColor: theme.COLORS.PRIMARY_GREEN,
-        toastHapticType: NotificationFeedbackType.Success
+        title: 'Success',
+        message: 'Your excuse has been submitted',
+        timer: 2000,
+        titleColor: theme.COLORS.PRIMARY_GREEN,
+        hapticType: NotificationFeedbackType.Success
       });
 
       onRequestClose();

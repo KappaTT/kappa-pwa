@@ -230,11 +230,11 @@ const CheckInContent: React.FC<{
       checkInSuccessDate.isAfter(checkInRequestDate)
     ) {
       dispatchShowToast({
-        toastTitle: 'Success',
-        toastMessage: 'You have been checked in to the event!',
-        toastTimer: 2000,
-        toastTitleColor: theme.COLORS.PRIMARY_GREEN,
-        toastHapticType: NotificationFeedbackType.Success
+        title: 'Success',
+        message: 'You have been checked in to the event!',
+        timer: 2000,
+        titleColor: theme.COLORS.PRIMARY_GREEN,
+        hapticType: NotificationFeedbackType.Success
       });
 
       setCode('');
@@ -249,11 +249,11 @@ const CheckInContent: React.FC<{
       createExcuseSuccessDate.isAfter(createExcuseRequestDate)
     ) {
       dispatchShowToast({
-        toastTitle: 'Success',
-        toastMessage: 'Your excuse has been submitted!',
-        toastTimer: 2000,
-        toastTitleColor: theme.COLORS.PRIMARY_GREEN,
-        toastHapticType: NotificationFeedbackType.Success
+        title: 'Success',
+        message: 'Your excuse has been submitted!',
+        timer: 2000,
+        titleColor: theme.COLORS.PRIMARY_GREEN,
+        hapticType: NotificationFeedbackType.Success
       });
 
       setReason('');

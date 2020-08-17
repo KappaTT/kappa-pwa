@@ -7,7 +7,7 @@ import { NotificationFeedbackType } from 'expo-haptics';
 import { hapticNotification } from '@services/hapticService';
 import { TRedux } from '@reducers';
 import { TToast } from '@reducers/ui';
-import { _auth, _kappa, _ui } from '@reducers/actions';
+import { _auth, _kappa, _ui, _voting } from '@reducers/actions';
 import { theme } from '@constants';
 import { log } from '@services/logService';
 import Block from '@components/Block';
@@ -16,19 +16,15 @@ import Toast from '@components/Toast';
 import RoundButton from '@components/RoundButton';
 
 const ToastController: React.FC = () => {
-  const globalErrorMessage = useSelector((state: TRedux) => state.kappa.globalErrorMessage);
-  const globalErrorCode = useSelector((state: TRedux) => state.kappa.globalErrorCode);
-  const globalErrorDate = useSelector((state: TRedux) => state.kappa.globalErrorDate);
+  const kappaGlobalErrorMessage = useSelector((state: TRedux) => state.kappa.globalErrorMessage);
+  const kappaGlobalErrorCode = useSelector((state: TRedux) => state.kappa.globalErrorCode);
+  const kappaGlobalErrorDate = useSelector((state: TRedux) => state.kappa.globalErrorDate);
+  const votingGlobalErrorMessage = useSelector((state: TRedux) => state.voting.globalErrorMessage);
+  const votingGlobalErrorCode = useSelector((state: TRedux) => state.voting.globalErrorCode);
+  const votingGlobalErrorDate = useSelector((state: TRedux) => state.voting.globalErrorDate);
   const isShowingToast = useSelector((state: TRedux) => state.ui.isShowingToast);
   const isHidingToast = useSelector((state: TRedux) => state.ui.isHidingToast);
-  const toastTitle = useSelector((state: TRedux) => state.ui.toastTitle);
-  const toastMessage = useSelector((state: TRedux) => state.ui.toastMessage);
-  const toastAllowClose = useSelector((state: TRedux) => state.ui.toastAllowClose);
-  const toastTimer = useSelector((state: TRedux) => state.ui.toastTimer);
-  const toastCode = useSelector((state: TRedux) => state.ui.toastCode);
-  const toastTitleColor = useSelector((state: TRedux) => state.ui.toastTitleColor);
-  const toastChildren = useSelector((state: TRedux) => state.ui.toastChildren);
-  const toastHapticType = useSelector((state: TRedux) => state.ui.toastHapticType);
+  const toast = useSelector((state: TRedux) => state.ui.toast);
 
   const [appState, setAppState] = React.useState<AppStateStatus>(AppState.currentState);
 
@@ -36,29 +32,31 @@ const ToastController: React.FC = () => {
   const dispatchShowToast = React.useCallback((toast: Partial<TToast>) => dispatch(_ui.showToast(toast)), [dispatch]);
   const dispatchHideToast = React.useCallback(() => dispatch(_ui.hideToast()), [dispatch]);
   const dispatchDoneHidingToast = React.useCallback(() => dispatch(_ui.doneHidingToast()), [dispatch]);
-  const dispatchClearError = React.useCallback(() => dispatch(_kappa.clearGlobalError()), [dispatch]);
+  const dispatchClearKappaError = React.useCallback(() => dispatch(_kappa.clearGlobalError()), [dispatch]);
+  const dispatchClearVotingError = React.useCallback(() => dispatch(_voting.clearGlobalError()), [dispatch]);
   const dispatchSignOut = React.useCallback(() => dispatch(_auth.signOut()), [dispatch]);
 
   const onDoneClosing = React.useCallback(() => {
     dispatchDoneHidingToast();
 
-    if (toastCode > 0) {
-      dispatchClearError();
+    if (toast.code > 0) {
+      dispatchClearKappaError();
+      dispatchClearVotingError();
     }
-  }, [dispatchClearError, dispatchDoneHidingToast, toastCode]);
+  }, [dispatchClearKappaError, dispatchClearVotingError, dispatchDoneHidingToast, toast.code]);
 
   const onPressSignOut = React.useCallback(() => {
     dispatchHideToast();
     dispatchSignOut();
   }, [dispatchHideToast, dispatchSignOut]);
 
-  const onPressReload = async () => {
+  const onPressReload = React.useCallback(async () => {
     await Updates.reloadAsync();
-  };
+  }, []);
 
-  const handleAppStateChange = (nextAppState: AppStateStatus) => {
+  const handleAppStateChange = React.useCallback((nextAppState: AppStateStatus) => {
     setAppState(nextAppState);
-  };
+  }, []);
 
   const checkForUpdates = React.useCallback(async () => {
     log('Checking for updates');
@@ -70,12 +68,12 @@ const ToastController: React.FC = () => {
         await Updates.fetchUpdateAsync();
 
         dispatchShowToast({
-          toastTitle: 'Update Ready',
-          toastMessage: 'The latest version has been downloaded, please reload the app to use it!',
-          toastAllowClose: false,
-          toastTimer: -1,
-          toastCode: 426,
-          toastHapticType: NotificationFeedbackType.Warning
+          title: 'Update Ready',
+          message: 'The latest version has been downloaded, please reload the app to use it!',
+          allowClose: false,
+          timer: -1,
+          code: 426,
+          hapticType: NotificationFeedbackType.Warning
         });
       }
     } catch (error) {
@@ -84,18 +82,39 @@ const ToastController: React.FC = () => {
   }, [dispatchShowToast]);
 
   React.useEffect(() => {
-    if (globalErrorMessage !== '') {
+    if (kappaGlobalErrorMessage !== '' && kappaGlobalErrorDate !== null) {
       dispatchShowToast({
-        toastTitle: 'Error',
-        toastMessage: globalErrorMessage,
-        toastAllowClose: globalErrorCode !== 401,
-        toastTimer: globalErrorCode !== 401 ? 3000 : -1,
-        toastTitleColor: theme.COLORS.PRIMARY,
-        toastCode: globalErrorCode,
-        toastHapticType: NotificationFeedbackType.Warning
+        title: 'Error',
+        message: kappaGlobalErrorMessage,
+        allowClose: kappaGlobalErrorCode !== 401,
+        timer: kappaGlobalErrorCode !== 401 ? 3000 : -1,
+        titleColor: theme.COLORS.PRIMARY,
+        code: kappaGlobalErrorCode,
+        hapticType: NotificationFeedbackType.Warning
       });
     }
-  }, [globalErrorMessage, globalErrorCode, globalErrorDate, dispatchShowToast]);
+  }, [dispatchShowToast, kappaGlobalErrorMessage, kappaGlobalErrorCode, kappaGlobalErrorDate]);
+
+  React.useEffect(() => {
+    if (votingGlobalErrorMessage !== '' && votingGlobalErrorDate !== null) {
+      dispatchShowToast({
+        title: 'Error',
+        message: votingGlobalErrorMessage,
+        allowClose: votingGlobalErrorCode !== 401,
+        timer: votingGlobalErrorCode !== 401 ? 3000 : -1,
+        titleColor: theme.COLORS.PRIMARY,
+        code: votingGlobalErrorCode,
+        hapticType: NotificationFeedbackType.Warning
+      });
+    }
+  }, [
+    dispatchShowToast,
+    kappaGlobalErrorMessage,
+    kappaGlobalErrorCode,
+    votingGlobalErrorMessage,
+    votingGlobalErrorCode,
+    votingGlobalErrorDate
+  ]);
 
   React.useEffect(() => {
     if (appState === 'active') {
@@ -110,10 +129,10 @@ const ToastController: React.FC = () => {
   }, [isShowingToast]);
 
   React.useEffect(() => {
-    if (toastHapticType !== null) {
-      hapticNotification(toastHapticType);
+    if (toast.hapticType !== null) {
+      hapticNotification(toast.hapticType);
     }
-  }, [toastHapticType]);
+  }, [toast.hapticType]);
 
   React.useEffect(() => {
     AppState.addEventListener('change', handleAppStateChange);
@@ -126,22 +145,14 @@ const ToastController: React.FC = () => {
   return (
     <Ghost style={styles.container}>
       {isShowingToast && (
-        <Toast
-          title={toastTitle}
-          message={toastMessage}
-          titleColor={toastTitleColor}
-          timer={toastTimer}
-          allowClose={toastAllowClose}
-          shouldClose={isHidingToast}
-          onDoneClosing={onDoneClosing}
-        >
-          {toastChildren !== null && toastChildren}
-          {toastCode === 401 && (
+        <Toast toast={toast} shouldClose={isHidingToast} onDoneClosing={onDoneClosing}>
+          {toast.children !== null && toast.children}
+          {toast.code === 401 && (
             <Block style={styles.signInButton}>
               <RoundButton label="Return to Sign In" onPress={onPressSignOut} />
             </Block>
           )}
-          {toastCode === 426 && (
+          {toast.code === 426 && (
             <Block style={styles.signInButton}>
               <RoundButton label="Reload" onPress={onPressReload} />
             </Block>

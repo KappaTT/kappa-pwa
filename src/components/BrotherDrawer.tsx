@@ -125,9 +125,9 @@ const BrotherDrawer: React.FC = () => {
     Clipboard.setString(selectedUserEmail);
 
     dispatchShowToast({
-      toastTitle: 'Copied',
-      toastMessage: 'The email was saved to your clipboard',
-      toastTimer: 1500
+      title: 'Copied',
+      message: 'The email was saved to your clipboard',
+      timer: 1500
     });
   }, [dispatchShowToast, selectedUserEmail]);
 
@@ -135,9 +135,9 @@ const BrotherDrawer: React.FC = () => {
     Clipboard.setString(selectedUser ? selectedUser.phone : '');
 
     dispatchShowToast({
-      toastTitle: 'Copied',
-      toastMessage: 'The phone number was saved to your clipboard',
-      toastTimer: 1500
+      title: 'Copied',
+      message: 'The phone number was saved to your clipboard',
+      timer: 1500
     });
   }, [dispatchShowToast, selectedUser]);
 
