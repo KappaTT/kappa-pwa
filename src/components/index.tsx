@@ -38,6 +38,7 @@ import TextConstraint from './TextConstraint';
 import TitleCard from './TitleCard';
 import Toast from './Toast';
 import ToastController from './ToastController';
+import VotingController from './VotingController';
 
 export {
   BackButton,
@@ -79,5 +80,6 @@ export {
   TextConstraint,
   TitleCard,
   Toast,
-  ToastController
+  ToastController,
+  VotingController
 };

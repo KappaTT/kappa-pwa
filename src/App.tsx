@@ -12,7 +12,16 @@ import { GalioProvider } from '@galio';
 import { TRedux } from '@reducers';
 import { _auth, _prefs, _ui } from '@reducers/actions';
 import { incompleteUser } from '@backend/auth';
-import { Block, Ghost, FadeModal, SlideModal, EventDrawer, BrotherDrawer, ToastController } from '@components';
+import {
+  Block,
+  Ghost,
+  FadeModal,
+  SlideModal,
+  EventDrawer,
+  BrotherDrawer,
+  ToastController,
+  VotingController
+} from '@components';
 import { Images, theme } from '@constants';
 import AppNavigator from '@navigation/AppNavigator';
 import { LoginPage, OnboardingPage } from '@pages';
@@ -169,6 +178,8 @@ const App = () => {
             </SlideModal>
 
             <ToastController />
+
+            <VotingController />
           </Block>
         </SafeAreaProvider>
       </GalioProvider>

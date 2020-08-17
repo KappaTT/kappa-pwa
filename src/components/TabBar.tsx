@@ -22,6 +22,7 @@ const TabBar: React.FC<BottomTabBarProps> = ({
 
   const user = useSelector((state: TRedux) => state.auth.user);
   const pendingExcusesArray = useSelector((state: TRedux) => state.kappa.pendingExcusesArray);
+  const activeSession = useSelector((state: TRedux) => state.voting.activeSession);
 
   const unreadMessages = React.useMemo(() => {
     if (pendingExcusesArray.length > 0) return true;
@@ -40,7 +41,7 @@ const TabBar: React.FC<BottomTabBarProps> = ({
         }
       ]}
     >
-      <View style={[styles.container, { paddingRight: 0 }]}>
+      <View style={[styles.container, activeSession !== null && { paddingRight: 0 }]}>
         {state.routes.map((route, routeIndex) => {
           const { options } = descriptors[route.key];
 
@@ -85,10 +86,12 @@ const TabBar: React.FC<BottomTabBarProps> = ({
           );
         })}
 
-        <PopupButton
-          label="Vote"
-          icon={<Icon family="MaterialIcons" name="open-in-new" color={theme.COLORS.WHITE} size={20} />}
-        />
+        {activeSession !== null && (
+          <PopupButton
+            label="Vote"
+            icon={<Icon family="MaterialIcons" name="open-in-new" color={theme.COLORS.WHITE} size={20} />}
+          />
+        )}
       </View>
     </View>
   );
