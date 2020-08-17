@@ -1,12 +1,12 @@
 import React from 'react';
 import { StyleSheet, TouchableWithoutFeedback } from 'react-native';
 
+import { TUser } from '@backend/auth';
+import { theme } from '@constants';
 import Block from '@components/Block';
-import Text from '@components/Text';
 import Icon from '@components/Icon';
 import Badge from '@components/Badge';
-import { theme } from '@constants';
-import { TUser } from '@backend/auth';
+import TextBadge from '@components/TextBadge';
 
 const TabBarButton: React.FC<{
   route: any;
@@ -19,6 +19,7 @@ const TabBarButton: React.FC<{
   onTabLongPress(): void;
   user?: TUser;
   badge?: boolean;
+  badgeText?: string;
 }> = ({
   route,
   renderIcon,
@@ -29,7 +30,8 @@ const TabBarButton: React.FC<{
   onTabPress,
   onTabLongPress,
   user,
-  badge
+  badge,
+  badgeText = ''
 }) => {
   const tintColor = React.useMemo(() => (isRouteActive ? activeTintColor : inactiveTintColor), [
     activeTintColor,
@@ -48,7 +50,7 @@ const TabBarButton: React.FC<{
           ) : (
             <React.Fragment>
               {renderIcon({ focused: isRouteActive, color: tintColor, size: 28 })}
-              <Badge active={badge} />
+              {badgeText === '' ? <Badge active={badge} /> : <TextBadge active={badge} label={badgeText} />}
             </React.Fragment>
           )}
         </Block>

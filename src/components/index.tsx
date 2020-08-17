@@ -33,6 +33,7 @@ import Switch from './Switch';
 import TabBar from './TabBar';
 import TabBarButton from './TabBarButton';
 import Text from './Text';
+import TextBadge from './TextBadge';
 import TextButton from './TextButton';
 import TextConstraint from './TextConstraint';
 import TitleCard from './TitleCard';
@@ -76,6 +77,7 @@ export {
   TabBar,
   TabBarButton,
   Text,
+  TextBadge,
   TextButton,
   TextConstraint,
   TitleCard,

@@ -8,8 +8,6 @@ import TabBarButton from '@components/TabBarButton';
 import { TRedux } from '@reducers';
 import { TabBarHeight } from '@services/utils';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
-import PopupButton from '@components/PopupButton';
-import Icon from '@components/Icon';
 
 const TabBar: React.FC<BottomTabBarProps> = ({
   state,
@@ -41,7 +39,7 @@ const TabBar: React.FC<BottomTabBarProps> = ({
         }
       ]}
     >
-      <View style={[styles.container, activeSession !== null && { paddingRight: 0 }]}>
+      <View style={styles.container}>
         {state.routes.map((route, routeIndex) => {
           const { options } = descriptors[route.key];
 
@@ -82,16 +80,10 @@ const TabBar: React.FC<BottomTabBarProps> = ({
               onTabLongPress={onLongPress}
               user={user}
               badge={isMessages && unreadMessages}
+              badgeText={isMessages && activeSession !== null ? 'VOTE' : ''}
             />
           );
         })}
-
-        {activeSession !== null && (
-          <PopupButton
-            label="Vote"
-            icon={<Icon family="MaterialIcons" name="open-in-new" color={theme.COLORS.WHITE} size={20} />}
-          />
-        )}
       </View>
     </View>
   );
