@@ -380,7 +380,7 @@ const CheckInContent: React.FC<{
                       placeholderText="reason"
                       maxLength={128}
                       error={false}
-                      defaultValue={reason}
+                      value={reason}
                       onChangeText={(text: string) => setReason(text)}
                     />
                   </Block>
@@ -405,7 +405,7 @@ const CheckInContent: React.FC<{
                           keyboardType="number-pad"
                           returnKeyType="done"
                           error={false}
-                          defaultValue={code}
+                          value={code}
                           formatter={numberFormatter}
                           onChangeText={(text: string) => setCode(text)}
                         />

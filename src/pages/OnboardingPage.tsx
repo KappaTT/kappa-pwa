@@ -148,7 +148,7 @@ const OnboardingPage: React.FC = () => {
           returnKeyType="done"
           textContentType="telephoneNumber"
           maxLength={10}
-          defaultValue={phone}
+          value={phone}
           formatter={phoneFormatter}
           onChangeText={(text) => setPhone(text)}
           onSubmit={(text) => setEditing('')}

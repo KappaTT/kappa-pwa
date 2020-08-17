@@ -184,7 +184,7 @@ const LateExcusePage: React.FC<{
                 placeholderText="reason"
                 maxLength={128}
                 error={false}
-                defaultValue={reason}
+                value={reason}
                 onChangeText={(text: string) => setReason(text)}
               />
 

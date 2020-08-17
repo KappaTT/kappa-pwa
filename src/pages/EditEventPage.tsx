@@ -299,7 +299,7 @@ const EditEventPage: React.FC<{
                       returnKeyType="done"
                       maxLength={32}
                       error={showErrors && title.trim() === ''}
-                      defaultValue={title}
+                      value={title}
                       onChangeText={(text: string) => setTitle(text)}
                     />
 
@@ -312,7 +312,7 @@ const EditEventPage: React.FC<{
                       multiline={true}
                       numberOfLines={6}
                       maxLength={256}
-                      defaultValue={description}
+                      value={description}
                       onChangeText={(text: string) => setDescription(text)}
                     />
 
@@ -357,7 +357,7 @@ const EditEventPage: React.FC<{
                           keyboardType="number-pad"
                           returnKeyType="done"
                           error={showErrors && (duration === '' || duration === '0')}
-                          defaultValue={duration}
+                          value={duration}
                           formatter={numberFormatter}
                           onChangeText={(text: string) => setDuration(text)}
                         />
@@ -376,7 +376,7 @@ const EditEventPage: React.FC<{
                       placeholderText="ex: EHall 106b1"
                       returnKeyType="done"
                       maxLength={64}
-                      defaultValue={location}
+                      value={location}
                       onChangeText={(text: string) => setLocation(text)}
                     />
 
@@ -423,7 +423,7 @@ const EditEventPage: React.FC<{
                           maxLength={1}
                           keyboardType="number-pad"
                           returnKeyType="done"
-                          defaultValue={profPoints}
+                          value={profPoints}
                           formatter={numberFormatter}
                           onChangeText={(text: string) => setProfPoints(text)}
                         />
@@ -442,7 +442,7 @@ const EditEventPage: React.FC<{
                           maxLength={1}
                           keyboardType="number-pad"
                           returnKeyType="done"
-                          defaultValue={philPoints}
+                          value={philPoints}
                           formatter={numberFormatter}
                           onChangeText={(text: string) => setPhilPoints(text)}
                         />
@@ -460,7 +460,7 @@ const EditEventPage: React.FC<{
                           maxLength={1}
                           keyboardType="number-pad"
                           returnKeyType="done"
-                          defaultValue={broPoints}
+                          value={broPoints}
                           formatter={numberFormatter}
                           onChangeText={(text: string) => setBroPoints(text)}
                         />
@@ -479,7 +479,7 @@ const EditEventPage: React.FC<{
                           maxLength={1}
                           keyboardType="number-pad"
                           returnKeyType="done"
-                          defaultValue={rushPoints}
+                          value={rushPoints}
                           formatter={numberFormatter}
                           onChangeText={(text: string) => setRushPoints(text)}
                         />
@@ -497,7 +497,7 @@ const EditEventPage: React.FC<{
                           maxLength={1}
                           keyboardType="number-pad"
                           returnKeyType="done"
-                          defaultValue={anyPoints}
+                          value={anyPoints}
                           formatter={numberFormatter}
                           onChangeText={(text: string) => setAnyPoints(text)}
                         />

@@ -101,7 +101,7 @@ const EventSearchPage: React.FC<{
                 placeholderText="ex: General Meeting"
                 maxLength={128}
                 error={false}
-                defaultValue={searchText}
+                value={searchText}
                 onChangeText={(text: string) => setSearchText(text)}
               />
 
@@ -117,7 +117,7 @@ const EventSearchPage: React.FC<{
                     maxLength={1}
                     keyboardType="number-pad"
                     returnKeyType="done"
-                    defaultValue={profPoints}
+                    value={profPoints}
                     formatter={numberFormatter}
                     onChangeText={(text: string) => setProfPoints(text)}
                   />
@@ -136,7 +136,7 @@ const EventSearchPage: React.FC<{
                     maxLength={1}
                     keyboardType="number-pad"
                     returnKeyType="done"
-                    defaultValue={philPoints}
+                    value={philPoints}
                     formatter={numberFormatter}
                     onChangeText={(text: string) => setPhilPoints(text)}
                   />
@@ -154,7 +154,7 @@ const EventSearchPage: React.FC<{
                     maxLength={1}
                     keyboardType="number-pad"
                     returnKeyType="done"
-                    defaultValue={broPoints}
+                    value={broPoints}
                     formatter={numberFormatter}
                     onChangeText={(text: string) => setBroPoints(text)}
                   />
@@ -173,7 +173,7 @@ const EventSearchPage: React.FC<{
                     maxLength={1}
                     keyboardType="number-pad"
                     returnKeyType="done"
-                    defaultValue={rushPoints}
+                    value={rushPoints}
                     formatter={numberFormatter}
                     onChangeText={(text: string) => setRushPoints(text)}
                   />
@@ -191,7 +191,7 @@ const EventSearchPage: React.FC<{
                     maxLength={1}
                     keyboardType="number-pad"
                     returnKeyType="done"
-                    defaultValue={anyPoints}
+                    value={anyPoints}
                     formatter={numberFormatter}
                     onChangeText={(text: string) => setAnyPoints(text)}
                   />

@@ -13,7 +13,7 @@ const FormattedInput: React.FC<{
   iconFamily?: string;
   iconName?: string;
   placeholderText: string;
-  defaultValue?: string;
+  value: string;
   keyboardType?: string;
   returnKeyType?: string;
   password?: boolean;
@@ -36,7 +36,7 @@ const FormattedInput: React.FC<{
   iconFamily,
   iconName,
   placeholderText,
-  defaultValue,
+  value,
   keyboardType = 'default',
   returnKeyType,
   password = false,
@@ -53,11 +53,12 @@ const FormattedInput: React.FC<{
   onChangeText = (text: string) => {},
   onSubmit = (text: string) => {}
 }) => {
-  const [value, setValue] = React.useState<string>(defaultValue);
-
-  React.useEffect(() => {
-    setValue(defaultValue);
-  }, [defaultValue]);
+  const handleTextChange = React.useCallback(
+    (text: string) => {
+      onChangeText(formatter(text));
+    },
+    [formatter, onChangeText]
+  );
 
   return (
     <Block style={{ width }}>
@@ -75,7 +76,7 @@ const FormattedInput: React.FC<{
         autoFocus={autoFocus}
         placeholder={placeholderText}
         placeholderTextColor={theme.COLORS.LOGIN_INPUT_ICON}
-        defaultValue={defaultValue}
+        defaultValue={value}
         value={value}
         type={keyboardType}
         returnKeyType={returnKeyType}
@@ -97,11 +98,7 @@ const FormattedInput: React.FC<{
             />
           )
         }
-        onChangeText={(text: string) => {
-          const newText = formatter(text);
-          setValue(newText);
-          onChangeText(newText);
-        }}
+        onChangeText={handleTextChange}
         blurOnSubmit={blurOnSubmit}
         onSubmitEditing={onSubmit}
       />
