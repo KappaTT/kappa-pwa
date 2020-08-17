@@ -116,8 +116,7 @@ export default (state = initialState, action: any): TVotingState => {
         ...state,
         isGettingActiveVotes: false,
         getActiveVotesError: true,
-        getActiveVotesErrorMessage: action.error.message,
-        ...setGlobalError(action.error.message, action.error.code)
+        getActiveVotesErrorMessage: action.error.message
       };
     case SUBMIT_VOTE:
       return {
