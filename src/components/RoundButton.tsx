@@ -9,6 +9,8 @@ import Button from '@components/Button';
 
 const RoundButton: React.FC<{
   color?: string;
+  textColor?: string;
+  bgColor?: string;
   label: string;
   icon?: React.ReactNode;
   loading?: boolean;
@@ -19,6 +21,8 @@ const RoundButton: React.FC<{
   onPress?(): void;
 }> = ({
   color = theme.COLORS.PRIMARY,
+  textColor = theme.COLORS.WHITE,
+  bgColor = theme.COLORS.WHITE,
   label,
   icon,
   loading = false,
@@ -32,7 +36,7 @@ const RoundButton: React.FC<{
     styles.button,
     alt
       ? {
-          backgroundColor: theme.COLORS.WHITE,
+          backgroundColor: bgColor,
           borderWidth: 1,
           borderColor: color
         }
@@ -73,7 +77,7 @@ const RoundButton: React.FC<{
                   color
                 }
               : {
-                  color: theme.COLORS.WHITE
+                  color: textColor
                 }
           ]}
         >
