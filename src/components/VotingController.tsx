@@ -10,11 +10,13 @@ const VotingController: React.FC = () => {
   const user = useSelector((state: TRedux) => state.auth.user);
   const isGettingActiveVotes = useSelector((state: TRedux) => state.voting.isGettingActiveVotes);
   const activeSession = useSelector((state: TRedux) => state.voting.activeSession);
+  const isShowingVoting = useSelector((state: TRedux) => state.voting.isShowingVoting);
 
   const [votingRefreshDate, setVotingRefreshDate] = React.useState(moment());
 
   const dispatch = useDispatch();
   const dispatchGetActiveVotes = React.useCallback(() => dispatch(_voting.getActiveVotes(user)), [dispatch, user]);
+  const dispatchHideVoting = React.useCallback(() => dispatch(_voting.hideVoting()), [dispatch]);
 
   const refreshVotes = React.useCallback(() => {
     if (!isGettingActiveVotes) dispatchGetActiveVotes();
@@ -23,11 +25,17 @@ const VotingController: React.FC = () => {
   }, [dispatchGetActiveVotes, isGettingActiveVotes]);
 
   React.useEffect(() => {
+    if (activeSession === null && isShowingVoting) {
+      dispatchHideVoting();
+    }
+  }, [activeSession, dispatchHideVoting, isShowingVoting]);
+
+  React.useEffect(() => {
     if (authorized && !isGettingActiveVotes && votingRefreshDate.isBefore(moment())) {
-      const t = setTimeout(refreshVotes, activeSession ? 5000 : 10000);
+      const t = setTimeout(refreshVotes, isShowingVoting ? 5000 : 10000);
       return () => clearTimeout(t);
     }
-  }, [activeSession, authorized, isGettingActiveVotes, refreshVotes, votingRefreshDate]);
+  }, [authorized, isGettingActiveVotes, isShowingVoting, refreshVotes, votingRefreshDate]);
 
   return <React.Fragment />;
 };

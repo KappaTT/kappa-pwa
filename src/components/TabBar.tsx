@@ -79,7 +79,7 @@ const TabBar: React.FC<BottomTabBarProps> = ({
               onTabPress={onPress}
               onTabLongPress={onLongPress}
               user={user}
-              badge={isMessages && unreadMessages}
+              badge={isMessages && (unreadMessages || activeSession !== null)}
               badgeText={isMessages && activeSession !== null ? 'VOTE' : ''}
             />
           );

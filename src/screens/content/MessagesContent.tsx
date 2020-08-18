@@ -6,14 +6,15 @@ import moment from 'moment';
 import { useIsFocused } from '@react-navigation/native';
 
 import { TRedux } from '@reducers';
-import { _auth, _kappa } from '@reducers/actions';
-import { theme } from '@constants';
-import { Block, Text, Header, FadeModal, SlideModal, EndCapButton } from '@components';
+import { _auth, _kappa, _voting } from '@reducers/actions';
 import { NavigationTypes } from '@types';
 import { shouldLoad, sortEventsByDateReverse, getExcusedEvents, getEventById } from '@services/kappaService';
 import { HeaderHeight, HORIZONTAL_PADDING, isEmpty } from '@services/utils';
 import { TPendingExcuse, TExcuse, TEvent } from '@backend/kappa';
-import { ExcusePage, LateExcusePage } from '@pages';
+import { ExcusePage, LateExcusePage, VotingPage } from '@pages';
+import { theme } from '@constants';
+import { Block, Text, Header, FadeModal, SlideModal, EndCapButton } from '@components';
+import { hapticImpact } from '@services/hapticService';
 
 const MessagesContent: React.FC<{
   navigation: NavigationTypes.ParamType;
@@ -28,6 +29,8 @@ const MessagesContent: React.FC<{
   const pendingExcusesArray = useSelector((state: TRedux) => state.kappa.pendingExcusesArray);
   const isGettingExcuses = useSelector((state: TRedux) => state.kappa.isGettingExcuses);
   const getExcusesError = useSelector((state: TRedux) => state.kappa.getExcusesError);
+  const isShowingVoting = useSelector((state: TRedux) => state.voting.isShowingVoting);
+  const activeSession = useSelector((state: TRedux) => state.voting.activeSession);
 
   const [refreshing, setRefreshing] = React.useState<boolean>(false);
   const [selectedExcuse, setSelectedExcuse] = React.useState<TPendingExcuse>(null);
@@ -35,6 +38,8 @@ const MessagesContent: React.FC<{
 
   const dispatch = useDispatch();
   const dispatchGetExcuses = React.useCallback(() => dispatch(_kappa.getExcuses(user)), [dispatch, user]);
+  const dispatchShowVoting = React.useCallback(() => dispatch(_voting.showVoting()), [dispatch]);
+  const dispatchHideVoting = React.useCallback(() => dispatch(_voting.hideVoting()), [dispatch]);
 
   const insets = useSafeArea();
 
@@ -78,6 +83,11 @@ const MessagesContent: React.FC<{
     },
     [user]
   );
+
+  const onPressVote = React.useCallback(() => {
+    hapticImpact();
+    dispatchShowVoting();
+  }, [dispatchShowVoting]);
 
   React.useEffect(() => {
     if (selectedExcuse === null) return;
@@ -155,6 +165,21 @@ const MessagesContent: React.FC<{
       >
         <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
           <Block style={styles.content}>
+            {activeSession !== null && (
+              <Block style={styles.votingContainer}>
+                <Block style={styles.votingDetails}>
+                  <Text style={styles.votingName}>{activeSession.name}</Text>
+                  <Text style={styles.description}>Cast your vote to help shape the future of our fraternity.</Text>
+                </Block>
+
+                <TouchableOpacity activeOpacity={0.6} onPress={onPressVote}>
+                  <Block style={styles.votingButton}>
+                    <Text style={styles.votingButtonText}>Vote</Text>
+                  </Block>
+                </TouchableOpacity>
+              </Block>
+            )}
+
             <Text style={styles.propertyHeader}>Pending</Text>
             {pendingExcusesArray.length === 0 ? (
               <Text style={styles.description}>You have no pending excuses</Text>
@@ -201,6 +226,9 @@ const MessagesContent: React.FC<{
       </FadeModal>
       <SlideModal transparent={false} visible={showingRequestPage} onRequestClose={() => setShowingRequestPage(false)}>
         <LateExcusePage onRequestClose={() => setShowingRequestPage(false)} />
+      </SlideModal>
+      <SlideModal transparent={false} visible={isShowingVoting} onRequestClose={dispatchHideVoting}>
+        <VotingPage onRequestClose={dispatchHideVoting} />
       </SlideModal>
     </Block>
   );
@@ -283,6 +311,35 @@ const styles = StyleSheet.create({
     fontFamily: 'OpenSans',
     fontSize: 12,
     color: theme.COLORS.DARK_GRAY
+  },
+  votingContainer: {
+    marginVertical: HORIZONTAL_PADDING,
+    padding: HORIZONTAL_PADDING,
+    borderRadius: 20,
+    backgroundColor: theme.COLORS.SUPER_LIGHT_BLUE_GRAY,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
+  votingDetails: {
+    flex: 1
+  },
+  votingName: {
+    fontFamily: 'OpenSans-SemiBold',
+    fontSize: 15
+  },
+  votingButton: {
+    marginLeft: 8,
+    paddingVertical: 4,
+    paddingHorizontal: 24,
+    borderRadius: 100,
+    backgroundColor: theme.COLORS.LIGHT_GRAY
+  },
+  votingButtonText: {
+    fontFamily: 'OpenSans-Bold',
+    color: theme.COLORS.PRIMARY,
+    fontSize: 15,
+    textTransform: 'uppercase'
   }
 });
 
