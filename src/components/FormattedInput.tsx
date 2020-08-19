@@ -81,7 +81,7 @@ const FormattedInput: React.FC<{
         type={keyboardType}
         returnKeyType={returnKeyType}
         autoCapitalize="none"
-        autoCorrect={false}
+        autoCorrect={true}
         password={password}
         viewPass={password}
         textContentType={textContentType}
