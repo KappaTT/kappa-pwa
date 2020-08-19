@@ -34,7 +34,7 @@ import {
   KeyboardDismissView
 } from '@components';
 import { HeaderHeight, TabBarHeight, HORIZONTAL_PADDING } from '@services/utils';
-import { getEventById, hasValidCheckIn, shouldLoad, sortEventByDate } from '@services/kappaService';
+import { getEventById, hasValidCheckIn, shouldLoad, sortEventByDate, canCheckIn } from '@services/kappaService';
 
 const CheckInContent: React.FC<{
   navigation: NavigationTypes.ParamType;
@@ -468,7 +468,7 @@ const CheckInContent: React.FC<{
                       selectedEvent === null ||
                       alreadyCheckedIn ||
                       code.length !== 4 ||
-                      !moment(selectedEvent.start).isSame(moment(), 'day')
+                      !canCheckIn(selectedEvent)
                     }
                     loading={isCheckingIn}
                     label="Check In"

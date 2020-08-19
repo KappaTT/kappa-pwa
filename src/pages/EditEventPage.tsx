@@ -353,7 +353,7 @@ const EditEventPage: React.FC<{
                         <FormattedInput
                           style={styles.input}
                           placeholderText="ex: 60"
-                          maxLength={4}
+                          maxLength={10}
                           keyboardType="number-pad"
                           returnKeyType="done"
                           error={showErrors && (duration === '' || duration === '0')}

@@ -26,7 +26,8 @@ import {
   getMissedMandatoryByEvent,
   sortUserByName,
   prettyPoints,
-  shouldLoad
+  shouldLoad,
+  canCheckIn
 } from '@services/kappaService';
 import { theme } from '@constants';
 import { TabBarHeight, isEmpty, HORIZONTAL_PADDING } from '@services/utils';
@@ -520,7 +521,7 @@ const EventDrawer: React.FC = () => {
 
               <Block style={styles.attendButton}>
                 <RoundButton
-                  disabled={attended !== undefined || !moment(selectedEvent.start).isSame(moment(), 'day')}
+                  disabled={attended !== undefined || !canCheckIn(selectedEvent)}
                   label="Check In"
                   onPress={onPressCheckIn}
                 />
