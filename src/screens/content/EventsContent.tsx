@@ -250,7 +250,7 @@ const EventsContent: React.FC<{
         )}
       </Block>
 
-      <SlideModal visible={editingEventId !== ''}>
+      <SlideModal visible={editingEventId !== ''} statusBarStyle="dark-content">
         <EditEventPage
           initialEvent={editingEventId === 'NEW' ? null : getEventById(events, editingEventId)}
           onPressBack={dispatchCancelEditEvent}
@@ -258,7 +258,7 @@ const EventsContent: React.FC<{
         />
       </SlideModal>
 
-      <SlideModal visible={isShowingEventSearch}>
+      <SlideModal visible={isShowingEventSearch} statusBarStyle="dark-content">
         <EventSearchPage onRequestClose={() => setIsShowingEventSearch(false)} />
       </SlideModal>
     </Block>
