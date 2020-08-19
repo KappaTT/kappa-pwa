@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useSafeArea } from 'react-native-safe-area-context';
 
 import { TRedux } from '@reducers';
-import { _auth } from '@reducers/actions';
+import { _auth, _kappa } from '@reducers/actions';
 import { theme } from '@constants';
 import { HeaderHeight, HORIZONTAL_PADDING } from '@services/utils';
 import { prettyPhone } from '@services/kappaService';
@@ -60,8 +60,8 @@ const getGradYearOptions = () => {
 
 const OnboardingPage: React.FC = () => {
   const user = useSelector((state: TRedux) => state.auth.user);
-  const isEditingUser = useSelector((state: TRedux) => state.auth.isEditingUser);
-  const isUpdatingUser = useSelector((state: TRedux) => state.auth.isUpdatingUser);
+  const editingUserEmail = useSelector((state: TRedux) => state.kappa.editingUserEmail);
+  const isUpdatingUser = useSelector((state: TRedux) => state.kappa.isUpdatingUser);
 
   const [editing, setEditing] = React.useState<string>('');
   const [phone, setPhone] = React.useState<string>(user.phone || '');
@@ -69,16 +69,10 @@ const OnboardingPage: React.FC = () => {
 
   const dispatch = useDispatch();
   const dispatchUpdateUser = React.useCallback(
-    () =>
-      dispatch(
-        _auth.updateUser(user, {
-          phone,
-          gradYear
-        })
-      ),
+    () => dispatch(_kappa.updateUser(user, user.email, { phone, gradYear })),
     [dispatch, user, phone, gradYear]
   );
-  const dispatchHideOnboarding = React.useCallback(() => dispatch(_auth.hideOnboarding()), [dispatch]);
+  const dispatchCancelEditUser = React.useCallback(() => dispatch(_kappa.cancelEditUser()), [dispatch]);
 
   const insets = useSafeArea();
 
@@ -230,8 +224,8 @@ const OnboardingPage: React.FC = () => {
       <Block flex>
         <Header
           title="Edit Profile"
-          showBackButton={isEditingUser}
-          onPressBackButton={dispatchHideOnboarding}
+          showBackButton={editingUserEmail === user.email}
+          onPressBackButton={dispatchCancelEditUser}
           rightButton={
             <EndCapButton label="Save" loading={isUpdatingUser} disabled={submitDisabled} onPress={onPressSubmit} />
           }

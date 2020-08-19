@@ -10,7 +10,7 @@ import { enableScreens } from 'react-native-screens';
 import { GalioProvider } from '@galio';
 
 import { TRedux } from '@reducers';
-import { _auth, _prefs, _ui } from '@reducers/actions';
+import { _auth, _kappa, _prefs, _ui } from '@reducers/actions';
 import { incompleteUser } from '@backend/auth';
 import {
   Block,
@@ -65,18 +65,31 @@ const App = () => {
   const user = useSelector((state: TRedux) => state.auth.user);
   const loginVisible = useSelector((state: TRedux) => state.auth.visible);
   const loadedPrefs = useSelector((state: TRedux) => state.prefs.loaded);
-  const onboardingVisible = useSelector((state: TRedux) => state.auth.onboardingVisible);
-  const isEditingUser = useSelector((state: TRedux) => state.auth.isEditingUser);
   const selectedEventId = useSelector((state: TRedux) => state.kappa.selectedEventId);
   const selectedUserEmail = useSelector((state: TRedux) => state.kappa.selectedUserEmail);
+  const editingUserEmail = useSelector((state: TRedux) => state.kappa.editingUserEmail);
 
   const [isLoadingComplete, setIsLoadingComplete] = React.useState<boolean>(false);
+
+  const userIsIncomplete = React.useMemo(() => {
+    if (!authorized || !user) return false;
+
+    let incomplete = false;
+
+    for (const key of Object.keys(incompleteUser)) {
+      if (user[key] === undefined || user[key] === incompleteUser[key]) {
+        incomplete = true;
+        break;
+      }
+    }
+
+    return incomplete;
+  }, [authorized, user]);
 
   const dispatch = useDispatch();
   const dispatchShowLogin = React.useCallback(() => dispatch(_auth.showModal()), [dispatch]);
   const dispatchHideLogin = React.useCallback(() => dispatch(_auth.hideModal()), [dispatch]);
-  const dispatchShowOnboarding = React.useCallback(() => dispatch(_auth.showOnboarding()), [dispatch]);
-  const dispatchHideOnboarding = React.useCallback(() => dispatch(_auth.hideOnboarding()), [dispatch]);
+  const dispatchCancelEditUser = React.useCallback(() => dispatch(_kappa.cancelEditUser()), [dispatch]);
   const dispatchLoadUser = React.useCallback(() => dispatch(_auth.loadUser()), [dispatch]);
   const dispatchLoadPrefs = React.useCallback(() => dispatch(_prefs.loadPrefs()), [dispatch]);
 
@@ -95,35 +108,6 @@ const App = () => {
       dispatchShowLogin();
     }
   }, [loadedUser, authorized, dispatchShowLogin]);
-
-  React.useEffect(() => {
-    if (!authorized || !user) {
-      if (onboardingVisible) {
-        dispatchHideOnboarding();
-      }
-
-      return;
-    }
-
-    if (isEditingUser) {
-      return;
-    }
-
-    let incomplete = false;
-
-    for (const key of Object.keys(incompleteUser)) {
-      if (user[key] === undefined || user[key] === incompleteUser[key]) {
-        incomplete = true;
-        break;
-      }
-    }
-
-    if (incomplete && !onboardingVisible) {
-      dispatchShowOnboarding();
-    } else if (!incomplete && onboardingVisible) {
-      dispatchHideOnboarding();
-    }
-  }, [authorized, user, onboardingVisible, isEditingUser, dispatchHideOnboarding, dispatchShowOnboarding]);
 
   React.useEffect(() => {
     if (!loadedPrefs) {
@@ -170,9 +154,9 @@ const App = () => {
 
             <SlideModal
               transparent={false}
-              visible={onboardingVisible}
-              onRequestClose={dispatchHideOnboarding}
-              disableAndroidBack={!isEditingUser}
+              visible={userIsIncomplete || (authorized && editingUserEmail === user.email)}
+              onRequestClose={dispatchCancelEditUser}
+              disableAndroidBack={userIsIncomplete}
             >
               <OnboardingPage />
             </SlideModal>

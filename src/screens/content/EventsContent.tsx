@@ -4,14 +4,13 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Placeholder, PlaceholderLine, Fade } from 'rn-placeholder';
 import { useSafeArea } from 'react-native-safe-area-context';
 import moment from 'moment';
-import { useIsFocused } from '@react-navigation/native';
+import { useIsFocused, NavigationProp } from '@react-navigation/native';
 
 import { theme } from '@constants';
 import { TRedux } from '@reducers';
 import { _kappa } from '@reducers/actions';
 import { Block, Header, EndCapButton, EndCapIconButton, Text, Icon, SlideModal } from '@components';
 import { EditEventPage, EventSearchPage } from '@pages';
-import { NavigationTypes } from '@types';
 import { HeaderHeight, isEmpty, HORIZONTAL_PADDING } from '@services/utils';
 import { log } from '@services/logService';
 import { TEvent } from '@backend/kappa';
@@ -32,7 +31,7 @@ const EventSkeleton: React.FC = () => {
 };
 
 const EventsContent: React.FC<{
-  navigation: NavigationTypes.ParamType;
+  navigation: NavigationProp<any, 'Events'>;
 }> = ({ navigation }) => {
   const isFocused = useIsFocused();
 

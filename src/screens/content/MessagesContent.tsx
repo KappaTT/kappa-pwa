@@ -3,11 +3,10 @@ import { StyleSheet, ScrollView, RefreshControl, TouchableOpacity } from 'react-
 import { useSelector, useDispatch } from 'react-redux';
 import { useSafeArea } from 'react-native-safe-area-context';
 import moment from 'moment';
-import { useIsFocused } from '@react-navigation/native';
+import { useIsFocused, NavigationProp } from '@react-navigation/native';
 
 import { TRedux } from '@reducers';
 import { _auth, _kappa, _voting } from '@reducers/actions';
-import { NavigationTypes } from '@types';
 import { shouldLoad, sortEventsByDateReverse, getExcusedEvents, getEventById } from '@services/kappaService';
 import { HeaderHeight, HORIZONTAL_PADDING, isEmpty } from '@services/utils';
 import { TPendingExcuse, TExcuse, TEvent } from '@backend/kappa';
@@ -17,7 +16,7 @@ import { Block, Text, Header, FadeModal, SlideModal, EndCapButton } from '@compo
 import { hapticImpact } from '@services/hapticService';
 
 const MessagesContent: React.FC<{
-  navigation: NavigationTypes.ParamType;
+  navigation: NavigationProp<any, 'Messages'>;
 }> = ({ navigation }) => {
   const isFocused = useIsFocused();
 

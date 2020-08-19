@@ -4,21 +4,20 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useSafeArea } from 'react-native-safe-area-context';
 import moment from 'moment';
 import Constants from 'expo-constants';
-import { useIsFocused } from '@react-navigation/native';
+import { useIsFocused, NavigationProp } from '@react-navigation/native';
 
 import { hapticImpact } from '@services/hapticService';
 import { TRedux } from '@reducers';
 import { _auth, _kappa } from '@reducers/actions';
 import { theme } from '@constants';
 import { Block, Text, Icon, GeneralMeetingChart } from '@components';
-import { NavigationTypes } from '@types';
 import { prettyPhone, shouldLoad, sortEventsByDateReverse } from '@services/kappaService';
 import { isEmpty, HORIZONTAL_PADDING } from '@services/utils';
 import { log } from '@services/logService';
 import { TEvent } from '@backend/kappa';
 
 const ProfileContent: React.FC<{
-  navigation: NavigationTypes.ParamType;
+  navigation: NavigationProp<any, 'Profile'>;
 }> = ({ navigation }) => {
   const isFocused = useIsFocused();
 
@@ -39,7 +38,7 @@ const ProfileContent: React.FC<{
   const [refreshing, setRefreshing] = React.useState<boolean>(false);
 
   const dispatch = useDispatch();
-  const dispatchEdit = React.useCallback(() => dispatch(_auth.showOnboarding(true)), [dispatch]);
+  const dispatchEditUser = React.useCallback(() => dispatch(_kappa.editUser(user.email)), [dispatch, user.email]);
   const dispatchSignOut = React.useCallback(() => dispatch(_auth.signOut()), [dispatch]);
   const dispatchGetEvents = React.useCallback(() => dispatch(_kappa.getEvents(user)), [dispatch, user]);
   const dispatchGetMyAttendance = React.useCallback(
@@ -85,8 +84,8 @@ const ProfileContent: React.FC<{
   const onPressEdit = React.useCallback(() => {
     hapticImpact();
 
-    dispatchEdit();
-  }, [dispatchEdit]);
+    dispatchEditUser();
+  }, [dispatchEditUser]);
 
   const onPressSignOut = React.useCallback(() => {
     hapticImpact();

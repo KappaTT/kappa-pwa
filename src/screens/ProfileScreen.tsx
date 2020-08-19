@@ -1,10 +1,10 @@
 import React from 'react';
+import { NavigationProp } from '@react-navigation/native';
 
-import { NavigationTypes } from '@types';
 import Content from '@screens/content/ProfileContent';
 
 const ProfileScreen: React.FC<{
-  navigation: NavigationTypes.ParamType;
+  navigation: NavigationProp<any, 'Profile'>;
 }> = ({ navigation }) => {
   return <Content navigation={navigation} />;
 };

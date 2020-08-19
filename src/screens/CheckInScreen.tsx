@@ -1,10 +1,10 @@
 import React from 'react';
+import { NavigationProp } from '@react-navigation/native';
 
-import { NavigationTypes } from '@types';
 import Content from '@screens/content/CheckInContent';
 
 const CheckInScreen: React.FC<{
-  navigation: NavigationTypes.ParamType;
+  navigation: NavigationProp<any, 'Check In'>;
 }> = ({ navigation }) => {
   return <Content navigation={navigation} />;
 };

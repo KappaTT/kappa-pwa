@@ -25,8 +25,6 @@
       "@screens/*": ["screens/*"],
       "@services": ["services"],
       "@services/*": ["services/*"],
-      "@types": ["types"],
-      "@types/*": ["types/*"],
       "@argon": ["../libs/argon"],
       "@argon/*": ["../libs/argon/*"],
       "@galio": ["../libs/galio"],

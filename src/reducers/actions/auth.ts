@@ -1,8 +1,6 @@
 import { Auth } from '@backend';
 
 import {
-  SHOW_ONBOARDING,
-  HIDE_ONBOARDING,
   SHOW_MODAL,
   HIDE_MODAL,
   LOADED_USER,
@@ -15,9 +13,6 @@ import {
   SIGN_IN_WITH_GOOGLE,
   SIGN_IN_WITH_GOOGLE_SUCCESS,
   SIGN_IN_WITH_GOOGLE_FAILURE,
-  UPDATE_USER,
-  UPDATE_USER_SUCCESS,
-  UPDATE_USER_FAILURE,
   MODIFY_USER
 } from '@reducers/auth';
 import { TUser, initialUser, TUserResponse, TGoogleUser, purge } from '@backend/auth';
@@ -25,19 +20,6 @@ import { getBatch, setBatch, deleteBatch } from '@services/secureStorage';
 import * as GoogleService from '@services/googleService';
 import { log } from '@services/logService';
 import { DEMO_USER } from '@services/demoService';
-
-export const showOnboarding = (editing: boolean = false) => {
-  return {
-    type: SHOW_ONBOARDING,
-    editing
-  };
-};
-
-export const hideOnboarding = () => {
-  return {
-    type: HIDE_ONBOARDING
-  };
-};
 
 export const showModal = () => {
   return {
@@ -71,10 +53,10 @@ export const setUser = (user: TUser, authorized: boolean = true) => {
   };
 };
 
-export const modifyUser = (changes: Partial<TUser>) => {
+export const modifyUser = (user: TUser) => {
   return {
     type: MODIFY_USER,
-    changes
+    user
   };
 };
 
@@ -175,42 +157,6 @@ export const signInWithGoogle = () => {
             message: 'Canceled'
           })
         );
-      }
-    });
-  };
-};
-
-const updatingUser = () => {
-  return {
-    type: UPDATE_USER
-  };
-};
-
-const updateUserSuccess = () => {
-  return {
-    type: UPDATE_USER_SUCCESS
-  };
-};
-
-const updateUserFailure = (err) => {
-  return {
-    type: UPDATE_USER_FAILURE,
-    error: err
-  };
-};
-
-export const updateUser = (user: TUser, changes: Partial<TUser>) => {
-  return (dispatch) => {
-    dispatch(updatingUser());
-
-    Auth.updateUser({ user, changes }).then((res) => {
-      if (res.success) {
-        dispatch(modifyUser(res.data.changes));
-        dispatch(updateUserSuccess());
-
-        setBatch('user', res.data.changes);
-      } else {
-        dispatch(updateUserFailure(res.error));
       }
     });
   };

@@ -13,14 +13,13 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useSafeArea } from 'react-native-safe-area-context';
 import moment from 'moment';
 import { BarCodeScanner } from 'expo-barcode-scanner';
-import { useIsFocused } from '@react-navigation/native';
+import { useIsFocused, NavigationProp } from '@react-navigation/native';
 import { NotificationFeedbackType } from 'expo-haptics';
 
 import { theme } from '@constants';
 import { TRedux } from '@reducers';
 import { TToast } from '@reducers/ui';
 import { _kappa, _ui } from '@reducers/actions';
-import { NavigationTypes } from '@types';
 import {
   Block,
   Text,
@@ -37,7 +36,7 @@ import { HeaderHeight, TabBarHeight, HORIZONTAL_PADDING } from '@services/utils'
 import { getEventById, hasValidCheckIn, shouldLoad, sortEventByDate, canCheckIn } from '@services/kappaService';
 
 const CheckInContent: React.FC<{
-  navigation: NavigationTypes.ParamType;
+  navigation: NavigationProp<any, 'Check In'>;
 }> = ({ navigation }) => {
   const isFocused = useIsFocused();
 

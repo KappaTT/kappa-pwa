@@ -3,13 +3,12 @@ import { StyleSheet, FlatList, ScrollView, RefreshControl, TouchableOpacity } fr
 import { useSelector, useDispatch } from 'react-redux';
 import { Placeholder, PlaceholderLine, Fade } from 'rn-placeholder';
 import { useSafeArea } from 'react-native-safe-area-context';
-import { useIsFocused } from '@react-navigation/native';
+import { useIsFocused, NavigationProp } from '@react-navigation/native';
 
 import { theme } from '@constants';
 import { TRedux } from '@reducers';
 import { _kappa } from '@reducers/actions';
 import { Block, Header, Text, Icon } from '@components';
-import { NavigationTypes } from '@types';
 import { HeaderHeight, isEmpty, HORIZONTAL_PADDING } from '@services/utils';
 import { log } from '@services/logService';
 import { TUser } from '@backend/auth';
@@ -27,7 +26,7 @@ const UserSkeleton: React.FC = () => {
 };
 
 const DirectoryContent: React.FC<{
-  navigation: NavigationTypes.ParamType;
+  navigation: NavigationProp<any, 'Directory'>;
 }> = ({ navigation }) => {
   const isFocused = useIsFocused();
 
