@@ -22,10 +22,12 @@ export const ENDPOINTS: {
   [key: string]: (config?: any) => string;
 } = {
   SIGN_IN: () => 'users/login',
-  UPDATE_USER: (config: { email: string }) => `users/${encodeURIComponent(config.email)}`,
+  CREATE_USER: () => 'users',
+  UPDATE_USER: (config: { email: string }) => `users/${config.email}`,
+  DELETE_USER: (config: { email: string }) => `users/${config.email}`,
   GET_EVENTS: () => 'events',
   GET_USERS: () => 'users',
-  GET_ATTENDANCE_BY_USER: (config: { email: string }) => `attendance/user/${encodeURIComponent(config.email)}`,
+  GET_ATTENDANCE_BY_USER: (config: { email: string }) => `attendance/user/${config.email}`,
   GET_ATTENDANCE_BY_EVENT: (config: { eventId: string }) => `attendance/event/${config.eventId}`,
   CREATE_EVENT: () => 'events',
   UPDATE_EVENT: (config: { eventId: string }) => `events/${config.eventId}`,
@@ -44,7 +46,9 @@ export const METHODS: {
   [key: string]: TMethod;
 } = {
   SIGN_IN: M_POST,
+  CREATE_USER: M_POST,
   UPDATE_USER: M_PATCH,
+  DELETE_USER: M_DELETE,
   GET_EVENTS: M_GET,
   GET_USERS: M_GET,
   GET_ATTENDANCE_BY_USER: M_GET,
