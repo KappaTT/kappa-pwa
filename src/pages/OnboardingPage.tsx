@@ -107,7 +107,7 @@ const OnboardingPage: React.FC = () => {
 
         <Text style={styles.description}>
           Please fill out all missing information. Information provided by the university or our official records cannot
-          be edited at this time.
+          be edited at this time. Please contact an exec if they should be changed.
         </Text>
       </Block>
     );
