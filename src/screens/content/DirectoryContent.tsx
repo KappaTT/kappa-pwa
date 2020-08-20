@@ -32,7 +32,7 @@ const DirectoryContent: React.FC<{
 
   const user = useSelector((state: TRedux) => state.auth.user);
   const loadHistory = useSelector((state: TRedux) => state.kappa.loadHistory);
-  const directory = useSelector((state: TRedux) => state.kappa.directory);
+  const directoryArray = useSelector((state: TRedux) => state.kappa.directoryArray);
   const isGettingEvents = useSelector((state: TRedux) => state.kappa.isGettingEvents);
   const getEventsError = useSelector((state: TRedux) => state.kappa.getEventsError);
   const isGettingDirectory = useSelector((state: TRedux) => state.kappa.isGettingDirectory);
@@ -159,7 +159,7 @@ const DirectoryContent: React.FC<{
           }
         ]}
       >
-        {isGettingDirectory && isEmpty(directory) ? (
+        {isGettingDirectory && directoryArray.length === 0 ? (
           <Block style={styles.loadingContainer}>
             <UserSkeleton />
             <Block style={styles.separator} />
@@ -186,7 +186,7 @@ const DirectoryContent: React.FC<{
         ) : (
           <FlatList
             ref={(ref) => (scrollRef.current = ref)}
-            data={Object.values(directory).sort(sortUserByName)}
+            data={directoryArray.sort(sortUserByName)}
             keyExtractor={keyExtractor}
             renderItem={renderItem}
             refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
