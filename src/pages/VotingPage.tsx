@@ -107,7 +107,7 @@ const VotingPage: React.FC<{
     <View style={styles.container}>
       <Header
         title="Voting"
-        subtitle={activeSession.name}
+        subtitle={activeSession?.name}
         showBackButton={true}
         onPressBackButton={onRequestClose}
         rightButton={
