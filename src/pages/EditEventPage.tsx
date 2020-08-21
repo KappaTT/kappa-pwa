@@ -297,7 +297,7 @@ const EditEventPage: React.FC<{
                       style={styles.input}
                       placeholderText="ex: General Meeting"
                       returnKeyType="done"
-                      maxLength={32}
+                      maxLength={64}
                       error={showErrors && title.trim() === ''}
                       value={title}
                       onChangeText={(text: string) => setTitle(text)}
