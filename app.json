@@ -4,7 +4,7 @@
     "slug": "kappa-theta-tau",
     "privacy": "unlisted",
     "platforms": ["ios", "android"],
-    "version": "1.38.0",
+    "version": "1.38.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -21,7 +21,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.jefftc.kappa",
-      "buildNumber": "1.38.0",
+      "buildNumber": "1.38.1",
       "config": {
         "googleSignIn": {
           "reservedClientId": "com.googleusercontent.apps.223233671218-v5meaa316pd8mgar3mgcvsmg3td7qnl6"
@@ -33,7 +33,7 @@
     },
     "android": {
       "package": "com.jefftc.kappa",
-      "versionCode": 2,
+      "versionCode": 3,
       "config": {
         "googleSignIn": {
           "apiKey": "AIzaSyDmoH0YM6EXxjparli9yfzxWnglMIpJfZo",
