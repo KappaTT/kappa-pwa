@@ -165,7 +165,7 @@ export const fail = (blame: TBlame, message?: string, code?: number) => {
   };
 };
 
-export const pass = (data?) => {
+export const pass = <T>(data?: T) => {
   return {
     success: true,
     data
