@@ -191,7 +191,7 @@ const OnboardingPage: React.FC = () => {
           subtitle={editing}
           showBackButton={true}
           onPressBackButton={() => setEditing('')}
-          rightButton={<EndCapButton label="Save" onPress={() => setEditing('')} />}
+          rightButton={<EndCapButton label="Next" onPress={() => setEditing('')} />}
         />
 
         <Block
