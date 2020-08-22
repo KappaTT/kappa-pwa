@@ -8,6 +8,7 @@ import demoGetAttendanceByEvent from '@services/demo/demoGetAttendanceByEvent';
 import demoGetPoints from '@services/demo/demoGetPoints';
 import demoGetExcuses from '@services/demo/demoGetExcuses';
 import demoPatchUser from '@services/demo/demoPatchUser';
+import demoGetActiveVotes from '@services/demo/demoGetActiveVotes';
 
 export const DEMO_TOKEN = 'DEMO';
 
@@ -53,6 +54,8 @@ export const getDemoEndpoint = (endpoint: string, method: string) => {
       return demoGetPoints;
     case `PATCH|users/`:
       return demoPatchUser;
+    case 'GET|active-candidate/votes':
+      return demoGetActiveVotes;
     default:
       log('Missed DEMO request', endpoint, demo, method);
   }

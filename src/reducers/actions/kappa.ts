@@ -60,6 +60,7 @@ import { TUser } from '@backend/auth';
 import { TEvent, TExcuse, TEventSearch } from '@backend/kappa';
 import { modifyUser } from './auth';
 import { setBatch } from '@services/secureStorage';
+import { DEMO_USER } from '@services/demoService';
 
 export const setGlobalError = (data) => {
   return {
@@ -121,7 +122,7 @@ export const updateUser = (user: TUser, target: string, changes: Partial<TUser>)
     if (target) {
       Kappa.updateUser({ user, target, changes }).then((res) => {
         if (res.success) {
-          if (user.email === res.data.user.email) {
+          if (user.email === res.data.user?.email && user.email !== DEMO_USER.email) {
             dispatch(modifyUser(res.data.user));
             setBatch('user', changes);
           }
@@ -239,13 +240,15 @@ export const getDirectory = (user: TUser) => {
 
     Kappa.getUsers({ user }).then((res) => {
       if (res.success) {
-        const latestUser = {
-          ...res.data.user,
-          sessionToken: res.data.sessionToken
-        };
+        if (res.data.user && res.data.user.email !== DEMO_USER.email) {
+          const latestUser = {
+            ...res.data.user,
+            sessionToken: res.data.sessionToken
+          };
 
-        dispatch(modifyUser(latestUser));
-        setBatch('user', latestUser);
+          dispatch(modifyUser(latestUser));
+          setBatch('user', latestUser);
+        }
 
         dispatch(getDirectorySuccess(res.data));
       } else {

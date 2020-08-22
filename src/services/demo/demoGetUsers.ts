@@ -1,3 +1,19 @@
+const DEMO_TOKEN = 'DEMO';
+
+const DEMO_USER = {
+  _id: 'demo',
+  email: 'thetataudemo@gmail.com',
+  familyName: 'Jobs',
+  givenName: 'Steve',
+  firstYear: '2017',
+  semester: 'Fall 2018',
+  type: 'B',
+  gradYear: 'Spring 2021',
+  phone: '5555555555',
+
+  sessionToken: DEMO_TOKEN
+};
+
 export default {
   users: [
     {
@@ -22,5 +38,7 @@ export default {
       gradYear: 'Spring 2021',
       phone: '5555555555'
     }
-  ]
+  ],
+  user: DEMO_USER,
+  sessionToken: DEMO_USER.sessionToken
 };

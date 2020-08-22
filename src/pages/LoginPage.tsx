@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Image, Alert } from 'react-native';
+import { StyleSheet, Image, Alert, TouchableWithoutFeedback } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { TRedux } from '@reducers';
@@ -17,6 +17,11 @@ const LoginPage: React.FC = () => {
   const dispatch = useDispatch();
   const dispatchHideModal = React.useCallback(() => dispatch(_auth.hideModal()), [dispatch]);
   const dispatchSignInWithGoogle = React.useCallback(() => dispatch(_auth.signInWithGoogle()), [dispatch]);
+  const dispatchSignInDemo = React.useCallback(() => dispatch(_auth.signInDemo()), [dispatch]);
+
+  const onPressLogo = React.useCallback(() => {
+    dispatchSignInDemo();
+  }, [dispatchSignInDemo]);
 
   React.useEffect(() => {
     if (authorized) {
@@ -45,7 +50,11 @@ const LoginPage: React.FC = () => {
       <Block style={styles.fg}>
         <Block style={styles.content}>
           <Text style={styles.title}>KAPPA</Text>
-          <Image style={styles.logo} source={Images.Kappa} resizeMode="contain" />
+
+          <TouchableWithoutFeedback onPress={onPressLogo}>
+            <Image style={styles.logo} source={Images.Kappa} resizeMode="contain" />
+          </TouchableWithoutFeedback>
+
           <Text style={styles.subtitle}>THETA TAU</Text>
         </Block>
 

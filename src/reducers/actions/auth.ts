@@ -161,3 +161,11 @@ export const signInWithGoogle = () => {
     });
   };
 };
+
+export const signInDemo = () => {
+  return (dispatch) => {
+    dispatch(signInWithGoogleSuccess());
+    dispatch(setUser(DEMO_USER));
+    dispatch(signInSuccess());
+  };
+};
