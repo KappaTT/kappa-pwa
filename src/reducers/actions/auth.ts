@@ -15,7 +15,7 @@ import {
   SIGN_IN_WITH_GOOGLE_FAILURE,
   MODIFY_USER
 } from '@reducers/auth';
-import { TUser, initialUser, TUserResponse, TGoogleUser, purge } from '@backend/auth';
+import { TUser, initialUser, TGoogleUser, purge } from '@backend/auth';
 import { getBatch, setBatch, deleteBatch } from '@services/secureStorage';
 import * as GoogleService from '@services/googleService';
 import { log } from '@services/logService';
@@ -99,11 +99,30 @@ const signInFailure = (err) => {
   };
 };
 
-export const authenticate = (email: string, idToken: string, googleUser: TGoogleUser) => {
+export const authenticate = (email: string, idToken: string) => {
   return (dispatch) => {
     dispatch(signingIn());
 
     Auth.signIn({ email, idToken }).then((res) => {
+      if (res.success) {
+        const user = res.data.user;
+
+        dispatch(setUser(user));
+        dispatch(signInSuccess());
+
+        setBatch('user', user);
+      } else {
+        dispatch(signInFailure(res.error));
+      }
+    });
+  };
+};
+
+export const authenticateWithSecretCode = (secretCode: string) => {
+  return (dispatch) => {
+    dispatch(signingIn());
+
+    Auth.signIn({ secretCode }).then((res) => {
       if (res.success) {
         const user = res.data.user;
 
@@ -149,7 +168,7 @@ export const signInWithGoogle = () => {
           dispatch(signInSuccess());
         } else {
           dispatch(signInWithGoogleSuccess());
-          dispatch(authenticate(res.data.email, res.data.idToken, res.data));
+          dispatch(authenticate(res.data.email, res.data.idToken));
         }
       } else {
         dispatch(

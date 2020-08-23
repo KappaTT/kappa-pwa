@@ -35,6 +35,10 @@ import {
 import { HeaderHeight, TabBarHeight, HORIZONTAL_PADDING } from '@services/utils';
 import { getEventById, hasValidCheckIn, shouldLoad, sortEventByDate, canCheckIn } from '@services/kappaService';
 
+const numberFormatter = (text: string) => {
+  return text !== undefined ? text.replace(/\D/g, '') : '';
+};
+
 const CheckInContent: React.FC<{
   navigation: NavigationProp<any, 'Check In'>;
 }> = ({ navigation }) => {
@@ -186,10 +190,6 @@ const CheckInContent: React.FC<{
     },
     [checkInEventId, dispatchCheckIn, eventOptions, dispatchSetCheckInEvent]
   );
-
-  const numberFormatter = (text: string) => {
-    return text !== undefined ? text.replace(/\D/g, '') : '';
-  };
 
   React.useEffect(() => {
     if (

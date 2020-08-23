@@ -22,6 +22,7 @@ export const ENDPOINTS: {
   [key: string]: (config?: any) => string;
 } = {
   SIGN_IN: () => 'users/login',
+  GENERATE_SECRET_CODE: () => 'users/generate-secret-code',
   CREATE_USER: () => 'users',
   UPDATE_USER: (config: { email: string }) => `users/${config.email}`,
   DELETE_USER: (config: { email: string }) => `users/${config.email}`,

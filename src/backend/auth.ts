@@ -39,6 +39,8 @@ export interface TUser {
   type: string;
   role?: string;
   privileged?: boolean;
+  secretCode?: string;
+  secretCodeExpiration?: string;
 
   // ONBOARDING
   phone?: string;
@@ -57,6 +59,8 @@ export const initialUser: TUser = {
   type: '',
   role: '',
   privileged: false,
+  secretCode: '',
+  secretCodeExpiration: '',
 
   // ONBOARDING
   phone: '',
@@ -68,38 +72,27 @@ export const incompleteUser: Partial<TUser> = {
   gradYear: ''
 };
 
-export interface TUserResponse {
-  sessionToken: string;
-  _id: string;
-  email: string;
-  familyName: string;
-  givenName: string;
-  firstYear: string;
-  semester: string;
-  type: string;
-  role?: string;
-  privileged?: boolean;
-  phone?: string;
-  gradYear?: string;
-}
-
 export const purge = async () => {
   return deleteBatch('user', initialUser);
 };
 
 export interface TSignInPayload {
-  email: string;
-  idToken: string;
+  // Google Sign In
+  email?: string;
+  idToken?: string;
+
+  // Escape Hatch
+  secretCode?: string;
 }
 
 interface TSignInRequestResponse {
   sessionToken: string;
-  user: TUserResponse;
+  user: TUser;
 }
 
 interface TSignInResponse extends TResponse {
   data?: {
-    user: TUserResponse;
+    user: TUser;
   };
 }
 
@@ -110,7 +103,8 @@ export const signIn = async (payload: TSignInPayload): Promise<TSignInResponse> 
         user: {
           email: payload.email
         },
-        idToken: payload.idToken
+        idToken: payload.idToken,
+        secretCode: payload.secretCode
       }
     });
 
