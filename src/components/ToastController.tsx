@@ -16,6 +16,7 @@ import Toast from '@components/Toast';
 import RoundButton from '@components/RoundButton';
 
 const ToastController: React.FC = () => {
+  const authorized = useSelector((state: TRedux) => state.auth.authorized);
   const kappaGlobalErrorMessage = useSelector((state: TRedux) => state.kappa.globalErrorMessage);
   const kappaGlobalErrorCode = useSelector((state: TRedux) => state.kappa.globalErrorCode);
   const kappaGlobalErrorDate = useSelector((state: TRedux) => state.kappa.globalErrorDate);
@@ -67,19 +68,23 @@ const ToastController: React.FC = () => {
       if (update.isAvailable) {
         await Updates.fetchUpdateAsync();
 
-        dispatchShowToast({
-          title: 'Update Ready',
-          message: 'The latest version has been downloaded, please reload the app to use it!',
-          allowClose: false,
-          timer: -1,
-          code: 426,
-          hapticType: NotificationFeedbackType.Warning
-        });
+        if (authorized) {
+          dispatchShowToast({
+            title: 'Update Ready',
+            message: 'The latest version has been downloaded, please reload the app to use it!',
+            allowClose: false,
+            timer: -1,
+            code: 426,
+            hapticType: NotificationFeedbackType.Warning
+          });
+        } else {
+          await Updates.reloadAsync();
+        }
       }
     } catch (error) {
       log(error.message);
     }
-  }, [dispatchShowToast]);
+  }, [authorized, dispatchShowToast]);
 
   React.useEffect(() => {
     if (kappaGlobalErrorMessage !== '' && kappaGlobalErrorDate !== null) {
@@ -140,7 +145,7 @@ const ToastController: React.FC = () => {
     return () => {
       AppState.removeEventListener('change', handleAppStateChange);
     };
-  }, []);
+  }, [handleAppStateChange]);
 
   return (
     <Ghost style={styles.container}>
