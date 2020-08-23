@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Image, Alert, TouchableWithoutFeedback } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
+import Constants from 'expo-constants';
 
 import { TRedux } from '@reducers';
 import { _auth } from '@reducers/actions';
@@ -60,6 +61,10 @@ const LoginPage: React.FC = () => {
 
         <Block style={styles.bottomArea}>
           <GoogleSignInButton loading={isSigningInWithGoogle || isAuthenticating} onPress={dispatchSignInWithGoogle} />
+
+          <Text style={styles.madeWithText}>
+            {`Whatsoever thy hand findeth to do, do it with thy might.\n\n${Constants.nativeBuildVersion} - ${Constants.manifest.sdkVersion} - ${Constants.manifest.revisionId}`}
+          </Text>
         </Block>
       </Block>
     );
@@ -106,6 +111,13 @@ const styles = StyleSheet.create({
     maxWidth: '50%',
     maxHeight: '20%',
     marginVertical: 20
+  },
+  madeWithText: {
+    marginTop: 16,
+    fontFamily: 'OpenSans',
+    fontSize: 12,
+    color: theme.COLORS.BORDER,
+    textAlign: 'center'
   }
 });
 
