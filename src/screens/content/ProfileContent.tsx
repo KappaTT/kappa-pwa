@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator, RefreshControl } from 'react-native';
+import { StyleSheet, ScrollView, View, TouchableOpacity, ActivityIndicator, RefreshControl } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { useSafeArea } from 'react-native-safe-area-context';
 import moment from 'moment';
@@ -10,6 +10,7 @@ import { hapticImpact } from '@services/hapticService';
 import { TRedux } from '@reducers';
 import { _auth, _kappa } from '@reducers/actions';
 import { theme } from '@constants';
+import { TPoints, POINTS_SO, GM_SO, POINTS_JR, GM_JR, POINTS_SR, GM_SR } from '@constants/Points';
 import { Block, Text, Icon, GeneralMeetingChart } from '@components';
 import { prettyPhone, shouldLoad, sortEventsByDateReverse } from '@services/kappaService';
 import { isEmpty, HORIZONTAL_PADDING } from '@services/utils';
@@ -120,6 +121,34 @@ const ProfileContent: React.FC<{
       loadData(false);
     }
   }, [isFocused, loadData, user.sessionToken]);
+
+  const renderRequirements = (points: TPoints, gm: number) => {
+    return (
+      <View style={styles.splitPropertyRow}>
+        <View style={styles.splitPropertyFifths}>
+          <Text style={styles.propertyHeader}>Prof</Text>
+          <Text style={styles.propertyValue}>{points.PROF}</Text>
+        </View>
+        <View style={styles.splitPropertyFifths}>
+          <Text style={styles.propertyHeader}>Phil</Text>
+          <Text style={styles.propertyValue}>{points.PHIL}</Text>
+        </View>
+        <View style={styles.splitPropertyFifths}>
+          <Text style={styles.propertyHeader}>Bro</Text>
+          <Text style={styles.propertyValue}>{points.BRO}</Text>
+        </View>
+        <View style={styles.splitPropertyFifths}>
+          <Text style={styles.propertyHeader}>Rush</Text>
+          <Text style={styles.propertyValue}>{points.RUSH}</Text>
+        </View>
+
+        <View style={styles.splitPropertyFifths}>
+          <Text style={styles.propertyHeader}>GM</Text>
+          <Text style={styles.propertyValue}>{gm}%</Text>
+        </View>
+      </View>
+    );
+  };
 
   return (
     <Block flex>
@@ -255,6 +284,20 @@ const ProfileContent: React.FC<{
             </Block>
           </Block>
 
+          <Text style={styles.headingText}>Requirements</Text>
+
+          <Text style={styles.subHeadingText}>Sophomore</Text>
+
+          {renderRequirements(POINTS_SO, GM_SO)}
+
+          <Text style={styles.subHeadingText}>Junior</Text>
+
+          {renderRequirements(POINTS_JR, GM_JR)}
+
+          <Text style={styles.subHeadingText}>Senior</Text>
+
+          {renderRequirements(POINTS_SR, GM_SR)}
+
           <Text style={styles.madeWithText}>
             {`Whatsoever thy hand findeth to do, do it with thy might.\n\n${Constants.nativeBuildVersion} - ${Constants.manifest.sdkVersion} - ${Constants.manifest.revisionId}\n\nJTC - Web Chair 2019-2021`}
           </Text>
@@ -367,6 +410,18 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: theme.COLORS.BORDER,
     textAlign: 'center'
+  },
+  headingText: {
+    marginTop: 24,
+    marginBottom: 8,
+    fontFamily: 'OpenSans-Bold',
+    fontSize: 20
+  },
+  subHeadingText: {
+    marginTop: 8,
+    marginBottom: -8,
+    fontFamily: 'OpenSans-Bold',
+    fontSize: 14
   }
 });
 
