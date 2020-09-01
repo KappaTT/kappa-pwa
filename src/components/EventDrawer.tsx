@@ -8,7 +8,8 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   StatusBar,
-  Clipboard
+  Clipboard,
+  Linking
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import Animated from 'react-native-reanimated';
@@ -180,6 +181,16 @@ const EventDrawer: React.FC = () => {
       });
     }
   }, [dispatchShowToast, selectedEvent]);
+
+  const onLongPressLink = React.useCallback(async () => {
+    if (selectedEvent?.link) {
+      const canOpen = await Linking.canOpenURL(selectedEvent.link);
+
+      if (canOpen) {
+        Linking.openURL(selectedEvent.link);
+      }
+    }
+  }, [selectedEvent]);
 
   const onPressCheckInCode = React.useCallback(() => {
     Clipboard.setString(selectedEvent.eventCode);
@@ -494,7 +505,7 @@ const EventDrawer: React.FC = () => {
                         <Text style={styles.propertyValue}>{selectedEvent.location}</Text>
                       </Block>
                       <Block style={styles.splitProperty}>
-                        <TouchableOpacity activeOpacity={0.6} onPress={onPressLink}>
+                        <TouchableOpacity activeOpacity={0.6} onPress={onPressLink} onLongPress={onLongPressLink}>
                           <Text style={styles.propertyHeader}>Link</Text>
                           <Text
                             style={[styles.propertyValue, selectedEvent.link && { color: theme.COLORS.PRIMARY }]}
