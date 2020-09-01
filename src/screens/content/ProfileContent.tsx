@@ -403,16 +403,8 @@ const styles = StyleSheet.create({
     color: theme.COLORS.GRAY,
     textTransform: 'uppercase'
   },
-  madeWithText: {
-    marginTop: 32,
-    marginBottom: 8,
-    fontFamily: 'OpenSans',
-    fontSize: 12,
-    color: theme.COLORS.BORDER,
-    textAlign: 'center'
-  },
   headingText: {
-    marginTop: 24,
+    marginTop: 8,
     marginBottom: 8,
     fontFamily: 'OpenSans-Bold',
     fontSize: 20
@@ -422,6 +414,14 @@ const styles = StyleSheet.create({
     marginBottom: -8,
     fontFamily: 'OpenSans-Bold',
     fontSize: 14
+  },
+  madeWithText: {
+    marginTop: 32,
+    marginBottom: 8,
+    fontFamily: 'OpenSans',
+    fontSize: 12,
+    color: theme.COLORS.BORDER,
+    textAlign: 'center'
   }
 });
 
