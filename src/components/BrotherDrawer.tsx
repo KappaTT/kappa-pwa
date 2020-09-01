@@ -349,13 +349,13 @@ const BrotherDrawer: React.FC = () => {
                   </Block>
                   <Block style={styles.splitPropertyRow}>
                     <Block style={styles.splitProperty}>
-                      <TouchableOpacity onPress={onPressEmail}>
+                      <TouchableOpacity activeOpacity={0.6} onPress={onPressEmail}>
                         <Text style={styles.propertyHeader}>Email</Text>
                         <Text style={styles.propertyValue}>{selectedUser.email}</Text>
                       </TouchableOpacity>
                     </Block>
                     <Block style={styles.splitProperty}>
-                      <TouchableOpacity onPress={onPressPhone}>
+                      <TouchableOpacity activeOpacity={0.6} onPress={onPressPhone}>
                         <Text style={styles.propertyHeader}>Phone</Text>
                         <Text style={styles.propertyValue}>{prettyPhone(selectedUser.phone)}</Text>
                       </TouchableOpacity>

@@ -62,6 +62,7 @@ const EditEventPage: React.FC<{
   );
   const [duration, setDuration] = React.useState<string>(initialEvent ? initialEvent.duration.toString() : '');
   const [location, setLocation] = React.useState<string>(initialEvent ? initialEvent.location : '');
+  const [link, setLink] = React.useState<string>(initialEvent?.link || '');
   const [mandatory, setMandatory] = React.useState<boolean>(initialEvent ? initialEvent.mandatory : false);
   const [excusable, setExcusable] = React.useState<boolean>(initialEvent ? initialEvent.excusable : true);
   const [profPoints, setProfPoints] = React.useState<string>(
@@ -96,6 +97,7 @@ const EditEventPage: React.FC<{
       start: startDate.toISOString(),
       duration: parseInt(duration || '0', 10),
       location,
+      link,
 
       creator: initialEvent ? initialEvent.creator : '',
       eventCode: initialEvent ? initialEvent.eventCode : ''
@@ -127,6 +129,7 @@ const EditEventPage: React.FC<{
     startDate,
     duration,
     location,
+    link,
     initialEvent,
     profPoints,
     philPoints,
@@ -378,6 +381,18 @@ const EditEventPage: React.FC<{
                       maxLength={64}
                       value={location}
                       onChangeText={(text: string) => setLocation(text)}
+                    />
+
+                    <Block style={styles.propertyHeaderContainer}>
+                      <Text style={styles.propertyHeader}>Link</Text>
+                    </Block>
+                    <FormattedInput
+                      style={styles.input}
+                      placeholderText="ex: https://illinois.zoom.us/j/123456789"
+                      returnKeyType="done"
+                      maxLength={256}
+                      value={link}
+                      onChangeText={(text: string) => setLink(text)}
                     />
 
                     <Block style={styles.doubleColumn}>

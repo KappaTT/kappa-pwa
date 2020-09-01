@@ -7,7 +7,8 @@ import {
   RefreshControl,
   TouchableOpacity,
   ActivityIndicator,
-  StatusBar
+  StatusBar,
+  Clipboard
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import Animated from 'react-native-reanimated';
@@ -17,7 +18,8 @@ import moment from 'moment';
 import { ProgressCircle } from 'react-native-svg-charts';
 
 import { TRedux } from '@reducers';
-import { _auth, _kappa } from '@reducers/actions';
+import { TToast } from '@reducers/ui';
+import { _auth, _kappa, _ui } from '@reducers/actions';
 import { log } from '@services/logService';
 import {
   getAttendance,
@@ -83,6 +85,7 @@ const EventDrawer: React.FC = () => {
     (excuse: boolean) => dispatch(_kappa.setCheckInEvent(selectedEventId, excuse)),
     [dispatch, selectedEventId]
   );
+  const dispatchShowToast = React.useCallback((toast: Partial<TToast>) => dispatch(_ui.showToast(toast)), [dispatch]);
 
   const insets = useSafeArea();
 
@@ -165,6 +168,28 @@ const EventDrawer: React.FC = () => {
 
     onPressClose();
   }, [dispatchCheckIn, onPressClose]);
+
+  const onPressLink = React.useCallback(() => {
+    if (selectedEvent?.link) {
+      Clipboard.setString(selectedEvent.link);
+
+      dispatchShowToast({
+        title: 'Copied',
+        message: 'The link was saved to your clipboard',
+        timer: 1500
+      });
+    }
+  }, [dispatchShowToast, selectedEvent]);
+
+  const onPressCheckInCode = React.useCallback(() => {
+    Clipboard.setString(selectedEvent.eventCode);
+
+    dispatchShowToast({
+      title: 'Copied',
+      message: 'The code was saved to your clipboard',
+      timer: 1500
+    });
+  }, [dispatchShowToast, selectedEvent]);
 
   const attended = React.useMemo(() => {
     return getAttendance(records, user.email, selectedEventId);
@@ -468,12 +493,17 @@ const EventDrawer: React.FC = () => {
                         <Text style={styles.propertyHeader}>Location</Text>
                         <Text style={styles.propertyValue}>{selectedEvent.location}</Text>
                       </Block>
-                      {user.privileged === true && (
-                        <Block style={styles.splitProperty}>
-                          <Text style={styles.propertyHeader}>Check-In Code</Text>
-                          <Text style={styles.propertyValue}>{selectedEvent.eventCode}</Text>
-                        </Block>
-                      )}
+                      <Block style={styles.splitProperty}>
+                        <TouchableOpacity activeOpacity={0.6} onPress={onPressLink}>
+                          <Text style={styles.propertyHeader}>Link</Text>
+                          <Text
+                            style={[styles.propertyValue, selectedEvent.link && { color: theme.COLORS.PRIMARY }]}
+                            numberOfLines={1}
+                          >
+                            {selectedEvent.link || 'N/A'}
+                          </Text>
+                        </TouchableOpacity>
+                      </Block>
                     </Block>
 
                     <Block style={styles.splitPropertyRow}>
@@ -489,6 +519,17 @@ const EventDrawer: React.FC = () => {
                         <Text style={styles.propertyHeader}>Points</Text>
                         <Text style={styles.propertyValue}>{prettyPoints(selectedEvent.points)}</Text>
                       </Block>
+                    </Block>
+
+                    <Block style={styles.splitPropertyRow}>
+                      {user.privileged === true && (
+                        <Block style={styles.splitProperty}>
+                          <TouchableOpacity activeOpacity={0.6} onPress={onPressCheckInCode}>
+                            <Text style={styles.propertyHeader}>Check-In Code</Text>
+                            <Text style={styles.propertyValue}>{selectedEvent.eventCode}</Text>
+                          </TouchableOpacity>
+                        </Block>
+                      )}
                     </Block>
 
                     {user.privileged === true && renderAdmin()}
