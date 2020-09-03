@@ -10,7 +10,7 @@ import { hapticImpact } from '@services/hapticService';
 import { TRedux } from '@reducers';
 import { _auth, _kappa } from '@reducers/actions';
 import { theme } from '@constants';
-import { TPoints, POINTS_SO, GM_SO, POINTS_JR, GM_JR, POINTS_SR, GM_SR } from '@constants/Points';
+import { TPoints, POINTS_SO, GM_SO, POINTS_JR, GM_JR, POINTS_SR, GM_SR, getClassYear } from '@constants/Points';
 import { Block, Text, Icon, GeneralMeetingChart } from '@components';
 import { prettyPhone, shouldLoad, sortEventsByDateReverse } from '@services/kappaService';
 import { isEmpty, HORIZONTAL_PADDING } from '@services/utils';
@@ -109,6 +109,8 @@ const ProfileContent: React.FC<{
 
     return Object.values(missedMandatory[user.email]).sort(sortEventsByDateReverse);
   }, [user, missedMandatory]);
+
+  const classYear = React.useMemo(() => getClassYear(user.firstYear), [user.firstYear]);
 
   React.useEffect(() => {
     if (!isGettingEvents && !isGettingAttendance && !isGettingPoints) {
@@ -286,17 +288,23 @@ const ProfileContent: React.FC<{
 
           <Text style={styles.headingText}>Requirements</Text>
 
-          <Text style={styles.subHeadingText}>Sophomore</Text>
+          <View style={{ opacity: classYear === 'FR' || classYear === 'SO' ? 1 : 0.4 }}>
+            <Text style={styles.subHeadingText}>Sophomore</Text>
 
-          {renderRequirements(POINTS_SO, GM_SO)}
+            {renderRequirements(POINTS_SO, GM_SO)}
+          </View>
 
-          <Text style={styles.subHeadingText}>Junior</Text>
+          <View style={{ opacity: classYear === 'JR' ? 1 : 0.4 }}>
+            <Text style={styles.subHeadingText}>Junior</Text>
 
-          {renderRequirements(POINTS_JR, GM_JR)}
+            {renderRequirements(POINTS_JR, GM_JR)}
+          </View>
 
-          <Text style={styles.subHeadingText}>Senior</Text>
+          <View style={{ opacity: classYear === 'SR' ? 1 : 0.4 }}>
+            <Text style={styles.subHeadingText}>Senior</Text>
 
-          {renderRequirements(POINTS_SR, GM_SR)}
+            {renderRequirements(POINTS_SR, GM_SR)}
+          </View>
 
           <Text style={styles.madeWithText}>
             {`Whatsoever thy hand findeth to do, do it with thy might.\n\n${Constants.nativeBuildVersion} - ${Constants.manifest.sdkVersion} - ${Constants.manifest.revisionId}\n\nJTC - Web Chair 2019-2021`}
