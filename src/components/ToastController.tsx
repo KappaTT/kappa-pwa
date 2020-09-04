@@ -16,6 +16,7 @@ import Toast from '@components/Toast';
 import RoundButton from '@components/RoundButton';
 
 const ToastController: React.FC = () => {
+  const loadedUser = useSelector((state: TRedux) => state.auth.loadedUser);
   const authorized = useSelector((state: TRedux) => state.auth.authorized);
   const kappaGlobalErrorMessage = useSelector((state: TRedux) => state.kappa.globalErrorMessage);
   const kappaGlobalErrorCode = useSelector((state: TRedux) => state.kappa.globalErrorCode);
@@ -122,10 +123,10 @@ const ToastController: React.FC = () => {
   ]);
 
   React.useEffect(() => {
-    if (appState === 'active') {
+    if (loadedUser && appState === 'active') {
       checkForUpdates();
     }
-  }, [appState, checkForUpdates]);
+  }, [appState, loadedUser, checkForUpdates]);
 
   React.useEffect(() => {
     if (isShowingToast) {
