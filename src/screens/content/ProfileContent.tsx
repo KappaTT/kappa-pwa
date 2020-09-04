@@ -14,7 +14,6 @@ import { TPoints, POINTS_SO, GM_SO, POINTS_JR, GM_JR, POINTS_SR, GM_SR, getClass
 import { Block, Text, Icon, GeneralMeetingChart } from '@components';
 import { prettyPhone, shouldLoad, sortEventsByDateReverse } from '@services/kappaService';
 import { isEmpty, HORIZONTAL_PADDING } from '@services/utils';
-import { log } from '@services/logService';
 import { TEvent } from '@backend/kappa';
 
 const ProfileContent: React.FC<{

@@ -9,7 +9,7 @@ import { TRedux } from '@reducers';
 import { _auth, _kappa, _voting } from '@reducers/actions';
 import { shouldLoad, sortEventsByDateReverse, getExcusedEvents, getEventById } from '@services/kappaService';
 import { HeaderHeight, HORIZONTAL_PADDING, isEmpty } from '@services/utils';
-import { TPendingExcuse, TExcuse, TEvent } from '@backend/kappa';
+import { TPendingExcuse, TExcuse } from '@backend/kappa';
 import { ExcusePage, LateExcusePage, VotingPage } from '@pages';
 import { theme } from '@constants';
 import { Block, Text, Header, FadeModal, SlideModal, EndCapButton } from '@components';

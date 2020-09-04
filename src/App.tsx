@@ -88,7 +88,6 @@ const App = () => {
 
   const dispatch = useDispatch();
   const dispatchShowLogin = React.useCallback(() => dispatch(_auth.showModal()), [dispatch]);
-  const dispatchHideLogin = React.useCallback(() => dispatch(_auth.hideModal()), [dispatch]);
   const dispatchCancelEditUser = React.useCallback(() => dispatch(_kappa.cancelEditUser()), [dispatch]);
   const dispatchLoadUser = React.useCallback(() => dispatch(_auth.loadUser()), [dispatch]);
   const dispatchLoadPrefs = React.useCallback(() => dispatch(_prefs.loadPrefs()), [dispatch]);

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, FlatList, ScrollView, RefreshControl, TouchableOpacity } from 'react-native';
+import { StyleSheet, FlatList, RefreshControl, TouchableOpacity } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { Placeholder, PlaceholderLine, Fade } from 'rn-placeholder';
 import { useSafeArea } from 'react-native-safe-area-context';
@@ -9,8 +9,7 @@ import { theme } from '@constants';
 import { TRedux } from '@reducers';
 import { _kappa } from '@reducers/actions';
 import { Block, Header, Text, Icon } from '@components';
-import { HeaderHeight, isEmpty, HORIZONTAL_PADDING } from '@services/utils';
-import { log } from '@services/logService';
+import { HeaderHeight, HORIZONTAL_PADDING } from '@services/utils';
 import { TUser } from '@backend/auth';
 import { shouldLoad } from '@services/kappaService';
 import { hapticImpact } from '@services/hapticService';
