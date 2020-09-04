@@ -12,7 +12,7 @@ import { Block, Header, Text, Icon } from '@components';
 import { HeaderHeight, isEmpty, HORIZONTAL_PADDING } from '@services/utils';
 import { log } from '@services/logService';
 import { TUser } from '@backend/auth';
-import { sortUserByName, shouldLoad } from '@services/kappaService';
+import { shouldLoad } from '@services/kappaService';
 import { hapticImpact } from '@services/hapticService';
 
 const UserSkeleton: React.FC = () => {
@@ -186,7 +186,7 @@ const DirectoryContent: React.FC<{
         ) : (
           <FlatList
             ref={(ref) => (scrollRef.current = ref)}
-            data={directoryArray.sort(sortUserByName)}
+            data={directoryArray}
             keyExtractor={keyExtractor}
             renderItem={renderItem}
             refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
