@@ -18,7 +18,7 @@ import { TEvent } from '@backend/kappa';
 import { TVote, TCandidate } from '@backend/voting';
 import { getVotes, getVotesBySession } from '@services/votingService';
 import { theme } from '@constants';
-import { Header, EndCapButton, Icon, FormattedInput, RoundButton, TextButton } from '@components';
+import { Header, EndCapButton, Icon, FormattedInput, SmallRoundButton } from '@components';
 import { HeaderHeight, HORIZONTAL_PADDING } from '@services/utils';
 
 const VotingPage: React.FC<{
@@ -329,15 +329,17 @@ const VotingPage: React.FC<{
                 <Text style={styles.submittedText}>Submitted</Text>
               )}
             {selectedCandidates.indexOf(candidate._id) >= 0 ? (
-              <TextButton
+              <SmallRoundButton
                 label="Unselect"
-                textStyle={styles.selectButton}
+                alt={true}
+                color={theme.COLORS.PRIMARY}
+                bgColor={theme.COLORS.SUPER_LIGHT_BLUE_GRAY}
                 onPress={() => onPressSelectCandidate(candidate._id)}
               />
             ) : (
-              <TextButton
+              <SmallRoundButton
                 label="Select"
-                textStyle={styles.selectButton}
+                color={theme.COLORS.PRIMARY}
                 onPress={() => onPressSelectCandidate(candidate._id)}
               />
             )}
@@ -596,11 +598,6 @@ const styles = StyleSheet.create({
     fontFamily: 'OpenSans',
     fontSize: 15,
     color: theme.COLORS.DARK_GRAY
-  },
-  selectButton: {
-    color: theme.COLORS.PRIMARY,
-    fontSize: 15,
-    fontFamily: 'OpenSans-SemiBold'
   }
 });
 

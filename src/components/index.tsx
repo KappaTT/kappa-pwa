@@ -29,6 +29,7 @@ import RadioList from './RadioList';
 import RefreshWrapper from './RefreshWrapper';
 import RoundButton from './RoundButton';
 import SlideModal from './SlideModal';
+import SmallRoundButton from './SmallRoundButton';
 import Switch from './Switch';
 import TabBar from './TabBar';
 import TabBarButton from './TabBarButton';
@@ -73,6 +74,7 @@ export {
   RefreshWrapper,
   RoundButton,
   SlideModal,
+  SmallRoundButton,
   Switch,
   TabBar,
   TabBarButton,
