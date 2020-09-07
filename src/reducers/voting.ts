@@ -98,7 +98,7 @@ export default (state = initialState, action: any): TVotingState => {
           ...state,
           isGettingActiveVotes: false,
           sessionArray: newSessionArray,
-          sessionToCandidateToVotes: mergeVotes(state.sessionToCandidateToVotes, action.votes),
+          sessionToCandidateToVotes: mergeVotes(state.sessionToCandidateToVotes, action.votes, true),
           ...recomputeVotingState({
             emailToCandidate: mergeCandidates(state.emailToCandidate, candidatesToMerge)
           }),
@@ -130,7 +130,7 @@ export default (state = initialState, action: any): TVotingState => {
       return {
         ...state,
         isSubmittingVote: false,
-        sessionToCandidateToVotes: mergeVotes(state.sessionToCandidateToVotes, action.votes)
+        sessionToCandidateToVotes: mergeVotes(state.sessionToCandidateToVotes, action.votes, true)
       };
     case SUBMIT_VOTE_FAILURE:
       return {
