@@ -4,6 +4,11 @@ import { TCandidateDict, TCandidate, TSession, TSessionToCandidateToVoteDict, TV
 import { TDirectory } from '@backend/kappa';
 import { sortUserByName } from '@services/kappaService';
 
+export const TYPE_OPTIONS = [
+  { id: 'REGULAR', title: 'One at a time' },
+  { id: 'MULTI', title: 'Multiple choice' }
+];
+
 export const CLASS_YEAR_OPTIONS = [
   { id: 'FR', title: 'Freshman' },
   { id: 'SO', title: 'Sophomore' },
@@ -124,13 +129,30 @@ export const getVotes = (
   });
 };
 
+export const getVotesBySession = (
+  sessionToCandidateToVotes: TSessionToCandidateToVoteDict,
+  sessionId: string
+): {
+  [candidateId: string]: TVote[];
+} => {
+  if (!sessionToCandidateToVotes.hasOwnProperty(sessionId)) {
+    return {};
+  }
+
+  return sessionToCandidateToVotes[sessionId];
+};
+
 export const recomputeVotingState = ({ emailToCandidate }: { emailToCandidate: TCandidateDict }) => {
   const candidateArray = Object.values(emailToCandidate).sort(sortUserByName);
   const idToCandidate = separateByCandidateId(candidateArray);
+  const approvedCandidateArray = candidateArray.filter((candidate) => candidate.approved);
+  const unapprovedCandidateArray = candidateArray.filter((candidate) => !candidate.approved);
 
   return {
     emailToCandidate,
     idToCandidate,
-    candidateArray
+    candidateArray,
+    approvedCandidateArray,
+    unapprovedCandidateArray
   };
 };

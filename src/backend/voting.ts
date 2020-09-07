@@ -28,6 +28,8 @@ export interface TSession {
   candidateOrder: string[];
   currentCandidateId: string;
   active: boolean;
+  type?: 'REGULAR' | 'MULTI';
+  maxVotes?: number;
 }
 
 export interface TVote {
@@ -50,8 +52,9 @@ export interface TGetActiveVotesPayload {
 }
 
 interface TGetActiveVotesRequestResponse {
-  sessions: TSession;
-  candidate: TCandidate;
+  sessions: TSession[];
+  candidate?: TCandidate;
+  candidates?: TCandidate[];
   votes: TVote[];
 }
 
@@ -87,6 +90,7 @@ export const getActiveVotes = async (payload: TGetActiveVotesPayload): Promise<T
     return pass({
       sessions: response.data.sessions,
       candidate: response.data.candidate,
+      candidates: response.data.candidates,
       votes: response.data.votes
     });
   } catch (error) {
@@ -122,6 +126,53 @@ export const submitVote = async (payload: TSubmitVotePayload): Promise<TSubmitVo
     );
 
     log('Submit vote response', response.code);
+
+    if (!response.success) {
+      return fail({}, response.error?.message || 'issue connecting to the server', 500);
+    } else if (response.code !== 200) {
+      if (response.code === 401) {
+        return fail({}, 'your credentials were invalid or have expired', response.code);
+      }
+
+      return fail({}, response.error?.message, response.code);
+    }
+
+    return pass({
+      votes: response.data.votes
+    });
+  } catch (error) {
+    log(error);
+    return fail({}, "that wasn't supposed to happen", -1);
+  }
+};
+
+export interface TSubmitMultiVotePayload {
+  user: TUser;
+  candidates: string[];
+}
+
+interface TSubmitMultiVoteRequestResponse {
+  votes: TVote[];
+}
+
+interface TSubmitMultiVoteResponse extends TResponse {
+  data?: TSubmitMultiVoteRequestResponse;
+}
+
+export const submitMultiVote = async (payload: TSubmitMultiVotePayload): Promise<TSubmitMultiVoteResponse> => {
+  try {
+    const response = await makeAuthorizedRequest<TSubmitMultiVoteRequestResponse>(
+      ENDPOINTS.SUBMIT_MULTI_VOTE(),
+      METHODS.SUBMIT_MULTI_VOTE,
+      {
+        body: {
+          candidates: payload.candidates
+        }
+      },
+      payload.user.sessionToken
+    );
+
+    log('Submit multi vote response', response.code);
 
     if (!response.success) {
       return fail({}, response.error?.message || 'issue connecting to the server', 500);

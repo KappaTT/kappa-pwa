@@ -40,7 +40,8 @@ export const ENDPOINTS: {
   GET_POINTS_BY_USER: (config: { email: string }) => `points/${encodeURIComponent(config.email)}`,
   GET_EVENT_SEARCH_RESULTS: () => 'search/events',
   GET_ACTIVE_VOTES: () => 'active-candidate/votes',
-  SUBMIT_VOTE: () => 'vote'
+  SUBMIT_VOTE: () => 'vote',
+  SUBMIT_MULTI_VOTE: () => 'multi-vote'
 };
 
 export const METHODS: {
@@ -64,7 +65,8 @@ export const METHODS: {
   GET_POINTS_BY_USER: M_GET,
   GET_EVENT_SEARCH_RESULTS: M_POST,
   GET_ACTIVE_VOTES: M_GET,
-  SUBMIT_VOTE: M_POST
+  SUBMIT_VOTE: M_POST,
+  SUBMIT_MULTI_VOTE: M_POST
 };
 
 export interface TResponse {

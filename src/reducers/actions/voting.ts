@@ -39,6 +39,7 @@ const getActiveVotesSuccess = (data) => {
     type: GET_ACTIVE_VOTES_SUCCESS,
     sessions: data.sessions,
     candidate: data.candidate,
+    candidates: data.candidates,
     votes: data.votes
   };
 };
@@ -89,6 +90,20 @@ export const submitVote = (user: TUser, vote: Partial<TVote>) => {
     dispatch(submittingVote());
 
     Voting.submitVote({ user, vote }).then((res) => {
+      if (res.success) {
+        dispatch(submitVoteSuccess(res.data));
+      } else {
+        dispatch(submitVoteFailure(res.error));
+      }
+    });
+  };
+};
+
+export const submitMultiVote = (user: TUser, candidates: string[]) => {
+  return (dispatch) => {
+    dispatch(submittingVote());
+
+    Voting.submitMultiVote({ user, candidates }).then((res) => {
       if (res.success) {
         dispatch(submitVoteSuccess(res.data));
       } else {
