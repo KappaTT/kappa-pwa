@@ -78,11 +78,11 @@ export const mergeVotes = (
   newVotes: TVote[],
   overwrite: boolean = false
 ) => {
-  if (newVotes.length === 0) {
-    return sessionToCandidateToVotes;
-  }
-
   const mergedVotes = overwrite ? {} : sessionToCandidateToVotes;
+
+  if (newVotes.length === 0) {
+    return mergedVotes;
+  }
 
   const duplicateVoteCheck: {
     [sessionId: string]: {
