@@ -21,6 +21,7 @@ import IconBadge from './IconBadge';
 import Input from './Input';
 import Interceptor from './Interceptor';
 import KeyboardDismissView from './KeyboardDismissView';
+import LinkContainer from './LinkContainer';
 import ListButton from './ListButton';
 import PageSection from './PageSection';
 import PopupButton from './PopupButton';
@@ -66,6 +67,7 @@ export {
   Input,
   Interceptor,
   KeyboardDismissView,
+  LinkContainer,
   ListButton,
   PageSection,
   PopupButton,
