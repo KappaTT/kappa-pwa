@@ -8,8 +8,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   StatusBar,
-  Clipboard,
-  Linking
+  Clipboard
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import Animated from 'react-native-reanimated';
@@ -44,6 +43,7 @@ import Text from '@components/Text';
 import RoundButton from '@components/RoundButton';
 import Icon from '@components/Icon';
 import Switch from '@components/Switch';
+import LinkContainer from '@components/LinkContainer';
 
 const { width, height } = Dimensions.get('window');
 
@@ -169,28 +169,6 @@ const EventDrawer: React.FC = () => {
 
     onPressClose();
   }, [dispatchCheckIn, onPressClose]);
-
-  const onPressLink = React.useCallback(() => {
-    if (selectedEvent?.link) {
-      Clipboard.setString(selectedEvent.link);
-
-      dispatchShowToast({
-        title: 'Copied',
-        message: 'The link was saved to your clipboard',
-        timer: 1500
-      });
-    }
-  }, [dispatchShowToast, selectedEvent]);
-
-  const onLongPressLink = React.useCallback(async () => {
-    if (selectedEvent?.link) {
-      const canOpen = await Linking.canOpenURL(selectedEvent.link);
-
-      if (canOpen) {
-        Linking.openURL(selectedEvent.link);
-      }
-    }
-  }, [selectedEvent]);
 
   const onPressCheckInCode = React.useCallback(() => {
     Clipboard.setString(selectedEvent.eventCode);
@@ -505,7 +483,7 @@ const EventDrawer: React.FC = () => {
                         <Text style={styles.propertyValue}>{selectedEvent.location}</Text>
                       </Block>
                       <Block style={styles.splitProperty}>
-                        <TouchableOpacity activeOpacity={0.6} onPress={onPressLink} onLongPress={onLongPressLink}>
+                        <LinkContainer link={selectedEvent.link}>
                           <Text style={styles.propertyHeader}>Link</Text>
                           <Text
                             style={[styles.propertyValue, selectedEvent.link && { color: theme.COLORS.PRIMARY }]}
@@ -513,7 +491,7 @@ const EventDrawer: React.FC = () => {
                           >
                             {selectedEvent.link || 'N/A'}
                           </Text>
-                        </TouchableOpacity>
+                        </LinkContainer>
                       </Block>
                     </Block>
 

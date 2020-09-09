@@ -10,11 +10,12 @@ import { hapticImpact } from '@services/hapticService';
 import { TRedux } from '@reducers';
 import { _auth, _kappa } from '@reducers/actions';
 import { theme } from '@constants';
-import { TPoints, POINTS_SO, GM_SO, POINTS_JR, GM_JR, POINTS_SR, GM_SR, getClassYear } from '@constants/Points';
-import { Block, Text, Icon, GeneralMeetingChart } from '@components';
+import { LINK_LINKTREE } from '@constants/Links';
 import { prettyPhone, shouldLoad, sortEventsByDateReverse } from '@services/kappaService';
 import { isEmpty, HORIZONTAL_PADDING } from '@services/utils';
 import { TEvent } from '@backend/kappa';
+import { TPoints, POINTS_SO, GM_SO, POINTS_JR, GM_JR, POINTS_SR, GM_SR, getClassYear } from '@constants/Points';
+import { Block, Text, Icon, GeneralMeetingChart, LinkContainer } from '@components';
 
 const ProfileContent: React.FC<{
   navigation: NavigationProp<any, 'Profile'>;
@@ -285,7 +286,7 @@ const ProfileContent: React.FC<{
             </Block>
           </Block>
 
-          <Text style={styles.headingText}>Requirements</Text>
+          <Text style={[styles.pointsText, { marginTop: -8 }]}>Requirements</Text>
 
           <View style={{ opacity: classYear === 'FR' || classYear === 'SO' ? 1 : 0.4 }}>
             <Text style={styles.subHeadingText}>Sophomore</Text>
@@ -303,6 +304,18 @@ const ProfileContent: React.FC<{
             <Text style={styles.subHeadingText}>Senior</Text>
 
             {renderRequirements(POINTS_SR, GM_SR)}
+          </View>
+
+          <Text style={styles.pointsText}>Links</Text>
+          <View style={styles.splitPropertyRow}>
+            <View style={[styles.splitPropertyAuto, { marginRight: 0 }]}>
+              <LinkContainer link={LINK_LINKTREE}>
+                <Text style={styles.propertyHeader}>Linktree</Text>
+                <Text style={[styles.propertyValue, { color: theme.COLORS.PRIMARY }]} numberOfLines={1}>
+                  {LINK_LINKTREE || 'N/A'}
+                </Text>
+              </LinkContainer>
+            </View>
           </View>
 
           <Text style={styles.madeWithText}>
