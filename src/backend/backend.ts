@@ -1,4 +1,5 @@
 import Constants from 'expo-constants';
+import { Platform } from 'react-native';
 
 import { jsonRequest, jsonAuthorizedRequest } from '@services/Networking';
 import { jsonDemoRequest, DEMO_TOKEN } from '@services/demoService';
@@ -16,7 +17,9 @@ export const BASE_URL_PRODUCTION = 'https://80ala1muig.execute-api.us-east-1.ama
 export const BASE_URL_DEVELOPMENT = 'http://127.0.0.1:3000/dev/';
 
 export const BASE_URL =
-  Constants.isDevice || process.env.NODE_ENV !== 'development' ? BASE_URL_PRODUCTION : BASE_URL_DEVELOPMENT;
+  Constants.isDevice || Platform.OS === 'android' || process.env.NODE_ENV !== 'development'
+    ? BASE_URL_PRODUCTION
+    : BASE_URL_DEVELOPMENT;
 
 export const ENDPOINTS: {
   [key: string]: (config?: any) => string;
