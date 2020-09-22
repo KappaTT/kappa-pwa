@@ -13,6 +13,8 @@
 1. Run `expo build:ios`
 2. Run `expo upload:ios`
 
+Note: if the upload step fails with an iTunes Transporter error, use the Transporter app on MacOS to upload manually
+
 ## Building iOS Simulator
 
 1. Run `expo build:ios -t simulator`
