@@ -96,6 +96,11 @@ const App = () => {
     setIsLoadingComplete(true);
   }, []);
 
+  const handleLoading = React.useCallback(async () => {
+    await _loadResourcesAsync();
+    _handleFinishLoading();
+  }, [_handleFinishLoading]);
+
   React.useEffect(() => {
     if (!loadedUser) {
       dispatchLoadUser();
@@ -113,6 +118,10 @@ const App = () => {
       dispatchLoadPrefs();
     }
   }, [dispatchLoadPrefs, loadedPrefs]);
+
+  React.useEffect(() => {
+    handleLoading();
+  }, [handleLoading]);
 
   const renderOverlay = () => {
     if (Platform.OS === 'ios' || selectedEventId !== '' || selectedUserEmail !== '') {
@@ -133,9 +142,10 @@ const App = () => {
   };
 
   if (!isLoadingComplete) {
-    return (
-      <AppLoading startAsync={_loadResourcesAsync} onError={_handleLoadingError} onFinish={_handleFinishLoading} />
-    );
+    // return (
+    //   <AppLoading startAsync={_loadResourcesAsync} onError={_handleLoadingError} onFinish={_handleFinishLoading} />
+    // );
+    return null;
   } else {
     return (
       <GalioProvider theme={theme}>
