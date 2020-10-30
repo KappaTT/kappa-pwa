@@ -2,6 +2,7 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { useSafeArea } from 'react-native-safe-area-context';
+import moment from 'moment';
 
 import { theme } from '@constants';
 import TabBarButton from '@components/TabBarButton';
@@ -79,8 +80,15 @@ const TabBar: React.FC<BottomTabBarProps> = ({
               onTabPress={onPress}
               onTabLongPress={onLongPress}
               user={user}
-              badge={isMessages && (unreadMessages || activeSession !== null)}
-              badgeText={isMessages && activeSession !== null ? 'VOTE' : ''}
+              badge={
+                isMessages &&
+                (unreadMessages || activeSession !== null || moment().isSameOrBefore(moment('11/03/2020'), 'day'))
+              }
+              badgeText={
+                isMessages && (activeSession !== null || moment().isSameOrBefore(moment('11/03/2020'), 'day'))
+                  ? 'VOTE'
+                  : ''
+              }
             />
           );
         })}
