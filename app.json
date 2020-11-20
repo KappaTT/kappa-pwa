@@ -33,7 +33,8 @@
     },
     "android": {
       "package": "com.jefftc.kappa",
-      "versionCode": 5,
+      "versionCode": 6,
+      "permissions": ["CAMERA", "VIBRATE"],
       "config": {
         "googleSignIn": {
           "apiKey": "AIzaSyDmoH0YM6EXxjparli9yfzxWnglMIpJfZo",
