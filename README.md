@@ -16,7 +16,7 @@ If no changes were made to native binaries, you can update OTA with `expo publis
 
 ## Building iOS
 
-1. Run `expo build:ios`
+1. Run `expo build:ios -t archive` and follow the steps to sign in to developer account
 2. Run `expo upload:ios`
 
 Note: if the upload step fails with an iTunes Transporter error, use the Transporter app on MacOS to upload manually
@@ -35,7 +35,7 @@ First time only:
 
 1. Make sure automatic app signing is enabled in the developer console
 2. Copy the SHA-1 from the developer console (this is the hash to use for credentials)
-3. Run `expo build:android` and select `app-bundle`
+3. Run `expo build:android -t app-bundle`
 4. If you do not have a keystore (first time building) have expo manage the creation. This will be the update key
 5. Run `expo fetch:android:keystore` to get the keystore (you need this to update the app in the future)
 6. Run `expo fetch:android:upload-cert` to get the upload cert
@@ -43,7 +43,7 @@ First time only:
 
 Regular process:
 
-1. Run `expo build:android` and select `app-bundle`
+1. Run `expo build:android -t app-bundle`
 2. Upload the generated app bundle to the developer console
 
 ## Building Android Simulator
