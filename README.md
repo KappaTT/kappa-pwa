@@ -8,6 +8,8 @@
 | ------------ | ------------------------------------------------------------ |
 | `expo start` | run the development server. Add the `-c` flag to clear cache |
 
+You can use the appropriate emulator depending on the platform you want to try. The expo CLI will automatically handle the process for building and running the development version without going through the build steps below.
+
 ## Building iOS
 
 1. Run `expo build:ios`
@@ -25,15 +27,22 @@ Note: if the upload step fails with an iTunes Transporter error, use the Transpo
 
 ## Building Android
 
+First time only:
+
 1. Make sure automatic app signing is enabled in the developer console
 2. Copy the SHA-1 from the developer console (this is the hash to use for credentials)
-3. Run `expo build:android` and select app-bundle
+3. Run `expo build:android` and select `app-bundle`
 4. If you do not have a keystore (first time building) have expo manage the creation. This will be the update key
 5. Run `expo fetch:android:keystore` to get the keystore (you need this to update the app in the future)
 6. Run `expo fetch:android:upload-cert` to get the upload cert
 7. Upload the generated app bundle to the developer console
 
-## Testing Android
+Regular procesS:
+
+1. Run `expo build:android` and select `app-bundle`
+2. Upload the generated app bundle to the developer console
+
+## Building Android Simulator
 
 1. Download a generic_x86 split APK's. It will be called "google emulator" and pick SDK 29
 2. Unzip the file
