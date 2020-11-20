@@ -10,6 +10,10 @@
 
 You can use the appropriate emulator depending on the platform you want to try. The expo CLI will automatically handle the process for building and running the development version without going through the build steps below.
 
+**Remember to increment the appropriate `expo`, `ios` and `android` versions when releasing updates**
+
+If no changes were made to native binaries, you can update OTA with `expo publish`.
+
 ## Building iOS
 
 1. Run `expo build:ios`
@@ -37,7 +41,7 @@ First time only:
 6. Run `expo fetch:android:upload-cert` to get the upload cert
 7. Upload the generated app bundle to the developer console
 
-Regular procesS:
+Regular process:
 
 1. Run `expo build:android` and select `app-bundle`
 2. Upload the generated app bundle to the developer console
