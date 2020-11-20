@@ -164,25 +164,6 @@ const MessagesContent: React.FC<{
       >
         <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
           <Block style={styles.content}>
-            {moment().isSameOrBefore(moment('11/03/2020'), 'day') && (
-              <Block style={styles.votingContainer}>
-                <Block style={styles.votingDetails}>
-                  <Text style={styles.votingName}>Vote for a better tomorrow</Text>
-                  <Text style={styles.description}>
-                    This is the most important election in modern history with the character of our nation on the
-                    ballot. Use your constitutional right to vote and help shape a better future for our country and the
-                    world.
-                  </Text>
-                </Block>
-
-                <TouchableOpacity activeOpacity={0.6} onPress={() => Linking.openURL('https://iwillvote.com/')}>
-                  <Block style={styles.votingButton}>
-                    <Text style={styles.votingButtonText}>Vote</Text>
-                  </Block>
-                </TouchableOpacity>
-              </Block>
-            )}
-
             {activeSession !== null && (
               <Block style={styles.votingContainer}>
                 <Block style={styles.votingDetails}>

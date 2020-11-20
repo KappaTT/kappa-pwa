@@ -3,7 +3,7 @@ import moment from 'moment';
 export default {
   COLORS: {
     DEFAULT: '#172B4D',
-    PRIMARY: moment().isSameOrBefore(moment('11/03/2020'), 'day') ? '#6665DD' : '#EB3349',
+    PRIMARY: '#EB3349',
     PRIMARY_BLUE: '#5E72E4',
     PRIMARY_RED: '#EB3349',
     PRIMARY_GREEN: '#23CD97',
