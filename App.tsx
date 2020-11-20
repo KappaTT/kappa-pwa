@@ -13,8 +13,6 @@ Sentry.init({
   debug: true
 });
 
-Sentry.setRelease(Constants.manifest.revisionId);
-
 const AppWrapper = () => {
   return (
     <Provider store={store}>
