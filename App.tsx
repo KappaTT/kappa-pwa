@@ -1,14 +1,14 @@
 import React from 'react';
 import * as Sentry from 'sentry-expo';
-import Constants from 'expo-constants';
 import { Provider } from 'react-redux';
 import { AppearanceProvider } from 'react-native-appearance';
 
 import App from './src/App';
 import store from '@reducers';
+import * as secrets from 'secrets';
 
 Sentry.init({
-  dsn: 'https://83abd164c9094221ba93a377464f3fe4@o378213.ingest.sentry.io/5201293',
+  dsn: secrets.SENTRY_DSN,
   enableInExpoDevelopment: false,
   debug: true
 });
