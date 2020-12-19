@@ -6,6 +6,10 @@ npm-debug.*
 *.key
 *.mobileprovision
 *.orig.*
+*.pem
 web-build/
 web-report/
 .DS_Store
+
+# secrets
+src/secrets.ts
