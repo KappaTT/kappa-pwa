@@ -1,6 +1,23 @@
-# ktt-frontend
+# kappa-mobile
 
-<img src="assets/icon.png#rounded" style="border-radius: 25%; overflow: hidden;" width="256" />
+<img src="assets/icon.png" width="256" />
+
+## Secrets
+
+Create a file `src/secrets.ts` as follows:
+
+```javascript
+export const API_URL = '<CHANGE ME>';
+
+export const GOOGLE_CLIENT_IDS = {
+  iosClientId: '<CHANGE ME>',
+  androidClientId: '<CHANGE ME>',
+  iosStandaloneAppClientId: '<CHANGE ME>',
+  androidStandaloneAppClientId: '<CHANGE ME>'
+};
+
+export const SENTRY_DSN = '<CHANGE ME>';
+```
 
 ## Development
 
