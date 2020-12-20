@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import normalize from './helpers/normalize';
 import GalioTheme, { withGalio } from './theme';
 
-const Typography = props => {
+const Typography = (props) => {
   const {
     style,
     h1,
@@ -42,7 +42,7 @@ const Typography = props => {
         italic && { fontStyle: 'italic' },
         bold && { fontWeight: 'bold' },
         center && { textAlign: 'center' },
-        style && style
+        style
       ]}
       {...rest}
     >

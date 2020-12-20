@@ -39,15 +39,15 @@ class Slider extends PureComponent {
     });
   }
 
-  _getRatio = value => (value - this.props.minimumValue) / (this.props.maximumValue - this.props.minimumValue);
+  _getRatio = (value) => (value - this.props.minimumValue) / (this.props.maximumValue - this.props.minimumValue);
 
-  _getThumbLeft = value => this._getRatio(value) * (this.state.containerSize.width - this.state.thumbSize.width);
+  _getThumbLeft = (value) => this._getRatio(value) * (this.state.containerSize.width - this.state.thumbSize.width);
 
   _getCurrentVal = () => this.position.__getValue();
 
-  _setCurrentValue = value => this.position.setValue(value);
+  _setCurrentValue = (value) => this.position.setValue(value);
 
-  _getValue = gestureState => {
+  _getValue = (gestureState) => {
     const length = this.state.containerSize.width - this.state.thumbSize.width;
     const thumbLeft = this._previousLeft + gestureState.dx;
 
@@ -73,15 +73,15 @@ class Slider extends PureComponent {
     );
   };
   // container size
-  _measureContainer = x => {
+  _measureContainer = (x) => {
     this._handleMeasure('containerSize', x);
   };
   // track size
-  _measureTrack = x => {
+  _measureTrack = (x) => {
     this._handleMeasure('trackSize', x);
   };
   // thumb size
-  _measureThumb = x => {
+  _measureThumb = (x) => {
     this._handleMeasure('thumbSize', x);
   };
   // calculate all of them
@@ -105,7 +105,7 @@ class Slider extends PureComponent {
     }
   };
 
-  _fireChangeEvent = event => {
+  _fireChangeEvent = (event) => {
     if (this.props[event]) {
       this.props[event](this._getCurrentVal());
     }
@@ -167,7 +167,6 @@ Slider.defaultProps = {
   trackStyle: {},
   thumbStyle: {},
   value: 0,
-  disabled: false,
   step: 0,
   style: null,
   theme: GalioTheme,
@@ -190,7 +189,7 @@ Slider.propTypes = {
   onValueChange: PropTypes.func
 };
 
-const styles = theme =>
+const styles = (theme) =>
   StyleSheet.create({
     container: {
       height: 40,

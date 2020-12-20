@@ -91,7 +91,7 @@ export const getJsonTemplate = async (f: TExternalGetItem, key: string) => {
     };
   } catch (error) {
     log(error);
-    undefined;
+    return undefined;
   }
 };
 
