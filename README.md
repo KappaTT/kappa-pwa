@@ -1,5 +1,7 @@
 # kappa-mobile
 
+[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/jtaylorchang/kappa-mobile.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/jtaylorchang/kappa-mobile/context:javascript)
+
 <img src="assets/icon.png" width="256" />
 
 ## Secrets
