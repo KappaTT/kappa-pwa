@@ -26,6 +26,9 @@ export const DEMO_USER: TUser = {
   sessionToken: DEMO_TOKEN
 };
 
+/**
+ * Get demo data for a given endpoint and method.
+ */
 export const getDemoEndpoint = (endpoint: string, method: string) => {
   let demo = `${method}|${endpoint}`;
   let arg = '';
@@ -63,6 +66,9 @@ export const getDemoEndpoint = (endpoint: string, method: string) => {
   return null;
 };
 
+/**
+ * Make a demo request that instead uses demo endpoint data.
+ */
 export const jsonDemoRequest = async <T>(
   endpoint: string,
   method: string

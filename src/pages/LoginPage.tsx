@@ -6,8 +6,7 @@ import {
   Alert,
   TouchableWithoutFeedback,
   TouchableOpacity,
-  KeyboardAvoidingView,
-  ScrollView
+  KeyboardAvoidingView
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import Constants from 'expo-constants';

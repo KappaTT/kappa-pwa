@@ -1,12 +1,18 @@
 import { LOADING_PREFERENCES, LOADED_PREFERENCES, SAVING_PREFERENCE, SAVED_PREFERENCE } from '@reducers/pref';
 import * as Prefs from '@services/prefService';
 
+/**
+ * Is loading user preferences.
+ */
 const loadingPreferences = () => {
   return {
     type: LOADING_PREFERENCES
   };
 };
 
+/**
+ * Finished loading user preferences successfully.
+ */
 const loadedPreferences = (prefs: Prefs.TPrefs) => {
   return {
     type: LOADED_PREFERENCES,
@@ -14,6 +20,9 @@ const loadedPreferences = (prefs: Prefs.TPrefs) => {
   };
 };
 
+/**
+ * Load user preferences from local storage.
+ */
 export const loadPrefs = () => {
   return (dispatch) => {
     dispatch(loadingPreferences());
@@ -24,6 +33,9 @@ export const loadPrefs = () => {
   };
 };
 
+/**
+ * Is saving user preferences.
+ */
 const savingPreferences = (prefs) => {
   return {
     type: SAVING_PREFERENCE,
@@ -31,6 +43,9 @@ const savingPreferences = (prefs) => {
   };
 };
 
+/**
+ * Finished saving user preferences successfully.
+ */
 const savedPreference = (success: boolean) => {
   return {
     type: SAVED_PREFERENCE,
@@ -38,6 +53,9 @@ const savedPreference = (success: boolean) => {
   };
 };
 
+/**
+ * Save user preferences to local storage.
+ */
 export const savePref = (prefs: Partial<Prefs.TPrefs>) => {
   return (dispatch) => {
     dispatch(savingPreferences(prefs));

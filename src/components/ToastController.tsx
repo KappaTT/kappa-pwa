@@ -60,6 +60,9 @@ const ToastController: React.FC = () => {
     setAppState(nextAppState);
   }, []);
 
+  /**
+   * Check if an update is available. If so, prompt user to reload.
+   */
   const checkForUpdates = React.useCallback(async () => {
     log('Checking for updates');
 
@@ -88,6 +91,7 @@ const ToastController: React.FC = () => {
   }, [authorized, dispatchShowToast]);
 
   React.useEffect(() => {
+    // Detect if a new kappa error should be displayed
     if (kappaGlobalErrorMessage !== '' && kappaGlobalErrorDate !== null) {
       dispatchShowToast({
         title: 'Error',
@@ -102,6 +106,7 @@ const ToastController: React.FC = () => {
   }, [dispatchShowToast, kappaGlobalErrorMessage, kappaGlobalErrorCode, kappaGlobalErrorDate]);
 
   React.useEffect(() => {
+    // Detect if a new voting error should be displayed
     if (votingGlobalErrorMessage !== '' && votingGlobalErrorDate !== null) {
       dispatchShowToast({
         title: 'Error',
@@ -123,24 +128,28 @@ const ToastController: React.FC = () => {
   ]);
 
   React.useEffect(() => {
+    // Check for updates on focus
     if (loadedUser && appState === 'active') {
       checkForUpdates();
     }
   }, [appState, loadedUser, checkForUpdates]);
 
   React.useEffect(() => {
+    // Dismiss keyboard if a toast opens
     if (isShowingToast) {
       Keyboard.dismiss();
     }
   }, [isShowingToast]);
 
   React.useEffect(() => {
+    // Trigger a haptic notification if the current toast requests it
     if (toast.hapticType !== null) {
       hapticNotification(toast.hapticType);
     }
   }, [toast.hapticType]);
 
   React.useEffect(() => {
+    // Register handler to listen to app state
     AppState.addEventListener('change', handleAppStateChange);
 
     return () => {

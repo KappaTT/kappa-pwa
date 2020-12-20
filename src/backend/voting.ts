@@ -62,6 +62,9 @@ interface TGetActiveVotesResponse extends TResponse {
   data?: TGetActiveVotesRequestResponse;
 }
 
+/**
+ * API request to get the votes for the active session and candidate if available.
+ */
 export const getActiveVotes = async (payload: TGetActiveVotesPayload): Promise<TGetActiveVotesResponse> => {
   try {
     const response = await makeAuthorizedRequest<TGetActiveVotesRequestResponse>(
@@ -112,6 +115,9 @@ interface TSubmitVoteResponse extends TResponse {
   data?: TSubmitVoteRequestResponse;
 }
 
+/**
+ * API request to submit a vote for a given candidate and session.
+ */
 export const submitVote = async (payload: TSubmitVotePayload): Promise<TSubmitVoteResponse> => {
   try {
     const response = await makeAuthorizedRequest<TSubmitVoteRequestResponse>(
@@ -160,6 +166,9 @@ interface TSubmitMultiVoteResponse extends TResponse {
   data?: TSubmitMultiVoteRequestResponse;
 }
 
+/**
+ * API request to submit a vote for multiple candidates in a given session.
+ */
 export const submitMultiVote = async (payload: TSubmitMultiVotePayload): Promise<TSubmitMultiVoteResponse> => {
   try {
     const response = await makeAuthorizedRequest<TSubmitMultiVoteRequestResponse>(

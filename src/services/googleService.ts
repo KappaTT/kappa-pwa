@@ -3,6 +3,9 @@ import * as Google from 'expo-google-app-auth';
 import { log } from '@services/logService';
 import * as secrets from 'secrets';
 
+/**
+ * Attempt to sign in with google.
+ */
 export const login = async () => {
   try {
     const loginResult = await Google.logInAsync(secrets.GOOGLE_CLIENT_IDS);

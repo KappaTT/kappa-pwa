@@ -33,6 +33,9 @@ export const PASSWORD_CODE: TRequirement = {
   maxLength: 6
 };
 
+/**
+ * Validate a given string matches the requirements.
+ */
 export const validate = (value: string, requirements: TRequirement, regex_fail?: string): string => {
   if (!(requirements.regex === undefined || requirements.regex.test(value)))
     return regex_fail || 'contains invalid characters';

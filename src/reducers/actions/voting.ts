@@ -14,6 +14,9 @@ import {
   CLEAR_GLOBAL_ERROR_MESSAGE
 } from '@reducers/voting';
 
+/**
+ * Set the global error message.
+ */
 export const setGlobalError = (data) => {
   return {
     type: SET_GLOBAL_ERROR_MESSAGE,
@@ -22,18 +25,27 @@ export const setGlobalError = (data) => {
   };
 };
 
+/**
+ * Clear the global error message.
+ */
 export const clearGlobalError = () => {
   return {
     type: CLEAR_GLOBAL_ERROR_MESSAGE
   };
 };
 
+/**
+ * Is getting the votes for the active candidate.
+ */
 const gettingActiveVotes = () => {
   return {
     type: GET_ACTIVE_VOTES
   };
 };
 
+/**
+ * Finished getting the active votes successfully.
+ */
 const getActiveVotesSuccess = (data) => {
   return {
     type: GET_ACTIVE_VOTES_SUCCESS,
@@ -44,6 +56,9 @@ const getActiveVotesSuccess = (data) => {
   };
 };
 
+/**
+ * Finished getting the active votes with an error.
+ */
 const getActiveVotesFailure = (error) => {
   return {
     type: GET_ACTIVE_VOTES_FAILURE,
@@ -51,6 +66,9 @@ const getActiveVotesFailure = (error) => {
   };
 };
 
+/**
+ * Get the votes for the active candidate and session if available.
+ */
 export const getActiveVotes = (user: TUser) => {
   return (dispatch) => {
     dispatch(gettingActiveVotes());
@@ -65,12 +83,18 @@ export const getActiveVotes = (user: TUser) => {
   };
 };
 
+/**
+ * Is submitting a vote.
+ */
 const submittingVote = () => {
   return {
     type: SUBMIT_VOTE
   };
 };
 
+/**
+ * Finished submitting a vote successfully.
+ */
 const submitVoteSuccess = (data) => {
   return {
     type: SUBMIT_VOTE_SUCCESS,
@@ -78,6 +102,9 @@ const submitVoteSuccess = (data) => {
   };
 };
 
+/**
+ * Finished submitting a vote with an error.
+ */
 const submitVoteFailure = (error) => {
   return {
     type: SUBMIT_VOTE_FAILURE,
@@ -85,6 +112,9 @@ const submitVoteFailure = (error) => {
   };
 };
 
+/**
+ * Submit a vote for a given candidate and session.
+ */
 export const submitVote = (user: TUser, vote: Partial<TVote>) => {
   return (dispatch) => {
     dispatch(submittingVote());
@@ -99,6 +129,9 @@ export const submitVote = (user: TUser, vote: Partial<TVote>) => {
   };
 };
 
+/**
+ * Submit a vote for multiple candidates in a given session.
+ */
 export const submitMultiVote = (user: TUser, sessionId: string, candidates: string[]) => {
   return (dispatch) => {
     dispatch(submittingVote());
@@ -113,12 +146,18 @@ export const submitMultiVote = (user: TUser, sessionId: string, candidates: stri
   };
 };
 
+/**
+ * Show the voting page.
+ */
 export const showVoting = () => {
   return {
     type: SHOW_VOTING
   };
 };
 
+/**
+ * Hide the voting page.
+ */
 export const hideVoting = () => {
   return {
     type: HIDE_VOTING

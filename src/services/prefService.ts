@@ -12,6 +12,9 @@ export const initialPrefs: TPrefs = {
   usernameVisible: true
 };
 
+/**
+ * Load user preferences from storage.
+ */
 export const loadPrefs = async () => {
   const prefs = await getBatch('preferences', initialPrefs, true);
 
@@ -23,6 +26,9 @@ export const loadPrefs = async () => {
   };
 };
 
+/**
+ * Save user preferences to storage.
+ */
 export const savePref = async (prefs: Partial<TPrefs>) => {
   await setBatch('preferences', prefs);
 

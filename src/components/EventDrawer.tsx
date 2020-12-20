@@ -24,7 +24,7 @@ import { log } from '@services/logService';
 import {
   getAttendance,
   getExcuse,
-  getEventRecordCounts,
+  getEventRecords,
   getMissedMandatoryByEvent,
   sortUserByName,
   prettyPoints,
@@ -188,10 +188,10 @@ const EventDrawer: React.FC = () => {
     return getExcuse(records, user.email, selectedEventId);
   }, [records, user, selectedEventId]);
 
-  const recordCounts = getEventRecordCounts(records, selectedEventId);
+  const recordCounts = getEventRecords(directory, records, selectedEventId);
 
   const recordStats = React.useMemo(() => {
-    const fraction = directorySize === 0 ? 0 : recordCounts.sum / directorySize;
+    const fraction = directorySize === 0 ? 0 : directorySize - recordCounts.absent.length;
 
     return {
       raw: fraction,

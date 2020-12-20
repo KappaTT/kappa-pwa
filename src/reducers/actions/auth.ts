@@ -21,30 +21,45 @@ import * as GoogleService from '@services/googleService';
 import { log } from '@services/logService';
 import { DEMO_USER } from '@services/demoService';
 
+/**
+ * Show the login modal.
+ */
 export const showModal = () => {
   return {
     type: SHOW_MODAL
   };
 };
 
+/**
+ * Hide the login modal.
+ */
 export const hideModal = () => {
   return {
     type: HIDE_MODAL
   };
 };
 
+/**
+ * Show the sign in view.
+ */
 export const showSignIn = () => {
   return {
     type: SHOW_SIGN_IN
   };
 };
 
+/**
+ * Finish loading user.
+ */
 export const loadedUser = () => {
   return {
     type: LOADED_USER
   };
 };
 
+/**
+ * Update the user object.
+ */
 export const setUser = (user: TUser, authorized: boolean = true) => {
   return {
     type: SET_USER,
@@ -53,6 +68,9 @@ export const setUser = (user: TUser, authorized: boolean = true) => {
   };
 };
 
+/**
+ * Modify the user object.
+ */
 export const modifyUser = (user: TUser) => {
   return {
     type: MODIFY_USER,
@@ -60,6 +78,9 @@ export const modifyUser = (user: TUser) => {
   };
 };
 
+/**
+ * Load the user from device storage.
+ */
 export const loadUser = () => {
   return (dispatch) => {
     getBatch('user', initialUser, true).then((user: TUser | undefined) => {
@@ -72,12 +93,18 @@ export const loadUser = () => {
   };
 };
 
+/**
+ * Is signing in.
+ */
 const signingIn = () => {
   return {
     type: SIGN_IN
   };
 };
 
+/**
+ * Sign out from the account. Clear local storage.
+ */
 export const signOut = () => {
   purge();
 
@@ -86,12 +113,18 @@ export const signOut = () => {
   };
 };
 
+/**
+ * Finish signing in successfully.
+ */
 const signInSuccess = () => {
   return {
     type: SIGN_IN_SUCCESS
   };
 };
 
+/**
+ * Finish signing in with an error.
+ */
 const signInFailure = (err) => {
   return {
     type: SIGN_IN_FAILURE,
@@ -99,6 +132,9 @@ const signInFailure = (err) => {
   };
 };
 
+/**
+ * Sign in with the given email and id token.
+ */
 export const authenticate = (email: string, idToken: string) => {
   return (dispatch) => {
     dispatch(signingIn());
@@ -118,6 +154,9 @@ export const authenticate = (email: string, idToken: string) => {
   };
 };
 
+/**
+ * Sign in with the given secret code.
+ */
 export const authenticateWithSecretCode = (secretCode: string) => {
   return (dispatch) => {
     dispatch(signingIn());
@@ -137,18 +176,27 @@ export const authenticateWithSecretCode = (secretCode: string) => {
   };
 };
 
+/**
+ * Is signing in with google.
+ */
 const signingInWithGoogle = () => {
   return {
     type: SIGN_IN_WITH_GOOGLE
   };
 };
 
+/**
+ * Finish signing in with google successfully.
+ */
 const signInWithGoogleSuccess = () => {
   return {
     type: SIGN_IN_WITH_GOOGLE_SUCCESS
   };
 };
 
+/**
+ * Finish signing in with google with an error.
+ */
 const signInWithGoogleFailure = (err) => {
   return {
     type: SIGN_IN_WITH_GOOGLE_FAILURE,
@@ -156,6 +204,9 @@ const signInWithGoogleFailure = (err) => {
   };
 };
 
+/**
+ * Sign in with google.
+ */
 export const signInWithGoogle = () => {
   return (dispatch) => {
     dispatch(signingInWithGoogle());
@@ -181,6 +232,9 @@ export const signInWithGoogle = () => {
   };
 };
 
+/**
+ * Sign in with the demo account.
+ */
 export const signInDemo = () => {
   return (dispatch) => {
     dispatch(signInWithGoogleSuccess());
