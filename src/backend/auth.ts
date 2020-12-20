@@ -72,6 +72,9 @@ export const incompleteUser: Partial<TUser> = {
   gradYear: ''
 };
 
+/**
+ * Remove the user from storage.
+ */
 export const purge = async () => {
   return deleteBatch('user', initialUser);
 };
