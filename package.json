@@ -2,19 +2,10 @@
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "expo start",
-    "deploy": "expo publish",
-    "validate": "npx tsc --noEmit",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
     "web": "expo start --web",
-    "eject": "expo eject",
-    "buildios": "expo build:ios",
-    "buildiossim": "expo build:ios -t simulator",
-    "uploadios": "expo upload:ios",
-    "fixsim": "xattr -cr kappa-theta-tau.app",
-    "installsim": "xcrun simctl install booted kappa-theta-tau.app",
-    "launchsim": "xcrun simctl launch booted kappa-theta-tau.app",
-    "installandroid": "adb install-multiple ./*"
+    "predeploy": "expo build:web",
+    "deploy": "netlify deploy --prod",
+    "validate": "npx tsc --noEmit"
   },
   "dependencies": {
     "@expo/vector-icons": "^10.0.0",
@@ -69,10 +60,5 @@
     "prettier": "^2.0.5",
     "typescript": "~3.9.2"
   },
-  "private": true,
-  "prettier": {
-    "trailingComma": "none",
-    "singleQuote": true,
-    "printWidth": 120
-  }
+  "private": true
 }
