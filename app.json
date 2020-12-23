@@ -1,10 +1,10 @@
 {
   "expo": {
     "name": "Kappa",
-    "slug": "kappa-theta-tau",
+    "slug": "kappa-pwa",
     "privacy": "unlisted",
-    "platforms": ["ios", "android"],
-    "version": "1.39.2",
+    "platforms": ["web"],
+    "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -13,46 +13,8 @@
       "backgroundColor": "#ffffff"
     },
     "updates": {
-      "fallbackToCacheTimeout": 0,
-      "checkAutomatically": "ON_ERROR_RECOVERY"
+      "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
-    "userInterfaceStyle": "automatic",
-    "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.jefftc.kappa",
-      "buildNumber": "1.39.2",
-      "config": {
-        "googleSignIn": {
-          "reservedClientId": "com.googleusercontent.apps.223233671218-v5meaa316pd8mgar3mgcvsmg3td7qnl6"
-        }
-      },
-      "infoPlist": {
-        "NSCameraUsageDescription": "This app uses the camera to scan event QR codes"
-      }
-    },
-    "android": {
-      "package": "com.jefftc.kappa",
-      "versionCode": 6,
-      "permissions": ["CAMERA", "VIBRATE"],
-      "config": {
-        "googleSignIn": {
-          "apiKey": "AIzaSyDmoH0YM6EXxjparli9yfzxWnglMIpJfZo",
-          "certificateHash": "4E:A2:49:B2:5A:58:1B:C4:FD:56:C9:5E:B7:21:C0:3C:93:6A:7C:09"
-        }
-      }
-    },
-    "hooks": {
-      "postPublish": [
-        {
-          "file": "sentry-expo/upload-sourcemaps",
-          "config": {
-            "organization": "theta-tau",
-            "project": "kappa",
-            "authToken": "dcdc8da9de2a4adcb95e47d3142ed313ed531908dc89407bbc07a619e07fa5df"
-          }
-        }
-      ]
-    }
+    "assetBundlePatterns": ["**/*"]
   }
 }
