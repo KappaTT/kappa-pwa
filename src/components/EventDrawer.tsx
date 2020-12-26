@@ -299,15 +299,15 @@ const EventDrawer: React.FC = () => {
           <Block style={styles.chartPropertyContainer}>
             <Block style={styles.chartProperty}>
               <Text style={styles.chartPropertyLabel}>Attended</Text>
-              <Text style={styles.chartPropertyValue}>{recordCounts.attended}</Text>
+              <Text style={styles.chartPropertyValue}>{recordCounts.attended.length}</Text>
             </Block>
             <Block style={styles.chartProperty}>
               <Text style={styles.chartPropertyLabel}>Excused</Text>
-              <Text style={styles.chartPropertyValue}>{recordCounts.excused}</Text>
+              <Text style={styles.chartPropertyValue}>{recordCounts.excused.length}</Text>
             </Block>
             <Block style={styles.chartProperty}>
               <Text style={styles.chartPropertyLabel}>Pending</Text>
-              <Text style={styles.chartPropertyValue}>{recordCounts.pending}</Text>
+              <Text style={styles.chartPropertyValue}>{recordCounts.pending.length}</Text>
             </Block>
           </Block>
         </Block>
