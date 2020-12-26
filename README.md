@@ -1,6 +1,6 @@
 # kappa-pwa
 
-[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/jtaylorchang/kappa-pwa.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/jtaylorchang/kappa-pwa/context:javascript)
+[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/jtaylorchang/kappa-pwa.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/jtaylorchang/kappa-pwa/context:javascript) [![Lines of Code](https://tokei.rs/b1/github/jtaylorchang/kappa-pwa)](https://github.com/jtaylorchang/kappa-pwa)
 
 <img src="assets/icon.png" width="256" />
 
