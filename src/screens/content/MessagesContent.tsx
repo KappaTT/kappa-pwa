@@ -12,7 +12,7 @@ import { HeaderHeight, HORIZONTAL_PADDING, isEmpty } from '@services/utils';
 import { TPendingExcuse, TExcuse } from '@backend/kappa';
 import { ExcusePage, LateExcusePage, VotingPage } from '@pages';
 import { theme } from '@constants';
-import { Block, Text, Header, EndCapButton } from '@components';
+import { Block, Text, Header, EndCapButton, LocalModalController, FullPageModal } from '@components';
 
 const MessagesContent: React.FC<{
   navigation: NavigationProp<any, 'Messages'>;
@@ -209,24 +209,23 @@ const MessagesContent: React.FC<{
         </ScrollView>
       </Block>
 
-      {/* <FadeModal
-        statusBarStyle="light-content"
-        transparent={true}
-        visible={selectedExcuse !== null}
-        onRequestClose={() => onSelectExcuse(null)}
-      >
-        <ExcusePage
-          excuse={selectedExcuse}
-          renderExcuse={renderExcuse(selectedExcuse, false, true)}
-          onRequestClose={() => onSelectExcuse(null)}
-        />
-      </FadeModal>
-      <SlideModal transparent={false} visible={showingRequestPage} onRequestClose={() => setShowingRequestPage(false)}>
-        <LateExcusePage onRequestClose={() => setShowingRequestPage(false)} />
-      </SlideModal>
-      <SlideModal transparent={false} visible={isShowingVoting} onRequestClose={dispatchHideVoting}>
-        <VotingPage onRequestClose={dispatchHideVoting} />
-      </SlideModal> */}
+      <LocalModalController>
+        <FullPageModal visible={selectedExcuse !== null} onDoneClosing={() => onSelectExcuse(null)}>
+          <ExcusePage
+            excuse={selectedExcuse}
+            renderExcuse={renderExcuse(selectedExcuse, false, true)}
+            onRequestClose={() => onSelectExcuse(null)}
+          />
+        </FullPageModal>
+
+        <FullPageModal visible={showingRequestPage} onDoneClosing={() => setShowingRequestPage(false)}>
+          <LateExcusePage onRequestClose={() => setShowingRequestPage(false)} />
+        </FullPageModal>
+
+        <FullPageModal visible={isShowingVoting} onDoneClosing={dispatchHideVoting}>
+          <VotingPage onRequestClose={dispatchHideVoting} />
+        </FullPageModal>
+      </LocalModalController>
     </Block>
   );
 };

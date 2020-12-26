@@ -19,7 +19,9 @@ import {
   FormattedInput,
   EndCapButton,
   RadioList,
-  Icon
+  Icon,
+  LocalModalController,
+  FullPageModal
 } from '@components';
 
 const { width, height } = Dimensions.get('window');
@@ -254,9 +256,9 @@ const OnboardingPage: React.FC = () => {
     <Block flex>
       <Block flex>{renderContent()}</Block>
 
-      {/* <SlideModal transparent={false} visible={editing !== ''}>
-        {renderEditingContent()}
-      </SlideModal> */}
+      <LocalModalController>
+        <FullPageModal visible={editing !== ''}>{renderEditingContent()}</FullPageModal>
+      </LocalModalController>
     </Block>
   );
 };

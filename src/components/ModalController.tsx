@@ -6,7 +6,7 @@ import { TRedux } from '@reducers';
 import { _auth, _kappa, _voting } from '@reducers/actions';
 import { TEvent } from '@backend/kappa';
 import { incompleteUser } from '@backend/auth';
-import { LoginPage } from '@pages';
+import { LoginPage, OnboardingPage } from '@pages';
 import Ghost from '@components/Ghost';
 import FullPageModal from '@components/FullPageModal';
 
@@ -14,8 +14,10 @@ const ModalController: React.FC = () => {
   const authorized = useSelector((state: TRedux) => state.auth.authorized);
   const user = useSelector((state: TRedux) => state.auth.user);
   const loginVisible = useSelector((state: TRedux) => state.auth.visible);
+  const editingUserEmail = useSelector((state: TRedux) => state.kappa.editingUserEmail);
 
   const dispatch = useDispatch();
+  const dispatchCancelEditUser = React.useCallback(() => dispatch(_kappa.cancelEditUser()), [dispatch]);
 
   const userIsIncomplete = React.useMemo(() => {
     if (!authorized || !user) return false;
@@ -38,14 +40,12 @@ const ModalController: React.FC = () => {
         <LoginPage />
       </FullPageModal>
 
-      {/* <SlideModal
-        transparent={false}
+      <FullPageModal
         visible={userIsIncomplete || (authorized && editingUserEmail === user.email)}
-        onRequestClose={dispatchCancelEditUser}
-        disableAndroidBack={userIsIncomplete}
+        onDoneClosing={dispatchCancelEditUser}
       >
         <OnboardingPage />
-      </SlideModal> */}
+      </FullPageModal>
     </Ghost>
   );
 };

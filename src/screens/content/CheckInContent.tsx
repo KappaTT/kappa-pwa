@@ -28,7 +28,9 @@ import {
   RoundButton,
   RadioList,
   FormattedInput,
-  KeyboardDismissView
+  KeyboardDismissView,
+  LocalModalController,
+  FullPageModal
 } from '@components';
 import { HeaderHeight, TabBarHeight, HORIZONTAL_PADDING } from '@services/utils';
 import { getEventById, hasValidCheckIn, shouldLoad, sortEventByDate, canCheckIn } from '@services/kappaService';
@@ -475,12 +477,15 @@ const CheckInContent: React.FC<{
           </Block>
         </Block>
 
-        {/* <SlideModal visible={choosingEvent} onRequestClose={() => setChoosingEvent(false)}>
-          {renderChoosingEvent()}
-        </SlideModal>
-        <SlideModal visible={scanning} onRequestClose={() => setScanning(false)}>
-          {renderScanner()}
-        </SlideModal> */}
+        <LocalModalController>
+          <FullPageModal visible={choosingEvent} onDoneClosing={() => setChoosingEvent(false)}>
+            {renderChoosingEvent()}
+          </FullPageModal>
+
+          <FullPageModal visible={scanning} onDoneClosing={() => setScanning(false)}>
+            {renderScanner()}
+          </FullPageModal>
+        </LocalModalController>
       </Block>
     </KeyboardDismissView>
   );

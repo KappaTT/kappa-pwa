@@ -23,6 +23,7 @@ import Interceptor from './Interceptor';
 import KeyboardDismissView from './KeyboardDismissView';
 import LinkContainer from './LinkContainer';
 import ListButton from './ListButton';
+import LocalModalController from './LocalModalController';
 import ModalController from './ModalController';
 import PageSection from './PageSection';
 import PopupButton from './PopupButton';
@@ -69,6 +70,7 @@ export {
   KeyboardDismissView,
   LinkContainer,
   ListButton,
+  LocalModalController,
   ModalController,
   PageSection,
   PopupButton,
