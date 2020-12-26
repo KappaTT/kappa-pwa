@@ -1,13 +1,5 @@
 import React from 'react';
-import {
-  StyleSheet,
-  View,
-  Image,
-  Alert,
-  TouchableWithoutFeedback,
-  TouchableOpacity,
-  KeyboardAvoidingView
-} from 'react-native';
+import { StyleSheet, View, Image, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import Constants from 'expo-constants';
 import { useSafeArea } from 'react-native-safe-area-context';
@@ -217,10 +209,10 @@ const styles = StyleSheet.create({
   logo: {
     width: 128,
     height: 128,
-    marginVertical: 20
+    marginVertical: 10
   },
   segmentContainer: {
-    marginTop: 40,
+    marginTop: 20,
     marginHorizontal: HORIZONTAL_PADDING,
     flexDirection: 'row',
     justifyContent: 'center'
@@ -251,7 +243,6 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   codeContainer: {
-    marginTop: 40,
     marginHorizontal: HORIZONTAL_PADDING,
     backgroundColor: theme.COLORS.WHITE,
     flexDirection: 'row',
