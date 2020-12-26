@@ -1,18 +1,6 @@
 import React from 'react';
-import {
-  StyleSheet,
-  Dimensions,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  ScrollView,
-  RefreshControl,
-  ActivityIndicator,
-  Clipboard,
-  StatusBar
-} from 'react-native';
+import { StyleSheet, TouchableOpacity, ScrollView, RefreshControl, ActivityIndicator, Clipboard } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import Animated from 'react-native-reanimated';
-import BottomSheet from 'reanimated-bottom-sheet';
 import { useSafeArea } from 'react-native-safe-area-context';
 import moment from 'moment';
 
@@ -21,14 +9,14 @@ import { TToast } from '@reducers/ui';
 import { _kappa, _ui } from '@reducers/actions';
 import { prettyPhone, shouldLoad, sortEventsByDateReverse } from '@services/kappaService';
 import { theme } from '@constants';
-import { isEmpty, HORIZONTAL_PADDING } from '@services/utils';
+import { isEmpty, HORIZONTAL_PADDING, HeaderHeight } from '@services/utils';
 import { TEvent } from '@backend/kappa';
+import FullPageModal from '@components/FullPageModal';
+import Header from '@components/Header';
 import Block from '@components/Block';
 import Ghost from '@components/Ghost';
 import Text from '@components/Text';
 import GeneralMeetingChart from '@components/GeneralMeetingChart';
-
-const { height } = Dimensions.get('window');
 
 const BrotherDrawer: React.FC = () => {
   const user = useSelector((state: TRedux) => state.auth.user);
@@ -62,19 +50,9 @@ const BrotherDrawer: React.FC = () => {
 
   const insets = useSafeArea();
 
-  const sheetRef = React.useRef(undefined);
   const scrollRef = React.useRef(undefined);
 
-  const maxSheetHeight = (height - insets.top) * 0.75 + insets.bottom;
-  const intermediateSheetHeight = 256 + insets.bottom;
-
-  const [snapPoint, setSnapPoint] = React.useState<number>(2);
-  const callbackNode = React.useRef(new Animated.Value(1)).current;
-
-  const backgroundOpacity = callbackNode.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0.5, 0]
-  });
+  const [visible, setVisible] = React.useState<boolean>(false);
 
   const loadData = React.useCallback(
     (force: boolean) => {
@@ -107,17 +85,9 @@ const BrotherDrawer: React.FC = () => {
     loadData(true);
   }, [loadData]);
 
-  const snapTo = React.useCallback(
-    (newSnap) => {
-      sheetRef?.current?.snapTo(newSnap);
-      sheetRef?.current?.snapTo(newSnap);
-    },
-    [sheetRef]
-  );
-
   const onPressClose = React.useCallback(() => {
-    snapTo(2);
-  }, [snapTo]);
+    dispatchUnselectUser();
+  }, [dispatchUnselectUser]);
 
   const onPressEmail = React.useCallback(() => {
     Clipboard.setString(selectedUserEmail);
@@ -147,33 +117,7 @@ const BrotherDrawer: React.FC = () => {
     return Object.values(missedMandatory[selectedUserEmail]).sort(sortEventsByDateReverse);
   }, [user, missedMandatory, selectedUserEmail]);
 
-  const lightStatusBar = React.useMemo(() => {
-    return snapPoint !== 2;
-  }, [snapPoint]);
-
-  const onOpenStart = React.useCallback(() => {
-    setSnapPoint(1);
-
-    if (user.privileged) {
-      snapTo(0);
-    }
-  }, [snapTo, user.privileged]);
-
-  const onOpenEnd = React.useCallback(() => {
-    setSnapPoint(0);
-  }, []);
-
-  const onCloseStart = React.useCallback(() => {
-    setSnapPoint(2);
-
-    if (user.privileged) {
-      snapTo(2);
-    }
-  }, [snapTo, user.privileged]);
-
   const onCloseEnd = React.useCallback(() => {
-    setSnapPoint(2);
-
     dispatchUnselectUser();
   }, [dispatchUnselectUser]);
 
@@ -185,23 +129,13 @@ const BrotherDrawer: React.FC = () => {
 
   React.useEffect(() => {
     if (selectedUserEmail === '') {
-      snapTo(2);
+      setVisible(false);
     } else {
-      snapTo(user.privileged ? 0 : 1);
+      setVisible(true);
 
       loadData(false);
     }
-  }, [user, loadData, selectedUserEmail, snapTo]);
-
-  const renderHeader = () => {
-    return (
-      <Block style={styles.header}>
-        <Block style={styles.panelHeader}>
-          <Block style={styles.panelHandle} />
-        </Block>
-      </Block>
-    );
-  };
+  }, [user, loadData, selectedUserEmail]);
 
   const renderAdmin = () => {
     return (
@@ -300,14 +234,7 @@ const BrotherDrawer: React.FC = () => {
 
   const renderContent = () => {
     return (
-      <Block
-        style={[
-          styles.contentWrapper,
-          {
-            height: (user.privileged ? maxSheetHeight : intermediateSheetHeight) - 48
-          }
-        ]}
-      >
+      <Block style={styles.contentWrapper}>
         {selectedUser !== null && (
           <React.Fragment>
             <ScrollView
@@ -372,37 +299,25 @@ const BrotherDrawer: React.FC = () => {
 
   return (
     <Ghost style={styles.container}>
-      {lightStatusBar && (
-        <StatusBar animated={true} translucent={true} backgroundColor="transparent" barStyle="light-content" />
-      )}
+      <FullPageModal visible={visible} onDoneClosing={onCloseEnd}>
+        <Header
+          title="Brother Details"
+          subtitle={selectedUser && `${selectedUser.familyName}, ${selectedUser.givenName}`}
+          showBackButton={true}
+          onPressBackButton={onPressClose}
+        />
 
-      <TouchableWithoutFeedback onPress={onPressClose}>
-        <Animated.View
-          pointerEvents={selectedUserEmail === '' ? 'none' : 'auto'}
+        <Block
           style={[
-            styles.background,
+            styles.wrapper,
             {
-              opacity: backgroundOpacity
+              top: insets.top + HeaderHeight
             }
           ]}
-        />
-      </TouchableWithoutFeedback>
-
-      <BottomSheet
-        ref={(ref) => (sheetRef.current = ref)}
-        snapPoints={[maxSheetHeight, intermediateSheetHeight, 0]}
-        initialSnap={2}
-        callbackNode={callbackNode}
-        overdragResistanceFactor={1.5}
-        enabledBottomClamp={true}
-        enabledContentGestureInteraction={false}
-        renderHeader={renderHeader}
-        renderContent={renderContent}
-        onOpenStart={onOpenStart}
-        onOpenEnd={onOpenEnd}
-        onCloseStart={onCloseStart}
-        onCloseEnd={onCloseEnd}
-      />
+        >
+          {renderContent()}
+        </Block>
+      </FullPageModal>
     </Ghost>
   );
 };
@@ -410,6 +325,12 @@ const BrotherDrawer: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1
+  },
+  wrapper: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0
   },
   background: {
     flex: 1,
@@ -441,6 +362,8 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   contentWrapper: {
+    flex: 1,
+    paddingTop: 20,
     backgroundColor: theme.COLORS.WHITE
   },
   userWrapper: {
