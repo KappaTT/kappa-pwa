@@ -15,7 +15,6 @@ import {
   Text,
   ListButton,
   FAB,
-  SlideModal,
   BackButton,
   FormattedInput,
   EndCapButton,
@@ -255,9 +254,9 @@ const OnboardingPage: React.FC = () => {
     <Block flex>
       <Block flex>{renderContent()}</Block>
 
-      <SlideModal transparent={false} visible={editing !== ''}>
+      {/* <SlideModal transparent={false} visible={editing !== ''}>
         {renderEditingContent()}
-      </SlideModal>
+      </SlideModal> */}
     </Block>
   );
 };

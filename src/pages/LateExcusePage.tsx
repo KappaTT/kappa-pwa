@@ -7,7 +7,7 @@ import moment from 'moment';
 import { TRedux } from '@reducers';
 import { _kappa, _ui } from '@reducers/actions';
 import { theme } from '@constants';
-import { Block, Header, EndCapButton, ListButton, SlideModal, Text, RadioList, FormattedInput } from '@components';
+import { Block, Header, EndCapButton, ListButton, Text, RadioList, FormattedInput } from '@components';
 import { HeaderHeight, HORIZONTAL_PADDING } from '@services/utils';
 import { TEvent } from '@backend/kappa';
 import { getEventById, hasValidCheckIn, sortEventByDate } from '@services/kappaService';
@@ -199,9 +199,9 @@ const LateExcusePage: React.FC<{
         </ScrollView>
       </Block>
 
-      <SlideModal visible={choosingEvent} onRequestClose={() => setChoosingEvent(false)}>
+      {/* <SlideModal visible={choosingEvent} onRequestClose={() => setChoosingEvent(false)}>
         {renderChoosingEvent()}
-      </SlideModal>
+      </SlideModal> */}
     </Block>
   );
 };

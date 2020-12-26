@@ -12,7 +12,7 @@ import { HeaderHeight, HORIZONTAL_PADDING, isEmpty } from '@services/utils';
 import { TPendingExcuse, TExcuse } from '@backend/kappa';
 import { ExcusePage, LateExcusePage, VotingPage } from '@pages';
 import { theme } from '@constants';
-import { Block, Text, Header, FadeModal, SlideModal, EndCapButton } from '@components';
+import { Block, Text, Header, EndCapButton } from '@components';
 
 const MessagesContent: React.FC<{
   navigation: NavigationProp<any, 'Messages'>;
@@ -209,7 +209,7 @@ const MessagesContent: React.FC<{
         </ScrollView>
       </Block>
 
-      <FadeModal
+      {/* <FadeModal
         statusBarStyle="light-content"
         transparent={true}
         visible={selectedExcuse !== null}
@@ -226,7 +226,7 @@ const MessagesContent: React.FC<{
       </SlideModal>
       <SlideModal transparent={false} visible={isShowingVoting} onRequestClose={dispatchHideVoting}>
         <VotingPage onRequestClose={dispatchHideVoting} />
-      </SlideModal>
+      </SlideModal> */}
     </Block>
   );
 };

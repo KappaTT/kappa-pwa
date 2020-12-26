@@ -26,7 +26,6 @@ import {
   Icon,
   ListButton,
   RoundButton,
-  SlideModal,
   RadioList,
   FormattedInput,
   KeyboardDismissView
@@ -476,12 +475,12 @@ const CheckInContent: React.FC<{
           </Block>
         </Block>
 
-        <SlideModal visible={choosingEvent} onRequestClose={() => setChoosingEvent(false)}>
+        {/* <SlideModal visible={choosingEvent} onRequestClose={() => setChoosingEvent(false)}>
           {renderChoosingEvent()}
         </SlideModal>
         <SlideModal visible={scanning} onRequestClose={() => setScanning(false)}>
           {renderScanner()}
-        </SlideModal>
+        </SlideModal> */}
       </Block>
     </KeyboardDismissView>
   );

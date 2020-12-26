@@ -11,20 +11,17 @@ import { GalioProvider } from '@galio';
 
 import { TRedux } from '@reducers';
 import { _auth, _kappa, _prefs, _ui } from '@reducers/actions';
-import { incompleteUser } from '@backend/auth';
 import {
   Block,
   Ghost,
-  FadeModal,
-  SlideModal,
   EventDrawer,
   BrotherDrawer,
   ToastController,
-  VotingController
+  VotingController,
+  ModalController
 } from '@components';
 import { Images, theme } from '@constants';
 import AppNavigator from '@navigation/AppNavigator';
-import { LoginPage, OnboardingPage } from '@pages';
 
 enableScreens();
 
@@ -63,28 +60,12 @@ const App = () => {
   const loadedUser = useSelector((state: TRedux) => state.auth.loadedUser);
   const authorized = useSelector((state: TRedux) => state.auth.authorized);
   const user = useSelector((state: TRedux) => state.auth.user);
-  const loginVisible = useSelector((state: TRedux) => state.auth.visible);
   const loadedPrefs = useSelector((state: TRedux) => state.prefs.loaded);
   const selectedEventId = useSelector((state: TRedux) => state.kappa.selectedEventId);
   const selectedUserEmail = useSelector((state: TRedux) => state.kappa.selectedUserEmail);
   const editingUserEmail = useSelector((state: TRedux) => state.kappa.editingUserEmail);
 
   const [isLoadingComplete, setIsLoadingComplete] = React.useState<boolean>(false);
-
-  const userIsIncomplete = React.useMemo(() => {
-    if (!authorized || !user) return false;
-
-    let incomplete = false;
-
-    for (const key of Object.keys(incompleteUser)) {
-      if (user[key] === undefined || user[key] === incompleteUser[key]) {
-        incomplete = true;
-        break;
-      }
-    }
-
-    return incomplete;
-  }, [authorized, user]);
 
   const dispatch = useDispatch();
   const dispatchShowLogin = React.useCallback(() => dispatch(_auth.showModal()), [dispatch]);
@@ -156,18 +137,7 @@ const App = () => {
 
             {renderOverlay()}
 
-            <FadeModal transparent={false} visible={loginVisible} disableAndroidBack={true} onRequestClose={() => {}}>
-              <LoginPage />
-            </FadeModal>
-
-            <SlideModal
-              transparent={false}
-              visible={userIsIncomplete || (authorized && editingUserEmail === user.email)}
-              onRequestClose={dispatchCancelEditUser}
-              disableAndroidBack={userIsIncomplete}
-            >
-              <OnboardingPage />
-            </SlideModal>
+            <ModalController />
 
             <ToastController />
 

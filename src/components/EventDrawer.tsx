@@ -312,47 +312,6 @@ const EventDrawer: React.FC = () => {
           </Block>
         </Block>
 
-        <Block style={styles.dangerZone}>
-          <Block style={styles.editZone}>
-            <Block style={styles.warning}>
-              <Text style={styles.zoneLabel}>Edit this event</Text>
-              <Text style={styles.description}>
-                Edits to events will only show up when users refresh. Please make sure you have refreshed the latest
-                event details before editing.
-              </Text>
-            </Block>
-
-            <TouchableOpacity onPress={dispatchEditEvent}>
-              <Icon style={styles.zoneIcon} family="Feather" name="edit" size={32} color={theme.COLORS.PRIMARY} />
-            </TouchableOpacity>
-          </Block>
-          <Block style={styles.deleteZone}>
-            <Block style={styles.warning}>
-              <Text style={styles.zoneLabel}>Delete this event</Text>
-              <Text style={styles.description}>
-                Deleting an event will delete all associated points, attendance and excuse records. Please double check
-                and be certain this is the event you want to delete.
-              </Text>
-            </Block>
-
-            {isDeletingEvent ? (
-              <ActivityIndicator style={styles.zoneIcon} color={theme.COLORS.PRIMARY} />
-            ) : (
-              <TouchableOpacity
-                style={!readyToDelete && styles.disabledButton}
-                disabled={!readyToDelete}
-                onPress={dispatchDeleteEvent}
-              >
-                <Icon style={styles.zoneIcon} family="Feather" name="trash-2" size={32} color={theme.COLORS.PRIMARY} />
-              </TouchableOpacity>
-            )}
-          </Block>
-          <Block style={styles.enableDeleteContainer}>
-            <Switch value={readyToDelete} onValueChange={(newValue: boolean) => setReadyToDelete(newValue)} />
-            <Text style={styles.readyToDelete}>I am ready to delete this event</Text>
-          </Block>
-        </Block>
-
         <Block style={styles.userList}>
           {!isGettingAttendance && mandatory.length > 0 && (
             <React.Fragment>

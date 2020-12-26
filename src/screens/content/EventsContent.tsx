@@ -9,8 +9,7 @@ import { useIsFocused, NavigationProp } from '@react-navigation/native';
 import { theme } from '@constants';
 import { TRedux } from '@reducers';
 import { _kappa } from '@reducers/actions';
-import { Block, Header, EndCapButton, EndCapIconButton, Text, Icon, SlideModal } from '@components';
-import { EditEventPage, EventSearchPage } from '@pages';
+import { Block, Header, EndCapButton, EndCapIconButton, Text, Icon } from '@components';
 import { HeaderHeight, isEmpty, HORIZONTAL_PADDING } from '@services/utils';
 import { log } from '@services/logService';
 import { TEvent } from '@backend/kappa';
@@ -191,17 +190,7 @@ const EventsContent: React.FC<{
 
   return (
     <Block flex>
-      <Header
-        title="Events"
-        leftButton={<EndCapButton direction="left" label={showing} onPress={toggleShowing} />}
-        rightButton={
-          <React.Fragment>
-            {user.privileged === true && (
-              <EndCapButton direction="right" label="New Event" onPress={dispatchEditNewEvent} />
-            )}
-          </React.Fragment>
-        }
-      />
+      <Header title="Events" leftButton={<EndCapButton direction="left" label={showing} onPress={toggleShowing} />} />
 
       <Block
         style={[
@@ -241,18 +230,6 @@ const EventsContent: React.FC<{
           />
         )}
       </Block>
-
-      <SlideModal visible={editingEventId !== ''} statusBarStyle="dark-content">
-        <EditEventPage
-          initialEvent={editingEventId === 'NEW' ? null : getEventById(events, editingEventId)}
-          onPressBack={dispatchCancelEditEvent}
-          onPressSave={dispatchSaveEditEvent}
-        />
-      </SlideModal>
-
-      <SlideModal visible={isShowingEventSearch} statusBarStyle="dark-content">
-        <EventSearchPage onRequestClose={() => setIsShowingEventSearch(false)} />
-      </SlideModal>
     </Block>
   );
 };

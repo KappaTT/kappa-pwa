@@ -10,8 +10,8 @@ import EndCapButton from './EndCapButton';
 import EndCapIconButton from './EndCapIconButton';
 import EventDrawer from './EventDrawer';
 import FAB from './FAB';
-import FadeModal from './FadeModal';
 import FormattedInput from './FormattedInput';
+import FullPageModal from './FullPageModal';
 import GeneralMeetingChart from './GeneralMeetingChart';
 import Ghost from './Ghost';
 import GoogleSignInButton from './GoogleSignInButton';
@@ -23,13 +23,13 @@ import Interceptor from './Interceptor';
 import KeyboardDismissView from './KeyboardDismissView';
 import LinkContainer from './LinkContainer';
 import ListButton from './ListButton';
+import ModalController from './ModalController';
 import PageSection from './PageSection';
 import PopupButton from './PopupButton';
 import PopupModal from './PopupModal';
 import RadioList from './RadioList';
 import RefreshWrapper from './RefreshWrapper';
 import RoundButton from './RoundButton';
-import SlideModal from './SlideModal';
 import SmallRoundButton from './SmallRoundButton';
 import Switch from './Switch';
 import TabBar from './TabBar';
@@ -56,8 +56,8 @@ export {
   EndCapIconButton,
   EventDrawer,
   FAB,
-  FadeModal,
   FormattedInput,
+  FullPageModal,
   GeneralMeetingChart,
   Ghost,
   GoogleSignInButton,
@@ -69,13 +69,13 @@ export {
   KeyboardDismissView,
   LinkContainer,
   ListButton,
+  ModalController,
   PageSection,
   PopupButton,
   PopupModal,
   RadioList,
   RefreshWrapper,
   RoundButton,
-  SlideModal,
   SmallRoundButton,
   Switch,
   TabBar,

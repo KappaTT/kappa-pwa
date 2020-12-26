@@ -215,8 +215,8 @@ const styles = StyleSheet.create({
     fontSize: 32
   },
   logo: {
-    flex: 1,
-    maxHeight: 160,
+    width: 128,
+    height: 128,
     marginVertical: 20
   },
   segmentContainer: {
