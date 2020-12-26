@@ -31,13 +31,13 @@ import { HeaderHeight, HORIZONTAL_PADDING } from '@services/utils';
 import { navigate } from '@navigation/NavigationService';
 import { TUser } from '@backend/auth';
 import FullPageModal from '@components/FullPageModal';
+import Header from '@components/Header';
 import Block from '@components/Block';
 import Ghost from '@components/Ghost';
 import Text from '@components/Text';
 import RoundButton from '@components/RoundButton';
 import Icon from '@components/Icon';
 import LinkContainer from '@components/LinkContainer';
-import Header from './Header';
 
 const EventDrawer: React.FC = () => {
   const user = useSelector((state: TRedux) => state.auth.user);
