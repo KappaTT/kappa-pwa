@@ -1,6 +1,3 @@
-import Constants from 'expo-constants';
-import { Platform } from 'react-native';
-
 import { jsonRequest, jsonAuthorizedRequest } from '@services/Networking';
 import { isEmpty } from '@services/utils';
 import * as secrets from '@secrets';
@@ -15,10 +12,7 @@ export type TMethod = typeof M_GET | typeof M_POST | typeof M_PUT | typeof M_PAT
 export const BASE_URL_PRODUCTION = secrets.API_URL;
 export const BASE_URL_DEVELOPMENT = 'http://127.0.0.1:3000/dev/';
 
-export const BASE_URL =
-  Constants.isDevice || Platform.OS === 'android' || process.env.NODE_ENV !== 'development'
-    ? BASE_URL_PRODUCTION
-    : BASE_URL_DEVELOPMENT;
+export const BASE_URL = process.env.NODE_ENV !== 'development' ? BASE_URL_PRODUCTION : BASE_URL_DEVELOPMENT;
 
 /**
  * Endpoints available for the Kappa API.
