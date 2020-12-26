@@ -19,8 +19,7 @@ import { ProgressCircle } from 'react-native-svg-charts';
 
 import { TRedux } from '@reducers';
 import { TToast } from '@reducers/ui';
-import { _auth, _kappa, _ui } from '@reducers/actions';
-import { log } from '@services/logService';
+import { _kappa, _ui } from '@reducers/actions';
 import {
   getAttendance,
   getExcuse,
@@ -32,19 +31,17 @@ import {
   canCheckIn
 } from '@services/kappaService';
 import { theme } from '@constants';
-import { TabBarHeight, isEmpty, HORIZONTAL_PADDING } from '@services/utils';
+import { HORIZONTAL_PADDING } from '@services/utils';
 import { navigate } from '@navigation/NavigationService';
-import { TEvent } from '@backend/kappa';
 import { TUser } from '@backend/auth';
 import Block from '@components/Block';
 import Ghost from '@components/Ghost';
 import Text from '@components/Text';
 import RoundButton from '@components/RoundButton';
 import Icon from '@components/Icon';
-import Switch from '@components/Switch';
 import LinkContainer from '@components/LinkContainer';
 
-const { width, height } = Dimensions.get('window');
+const { height } = Dimensions.get('window');
 
 const EventDrawer: React.FC = () => {
   const user = useSelector((state: TRedux) => state.auth.user);
@@ -57,10 +54,8 @@ const EventDrawer: React.FC = () => {
   const getAttendanceError = useSelector((state: TRedux) => state.kappa.getAttendanceError);
   const selectedEventId = useSelector((state: TRedux) => state.kappa.selectedEventId);
   const selectedEvent = useSelector((state: TRedux) => state.kappa.selectedEvent);
-  const isDeletingEvent = useSelector((state: TRedux) => state.kappa.isDeletingEvent);
 
   const [refreshing, setRefreshing] = React.useState<boolean>(isGettingAttendance);
-  const [readyToDelete, setReadyToDelete] = React.useState<boolean>(false);
 
   const dispatch = useDispatch();
   const dispatchGetAttendance = React.useCallback(
@@ -72,15 +67,6 @@ const EventDrawer: React.FC = () => {
     [dispatch, user]
   );
   const dispatchUnselectEvent = React.useCallback(() => dispatch(_kappa.unselectEvent()), [dispatch]);
-  const dispatchEditEvent = React.useCallback(() => dispatch(_kappa.editExistingEvent(selectedEventId)), [
-    dispatch,
-    selectedEventId
-  ]);
-  const dispatchDeleteEvent = React.useCallback(() => dispatch(_kappa.deleteEvent(user, selectedEvent)), [
-    dispatch,
-    user,
-    selectedEvent
-  ]);
   const dispatchCheckIn = React.useCallback(
     (excuse: boolean) => dispatch(_kappa.setCheckInEvent(selectedEventId, excuse)),
     [dispatch, selectedEventId]
@@ -112,8 +98,6 @@ const EventDrawer: React.FC = () => {
         ) {
           dispatchGetAttendance(force);
         }
-
-        setReadyToDelete(false);
       } else {
         if (!isGettingAttendance && (force || (!getAttendanceError && shouldLoad(loadHistory, `user-${user.email}`)))) {
           dispatchGetMyAttendance(force);

@@ -4,7 +4,6 @@ import { StyleSheet, TouchableOpacity, Animated, Easing, Dimensions, KeyboardAvo
 import { theme } from '@constants';
 import Block from '@components/Block';
 import Text from '@components/Text';
-import Icon from '@components/Icon';
 import CloseButton from '@components/CloseButton';
 import KeyboardDismissView from '@components/KeyboardDismissView';
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Image, StatusBar, Platform } from 'react-native';
+import { StyleSheet, Image, StatusBar } from 'react-native';
 import { AppLoading } from 'expo';
 import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
@@ -10,7 +10,7 @@ import { enableScreens } from 'react-native-screens';
 import { GalioProvider } from '@galio';
 
 import { TRedux } from '@reducers';
-import { _auth, _kappa, _prefs, _ui } from '@reducers/actions';
+import { _auth, _prefs } from '@reducers/actions';
 import {
   Block,
   Ghost,
@@ -59,17 +59,12 @@ const _handleLoadingError = (error: any) => {
 const App = () => {
   const loadedUser = useSelector((state: TRedux) => state.auth.loadedUser);
   const authorized = useSelector((state: TRedux) => state.auth.authorized);
-  const user = useSelector((state: TRedux) => state.auth.user);
   const loadedPrefs = useSelector((state: TRedux) => state.prefs.loaded);
-  const selectedEventId = useSelector((state: TRedux) => state.kappa.selectedEventId);
-  const selectedUserEmail = useSelector((state: TRedux) => state.kappa.selectedUserEmail);
-  const editingUserEmail = useSelector((state: TRedux) => state.kappa.editingUserEmail);
 
   const [isLoadingComplete, setIsLoadingComplete] = React.useState<boolean>(false);
 
   const dispatch = useDispatch();
   const dispatchShowLogin = React.useCallback(() => dispatch(_auth.showModal()), [dispatch]);
-  const dispatchCancelEditUser = React.useCallback(() => dispatch(_kappa.cancelEditUser()), [dispatch]);
   const dispatchLoadUser = React.useCallback(() => dispatch(_auth.loadUser()), [dispatch]);
   const dispatchLoadPrefs = React.useCallback(() => dispatch(_prefs.loadPrefs()), [dispatch]);
 

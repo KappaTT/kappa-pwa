@@ -4,7 +4,6 @@ import { StyleSheet, TouchableOpacity, ViewStyle } from 'react-native';
 import { theme } from '@constants';
 import Block from '@components/Block';
 import Icon from '@components/Icon';
-import Badge from '@components/Badge';
 import IconBadge from '@components/IconBadge';
 
 const FAB: React.FC<{

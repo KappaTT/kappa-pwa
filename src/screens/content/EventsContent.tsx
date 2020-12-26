@@ -9,11 +9,10 @@ import { useIsFocused, NavigationProp } from '@react-navigation/native';
 import { theme } from '@constants';
 import { TRedux } from '@reducers';
 import { _kappa } from '@reducers/actions';
-import { Block, Header, EndCapButton, EndCapIconButton, Text, Icon } from '@components';
-import { HeaderHeight, isEmpty, HORIZONTAL_PADDING } from '@services/utils';
-import { log } from '@services/logService';
+import { Block, Header, EndCapButton, Text, Icon } from '@components';
+import { HeaderHeight, HORIZONTAL_PADDING } from '@services/utils';
 import { TEvent } from '@backend/kappa';
-import { hasValidCheckIn, getEventById, shouldLoad } from '@services/kappaService';
+import { hasValidCheckIn, shouldLoad } from '@services/kappaService';
 
 const EventSkeleton: React.FC = () => {
   return (
@@ -44,17 +43,14 @@ const EventsContent: React.FC<{
   const getAttendanceError = useSelector((state: TRedux) => state.kappa.getAttendanceError);
   const isGettingExcuses = useSelector((state: TRedux) => state.kappa.isGettingExcuses);
   const getExcusesError = useSelector((state: TRedux) => state.kappa.getExcusesError);
-  const events = useSelector((state: TRedux) => state.kappa.events);
   const eventSections = useSelector((state: TRedux) => state.kappa.eventSections);
   const upcomingSections = useSelector((state: TRedux) => state.kappa.upcomingSections);
-  const editingEventId = useSelector((state: TRedux) => state.kappa.editingEventId);
   const getEventsErrorMessage = useSelector((state: TRedux) => state.kappa.getEventsErrorMessage);
 
   const [refreshing, setRefreshing] = React.useState<boolean>(
     isGettingEvents || isGettingDirectory || isGettingAttendance
   );
   const [showing, setShowing] = React.useState<'Full Year' | 'Upcoming'>('Upcoming');
-  const [isShowingEventSearch, setIsShowingEventSearch] = React.useState<boolean>(false);
 
   const dispatch = useDispatch();
   const dispatchGetEvents = React.useCallback(() => dispatch(_kappa.getEvents(user)), [dispatch, user]);
@@ -65,12 +61,6 @@ const EventsContent: React.FC<{
   const dispatchGetDirectory = React.useCallback(() => dispatch(_kappa.getDirectory(user)), [dispatch, user]);
   const dispatchGetExcuses = React.useCallback(() => dispatch(_kappa.getExcuses(user)), [dispatch, user]);
   const dispatchSelectEvent = React.useCallback((eventId: string) => dispatch(_kappa.selectEvent(eventId)), [dispatch]);
-  const dispatchEditNewEvent = React.useCallback(() => dispatch(_kappa.editNewEvent()), [dispatch]);
-  const dispatchSaveEditEvent = React.useCallback(
-    (event: Partial<TEvent>, eventId?: string) => dispatch(_kappa.saveEditEvent(user, event, eventId)),
-    [dispatch, user]
-  );
-  const dispatchCancelEditEvent = React.useCallback(() => dispatch(_kappa.cancelEditEvent()), [dispatch]);
 
   const insets = useSafeArea();
 

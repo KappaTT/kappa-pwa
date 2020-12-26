@@ -1,4 +1,4 @@
-import { getBatch, setItem, setBatch } from '@services/asyncStorage';
+import { getBatch, setBatch } from '@services/asyncStorage';
 
 export interface TPrefs {
   onboarded: boolean;

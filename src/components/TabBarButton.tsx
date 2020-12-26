@@ -2,7 +2,6 @@ import React from 'react';
 import { StyleSheet, TouchableWithoutFeedback } from 'react-native';
 
 import { TUser } from '@backend/auth';
-import { theme } from '@constants';
 import Block from '@components/Block';
 import Icon from '@components/Icon';
 import Badge from '@components/Badge';

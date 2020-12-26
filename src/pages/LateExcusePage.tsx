@@ -37,7 +37,7 @@ const LateExcusePage: React.FC<{
   const [choosingEvent, setChoosingEvent] = React.useState<boolean>(false);
   const [selectedEvent, setSelectedEvent] = React.useState<TEvent>(null);
   const [reason, setReason] = React.useState<string>('');
-  const [openDate, setOpenDate] = React.useState<moment.Moment>(moment());
+  const [openDate] = React.useState<moment.Moment>(moment());
 
   const dispatch = useDispatch();
   const dispatchCreateExcuse = React.useCallback(

@@ -1,7 +1,6 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 
-import { theme } from '@constants';
 import Block from '@components/Block';
 import CheckListButton from '@components/CheckListButton';
 

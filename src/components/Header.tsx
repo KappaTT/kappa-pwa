@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { useSafeArea } from 'react-native-safe-area-context';
 
 import { theme } from '@constants';

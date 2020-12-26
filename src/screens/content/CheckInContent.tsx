@@ -54,7 +54,7 @@ const CheckInContent: React.FC<{
   const [code, setCode] = React.useState<string>('');
   const [reason, setReason] = React.useState<string>('');
 
-  const [openDate, setOpenDate] = React.useState<moment.Moment>(moment());
+  const [openDate] = React.useState<moment.Moment>(moment());
 
   const dispatch = useDispatch();
   const dispatchSetCheckInEvent = React.useCallback(

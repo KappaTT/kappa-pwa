@@ -6,8 +6,6 @@ import { theme } from '@constants';
 import Block from '@components/Block';
 import Icon from '@components/Icon';
 
-const ButtonWidth = 54;
-
 const EndCapIconButton: React.FC<{
   iconFamily: string;
   iconName: string;

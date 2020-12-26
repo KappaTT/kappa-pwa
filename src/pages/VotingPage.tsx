@@ -13,7 +13,7 @@ import { useSafeArea } from 'react-native-safe-area-context';
 import moment from 'moment';
 
 import { TRedux } from '@reducers';
-import { _kappa, _ui, _voting } from '@reducers/actions';
+import { _voting } from '@reducers/actions';
 import { TEvent } from '@backend/kappa';
 import { TVote, TCandidate } from '@backend/voting';
 import { getVotes, getVotesBySession } from '@services/votingService';
@@ -50,7 +50,7 @@ const VotingPage: React.FC<{
     return [];
   }, [activeSession, candidateArray]);
 
-  const currentCandidateId = React.useMemo(() => activeSession?.currentCandidateId || '', [activeSession]);
+  // const currentCandidateId = React.useMemo(() => activeSession?.currentCandidateId || '', [activeSession]);
 
   const attendedEvents = React.useMemo(() => {
     if (!currentCandidate) return [];

@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavigationContainer, DefaultTheme, Theme, Route, RouteProp, ParamListBase } from '@react-navigation/native';
+import { NavigationContainer, DefaultTheme, Theme } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 

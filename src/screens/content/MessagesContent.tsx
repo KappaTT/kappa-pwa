@@ -1,12 +1,12 @@
 import React from 'react';
-import { StyleSheet, ScrollView, RefreshControl, TouchableOpacity, Linking } from 'react-native';
+import { StyleSheet, ScrollView, RefreshControl, TouchableOpacity } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { useSafeArea } from 'react-native-safe-area-context';
 import moment from 'moment';
 import { useIsFocused, NavigationProp } from '@react-navigation/native';
 
 import { TRedux } from '@reducers';
-import { _auth, _kappa, _voting } from '@reducers/actions';
+import { _kappa, _voting } from '@reducers/actions';
 import { shouldLoad, sortEventsByDateReverse, getExcusedEvents, getEventById } from '@services/kappaService';
 import { HeaderHeight, HORIZONTAL_PADDING, isEmpty } from '@services/utils';
 import { TPendingExcuse, TExcuse } from '@backend/kappa';

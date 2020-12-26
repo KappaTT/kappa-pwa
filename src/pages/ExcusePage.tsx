@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useSafeArea } from 'react-native-safe-area-context';
 
 import { TRedux } from '@reducers';
-import { _kappa, _ui } from '@reducers/actions';
+import { _kappa } from '@reducers/actions';
 import { TPendingExcuse } from '@backend/kappa';
 import { theme } from '@constants';
 import { HORIZONTAL_PADDING } from '@services/utils';

@@ -6,15 +6,12 @@ import { TRedux } from '@reducers';
 import { TToast } from '@reducers/ui';
 import { _auth, _kappa, _ui, _voting } from '@reducers/actions';
 import { theme } from '@constants';
-import { log } from '@services/logService';
 import Block from '@components/Block';
 import Ghost from '@components/Ghost';
 import Toast from '@components/Toast';
 import RoundButton from '@components/RoundButton';
 
 const ToastController: React.FC = () => {
-  const loadedUser = useSelector((state: TRedux) => state.auth.loadedUser);
-  const authorized = useSelector((state: TRedux) => state.auth.authorized);
   const kappaGlobalErrorMessage = useSelector((state: TRedux) => state.kappa.globalErrorMessage);
   const kappaGlobalErrorCode = useSelector((state: TRedux) => state.kappa.globalErrorCode);
   const kappaGlobalErrorDate = useSelector((state: TRedux) => state.kappa.globalErrorDate);

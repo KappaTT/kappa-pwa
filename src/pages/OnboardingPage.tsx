@@ -1,30 +1,24 @@
 import React from 'react';
-import { StyleSheet, Dimensions, ScrollView, TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, ScrollView, TouchableWithoutFeedback } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { useSafeArea } from 'react-native-safe-area-context';
 
 import { TRedux } from '@reducers';
-import { _auth, _kappa } from '@reducers/actions';
+import { _kappa } from '@reducers/actions';
 import { theme } from '@constants';
 import { HeaderHeight, HORIZONTAL_PADDING } from '@services/utils';
 import { prettyPhone } from '@services/kappaService';
 import {
   Header,
   Block,
-  Ghost,
   Text,
   ListButton,
-  FAB,
-  BackButton,
   FormattedInput,
   EndCapButton,
   RadioList,
-  Icon,
   LocalModalController,
   FullPageModal
 } from '@components';
-
-const { width, height } = Dimensions.get('window');
 
 const phoneFormatter = (text: string) => {
   return text.trim().replace(/\D/g, '');

@@ -1,8 +1,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useSafeArea } from 'react-native-safe-area-context';
-import moment from 'moment';
 
 import { theme } from '@constants';
 import TabBarButton from '@components/TabBarButton';
@@ -17,7 +16,7 @@ const TabBar: React.FC<BottomTabBarProps> = ({
   activeTintColor,
   inactiveTintColor
 }) => {
-  const focusedOptions = descriptors[state.routes[state.index].key].options;
+  // const focusedOptions = descriptors[state.routes[state.index].key].options;
 
   const user = useSelector((state: TRedux) => state.auth.user);
   const pendingExcusesArray = useSelector((state: TRedux) => state.kappa.pendingExcusesArray);

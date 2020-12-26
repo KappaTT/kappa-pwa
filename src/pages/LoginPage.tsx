@@ -9,7 +9,7 @@ import { TRedux } from '@reducers';
 import { _auth } from '@reducers/actions';
 import { HORIZONTAL_PADDING } from '@services/utils';
 import { theme, Images } from '@constants';
-import { Block, Text, GoogleSignInButton, FormattedInput, Icon, RoundButton } from '@components';
+import { Block, Text, GoogleSignInButton, FormattedInput, RoundButton } from '@components';
 
 const numberFormatter = (text: string) => {
   return text !== undefined ? text.replace(/\D/g, '') : '';

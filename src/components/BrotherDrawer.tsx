@@ -19,17 +19,16 @@ import moment from 'moment';
 import { TRedux } from '@reducers';
 import { TToast } from '@reducers/ui';
 import { _kappa, _ui } from '@reducers/actions';
-import { log } from '@services/logService';
-import { prettyPhone, sortEventByDate, shouldLoad, sortEventsByDateReverse } from '@services/kappaService';
+import { prettyPhone, shouldLoad, sortEventsByDateReverse } from '@services/kappaService';
 import { theme } from '@constants';
-import { TabBarHeight, isEmpty, HORIZONTAL_PADDING } from '@services/utils';
+import { isEmpty, HORIZONTAL_PADDING } from '@services/utils';
 import { TEvent } from '@backend/kappa';
 import Block from '@components/Block';
 import Ghost from '@components/Ghost';
 import Text from '@components/Text';
 import GeneralMeetingChart from '@components/GeneralMeetingChart';
 
-const { width, height } = Dimensions.get('window');
+const { height } = Dimensions.get('window');
 
 const BrotherDrawer: React.FC = () => {
   const user = useSelector((state: TRedux) => state.auth.user);

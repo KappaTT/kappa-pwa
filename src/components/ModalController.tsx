@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { TRedux } from '@reducers';
-import { _auth, _kappa, _voting } from '@reducers/actions';
+import { _kappa } from '@reducers/actions';
 import { incompleteUser } from '@backend/auth';
 import { LoginPage, OnboardingPage } from '@pages';
 import Ghost from '@components/Ghost';
