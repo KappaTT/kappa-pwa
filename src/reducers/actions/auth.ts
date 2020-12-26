@@ -10,16 +10,11 @@ import {
   SIGN_IN_FAILURE,
   SIGN_OUT,
   SHOW_SIGN_IN,
-  SIGN_IN_WITH_GOOGLE,
-  SIGN_IN_WITH_GOOGLE_SUCCESS,
-  SIGN_IN_WITH_GOOGLE_FAILURE,
   MODIFY_USER
 } from '@reducers/auth';
-import { TUser, initialUser, TGoogleUser, purge } from '@backend/auth';
-import { getBatch, setBatch, deleteBatch } from '@services/secureStorage';
-import * as GoogleService from '@services/googleService';
+import { TUser, initialUser, purge } from '@backend/auth';
+import { getBatch, setBatch } from '@services/asyncStorage';
 import { log } from '@services/logService';
-import { DEMO_USER } from '@services/demoService';
 
 /**
  * Show the login modal.
@@ -177,68 +172,10 @@ export const authenticateWithSecretCode = (secretCode: string) => {
 };
 
 /**
- * Is signing in with google.
+ * Sign in with the given google response.
  */
-const signingInWithGoogle = () => {
-  return {
-    type: SIGN_IN_WITH_GOOGLE
-  };
-};
-
-/**
- * Finish signing in with google successfully.
- */
-const signInWithGoogleSuccess = () => {
-  return {
-    type: SIGN_IN_WITH_GOOGLE_SUCCESS
-  };
-};
-
-/**
- * Finish signing in with google with an error.
- */
-const signInWithGoogleFailure = (err) => {
-  return {
-    type: SIGN_IN_WITH_GOOGLE_FAILURE,
-    error: err
-  };
-};
-
-/**
- * Sign in with google.
- */
-export const signInWithGoogle = () => {
+export const signInWithGoogle = (data: { email: string; idToken: string }) => {
   return (dispatch) => {
-    dispatch(signingInWithGoogle());
-
-    GoogleService.login().then((res) => {
-      if (res.success) {
-        if (res.data.email === 'thetataudemo@gmail.com') {
-          dispatch(signInWithGoogleSuccess());
-          dispatch(setUser(DEMO_USER));
-          dispatch(signInSuccess());
-        } else {
-          dispatch(signInWithGoogleSuccess());
-          dispatch(authenticate(res.data.email, res.data.idToken));
-        }
-      } else {
-        dispatch(
-          signInWithGoogleFailure({
-            message: 'Canceled'
-          })
-        );
-      }
-    });
-  };
-};
-
-/**
- * Sign in with the demo account.
- */
-export const signInDemo = () => {
-  return (dispatch) => {
-    dispatch(signInWithGoogleSuccess());
-    dispatch(setUser(DEMO_USER));
-    dispatch(signInSuccess());
+    dispatch(authenticate(data.email, data.idToken));
   };
 };

@@ -12,7 +12,6 @@ import {
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useSelector } from 'react-redux';
 import { useSafeArea } from 'react-native-safe-area-context';
-import { useColorScheme } from 'react-native-appearance';
 import moment from 'moment';
 
 import { TRedux } from '@reducers';
@@ -48,7 +47,6 @@ const EditEventPage: React.FC<{
   const isSavingEvent = useSelector((state: TRedux) => state.kappa.isSavingEvent);
 
   const insets = useSafeArea();
-  const colorScheme = useColorScheme();
 
   const [choosingType, setChoosingType] = React.useState<boolean>(false);
   const [type, setType] = React.useState<string>(initialEvent ? initialEvent.eventType : '');
@@ -232,7 +230,7 @@ const EditEventPage: React.FC<{
               styles.pickerModalContent,
               {
                 paddingBottom: insets.bottom,
-                backgroundColor: colorScheme === 'dark' ? theme.COLORS.BLACK : theme.COLORS.WHITE
+                backgroundColor: theme.COLORS.WHITE
               }
             ]}
           >

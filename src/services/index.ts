@@ -1,7 +1,6 @@
-import * as GoogleService from './googleService';
 import * as KappaService from './kappaService';
 import * as LogService from './logService';
 import * as NetworkingService from './Networking';
-import * as StorageService from './secureStorage';
+import * as StorageService from './asyncStorage';
 
-export { GoogleService, KappaService, LogService, NetworkingService, StorageService };
+export { KappaService, LogService, NetworkingService, StorageService };

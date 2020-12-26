@@ -2,7 +2,6 @@ import React from 'react';
 import { StyleSheet, View, TouchableOpacity, Text, ActivityIndicator } from 'react-native';
 import { useSafeArea } from 'react-native-safe-area-context';
 
-import { hapticImpact } from '@services/hapticService';
 import { theme } from '@constants';
 import { TabBarHeight, HeaderHeight } from '@services/utils';
 
@@ -13,7 +12,6 @@ const PopupButton: React.FC<{
   textColor?: string;
   loading?: boolean;
   disabled?: boolean;
-  haptic?: boolean;
   onPress?(): void;
 }> = ({
   label,
@@ -22,20 +20,15 @@ const PopupButton: React.FC<{
   textColor = theme.COLORS.WHITE,
   loading = false,
   disabled = false,
-  haptic = true,
   onPress = () => {}
 }) => {
   const insets = useSafeArea();
 
   const onButtonPress = React.useCallback(() => {
     if (!loading) {
-      if (haptic) {
-        hapticImpact();
-      }
-
       onPress();
     }
-  }, [haptic, loading, onPress]);
+  }, [loading, onPress]);
 
   return (
     <TouchableOpacity activeOpacity={0.6} onPress={onButtonPress}>

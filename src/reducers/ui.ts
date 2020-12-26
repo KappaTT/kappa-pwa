@@ -1,5 +1,3 @@
-import { NotificationFeedbackType } from 'expo-haptics';
-
 export const SHOW_TOAST = 'SHOW_TOAST';
 export const HIDE_TOAST = 'HIDE_TOAST';
 export const DONE_HIDING_TOAST = 'DONE_HIDING_TOAST';
@@ -12,7 +10,6 @@ export interface TToast {
   code: number;
   titleColor: string;
   children: React.ReactNode;
-  hapticType: NotificationFeedbackType;
 }
 
 export interface TUIState {
@@ -28,8 +25,7 @@ const initialToast: TToast = {
   timer: -1,
   code: -1,
   titleColor: 'black',
-  children: null,
-  hapticType: null
+  children: null
 };
 
 const initialState: TUIState = {
@@ -58,8 +54,7 @@ export default (state = initialState, action: any): TUIState => {
           timer: action.toast.timer !== undefined ? action.toast.timer : initialToast.timer,
           code: action.toast.code !== undefined ? action.toast.code : initialToast.code,
           titleColor: action.toast.titleColor || initialToast.titleColor,
-          children: action.toast.children || initialToast.children,
-          hapticType: action.toast.hapticType || initialToast.hapticType
+          children: action.toast.children || initialToast.children
         }
       };
     case HIDE_TOAST:

@@ -1,62 +1,24 @@
 import React from 'react';
-import { StyleSheet, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
+import GoogleLogin, { GoogleLoginResponse } from 'react-google-login';
 
-import Block from '@components/Block';
-import Text from '@components/Text';
-import { theme } from '@constants';
+import * as secrets from '@secrets';
 
-const googleLogo = {
-  uri:
-    'https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/200px-Google_%22G%22_Logo.svg.png'
-};
+export const GOOGLE_CLIENT_ID =
+  process.env.NODE_ENV !== 'development' ? secrets.GOOGLE_CLIENT_IDS.prod : secrets.GOOGLE_CLIENT_IDS.dev;
 
-const GoogleSignInButton: React.FC<{ loading?: boolean; disabled?: boolean; onPress(): void }> = ({
-  loading = false,
-  disabled = false,
-  onPress
-}) => {
+const GoogleSignInButton: React.FC<{
+  onSuccess(payload: GoogleLoginResponse): void;
+  onFailure(error: any): void;
+}> = ({ onSuccess, onFailure }) => {
   return (
-    <TouchableOpacity disabled={loading || disabled} activeOpacity={0.6} style={styles.button} onPress={onPress}>
-      <Block style={styles.content}>
-        {loading ? (
-          <ActivityIndicator style={styles.icon} color={theme.COLORS.DARK_GRAY} />
-        ) : (
-          <Image source={googleLogo} style={styles.icon} />
-        )}
-        <Text style={styles.text}>Sign in with Google</Text>
-      </Block>
-    </TouchableOpacity>
+    <GoogleLogin
+      clientId={GOOGLE_CLIENT_ID}
+      buttonText="Sign in with Google"
+      cookiePolicy="single_host_origin"
+      onSuccess={onSuccess}
+      onFailure={onFailure}
+    />
   );
 };
 
 export default GoogleSignInButton;
-
-const styles = StyleSheet.create({
-  button: {
-    shadowOpacity: 0.2,
-    shadowRadius: 1.5,
-    shadowOffset: { width: 0, height: 1 },
-    elevation: 1,
-    overflow: 'visible',
-    backgroundColor: 'white',
-    borderRadius: 4
-  },
-  content: {
-    display: 'flex',
-    flexDirection: 'row',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    alignItems: 'center',
-    justifyContent: 'space-between'
-  },
-  icon: {
-    width: 24,
-    aspectRatio: 1
-  },
-  text: {
-    color: theme.COLORS.GRAY,
-    marginLeft: 12,
-    fontSize: 16,
-    fontWeight: '600'
-  }
-});

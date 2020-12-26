@@ -13,7 +13,6 @@ import { TPendingExcuse, TExcuse } from '@backend/kappa';
 import { ExcusePage, LateExcusePage, VotingPage } from '@pages';
 import { theme } from '@constants';
 import { Block, Text, Header, FadeModal, SlideModal, EndCapButton } from '@components';
-import { hapticImpact } from '@services/hapticService';
 
 const MessagesContent: React.FC<{
   navigation: NavigationProp<any, 'Messages'>;
@@ -84,7 +83,6 @@ const MessagesContent: React.FC<{
   );
 
   const onPressVote = React.useCallback(() => {
-    hapticImpact();
     dispatchShowVoting();
   }, [dispatchShowVoting]);
 

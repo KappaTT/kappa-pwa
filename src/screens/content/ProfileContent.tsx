@@ -6,7 +6,6 @@ import moment from 'moment';
 import Constants from 'expo-constants';
 import { useIsFocused, NavigationProp } from '@react-navigation/native';
 
-import { hapticImpact } from '@services/hapticService';
 import { TRedux } from '@reducers';
 import { _auth, _kappa } from '@reducers/actions';
 import { theme } from '@constants';
@@ -91,14 +90,10 @@ const ProfileContent: React.FC<{
   }, [loadData]);
 
   const onPressEdit = React.useCallback(() => {
-    hapticImpact();
-
     dispatchEditUser();
   }, [dispatchEditUser]);
 
   const onPressSignOut = React.useCallback(() => {
-    hapticImpact();
-
     dispatchSignOut();
   }, [dispatchSignOut]);
 

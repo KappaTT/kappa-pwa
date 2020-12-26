@@ -3,7 +3,6 @@ import { StyleSheet, ScrollView, TouchableWithoutFeedback } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { useSafeArea } from 'react-native-safe-area-context';
 import moment from 'moment';
-import { NotificationFeedbackType } from 'expo-haptics';
 
 import { TRedux } from '@reducers';
 import { _kappa, _ui } from '@reducers/actions';

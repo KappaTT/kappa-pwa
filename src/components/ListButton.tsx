@@ -1,7 +1,6 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
-import { hapticImpact } from '@services/hapticService';
 import { theme } from '@constants';
 import Block from '@components/Block';
 import Icon from '@components/Icon';
@@ -12,31 +11,13 @@ const ListButton: React.FC<{
   valueText: string;
   valueColor?: string;
   disabled?: boolean;
-  haptic?: boolean;
   onPress?(): void;
-}> = ({
-  keyText,
-  valueText = '',
-  valueColor = theme.COLORS.PRIMARY,
-  disabled = false,
-  haptic = true,
-  onPress = () => {}
-}) => {
+}> = ({ keyText, valueText = '', valueColor = theme.COLORS.PRIMARY, disabled = false, onPress = () => {} }) => {
   const computedOpacity = disabled ? 0.5 : 1;
 
   return (
     <Block style={styles.wrapper}>
-      <TouchableOpacity
-        style={styles.button}
-        disabled={disabled}
-        onPress={() => {
-          if (haptic) {
-            hapticImpact();
-          }
-
-          onPress();
-        }}
-      >
+      <TouchableOpacity style={styles.button} disabled={disabled} onPress={onPress}>
         <Text
           style={[
             styles.keyText,

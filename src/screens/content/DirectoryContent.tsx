@@ -12,7 +12,6 @@ import { Block, Header, Text, Icon } from '@components';
 import { HeaderHeight, HORIZONTAL_PADDING } from '@services/utils';
 import { TUser } from '@backend/auth';
 import { shouldLoad } from '@services/kappaService';
-import { hapticImpact } from '@services/hapticService';
 
 const UserSkeleton: React.FC = () => {
   return (
@@ -111,13 +110,7 @@ const DirectoryContent: React.FC<{
   const renderItem = ({ item }: { item: TUser }) => {
     return (
       <React.Fragment>
-        <TouchableOpacity
-          onPress={() => {
-            hapticImpact();
-
-            dispatchSelectUser(item.email);
-          }}
-        >
+        <TouchableOpacity onPress={() => dispatchSelectUser(item.email)}>
           <Block style={styles.userContainer}>
             <Block style={styles.userHeader}>
               <Block style={styles.selectIcon}>

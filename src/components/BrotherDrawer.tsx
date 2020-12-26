@@ -21,7 +21,6 @@ import { TToast } from '@reducers/ui';
 import { _kappa, _ui } from '@reducers/actions';
 import { log } from '@services/logService';
 import { prettyPhone, sortEventByDate, shouldLoad, sortEventsByDateReverse } from '@services/kappaService';
-import { hapticImpact } from '@services/hapticService';
 import { theme } from '@constants';
 import { TabBarHeight, isEmpty, HORIZONTAL_PADDING } from '@services/utils';
 import { TEvent } from '@backend/kappa';

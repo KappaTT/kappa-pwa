@@ -8,7 +8,7 @@ import {
   fail,
   TBlame
 } from '@backend/backend';
-import { getBatch, deleteBatch } from '@services/secureStorage';
+import { getBatch, deleteBatch } from '@services/asyncStorage';
 import { log } from '@services/logService';
 
 export interface TGoogleUser {

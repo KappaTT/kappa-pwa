@@ -11,6 +11,7 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import Constants from 'expo-constants';
 import { useSafeArea } from 'react-native-safe-area-context';
+import { GoogleLoginResponse } from 'react-google-login';
 
 import { TRedux } from '@reducers';
 import { _auth } from '@reducers/actions';
@@ -25,8 +26,6 @@ const numberFormatter = (text: string) => {
 const LoginPage: React.FC = () => {
   const authorized = useSelector((state: TRedux) => state.auth.authorized);
   const isAuthenticating = useSelector((state: TRedux) => state.auth.isAuthenticating);
-  const isSigningInWithGoogle = useSelector((state: TRedux) => state.auth.isSigningInWithGoogle);
-  const signInWithGoogleErrorMessage = useSelector((state: TRedux) => state.auth.signInWithGoogleErrorMessage);
   const signInErrorMessage = useSelector((state: TRedux) => state.auth.signInErrorMessage);
 
   const [signInMethod, setSignInMethod] = React.useState<'google' | 'code'>('google');
@@ -34,8 +33,10 @@ const LoginPage: React.FC = () => {
 
   const dispatch = useDispatch();
   const dispatchHideModal = React.useCallback(() => dispatch(_auth.hideModal()), [dispatch]);
-  const dispatchSignInWithGoogle = React.useCallback(() => dispatch(_auth.signInWithGoogle()), [dispatch]);
-  const dispatchSignInDemo = React.useCallback(() => dispatch(_auth.signInDemo()), [dispatch]);
+  const dispatchSignInWithGoogle = React.useCallback(
+    (data: { email: string; idToken: string }) => dispatch(_auth.signInWithGoogle(data)),
+    [dispatch]
+  );
   const dispatchSignInWithSecretCode = React.useCallback(() => dispatch(_auth.authenticateWithSecretCode(secretCode)), [
     dispatch,
     secretCode
@@ -43,14 +44,24 @@ const LoginPage: React.FC = () => {
 
   const insets = useSafeArea();
 
-  const onPressLogo = React.useCallback(() => {
-    dispatchSignInDemo();
-  }, [dispatchSignInDemo]);
-
   const onPressChooseGoogle = React.useCallback(() => setSignInMethod('google'), []);
   const onPressChooseCode = React.useCallback(() => setSignInMethod('code'), []);
 
   const onChangeSecretCode = React.useCallback((text: string) => setSecretCode(text), []);
+
+  const onGoogleSuccess = React.useCallback(
+    (data: GoogleLoginResponse) => {
+      dispatchSignInWithGoogle({
+        email: data.profileObj.email,
+        idToken: data.tokenId
+      });
+    },
+    [dispatchSignInWithGoogle]
+  );
+
+  const onGoogleFailure = React.useCallback((error: any) => {
+    console.warn(error);
+  }, []);
 
   React.useEffect(() => {
     if (authorized) {
@@ -59,17 +70,10 @@ const LoginPage: React.FC = () => {
   }, [authorized, dispatchHideModal]);
 
   React.useEffect(() => {
-    if (signInWithGoogleErrorMessage && signInWithGoogleErrorMessage !== 'Canceled') {
-      Alert.alert('Could not sign in!', signInWithGoogleErrorMessage);
-    }
-  }, [signInWithGoogleErrorMessage]);
-
-  React.useEffect(() => {
     if (signInErrorMessage) {
-      Alert.alert('Could not sign in!', signInErrorMessage);
+      alert(signInErrorMessage);
     }
   }, [signInErrorMessage]);
-
   const renderBackground = () => {
     return <Block style={styles.bg} />;
   };
@@ -81,9 +85,7 @@ const LoginPage: React.FC = () => {
           <Block style={styles.content}>
             <Text style={styles.title}>KAPPA</Text>
 
-            <TouchableWithoutFeedback onPress={onPressLogo}>
-              <Image style={styles.logo} source={Images.Kappa} resizeMode="contain" />
-            </TouchableWithoutFeedback>
+            <Image style={styles.logo} source={Images.Kappa} resizeMode="contain" />
 
             <Text style={styles.subtitle}>THETA TAU</Text>
 
@@ -134,10 +136,7 @@ const LoginPage: React.FC = () => {
 
           <Block style={styles.bottomArea}>
             {signInMethod === 'google' && (
-              <GoogleSignInButton
-                loading={isSigningInWithGoogle || isAuthenticating}
-                onPress={dispatchSignInWithGoogle}
-              />
+              <GoogleSignInButton onSuccess={onGoogleSuccess} onFailure={onGoogleFailure} />
             )}
 
             {signInMethod === 'code' && (

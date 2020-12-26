@@ -33,7 +33,6 @@ import {
 } from '@services/kappaService';
 import { theme } from '@constants';
 import { TabBarHeight, isEmpty, HORIZONTAL_PADDING } from '@services/utils';
-import { hapticImpact } from '@services/hapticService';
 import { navigate } from '@navigation/NavigationService';
 import { TEvent } from '@backend/kappa';
 import { TUser } from '@backend/auth';
@@ -323,13 +322,7 @@ const EventDrawer: React.FC = () => {
               </Text>
             </Block>
 
-            <TouchableOpacity
-              onPress={() => {
-                hapticImpact();
-
-                dispatchEditEvent();
-              }}
-            >
+            <TouchableOpacity onPress={dispatchEditEvent}>
               <Icon style={styles.zoneIcon} family="Feather" name="edit" size={32} color={theme.COLORS.PRIMARY} />
             </TouchableOpacity>
           </Block>
@@ -348,27 +341,14 @@ const EventDrawer: React.FC = () => {
               <TouchableOpacity
                 style={!readyToDelete && styles.disabledButton}
                 disabled={!readyToDelete}
-                onPress={() => {
-                  hapticImpact();
-
-                  dispatchDeleteEvent();
-                }}
+                onPress={dispatchDeleteEvent}
               >
                 <Icon style={styles.zoneIcon} family="Feather" name="trash-2" size={32} color={theme.COLORS.PRIMARY} />
               </TouchableOpacity>
             )}
           </Block>
           <Block style={styles.enableDeleteContainer}>
-            <Switch
-              value={readyToDelete}
-              onValueChange={(newValue: boolean) => {
-                if (newValue) {
-                  hapticImpact();
-                }
-
-                setReadyToDelete(newValue);
-              }}
-            />
+            <Switch value={readyToDelete} onValueChange={(newValue: boolean) => setReadyToDelete(newValue)} />
             <Text style={styles.readyToDelete}>I am ready to delete this event</Text>
           </Block>
         </Block>

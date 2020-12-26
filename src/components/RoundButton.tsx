@@ -1,7 +1,6 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 
-import { hapticImpact } from '@services/hapticService';
 import { theme } from '@constants';
 import Block from '@components/Block';
 import Text from '@components/Text';
@@ -17,7 +16,6 @@ const RoundButton: React.FC<{
   disabled?: boolean;
   right?: boolean;
   alt?: boolean;
-  haptic?: boolean;
   onPress?(): void;
 }> = ({
   color = theme.COLORS.PRIMARY,
@@ -29,7 +27,6 @@ const RoundButton: React.FC<{
   disabled = false,
   right = false,
   alt = false,
-  haptic = true,
   onPress = () => {}
 }) => {
   const buttonStyle = StyleSheet.flatten([
@@ -47,13 +44,9 @@ const RoundButton: React.FC<{
 
   const onButtonPress = React.useCallback(() => {
     if (!loading) {
-      if (haptic) {
-        hapticImpact();
-      }
-
       onPress();
     }
-  }, [haptic, loading, onPress]);
+  }, [loading, onPress]);
 
   return (
     <Button

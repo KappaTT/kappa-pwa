@@ -1,7 +1,6 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
 
-import { hapticImpact } from '@services/hapticService';
 import { HORIZONTAL_PADDING } from '@services/utils';
 import { theme } from '@constants';
 import Block from '@components/Block';
@@ -18,7 +17,6 @@ const EndCapIconButton: React.FC<{
   color?: string;
   loading?: boolean;
   disabled?: boolean;
-  haptic?: boolean;
   onPress?(): void;
 }> = ({
   iconFamily,
@@ -29,7 +27,6 @@ const EndCapIconButton: React.FC<{
   color = theme.COLORS.PRIMARY,
   loading = false,
   disabled = false,
-  haptic = true,
   onPress = () => {}
 }) => {
   const computedOpacity = disabled ? 0.5 : 1;
@@ -52,17 +49,7 @@ const EndCapIconButton: React.FC<{
       {loading ? (
         <ActivityIndicator style={styles.button} color={theme.COLORS.PRIMARY} />
       ) : (
-        <TouchableOpacity
-          style={styles.button}
-          disabled={disabled}
-          onPress={() => {
-            if (haptic) {
-              hapticImpact();
-            }
-
-            onPress();
-          }}
-        >
+        <TouchableOpacity style={styles.button} disabled={disabled} onPress={onPress}>
           <Icon
             style={{
               opacity: computedOpacity

@@ -142,10 +142,9 @@ const App = () => {
   };
 
   if (!isLoadingComplete) {
-    // return (
-    //   <AppLoading startAsync={_loadResourcesAsync} onError={_handleLoadingError} onFinish={_handleFinishLoading} />
-    // );
-    return null;
+    return (
+      <AppLoading startAsync={_loadResourcesAsync} onError={_handleLoadingError} onFinish={_handleFinishLoading} />
+    );
   } else {
     return (
       <GalioProvider theme={theme}>
