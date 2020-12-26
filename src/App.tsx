@@ -104,24 +104,6 @@ const App = () => {
     handleLoading();
   }, [handleLoading]);
 
-  const renderOverlay = () => {
-    if (Platform.OS === 'ios' || selectedEventId !== '' || selectedUserEmail !== '') {
-      return (
-        <React.Fragment>
-          <Ghost style={styles.overlay}>
-            <EventDrawer />
-          </Ghost>
-
-          <Ghost style={styles.overlay}>
-            <BrotherDrawer />
-          </Ghost>
-        </React.Fragment>
-      );
-    } else {
-      return <React.Fragment />;
-    }
-  };
-
   if (!isLoadingComplete) {
     return (
       <AppLoading startAsync={_loadResourcesAsync} onError={_handleLoadingError} onFinish={_handleFinishLoading} />
@@ -135,7 +117,13 @@ const App = () => {
           <Block flex>
             <AppNavigator />
 
-            {renderOverlay()}
+            <Ghost style={styles.overlay}>
+              <EventDrawer />
+            </Ghost>
+
+            <Ghost style={styles.overlay}>
+              <BrotherDrawer />
+            </Ghost>
 
             <ModalController />
 
