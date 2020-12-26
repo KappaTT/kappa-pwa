@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, SectionList, RefreshControl, TouchableOpacity } from 'react-native';
+import { StyleSheet, SectionList, TouchableOpacity } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { Placeholder, PlaceholderLine, Fade } from 'rn-placeholder';
 import { useSafeArea } from 'react-native-safe-area-context';
@@ -95,10 +95,12 @@ const EventsContent: React.FC<{
   );
 
   const onRefresh = React.useCallback(() => {
-    setRefreshing(true);
+    if (!refreshing) {
+      setRefreshing(true);
 
-    loadData(true);
-  }, [loadData]);
+      loadData(true);
+    }
+  }, [loadData, refreshing]);
 
   const toggleShowing = React.useCallback(() => {
     if (
@@ -180,7 +182,11 @@ const EventsContent: React.FC<{
 
   return (
     <Block flex>
-      <Header title="Events" leftButton={<EndCapButton direction="left" label={showing} onPress={toggleShowing} />} />
+      <Header
+        title="Events"
+        leftButton={<EndCapButton direction="left" label={showing} onPress={toggleShowing} />}
+        rightButton={<EndCapButton label="Refresh" loading={refreshing} onPress={onRefresh} />}
+      />
 
       <Block
         style={[
@@ -209,10 +215,11 @@ const EventsContent: React.FC<{
             keyExtractor={keyExtractor}
             renderSectionHeader={renderSectionHeader}
             renderItem={renderItem}
-            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
             ListEmptyComponent={
               <React.Fragment>
-                <Text style={styles.pullToRefresh}>Pull to refresh</Text>
+                <Text style={styles.pullToRefresh} onPress={onRefresh}>
+                  Click to Refresh
+                </Text>
                 <Text style={styles.errorMessage}>{getEventsErrorMessage || 'No upcoming events'}</Text>
               </React.Fragment>
             }
@@ -299,7 +306,8 @@ const styles = StyleSheet.create({
   pullToRefresh: {
     marginTop: '50%',
     textAlign: 'center',
-    fontFamily: 'OpenSans-SemiBold'
+    fontFamily: 'OpenSans-SemiBold',
+    color: theme.COLORS.PRIMARY
   },
   errorMessage: {
     textAlign: 'center',

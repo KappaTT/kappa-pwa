@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, FlatList, RefreshControl, TouchableOpacity } from 'react-native';
+import { StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { Placeholder, PlaceholderLine, Fade } from 'rn-placeholder';
 import { useSafeArea } from 'react-native-safe-area-context';
@@ -8,7 +8,7 @@ import { useIsFocused, NavigationProp } from '@react-navigation/native';
 import { theme } from '@constants';
 import { TRedux } from '@reducers';
 import { _kappa } from '@reducers/actions';
-import { Block, Header, Text, Icon } from '@components';
+import { Block, Header, Text, Icon, EndCapButton } from '@components';
 import { HeaderHeight, HORIZONTAL_PADDING } from '@services/utils';
 import { TUser } from '@backend/auth';
 import { shouldLoad } from '@services/kappaService';
@@ -88,10 +88,12 @@ const DirectoryContent: React.FC<{
   );
 
   const onRefresh = React.useCallback(() => {
-    setRefreshing(true);
+    if (!refreshing) {
+      setRefreshing(true);
 
-    loadData(true);
-  }, [loadData]);
+      loadData(true);
+    }
+  }, [loadData, refreshing]);
 
   React.useEffect(() => {
     if (!isGettingEvents && !isGettingDirectory && !isGettingAttendance) {
@@ -141,7 +143,10 @@ const DirectoryContent: React.FC<{
 
   return (
     <Block flex>
-      <Header title="Directory" />
+      <Header
+        title="Directory"
+        rightButton={<EndCapButton label="Refresh" loading={refreshing} onPress={onRefresh} />}
+      />
 
       <Block
         style={[
@@ -181,10 +186,11 @@ const DirectoryContent: React.FC<{
             data={directoryArray}
             keyExtractor={keyExtractor}
             renderItem={renderItem}
-            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
             ListEmptyComponent={
               <React.Fragment>
-                <Text style={styles.pullToRefresh}>Pull to refresh</Text>
+                <Text style={styles.pullToRefresh} onPress={onRefresh}>
+                  Click to Refresh
+                </Text>
                 <Text style={styles.errorMessage}>{getDirectoryErrorMessage || 'No users'}</Text>
               </React.Fragment>
             }
@@ -266,7 +272,8 @@ const styles = StyleSheet.create({
   pullToRefresh: {
     marginTop: '50%',
     textAlign: 'center',
-    fontFamily: 'OpenSans-SemiBold'
+    fontFamily: 'OpenSans-SemiBold',
+    color: theme.COLORS.PRIMARY
   },
   errorMessage: {
     textAlign: 'center',
