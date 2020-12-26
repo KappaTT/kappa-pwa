@@ -289,19 +289,17 @@ const CheckInContent: React.FC<{
                     </Block>
 
                     <Block style={styles.codeContainer}>
-                      <Block style={styles.column}>
-                        <FormattedInput
-                          style={styles.input}
-                          placeholderText="code"
-                          maxLength={4}
-                          keyboardType="number-pad"
-                          returnKeyType="done"
-                          error={false}
-                          value={code}
-                          formatter={numberFormatter}
-                          onChangeText={(text: string) => setCode(text)}
-                        />
-                      </Block>
+                      <FormattedInput
+                        style={styles.input}
+                        placeholderText="ex: 1234"
+                        maxLength={4}
+                        keyboardType="number-pad"
+                        returnKeyType="done"
+                        error={false}
+                        value={code}
+                        formatter={numberFormatter}
+                        onChangeText={(text: string) => setCode(text)}
+                      />
                     </Block>
                   </Block>
                   <Text style={styles.description}>
