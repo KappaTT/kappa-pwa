@@ -158,7 +158,7 @@ const LoginPage: React.FC = () => {
             )}
 
             <Text style={styles.madeWithText}>
-              {`Whatsoever thy hand findeth to do, do it with thy might.\n\n${Constants.nativeBuildVersion} - ${Constants.manifest.sdkVersion} - ${Constants.manifest.revisionId}`}
+              {`Whatsoever thy hand findeth to do, do it with thy might.\n\n${Constants.manifest.sdkVersion}`}
             </Text>
           </Block>
         </View>
