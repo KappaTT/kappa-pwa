@@ -1,18 +1,8 @@
 import React from 'react';
-import {
-  StyleSheet,
-  ScrollView,
-  TouchableWithoutFeedback,
-  TouchableOpacity,
-  Keyboard,
-  ActivityIndicator,
-  Alert,
-  KeyboardAvoidingView
-} from 'react-native';
+import { StyleSheet, ScrollView, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { useSafeArea } from 'react-native-safe-area-context';
 import moment from 'moment';
-import { BarCodeScanner } from 'expo-barcode-scanner';
 import { useIsFocused, NavigationProp } from '@react-navigation/native';
 
 import { theme } from '@constants';
@@ -32,7 +22,7 @@ import {
   LocalModalController,
   FullPageModal
 } from '@components';
-import { HeaderHeight, TabBarHeight, HORIZONTAL_PADDING } from '@services/utils';
+import { HeaderHeight, HORIZONTAL_PADDING } from '@services/utils';
 import { getEventById, hasValidCheckIn, shouldLoad, sortEventByDate, canCheckIn } from '@services/kappaService';
 
 const numberFormatter = (text: string) => {
@@ -64,9 +54,6 @@ const CheckInContent: React.FC<{
   const [code, setCode] = React.useState<string>('');
   const [reason, setReason] = React.useState<string>('');
 
-  const [hasPermission, setHasPermission] = React.useState<boolean>(false);
-  const [scanned, setScanned] = React.useState<boolean>(false);
-  const [scanning, setScanning] = React.useState<boolean>(false);
   const [openDate, setOpenDate] = React.useState<moment.Moment>(moment());
 
   const dispatch = useDispatch();
@@ -120,32 +107,6 @@ const CheckInContent: React.FC<{
     [checkInExcuse, dispatchSetCheckInEvent]
   );
 
-  const askForPermission = React.useCallback(async () => {
-    const { status } = await BarCodeScanner.requestPermissionsAsync();
-
-    if (status === 'granted') {
-      setHasPermission(true);
-      setScanning(true);
-      setScanned(false);
-    } else {
-      setHasPermission(false);
-      setScanning(false);
-
-      Alert.alert('You must enable camera access from phone settings to scan');
-    }
-  }, []);
-
-  const onPressScan = React.useCallback(() => {
-    Keyboard.dismiss();
-
-    if (hasPermission) {
-      setScanning(true);
-      setScanned(false);
-    } else {
-      askForPermission();
-    }
-  }, [askForPermission, hasPermission]);
-
   const onPressCheckIn = React.useCallback(() => {
     Keyboard.dismiss();
 
@@ -153,43 +114,6 @@ const CheckInContent: React.FC<{
       dispatchCheckIn(checkInEventId, code);
     }
   }, [checkInEventId, code, dispatchCheckIn]);
-
-  const handleCodeScanned = React.useCallback(
-    ({ type, data }) => {
-      if (type === BarCodeScanner.Constants.BarCodeType.qr && data) {
-        if (numberFormatter(data) === data && data.length === 4) {
-          setScanning(false);
-          setScanned(true);
-          setCode(data);
-
-          if (checkInEventId !== '') {
-            dispatchCheckIn(checkInEventId, data);
-          }
-        } else if (data.indexOf(':') > 0) {
-          const pieces = data.split(':');
-
-          let eventId = '';
-          const eventCode = pieces[0];
-
-          for (const event of eventOptions) {
-            if (event.id === pieces[0]) {
-              eventId = pieces[0];
-              break;
-            }
-          }
-
-          if (eventId !== '' && numberFormatter(eventCode) === eventCode && eventCode.length === 4) {
-            setScanning(false);
-            setScanned(true);
-            setCode(eventCode);
-            dispatchSetCheckInEvent(eventId, false);
-            dispatchCheckIn(eventId, eventCode);
-          }
-        }
-      }
-    },
-    [checkInEventId, dispatchCheckIn, eventOptions, dispatchSetCheckInEvent]
-  );
 
   React.useEffect(() => {
     if (
@@ -303,35 +227,6 @@ const CheckInContent: React.FC<{
     );
   };
 
-  const renderScanner = () => {
-    return (
-      <Block flex>
-        {hasPermission && <BarCodeScanner style={styles.scanner} onBarCodeScanned={handleCodeScanned} />}
-
-        <Block
-          style={[
-            styles.scannerOverlay,
-            {
-              top: insets.top
-            }
-          ]}
-        >
-          <TouchableOpacity onPress={() => setScanning(false)}>
-            <Block style={styles.scannerCloseButtonContainer}>
-              <Icon
-                style={styles.scannerCloseButton}
-                family="Feather"
-                name="x"
-                color={theme.COLORS.PRIMARY}
-                size={32}
-              />
-            </Block>
-          </TouchableOpacity>
-        </Block>
-      </Block>
-    );
-  };
-
   return (
     <KeyboardDismissView style={styles.flex}>
       <Block flex>
@@ -407,18 +302,6 @@ const CheckInContent: React.FC<{
                           onChangeText={(text: string) => setCode(text)}
                         />
                       </Block>
-
-                      <Block style={styles.scanButton}>
-                        <RoundButton
-                          disabled={isCheckingIn}
-                          label="Scan"
-                          right={true}
-                          icon={
-                            <Icon family="MaterialCommunityIcons" name="qrcode" size={24} color={theme.COLORS.WHITE} />
-                          }
-                          onPress={onPressScan}
-                        />
-                      </Block>
                     </Block>
                   </Block>
                   <Text style={styles.description}>
@@ -480,10 +363,6 @@ const CheckInContent: React.FC<{
         <LocalModalController>
           <FullPageModal visible={choosingEvent} onDoneClosing={() => setChoosingEvent(false)}>
             {renderChoosingEvent()}
-          </FullPageModal>
-
-          <FullPageModal visible={scanning} onDoneClosing={() => setScanning(false)}>
-            {renderScanner()}
           </FullPageModal>
         </LocalModalController>
       </Block>
