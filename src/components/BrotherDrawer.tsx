@@ -363,10 +363,10 @@ const styles = StyleSheet.create({
   },
   contentWrapper: {
     flex: 1,
-    paddingTop: 20,
     backgroundColor: theme.COLORS.WHITE
   },
   userWrapper: {
+    paddingTop: HORIZONTAL_PADDING,
     paddingHorizontal: HORIZONTAL_PADDING
   },
   userHeader: {},
