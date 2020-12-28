@@ -3,9 +3,9 @@ import { StyleSheet } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { TRedux } from '@reducers';
-import { _kappa } from '@reducers/actions';
+import { _kappa, _voting } from '@reducers/actions';
 import { incompleteUser } from '@backend/auth';
-import { LoginPage, OnboardingPage } from '@pages';
+import { LoginPage, OnboardingPage, VotingPage } from '@pages';
 import Ghost from '@components/Ghost';
 import FullPageModal from '@components/FullPageModal';
 
@@ -14,9 +14,11 @@ const ModalController: React.FC = () => {
   const user = useSelector((state: TRedux) => state.auth.user);
   const loginVisible = useSelector((state: TRedux) => state.auth.visible);
   const editingUserEmail = useSelector((state: TRedux) => state.kappa.editingUserEmail);
+  const isShowingVoting = useSelector((state: TRedux) => state.voting.isShowingVoting);
 
   const dispatch = useDispatch();
   const dispatchCancelEditUser = React.useCallback(() => dispatch(_kappa.cancelEditUser()), [dispatch]);
+  const dispatchHideVoting = React.useCallback(() => dispatch(_voting.hideVoting()), [dispatch]);
 
   const userIsIncomplete = React.useMemo(() => {
     if (!authorized || !user) return false;
@@ -35,8 +37,8 @@ const ModalController: React.FC = () => {
 
   return (
     <Ghost style={styles.container}>
-      <FullPageModal visible={loginVisible}>
-        <LoginPage />
+      <FullPageModal visible={isShowingVoting} onDoneClosing={dispatchHideVoting}>
+        <VotingPage onRequestClose={dispatchHideVoting} />
       </FullPageModal>
 
       <FullPageModal
@@ -44,6 +46,10 @@ const ModalController: React.FC = () => {
         onDoneClosing={dispatchCancelEditUser}
       >
         <OnboardingPage />
+      </FullPageModal>
+
+      <FullPageModal visible={loginVisible}>
+        <LoginPage />
       </FullPageModal>
     </Ghost>
   );

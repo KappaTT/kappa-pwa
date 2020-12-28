@@ -10,7 +10,7 @@ import { _kappa, _voting } from '@reducers/actions';
 import { shouldLoad, sortEventsByDateReverse, getExcusedEvents, getEventById } from '@services/kappaService';
 import { HeaderHeight, HORIZONTAL_PADDING, isEmpty } from '@services/utils';
 import { TPendingExcuse, TExcuse } from '@backend/kappa';
-import { ExcusePage, LateExcusePage, VotingPage } from '@pages';
+import { ExcusePage, LateExcusePage } from '@pages';
 import { theme } from '@constants';
 import { Block, Text, Header, EndCapButton, LocalModalController, FullPageModal } from '@components';
 
@@ -27,7 +27,6 @@ const MessagesContent: React.FC<{
   const pendingExcusesArray = useSelector((state: TRedux) => state.kappa.pendingExcusesArray);
   const isGettingExcuses = useSelector((state: TRedux) => state.kappa.isGettingExcuses);
   const getExcusesError = useSelector((state: TRedux) => state.kappa.getExcusesError);
-  const isShowingVoting = useSelector((state: TRedux) => state.voting.isShowingVoting);
   const activeSession = useSelector((state: TRedux) => state.voting.activeSession);
 
   const [refreshing, setRefreshing] = React.useState<boolean>(false);
@@ -37,7 +36,6 @@ const MessagesContent: React.FC<{
   const dispatch = useDispatch();
   const dispatchGetExcuses = React.useCallback(() => dispatch(_kappa.getExcuses(user)), [dispatch, user]);
   const dispatchShowVoting = React.useCallback(() => dispatch(_voting.showVoting()), [dispatch]);
-  const dispatchHideVoting = React.useCallback(() => dispatch(_voting.hideVoting()), [dispatch]);
 
   const insets = useSafeArea();
 
@@ -220,10 +218,6 @@ const MessagesContent: React.FC<{
 
         <FullPageModal visible={showingRequestPage} onDoneClosing={() => setShowingRequestPage(false)}>
           <LateExcusePage onRequestClose={() => setShowingRequestPage(false)} />
-        </FullPageModal>
-
-        <FullPageModal visible={isShowingVoting} onDoneClosing={dispatchHideVoting}>
-          <VotingPage onRequestClose={dispatchHideVoting} />
         </FullPageModal>
       </LocalModalController>
     </Block>
