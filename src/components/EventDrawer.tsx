@@ -30,7 +30,7 @@ import { theme } from '@constants';
 import { HeaderHeight, HORIZONTAL_PADDING } from '@services/utils';
 import { navigate } from '@navigation/NavigationService';
 import { TUser } from '@backend/auth';
-import FullPageModal from '@components/FullPageModal';
+import PartialPageModal from '@components/PartialPageModal';
 import Header from '@components/Header';
 import Block from '@components/Block';
 import Ghost from '@components/Ghost';
@@ -423,7 +423,7 @@ const EventDrawer: React.FC = () => {
 
   return (
     <Ghost style={styles.container}>
-      <FullPageModal visible={visible} onDoneClosing={onCloseEnd}>
+      <PartialPageModal visible={visible} height={user.privileged ? '75%' : 460} onDoneClosing={onCloseEnd}>
         <Header
           title="Event Details"
           subtitle={selectedEvent?.title}
@@ -441,7 +441,7 @@ const EventDrawer: React.FC = () => {
         >
           {renderContent()}
         </Block>
-      </FullPageModal>
+      </PartialPageModal>
     </Ghost>
   );
 };

@@ -11,7 +11,7 @@ import { prettyPhone, shouldLoad, sortEventsByDateReverse } from '@services/kapp
 import { theme } from '@constants';
 import { isEmpty, HORIZONTAL_PADDING, HeaderHeight } from '@services/utils';
 import { TEvent } from '@backend/kappa';
-import FullPageModal from '@components/FullPageModal';
+import PartialPageModal from '@components/PartialPageModal';
 import Header from '@components/Header';
 import Block from '@components/Block';
 import Ghost from '@components/Ghost';
@@ -299,7 +299,7 @@ const BrotherDrawer: React.FC = () => {
 
   return (
     <Ghost style={styles.container}>
-      <FullPageModal visible={visible} onDoneClosing={onCloseEnd}>
+      <PartialPageModal visible={visible} height={user.privileged ? '75%' : 280} onDoneClosing={onCloseEnd}>
         <Header
           title="Brother Details"
           subtitle={selectedUser && `${selectedUser.familyName}, ${selectedUser.givenName}`}
@@ -317,7 +317,7 @@ const BrotherDrawer: React.FC = () => {
         >
           {renderContent()}
         </Block>
-      </FullPageModal>
+      </PartialPageModal>
     </Ghost>
   );
 };
