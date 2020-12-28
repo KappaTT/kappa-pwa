@@ -26,6 +26,7 @@ import ListButton from './ListButton';
 import LocalModalController from './LocalModalController';
 import ModalController from './ModalController';
 import PageSection from './PageSection';
+import PartialPageModal from './PartialPageModal';
 import PopupButton from './PopupButton';
 import PopupModal from './PopupModal';
 import RadioList from './RadioList';
@@ -73,6 +74,7 @@ export {
   LocalModalController,
   ModalController,
   PageSection,
+  PartialPageModal,
   PopupButton,
   PopupModal,
   RadioList,
