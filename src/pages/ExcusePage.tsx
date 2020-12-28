@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity, TouchableWithoutFeedback, ActivityIndicator } from 'react-native';
+import { StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { useSafeArea } from 'react-native-safe-area-context';
 
@@ -37,10 +37,6 @@ const ExcusePage: React.FC<{
 
   return (
     <Block flex>
-      <TouchableWithoutFeedback onPress={onRequestClose}>
-        <Block style={styles.excuseOverlay} />
-      </TouchableWithoutFeedback>
-
       <Block
         style={[
           styles.excusePage,

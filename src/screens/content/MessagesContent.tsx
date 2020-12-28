@@ -12,7 +12,7 @@ import { HeaderHeight, HORIZONTAL_PADDING, isEmpty } from '@services/utils';
 import { TPendingExcuse, TExcuse } from '@backend/kappa';
 import { ExcusePage, LateExcusePage } from '@pages';
 import { theme } from '@constants';
-import { Block, Text, Header, EndCapButton, LocalModalController, FullPageModal } from '@components';
+import { Block, Text, Header, EndCapButton, LocalModalController, FullPageModal, PartialPageModal } from '@components';
 
 const MessagesContent: React.FC<{
   navigation: NavigationProp<any, 'Messages'>;
@@ -208,13 +208,13 @@ const MessagesContent: React.FC<{
       </Block>
 
       <LocalModalController>
-        <FullPageModal visible={selectedExcuse !== null} onDoneClosing={() => onSelectExcuse(null)}>
+        <PartialPageModal visible={selectedExcuse !== null} height="auto" onDoneClosing={() => onSelectExcuse(null)}>
           <ExcusePage
             excuse={selectedExcuse}
             renderExcuse={renderExcuse(selectedExcuse, false, true)}
             onRequestClose={() => onSelectExcuse(null)}
           />
-        </FullPageModal>
+        </PartialPageModal>
 
         <FullPageModal visible={showingRequestPage} onDoneClosing={() => setShowingRequestPage(false)}>
           <LateExcusePage onRequestClose={() => setShowingRequestPage(false)} />
