@@ -8,6 +8,7 @@ import { GoogleLoginResponse } from 'react-google-login';
 import { TRedux } from '@reducers';
 import { _auth } from '@reducers/actions';
 import { HORIZONTAL_PADDING } from '@services/utils';
+import useWindowSize from '@services/useWindowSize';
 import { theme, Images } from '@constants';
 import { Block, Text, GoogleSignInButton, FormattedInput, RoundButton } from '@components';
 
@@ -22,6 +23,7 @@ const LoginPage: React.FC = () => {
 
   const [signInMethod, setSignInMethod] = React.useState<'google' | 'code'>('google');
   const [secretCode, setSecretCode] = React.useState<string>('');
+  const [innerWidth, innerHeight] = useWindowSize();
 
   const dispatch = useDispatch();
   const dispatchHideModal = React.useCallback(() => dispatch(_auth.hideModal()), [dispatch]);
@@ -158,7 +160,7 @@ const LoginPage: React.FC = () => {
             )}
 
             <Text style={styles.madeWithText}>
-              {`Whatsoever thy hand findeth to do, do it with thy might.\n\n${Constants.manifest.sdkVersion}`}
+              {`Whatsoever thy hand findeth to do, do it with thy might.\n\n${Constants.manifest.sdkVersion} | ${insets.top} ${insets.bottom} | ${innerWidth} ${innerHeight}`}
             </Text>
           </Block>
         </View>
@@ -187,7 +189,7 @@ const styles = StyleSheet.create({
     flex: 1
   },
   scrollContent: {
-    height: '100%'
+    flex: 1
   },
   content: {
     flex: 1,

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Image, StatusBar } from 'react-native';
+import { StyleSheet, Image, StatusBar, View } from 'react-native';
 import { AppLoading } from 'expo';
 import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
@@ -11,17 +11,11 @@ import { GalioProvider } from '@galio';
 
 import { TRedux } from '@reducers';
 import { _auth, _prefs } from '@reducers/actions';
-import {
-  Block,
-  Ghost,
-  EventDrawer,
-  BrotherDrawer,
-  ToastController,
-  VotingController,
-  ModalController
-} from '@components';
+import { Ghost, EventDrawer, BrotherDrawer, ToastController, VotingController, ModalController } from '@components';
 import { Images, theme } from '@constants';
 import AppNavigator from '@navigation/AppNavigator';
+
+import './styles/global.css';
 
 enableScreens();
 
@@ -109,7 +103,7 @@ const App = () => {
         <StatusBar animated={true} translucent={true} backgroundColor="transparent" barStyle="dark-content" />
 
         <SafeAreaProvider>
-          <Block flex>
+          <View style={styles.container}>
             <AppNavigator />
 
             <Ghost style={styles.overlay}>
@@ -125,7 +119,7 @@ const App = () => {
             <ToastController />
 
             <VotingController />
-          </Block>
+          </View>
         </SafeAreaProvider>
       </GalioProvider>
     );
@@ -133,6 +127,9 @@ const App = () => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1
+  },
   overlay: {
     position: 'absolute',
     top: 0,
