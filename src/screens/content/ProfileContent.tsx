@@ -12,6 +12,7 @@ import { theme } from '@constants';
 import { LINK_LINKTREE } from '@constants/Links';
 import { prettyPhone, shouldLoad, sortEventsByDateReverse } from '@services/kappaService';
 import { isEmpty, HORIZONTAL_PADDING } from '@services/utils';
+import useWindowSize from '@services/useWindowSize';
 import { TEvent } from '@backend/kappa';
 import { TPoints, POINTS_SO, GM_SO, POINTS_JR, GM_JR, POINTS_SR, GM_SR, getClassYear } from '@constants/Points';
 import { Block, Text, Icon, GeneralMeetingChart, LinkContainer } from '@components';
@@ -38,6 +39,7 @@ const ProfileContent: React.FC<{
   const getDirectoryError = useSelector((state: TRedux) => state.kappa.getDirectoryError);
 
   const [refreshing, setRefreshing] = React.useState<boolean>(false);
+  const [innerWidth, innerHeight] = useWindowSize();
 
   const dispatch = useDispatch();
   const dispatchEditUser = React.useCallback(() => dispatch(_kappa.editUser(user.email)), [dispatch, user.email]);
@@ -314,7 +316,7 @@ const ProfileContent: React.FC<{
           </View>
 
           <Text style={styles.madeWithText}>
-            {`Whatsoever thy hand findeth to do, do it with thy might.\n\n${Constants.manifest.sdkVersion}\n\nJTC - Web Chair 2019-2021`}
+            {`Whatsoever thy hand findeth to do, do it with thy might.\n\n${Constants.manifest.sdkVersion} | ${innerWidth} ${innerHeight}\n\nJTC - Web Chair 2019-2021`}
           </Text>
         </Block>
       </ScrollView>

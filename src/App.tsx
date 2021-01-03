@@ -6,11 +6,13 @@ import * as Font from 'expo-font';
 import { useSelector, useDispatch } from 'react-redux';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { enableScreens } from 'react-native-screens';
+import { RemoveScroll } from 'react-remove-scroll';
 
 import { GalioProvider } from '@galio';
 
 import { TRedux } from '@reducers';
 import { _auth, _prefs } from '@reducers/actions';
+import useWindowSize from '@services/useWindowSize';
 import { Ghost, EventDrawer, BrotherDrawer, ToastController, VotingController, ModalController } from '@components';
 import { Images, theme } from '@constants';
 import AppNavigator from '@navigation/AppNavigator';
@@ -56,6 +58,7 @@ const App = () => {
   const loadedPrefs = useSelector((state: TRedux) => state.prefs.loaded);
 
   const [isLoadingComplete, setIsLoadingComplete] = React.useState<boolean>(false);
+  const [innerWidth, innerHeight] = useWindowSize();
 
   const dispatch = useDispatch();
   const dispatchShowLogin = React.useCallback(() => dispatch(_auth.showModal()), [dispatch]);
@@ -103,23 +106,33 @@ const App = () => {
         <StatusBar animated={true} translucent={true} backgroundColor="transparent" barStyle="dark-content" />
 
         <SafeAreaProvider>
-          <View style={styles.container}>
-            <AppNavigator />
+          <RemoveScroll>
+            <View
+              style={[
+                styles.container,
+                {
+                  width: innerWidth,
+                  height: innerHeight
+                }
+              ]}
+            >
+              <AppNavigator />
 
-            <Ghost style={styles.overlay}>
-              <EventDrawer />
-            </Ghost>
+              <Ghost style={styles.overlay}>
+                <EventDrawer />
+              </Ghost>
 
-            <Ghost style={styles.overlay}>
-              <BrotherDrawer />
-            </Ghost>
+              <Ghost style={styles.overlay}>
+                <BrotherDrawer />
+              </Ghost>
 
-            <ModalController />
+              <ModalController />
 
-            <ToastController />
+              <ToastController />
 
-            <VotingController />
-          </View>
+              <VotingController />
+            </View>
+          </RemoveScroll>
         </SafeAreaProvider>
       </GalioProvider>
     );
@@ -127,9 +140,7 @@ const App = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  },
+  container: {},
   overlay: {
     position: 'absolute',
     top: 0,
