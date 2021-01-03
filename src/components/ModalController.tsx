@@ -10,6 +10,7 @@ import Ghost from '@components/Ghost';
 import FullPageModal from '@components/FullPageModal';
 
 const ModalController: React.FC = () => {
+  const loadedUser = useSelector((state: TRedux) => state.auth.loadedUser);
   const authorized = useSelector((state: TRedux) => state.auth.authorized);
   const user = useSelector((state: TRedux) => state.auth.user);
   const loginVisible = useSelector((state: TRedux) => state.auth.visible);
@@ -48,7 +49,7 @@ const ModalController: React.FC = () => {
         <OnboardingPage />
       </FullPageModal>
 
-      <FullPageModal visible={loginVisible}>
+      <FullPageModal visible={loginVisible || (loadedUser && !authorized)}>
         <LoginPage />
       </FullPageModal>
     </Ghost>
