@@ -299,7 +299,7 @@ const BrotherDrawer: React.FC = () => {
 
   return (
     <Ghost style={styles.container}>
-      <PartialPageModal visible={visible} height={user.privileged ? '75%' : 280} onDoneClosing={onCloseEnd}>
+      <PartialPageModal visible={visible} height={user.privileged ? '80%' : 280} onDoneClosing={onCloseEnd}>
         <Header
           title="Brother Details"
           subtitle={selectedUser && `${selectedUser.familyName}, ${selectedUser.givenName}`}

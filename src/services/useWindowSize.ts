@@ -1,11 +1,13 @@
 import { useLayoutEffect, useState } from 'react';
 
 const useWindowSize = () => {
-  const [size, setSize] = useState([0, 0]);
+  const [width, setWidth] = useState<number>(0);
+  const [height, setHeight] = useState<number>(0);
 
   useLayoutEffect(() => {
     function updateSize() {
-      setSize([window.innerWidth, window.innerHeight]);
+      setWidth(window.innerWidth);
+      setHeight(window.innerHeight);
     }
 
     window.addEventListener('resize', updateSize);
@@ -15,7 +17,7 @@ const useWindowSize = () => {
     return () => window.removeEventListener('resize', updateSize);
   }, []);
 
-  return size;
+  return [width, height];
 };
 
 export default useWindowSize;
