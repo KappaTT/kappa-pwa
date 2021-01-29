@@ -286,7 +286,7 @@ const ProfileContent: React.FC<{
           <Text style={[styles.pointsText, { marginTop: 0 }]}>Requirements</Text>
 
           <View style={{ opacity: classYear === 'FR' || classYear === 'SO' ? 1 : 0.4 }}>
-            <Text style={styles.subHeadingText}>Sophomore</Text>
+            <Text style={styles.subHeadingText}>Freshman and Sophomore</Text>
 
             {renderRequirements(POINTS_SO, GM_SO)}
           </View>
