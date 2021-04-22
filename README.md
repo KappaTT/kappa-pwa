@@ -29,3 +29,7 @@ You can use the appropriate emulator depending on the platform you want to try. 
 
 1. `npm install -g netlify-cli` if you don't have netlify installed
 2. `yarn deploy`
+
+## License
+
+This project is [GPLv2 licensed](./LICENSE)
