@@ -142,7 +142,7 @@ const BrotherDrawer: React.FC = () => {
       <Block style={styles.adminContainer}>
         <Block>
           <Block style={styles.splitPropertyRow}>
-            <Block style={styles.splitPropertyFifths}>
+            <Block style={styles.splitPropertySixths}>
               <Text style={styles.propertyHeader}>Prof</Text>
               {isGettingPoints ? (
                 <ActivityIndicator style={styles.propertyLoader} color={theme.COLORS.DARK_GRAY} />
@@ -152,7 +152,7 @@ const BrotherDrawer: React.FC = () => {
                 </Text>
               )}
             </Block>
-            <Block style={styles.splitPropertyFifths}>
+            <Block style={styles.splitPropertySixths}>
               <Text style={styles.propertyHeader}>Phil</Text>
               {isGettingPoints ? (
                 <ActivityIndicator style={styles.propertyLoader} color={theme.COLORS.DARK_GRAY} />
@@ -162,7 +162,7 @@ const BrotherDrawer: React.FC = () => {
                 </Text>
               )}
             </Block>
-            <Block style={styles.splitPropertyFifths}>
+            <Block style={styles.splitPropertySixths}>
               <Text style={styles.propertyHeader}>Bro</Text>
               {isGettingPoints ? (
                 <ActivityIndicator style={styles.propertyLoader} color={theme.COLORS.DARK_GRAY} />
@@ -172,7 +172,7 @@ const BrotherDrawer: React.FC = () => {
                 </Text>
               )}
             </Block>
-            <Block style={styles.splitPropertyFifths}>
+            <Block style={styles.splitPropertySixths}>
               <Text style={styles.propertyHeader}>Rush</Text>
               {isGettingPoints ? (
                 <ActivityIndicator style={styles.propertyLoader} color={theme.COLORS.DARK_GRAY} />
@@ -182,7 +182,7 @@ const BrotherDrawer: React.FC = () => {
                 </Text>
               )}
             </Block>
-            <Block style={styles.splitPropertyFifths}>
+            <Block style={styles.splitPropertySixths}>
               <Text style={styles.propertyHeader}>Kappa Chat</Text>
               {isGettingPoints ? (
                 <ActivityIndicator style={styles.propertyLoader} color={theme.COLORS.DARK_GRAY} />
@@ -192,7 +192,7 @@ const BrotherDrawer: React.FC = () => {
                 </Text>
               )}
             </Block>
-            <Block style={styles.splitPropertyFifths}>
+            <Block style={styles.splitPropertySixths}>
               <Text style={styles.propertyHeader}>Any</Text>
               {isGettingPoints ? (
                 <ActivityIndicator style={styles.propertyLoader} color={theme.COLORS.DARK_GRAY} />
@@ -440,6 +440,9 @@ const styles = StyleSheet.create({
   },
   splitPropertyFifths: {
     width: '20%'
+  },
+  splitPropertySixths: {
+    width: '16%'
   },
   adminContainer: {},
   mandatoryLabel: {
