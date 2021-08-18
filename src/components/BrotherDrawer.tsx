@@ -183,6 +183,16 @@ const BrotherDrawer: React.FC = () => {
               )}
             </Block>
             <Block style={styles.splitPropertyFifths}>
+              <Text style={styles.propertyHeader}>Kappa Chat</Text>
+              {isGettingPoints ? (
+                <ActivityIndicator style={styles.propertyLoader} color={theme.COLORS.DARK_GRAY} />
+              ) : (
+                <Text style={styles.propertyValue}>
+                  {points.hasOwnProperty(selectedUserEmail) ? points[selectedUserEmail].CHAT : '0'}
+                </Text>
+              )}
+            </Block>
+            <Block style={styles.splitPropertyFifths}>
               <Text style={styles.propertyHeader}>Any</Text>
               {isGettingPoints ? (
                 <ActivityIndicator style={styles.propertyLoader} color={theme.COLORS.DARK_GRAY} />
