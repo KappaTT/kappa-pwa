@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Placeholder, PlaceholderLine, Fade } from 'rn-placeholder';
 import { useSafeArea } from 'react-native-safe-area-context';
 import { useIsFocused, NavigationProp } from '@react-navigation/native';
+import { SearchBar } from 'react-native-elements';
 
 import { theme } from '@constants';
 import { TRedux } from '@reducers';
@@ -141,9 +142,56 @@ const DirectoryContent: React.FC<{
     );
   };
 
+  const [searchState, setSearchState] = React.useState({
+    searchText: '',
+    filteredData: []
+  });
+
+  const search = (searchText) => {
+    let filteredData = directoryArray.filter(function (item) {
+      const fullName = item.givenName.toLowerCase() + ' ' + item.familyName.toLowerCase();
+      return (
+        fullName.includes(searchText.toLowerCase()) ||
+        item.phone.includes(searchText.toLowerCase()) ||
+        item.email.includes(searchText.toLowerCase())
+      );
+    });
+
+    setSearchState({ searchText: searchText, filteredData: filteredData });
+  };
+
   return (
     <Block flex>
       <Header
+        leftButton={
+          <Block style={[styles.leftButton]}>
+            <SearchBar
+              round={true}
+              autoCapitalize="none"
+              autoCorrect={false}
+              lightTheme={true}
+              showCancel={false}
+              cancelIcon={false}
+              searchIcon={false}
+              placeholder="Search..."
+              containerStyle={{
+                backgroundColor: 'transparent',
+                borderTopColor: 'transparent',
+                borderBottomColor: 'transparent',
+                width: 150
+              }}
+              inputContainerStyle={{
+                backgroundColor: 'transparent',
+                width: 150
+              }}
+              inputStyle={{
+                fontSize: 14
+              }}
+              onChangeText={(searchText) => search(searchText)}
+              value={searchState.searchText}
+            />
+          </Block>
+        }
         title="Directory"
         rightButton={<EndCapButton label="Refresh" loading={refreshing} onPress={onRefresh} />}
       />
@@ -183,7 +231,11 @@ const DirectoryContent: React.FC<{
         ) : (
           <FlatList
             ref={(ref) => (scrollRef.current = ref)}
-            data={directoryArray}
+            data={
+              searchState.filteredData && searchState.filteredData.length > 0
+                ? searchState.filteredData
+                : directoryArray
+            }
             keyExtractor={keyExtractor}
             renderItem={renderItem}
             ListEmptyComponent={
@@ -278,6 +330,10 @@ const styles = StyleSheet.create({
   errorMessage: {
     textAlign: 'center',
     fontFamily: 'OpenSans'
+  },
+  leftButton: {
+    position: 'absolute',
+    left: 0
   }
 });
 

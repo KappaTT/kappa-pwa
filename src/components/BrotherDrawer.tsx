@@ -9,6 +9,7 @@ import { TToast } from '@reducers/ui';
 import { _kappa, _ui } from '@reducers/actions';
 import { prettyPhone, shouldLoad, sortEventsByDateReverse } from '@services/kappaService';
 import { theme } from '@constants';
+import { POINTS_SO, POINTS_JR, POINTS_SR, getClassYear } from '@constants/Points';
 import { isEmpty, HORIZONTAL_PADDING, HeaderHeight } from '@services/utils';
 import { TEvent } from '@backend/kappa';
 import PartialPageModal from '@components/PartialPageModal';
@@ -34,6 +35,15 @@ const BrotherDrawer: React.FC = () => {
   const selectedUser = useSelector((state: TRedux) => state.kappa.selectedUser);
 
   const [refreshing, setRefreshing] = React.useState<boolean>(isGettingAttendance);
+
+  const isScribe = React.useMemo(() => user.role?.toLowerCase() === 'scribe', [user.role]);
+  const classYear = React.useMemo(() => getClassYear(user.firstYear), [user.firstYear]);
+  let pointsRequired = POINTS_SO;
+  if (classYear == 'JR') {
+    pointsRequired = POINTS_JR;
+  } else if (classYear == 'SR') {
+    pointsRequired = POINTS_SR;
+  }
 
   const dispatch = useDispatch();
   const dispatchGetAttendance = React.useCallback(
@@ -147,7 +157,16 @@ const BrotherDrawer: React.FC = () => {
               {isGettingPoints ? (
                 <ActivityIndicator style={styles.propertyLoader} color={theme.COLORS.DARK_GRAY} />
               ) : (
-                <Text style={styles.propertyValue}>
+                <Text
+                  style={[
+                    isScribe &&
+                    points.hasOwnProperty(selectedUserEmail) &&
+                    points[selectedUserEmail].PROF >= pointsRequired.PROF
+                      ? styles.pointsSatisfied
+                      : isScribe && styles.pointsNotSatisfied,
+                    styles.propertyValue
+                  ]}
+                >
                   {points.hasOwnProperty(selectedUserEmail) ? points[selectedUserEmail].PROF : '0'}
                 </Text>
               )}
@@ -157,7 +176,16 @@ const BrotherDrawer: React.FC = () => {
               {isGettingPoints ? (
                 <ActivityIndicator style={styles.propertyLoader} color={theme.COLORS.DARK_GRAY} />
               ) : (
-                <Text style={styles.propertyValue}>
+                <Text
+                  style={[
+                    isScribe &&
+                    points.hasOwnProperty(selectedUserEmail) &&
+                    points[selectedUserEmail].PHIL >= pointsRequired.PHIL
+                      ? styles.pointsSatisfied
+                      : isScribe && styles.pointsNotSatisfied,
+                    styles.propertyValue
+                  ]}
+                >
                   {points.hasOwnProperty(selectedUserEmail) ? points[selectedUserEmail].PHIL : '0'}
                 </Text>
               )}
@@ -167,7 +195,16 @@ const BrotherDrawer: React.FC = () => {
               {isGettingPoints ? (
                 <ActivityIndicator style={styles.propertyLoader} color={theme.COLORS.DARK_GRAY} />
               ) : (
-                <Text style={styles.propertyValue}>
+                <Text
+                  style={[
+                    isScribe &&
+                    points.hasOwnProperty(selectedUserEmail) &&
+                    points[selectedUserEmail].BRO >= pointsRequired.BRO
+                      ? styles.pointsSatisfied
+                      : isScribe && styles.pointsNotSatisfied,
+                    styles.propertyValue
+                  ]}
+                >
                   {points.hasOwnProperty(selectedUserEmail) ? points[selectedUserEmail].BRO : '0'}
                 </Text>
               )}
@@ -177,7 +214,16 @@ const BrotherDrawer: React.FC = () => {
               {isGettingPoints ? (
                 <ActivityIndicator style={styles.propertyLoader} color={theme.COLORS.DARK_GRAY} />
               ) : (
-                <Text style={styles.propertyValue}>
+                <Text
+                  style={[
+                    isScribe &&
+                    points.hasOwnProperty(selectedUserEmail) &&
+                    points[selectedUserEmail].RUSH >= pointsRequired.RUSH
+                      ? styles.pointsSatisfied
+                      : isScribe && styles.pointsNotSatisfied,
+                    styles.propertyValue
+                  ]}
+                >
                   {points.hasOwnProperty(selectedUserEmail) ? points[selectedUserEmail].RUSH : '0'}
                 </Text>
               )}
@@ -187,7 +233,16 @@ const BrotherDrawer: React.FC = () => {
               {isGettingPoints ? (
                 <ActivityIndicator style={styles.propertyLoader} color={theme.COLORS.DARK_GRAY} />
               ) : (
-                <Text style={styles.propertyValue}>
+                <Text
+                  style={[
+                    isScribe &&
+                    points.hasOwnProperty(selectedUserEmail) &&
+                    points[selectedUserEmail].CHAT >= pointsRequired.CHAT
+                      ? styles.pointsSatisfied
+                      : isScribe && styles.pointsNotSatisfied,
+                    styles.propertyValue
+                  ]}
+                >
                   {points.hasOwnProperty(selectedUserEmail) ? points[selectedUserEmail].CHAT : '0'}
                 </Text>
               )}
@@ -197,7 +252,16 @@ const BrotherDrawer: React.FC = () => {
               {isGettingPoints ? (
                 <ActivityIndicator style={styles.propertyLoader} color={theme.COLORS.DARK_GRAY} />
               ) : (
-                <Text style={styles.propertyValue}>
+                <Text
+                  style={[
+                    isScribe &&
+                    points.hasOwnProperty(selectedUserEmail) &&
+                    points[selectedUserEmail].DIV >= pointsRequired.DIV
+                      ? styles.pointsSatisfied
+                      : isScribe && styles.pointsNotSatisfied,
+                    styles.propertyValue
+                  ]}
+                >
                   {points.hasOwnProperty(selectedUserEmail) ? points[selectedUserEmail].DIV : '0'}
                 </Text>
               )}
@@ -430,6 +494,12 @@ const styles = StyleSheet.create({
     marginTop: 4,
     fontFamily: 'OpenSans',
     fontSize: 15
+  },
+  pointsSatisfied: {
+    color: '#008000'
+  },
+  pointsNotSatisfied: {
+    color: '#ff0000'
   },
   propertyLoader: {
     alignSelf: 'flex-start'
