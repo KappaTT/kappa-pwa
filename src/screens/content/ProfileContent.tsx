@@ -147,10 +147,6 @@ const ProfileContent: React.FC<{
           <Text style={styles.propertyValue}>{points.RUSH}</Text>
         </View>
         <View style={styles.splitPropertySixths}>
-          <Text style={styles.propertyHeader}>Kappa Chat</Text>
-          <Text style={styles.propertyValue}>{points.CHAT}</Text>
-        </View>
-        <View style={styles.splitPropertySixths}>
           <Text style={styles.propertyHeader}>Diversity</Text>
           <Text style={styles.propertyValue}>{points.DIV}</Text>
         </View>
@@ -220,7 +216,7 @@ const ProfileContent: React.FC<{
           <Text style={styles.pointsText}>Points</Text>
           <Block>
             <Block style={styles.splitPropertyRow}>
-              <Block style={styles.splitPropertySevenths}>
+              <Block style={styles.splitPropertySixths}>
                 <Text style={styles.propertyHeader}>Prof</Text>
                 {isGettingPoints ? (
                   <ActivityIndicator style={styles.propertyLoader} color={theme.COLORS.DARK_GRAY} />
@@ -237,7 +233,7 @@ const ProfileContent: React.FC<{
                   </Text>
                 )}
               </Block>
-              <Block style={styles.splitPropertySevenths}>
+              <Block style={styles.splitPropertySixths}>
                 <Text style={styles.propertyHeader}>Phil</Text>
                 {isGettingPoints ? (
                   <ActivityIndicator style={styles.propertyLoader} color={theme.COLORS.DARK_GRAY} />
@@ -254,7 +250,7 @@ const ProfileContent: React.FC<{
                   </Text>
                 )}
               </Block>
-              <Block style={styles.splitPropertySevenths}>
+              <Block style={styles.splitPropertySixths}>
                 <Text style={styles.propertyHeader}>Bro</Text>
                 {isGettingPoints ? (
                   <ActivityIndicator style={styles.propertyLoader} color={theme.COLORS.DARK_GRAY} />
@@ -271,7 +267,7 @@ const ProfileContent: React.FC<{
                   </Text>
                 )}
               </Block>
-              <Block style={styles.splitPropertySevenths}>
+              <Block style={styles.splitPropertySixths}>
                 <Text style={styles.propertyHeader}>Rush</Text>
                 {isGettingPoints ? (
                   <ActivityIndicator style={styles.propertyLoader} color={theme.COLORS.DARK_GRAY} />
@@ -288,24 +284,7 @@ const ProfileContent: React.FC<{
                   </Text>
                 )}
               </Block>
-              <Block style={styles.splitPropertySevenths}>
-                <Text style={styles.propertyHeader}>Kappa Chat</Text>
-                {isGettingPoints ? (
-                  <ActivityIndicator style={styles.propertyLoader} color={theme.COLORS.DARK_GRAY} />
-                ) : (
-                  <Text
-                    style={[
-                      styles.propertyValue,
-                      points.hasOwnProperty(user.email) && points[user.email].CHAT >= pointsRequired.CHAT
-                        ? styles.pointsSatisfied
-                        : styles.pointsNotSatisfied
-                    ]}
-                  >
-                    {points.hasOwnProperty(user.email) ? points[user.email].CHAT : '0'}
-                  </Text>
-                )}
-              </Block>
-              <Block style={styles.splitPropertySevenths}>
+              <Block style={styles.splitPropertySixths}>
                 <Text style={styles.propertyHeader}>Diversity</Text>
                 {isGettingPoints ? (
                   <ActivityIndicator style={styles.propertyLoader} color={theme.COLORS.DARK_GRAY} />
@@ -322,7 +301,7 @@ const ProfileContent: React.FC<{
                   </Text>
                 )}
               </Block>
-              <Block style={styles.splitPropertySevenths}>
+              <Block style={styles.splitPropertySixths}>
                 <Text style={styles.propertyHeader}>Any</Text>
                 {isGettingPoints ? (
                   <ActivityIndicator style={styles.propertyLoader} color={theme.COLORS.DARK_GRAY} />

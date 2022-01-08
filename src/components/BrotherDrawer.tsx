@@ -152,7 +152,7 @@ const BrotherDrawer: React.FC = () => {
       <Block style={styles.adminContainer}>
         <Block>
           <Block style={styles.splitPropertyRow}>
-            <Block style={styles.splitPropertySevenths}>
+            <Block style={styles.splitPropertySixths}>
               <Text style={styles.propertyHeader}>Prof</Text>
               {isGettingPoints ? (
                 <ActivityIndicator style={styles.propertyLoader} color={theme.COLORS.DARK_GRAY} />
@@ -171,7 +171,7 @@ const BrotherDrawer: React.FC = () => {
                 </Text>
               )}
             </Block>
-            <Block style={styles.splitPropertySevenths}>
+            <Block style={styles.splitPropertySixths}>
               <Text style={styles.propertyHeader}>Phil</Text>
               {isGettingPoints ? (
                 <ActivityIndicator style={styles.propertyLoader} color={theme.COLORS.DARK_GRAY} />
@@ -190,7 +190,7 @@ const BrotherDrawer: React.FC = () => {
                 </Text>
               )}
             </Block>
-            <Block style={styles.splitPropertySevenths}>
+            <Block style={styles.splitPropertySixths}>
               <Text style={styles.propertyHeader}>Bro</Text>
               {isGettingPoints ? (
                 <ActivityIndicator style={styles.propertyLoader} color={theme.COLORS.DARK_GRAY} />
@@ -209,7 +209,7 @@ const BrotherDrawer: React.FC = () => {
                 </Text>
               )}
             </Block>
-            <Block style={styles.splitPropertySevenths}>
+            <Block style={styles.splitPropertySixths}>
               <Text style={styles.propertyHeader}>Rush</Text>
               {isGettingPoints ? (
                 <ActivityIndicator style={styles.propertyLoader} color={theme.COLORS.DARK_GRAY} />
@@ -228,26 +228,7 @@ const BrotherDrawer: React.FC = () => {
                 </Text>
               )}
             </Block>
-            <Block style={styles.splitPropertySevenths}>
-              <Text style={styles.propertyHeader}>Kappa Chat</Text>
-              {isGettingPoints ? (
-                <ActivityIndicator style={styles.propertyLoader} color={theme.COLORS.DARK_GRAY} />
-              ) : (
-                <Text
-                  style={[
-                    isScribe &&
-                    points.hasOwnProperty(selectedUserEmail) &&
-                    points[selectedUserEmail].CHAT >= pointsRequired.CHAT
-                      ? styles.pointsSatisfied
-                      : isScribe && styles.pointsNotSatisfied,
-                    styles.propertyValue
-                  ]}
-                >
-                  {points.hasOwnProperty(selectedUserEmail) ? points[selectedUserEmail].CHAT : '0'}
-                </Text>
-              )}
-            </Block>
-            <Block style={styles.splitPropertySevenths}>
+            <Block style={styles.splitPropertySixths}>
               <Text style={styles.propertyHeader}>Diversity</Text>
               {isGettingPoints ? (
                 <ActivityIndicator style={styles.propertyLoader} color={theme.COLORS.DARK_GRAY} />
@@ -266,7 +247,7 @@ const BrotherDrawer: React.FC = () => {
                 </Text>
               )}
             </Block>
-            <Block style={styles.splitPropertySevenths}>
+            <Block style={styles.splitPropertySixths}>
               <Text style={styles.propertyHeader}>Any</Text>
               {isGettingPoints ? (
                 <ActivityIndicator style={styles.propertyLoader} color={theme.COLORS.DARK_GRAY} />
