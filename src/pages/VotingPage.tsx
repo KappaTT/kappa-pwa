@@ -20,16 +20,23 @@ import { getVotes, getVotesBySession } from '@services/votingService';
 import { theme } from '@constants';
 import { Header, EndCapButton, Icon, FormattedInput, SmallRoundButton } from '@components';
 import { HeaderHeight, HORIZONTAL_PADDING } from '@services/utils';
+import { getAttendance } from '@services/kappaService';
 
 const VotingPage: React.FC<{
   onRequestClose(): void;
 }> = ({ onRequestClose }) => {
   const user = useSelector((state: TRedux) => state.auth.user);
+  const records = useSelector((state: TRedux) => state.kappa.records);
   const eventArray = useSelector((state: TRedux) => state.kappa.eventArray);
   const activeSession = useSelector((state: TRedux) => state.voting.activeSession);
   const candidateArray = useSelector((state: TRedux) => state.voting.candidateArray);
   const sessionToCandidateToVotes = useSelector((state: TRedux) => state.voting.sessionToCandidateToVotes);
   const isSubmittingVote = useSelector((state: TRedux) => state.voting.isSubmittingVote);
+
+  const userAttended = React.useMemo(
+    () => (getAttendance(records, user.email, activeSession?.gmId) !== undefined ? true : false),
+    [activeSession]
+  );
 
   const maxVotes = React.useMemo(() => (activeSession?.maxVotes !== undefined ? activeSession.maxVotes : 0), [
     activeSession
@@ -103,10 +110,10 @@ const VotingPage: React.FC<{
   const [reason, setReason] = React.useState<string>('');
   const [selectedCandidates, setSelectedCandidates] = React.useState<string[]>([]);
 
-  const readyToSubmit = React.useMemo(() => selectedCandidates.length > 0 && selectedCandidates.length <= maxVotes, [
-    maxVotes,
-    selectedCandidates.length
-  ]);
+  const readyToSubmit = React.useMemo(
+    () => userAttended === true && selectedCandidates.length > 0 && selectedCandidates.length <= maxVotes,
+    [maxVotes, selectedCandidates.length, userAttended]
+  );
 
   const dispatch = useDispatch();
   const dispatchSubmitVote = React.useCallback(
@@ -140,8 +147,9 @@ const VotingPage: React.FC<{
   );
 
   const submitDisabled = React.useMemo(
-    () => currentCandidate === null || verdict === null || (verdict === false && reason === ''),
-    [currentCandidate, reason, verdict]
+    () =>
+      currentCandidate === null || verdict === null || (verdict === false && reason === '') || userAttended === false,
+    [currentCandidate, reason, verdict, userAttended]
   );
 
   React.useEffect(() => {
