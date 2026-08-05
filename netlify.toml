@@ -1,8 +1,11 @@
 [build]
-    command = "npx --yes expo-cli export:web"
-    publish = "web-build/"
+  command = "yarn install --ignore-engines && npx --yes expo-cli export:web"
+  publish = "web-build/"
+
+[build.environment]
+  NODE_OPTIONS = "--openssl-legacy-provider"
 
 [[redirects]]
-    from = "/*"
-    to = "/index.html"
-    status = 200
+  from = "/*"
+  to = "/index.html"
+  status = 200
