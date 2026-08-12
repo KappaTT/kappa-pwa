@@ -94,7 +94,11 @@ const OnboardingPage: React.FC = () => {
         <ListButton keyText="Phone" valueText={prettyPhoneValue} onPress={() => setEditing('Phone')} />
 
         <Text style={styles.heading}>PROFILE</Text>
-        <ListButton keyText="Member Status" valueText={user.type === 'B' ? 'Brother' : 'Unknown'} disabled={true} />
+        <ListButton
+          keyText="Member Status"
+          valueText={user.type === 'B' ? 'Brother' : user.type === 'PNM' ? 'PNM' : 'Unknown'}
+          disabled={true}
+        />
         {user.role !== '' && <ListButton keyText="Position" valueText={user.role} disabled={true} />}
         <ListButton keyText="Pledge Class" valueText={user.semester} disabled={true} />
         <ListButton keyText="Freshman Year" valueText={user.firstYear} disabled={true} />

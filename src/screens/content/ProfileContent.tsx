@@ -10,11 +10,21 @@ import { TRedux } from '@reducers';
 import { _auth, _kappa } from '@reducers/actions';
 import { theme } from '@constants';
 import { LINK_LINKTREE } from '@constants/Links';
-import { prettyPhone, shouldLoad, sortEventsByDateReverse } from '@services/kappaService';
+import { isPNM, prettyPhone, shouldLoad, sortEventsByDateReverse } from '@services/kappaService';
 import { isEmpty, HORIZONTAL_PADDING } from '@services/utils';
 import useWindowSize from '@services/useWindowSize';
 import { TEvent } from '@backend/kappa';
-import { TPoints, POINTS_SO, GM_SO, POINTS_JR, GM_JR, POINTS_SR, GM_SR, getClassYear } from '@constants/Points';
+import {
+  TPoints,
+  POINTS_SO,
+  GM_SO,
+  POINTS_JR,
+  GM_JR,
+  POINTS_SR,
+  GM_SR,
+  POINTS_PNM,
+  getClassYear
+} from '@constants/Points';
 import { Block, Text, Icon, GeneralMeetingChart, LinkContainer } from '@components';
 
 const ProfileContent: React.FC<{
@@ -109,7 +119,9 @@ const ProfileContent: React.FC<{
 
   const classYear = React.useMemo(() => getClassYear(user.firstYear), [user.firstYear]);
   let pointsRequired = POINTS_SO;
-  if (classYear == 'JR') {
+  if (isPNM(user)) {
+    pointsRequired = POINTS_PNM;
+  } else if (classYear == 'JR') {
     pointsRequired = POINTS_JR;
   } else if (classYear == 'SR') {
     pointsRequired = POINTS_SR;
@@ -127,7 +139,7 @@ const ProfileContent: React.FC<{
     }
   }, [isFocused, loadData, user.sessionToken]);
 
-  const renderRequirements = (points: TPoints, gm: number) => {
+  const renderRequirements = (points: TPoints, gm: number | null) => {
     return (
       <View style={styles.splitPropertyRow}>
         <View style={styles.splitPropertySixths}>
@@ -142,19 +154,23 @@ const ProfileContent: React.FC<{
           <Text style={styles.propertyHeader}>Bro</Text>
           <Text style={styles.propertyValue}>{points.BRO}</Text>
         </View>
-        <View style={styles.splitPropertySixths}>
-          <Text style={styles.propertyHeader}>Rush</Text>
-          <Text style={styles.propertyValue}>{points.RUSH}</Text>
-        </View>
+        {points.RUSH > 0 && (
+          <View style={styles.splitPropertySixths}>
+            <Text style={styles.propertyHeader}>Rush</Text>
+            <Text style={styles.propertyValue}>{points.RUSH}</Text>
+          </View>
+        )}
         <View style={styles.splitPropertySixths}>
           <Text style={styles.propertyHeader}>Diversity</Text>
           <Text style={styles.propertyValue}>{points.DIV}</Text>
         </View>
 
-        <View style={styles.splitPropertySixths}>
-          <Text style={styles.propertyHeader}>GM</Text>
-          <Text style={styles.propertyValue}>{gm}%</Text>
-        </View>
+        {gm !== null && (
+          <View style={styles.splitPropertySixths}>
+            <Text style={styles.propertyHeader}>GM</Text>
+            <Text style={styles.propertyValue}>{gm}%</Text>
+          </View>
+        )}
       </View>
     );
   };
@@ -267,23 +283,25 @@ const ProfileContent: React.FC<{
                   </Text>
                 )}
               </Block>
-              <Block style={styles.splitPropertySixths}>
-                <Text style={styles.propertyHeader}>Rush</Text>
-                {isGettingPoints ? (
-                  <ActivityIndicator style={styles.propertyLoader} color={theme.COLORS.DARK_GRAY} />
-                ) : (
-                  <Text
-                    style={[
-                      styles.propertyValue,
-                      points.hasOwnProperty(user.email) && points[user.email].RUSH >= pointsRequired.RUSH
-                        ? styles.pointsSatisfied
-                        : styles.pointsNotSatisfied
-                    ]}
-                  >
-                    {points.hasOwnProperty(user.email) ? points[user.email].RUSH : '0'}
-                  </Text>
-                )}
-              </Block>
+              {!isPNM(user) && (
+                <Block style={styles.splitPropertySixths}>
+                  <Text style={styles.propertyHeader}>Rush</Text>
+                  {isGettingPoints ? (
+                    <ActivityIndicator style={styles.propertyLoader} color={theme.COLORS.DARK_GRAY} />
+                  ) : (
+                    <Text
+                      style={[
+                        styles.propertyValue,
+                        points.hasOwnProperty(user.email) && points[user.email].RUSH >= pointsRequired.RUSH
+                          ? styles.pointsSatisfied
+                          : styles.pointsNotSatisfied
+                      ]}
+                    >
+                      {points.hasOwnProperty(user.email) ? points[user.email].RUSH : '0'}
+                    </Text>
+                  )}
+                </Block>
+              )}
               <Block style={styles.splitPropertySixths}>
                 <Text style={styles.propertyHeader}>Diversity</Text>
                 {isGettingPoints ? (
@@ -314,49 +332,61 @@ const ProfileContent: React.FC<{
             </Block>
           </Block>
 
-          <Block style={styles.adminContainer}>
-            <GeneralMeetingChart
-              isGettingAttendance={isGettingAttendance}
-              email={user.email}
-              records={records}
-              events={events}
-              gmCount={gmCount}
-            />
+          {!isPNM(user) && (
+            <Block style={styles.adminContainer}>
+              <GeneralMeetingChart
+                isGettingAttendance={isGettingAttendance}
+                email={user.email}
+                records={records}
+                events={events}
+                gmCount={gmCount}
+              />
 
-            <Block style={styles.eventList}>
-              {mandatory.length > 0 && (
-                <React.Fragment>
-                  <Text style={styles.mandatoryLabel}>Missed Mandatory</Text>
-                  {mandatory.map((event: TEvent) => (
-                    <Block key={event._id} style={styles.eventContainer}>
-                      <Text style={styles.eventTitle}>{event.title}</Text>
-                      <Text style={styles.eventDate}>{moment(event.start).format('M/D/Y')}</Text>
-                    </Block>
-                  ))}
-                </React.Fragment>
-              )}
+              <Block style={styles.eventList}>
+                {mandatory.length > 0 && (
+                  <React.Fragment>
+                    <Text style={styles.mandatoryLabel}>Missed Mandatory</Text>
+                    {mandatory.map((event: TEvent) => (
+                      <Block key={event._id} style={styles.eventContainer}>
+                        <Text style={styles.eventTitle}>{event.title}</Text>
+                        <Text style={styles.eventDate}>{moment(event.start).format('M/D/Y')}</Text>
+                      </Block>
+                    ))}
+                  </React.Fragment>
+                )}
+              </Block>
             </Block>
-          </Block>
+          )}
 
           <Text style={[styles.pointsText, { marginTop: 0 }]}>Requirements</Text>
 
-          <View style={{ opacity: classYear === 'FR' || classYear === 'SO' ? 1 : 0.4 }}>
-            <Text style={styles.subHeadingText}>Freshman and Sophomore</Text>
+          {isPNM(user) ? (
+            <View>
+              <Text style={styles.subHeadingText}>Potential New Member</Text>
 
-            {renderRequirements(POINTS_SO, GM_SO)}
-          </View>
+              {renderRequirements(POINTS_PNM, null)}
+            </View>
+          ) : (
+            <React.Fragment>
+              <View style={{ opacity: classYear === 'FR' || classYear === 'SO' ? 1 : 0.4 }}>
+                <Text style={styles.subHeadingText}>Freshman and Sophomore</Text>
 
-          <View style={{ opacity: classYear === 'JR' ? 1 : 0.4 }}>
-            <Text style={styles.subHeadingText}>Junior</Text>
+                {renderRequirements(POINTS_SO, GM_SO)}
+              </View>
 
-            {renderRequirements(POINTS_JR, GM_JR)}
-          </View>
+              <View style={{ opacity: classYear === 'JR' ? 1 : 0.4 }}>
+                <Text style={styles.subHeadingText}>Junior</Text>
 
-          <View style={{ opacity: classYear === 'SR' ? 1 : 0.4 }}>
-            <Text style={styles.subHeadingText}>Senior</Text>
+                {renderRequirements(POINTS_JR, GM_JR)}
+              </View>
 
-            {renderRequirements(POINTS_SR, GM_SR)}
-          </View>
+              <View style={{ opacity: classYear === 'SR' ? 1 : 0.4 }}>
+                <Text style={styles.subHeadingText}>Senior</Text>
+
+                {renderRequirements(POINTS_SR, GM_SR)}
+              </View>
+            </React.Fragment>
+          )}
 
           <Text style={styles.pointsText}>Links</Text>
           <View style={styles.splitPropertyRow}>

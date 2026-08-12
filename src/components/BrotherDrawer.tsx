@@ -7,9 +7,9 @@ import moment from 'moment';
 import { TRedux } from '@reducers';
 import { TToast } from '@reducers/ui';
 import { _kappa, _ui } from '@reducers/actions';
-import { prettyPhone, shouldLoad, sortEventsByDateReverse } from '@services/kappaService';
+import { isPNM, prettyPhone, shouldLoad, sortEventsByDateReverse } from '@services/kappaService';
 import { theme } from '@constants';
-import { POINTS_SO, POINTS_JR, POINTS_SR, getClassYear } from '@constants/Points';
+import { POINTS_SO, POINTS_JR, POINTS_SR, POINTS_PNM, getClassYear } from '@constants/Points';
 import { isEmpty, HORIZONTAL_PADDING, HeaderHeight } from '@services/utils';
 import { TEvent } from '@backend/kappa';
 import PartialPageModal from '@components/PartialPageModal';
@@ -37,9 +37,12 @@ const BrotherDrawer: React.FC = () => {
   const [refreshing, setRefreshing] = React.useState<boolean>(isGettingAttendance);
 
   const isScribe = React.useMemo(() => user.role?.toLowerCase() === 'scribe', [user.role]);
+  const selectedUserIsPNM = React.useMemo(() => isPNM(selectedUser), [selectedUser]);
   const classYear = React.useMemo(() => getClassYear(user.firstYear), [user.firstYear]);
   let pointsRequired = POINTS_SO;
-  if (classYear == 'JR') {
+  if (selectedUserIsPNM) {
+    pointsRequired = POINTS_PNM;
+  } else if (classYear == 'JR') {
     pointsRequired = POINTS_JR;
   } else if (classYear == 'SR') {
     pointsRequired = POINTS_SR;
@@ -209,25 +212,27 @@ const BrotherDrawer: React.FC = () => {
                 </Text>
               )}
             </Block>
-            <Block style={styles.splitPropertySixths}>
-              <Text style={styles.propertyHeader}>Rush</Text>
-              {isGettingPoints ? (
-                <ActivityIndicator style={styles.propertyLoader} color={theme.COLORS.DARK_GRAY} />
-              ) : (
-                <Text
-                  style={[
-                    isScribe &&
-                    points.hasOwnProperty(selectedUserEmail) &&
-                    points[selectedUserEmail].RUSH >= pointsRequired.RUSH
-                      ? styles.pointsSatisfied
-                      : isScribe && styles.pointsNotSatisfied,
-                    styles.propertyValue
-                  ]}
-                >
-                  {points.hasOwnProperty(selectedUserEmail) ? points[selectedUserEmail].RUSH : '0'}
-                </Text>
-              )}
-            </Block>
+            {!selectedUserIsPNM && (
+              <Block style={styles.splitPropertySixths}>
+                <Text style={styles.propertyHeader}>Rush</Text>
+                {isGettingPoints ? (
+                  <ActivityIndicator style={styles.propertyLoader} color={theme.COLORS.DARK_GRAY} />
+                ) : (
+                  <Text
+                    style={[
+                      isScribe &&
+                      points.hasOwnProperty(selectedUserEmail) &&
+                      points[selectedUserEmail].RUSH >= pointsRequired.RUSH
+                        ? styles.pointsSatisfied
+                        : isScribe && styles.pointsNotSatisfied,
+                      styles.propertyValue
+                    ]}
+                  >
+                    {points.hasOwnProperty(selectedUserEmail) ? points[selectedUserEmail].RUSH : '0'}
+                  </Text>
+                )}
+              </Block>
+            )}
             <Block style={styles.splitPropertySixths}>
               <Text style={styles.propertyHeader}>Diversity</Text>
               {isGettingPoints ? (
@@ -260,16 +265,18 @@ const BrotherDrawer: React.FC = () => {
           </Block>
         </Block>
 
-        <GeneralMeetingChart
-          isGettingAttendance={isGettingAttendance}
-          email={selectedUserEmail}
-          records={records}
-          events={events}
-          gmCount={gmCount}
-        />
+        {!selectedUserIsPNM && (
+          <GeneralMeetingChart
+            isGettingAttendance={isGettingAttendance}
+            email={selectedUserEmail}
+            records={records}
+            events={events}
+            gmCount={gmCount}
+          />
+        )}
 
         <Block style={styles.eventList}>
-          {!isGettingAttendance && mandatory.length > 0 && (
+          {!selectedUserIsPNM && !isGettingAttendance && mandatory.length > 0 && (
             <React.Fragment>
               <Text style={styles.mandatoryLabel}>Missed Mandatory</Text>
               {mandatory.map((event: TEvent) => (

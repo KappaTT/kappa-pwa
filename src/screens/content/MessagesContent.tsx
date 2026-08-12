@@ -7,7 +7,7 @@ import { useIsFocused, NavigationProp } from '@react-navigation/native';
 
 import { TRedux } from '@reducers';
 import { _kappa, _voting } from '@reducers/actions';
-import { shouldLoad, sortEventsByDateReverse, getExcusedEvents, getEventById } from '@services/kappaService';
+import { isPNM, shouldLoad, sortEventsByDateReverse, getExcusedEvents, getEventById } from '@services/kappaService';
 import { HeaderHeight, HORIZONTAL_PADDING, isEmpty } from '@services/utils';
 import { TPendingExcuse, TExcuse } from '@backend/kappa';
 import { ExcusePage, LateExcusePage } from '@pages';
@@ -160,7 +160,7 @@ const MessagesContent: React.FC<{
       >
         <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
           <Block style={styles.content}>
-            {activeSession !== null && (
+            {activeSession !== null && !isPNM(user) && (
               <Block style={styles.votingContainer}>
                 <Block style={styles.votingDetails}>
                   <Text style={styles.votingName}>{activeSession.name}</Text>

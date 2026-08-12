@@ -12,7 +12,7 @@ import { _kappa } from '@reducers/actions';
 import { Block, Header, Text, Icon, EndCapButton } from '@components';
 import { HeaderHeight, HORIZONTAL_PADDING } from '@services/utils';
 import { TUser } from '@backend/auth';
-import { shouldLoad } from '@services/kappaService';
+import { isPNM, shouldLoad } from '@services/kappaService';
 
 const UserSkeleton: React.FC = () => {
   return (
@@ -160,6 +160,14 @@ const DirectoryContent: React.FC<{
     setSearchState({ searchText: searchText, filteredData: filteredData });
   };
 
+  const visibleUsers = React.useMemo(
+    () => (searchState.filteredData && searchState.filteredData.length > 0 ? searchState.filteredData : directoryArray),
+    [searchState.filteredData, directoryArray]
+  );
+
+  const brothers = React.useMemo(() => visibleUsers.filter((item: TUser) => !isPNM(item)), [visibleUsers]);
+  const pnms = React.useMemo(() => visibleUsers.filter((item: TUser) => isPNM(item)), [visibleUsers]);
+
   return (
     <Block flex>
       <Header
@@ -231,20 +239,28 @@ const DirectoryContent: React.FC<{
         ) : (
           <FlatList
             ref={(ref) => (scrollRef.current = ref)}
-            data={
-              searchState.filteredData && searchState.filteredData.length > 0
-                ? searchState.filteredData
-                : directoryArray
-            }
+            data={brothers}
             keyExtractor={keyExtractor}
             renderItem={renderItem}
+            ListFooterComponent={
+              pnms.length > 0 ? (
+                <React.Fragment>
+                  <Text style={styles.pnmsLabel}>PNMs</Text>
+                  {pnms.map((item: TUser) => (
+                    <React.Fragment key={item._id}>{renderItem({ item })}</React.Fragment>
+                  ))}
+                </React.Fragment>
+              ) : null
+            }
             ListEmptyComponent={
-              <React.Fragment>
-                <Text style={styles.pullToRefresh} onPress={onRefresh}>
-                  Click to Refresh
-                </Text>
-                <Text style={styles.errorMessage}>{getDirectoryErrorMessage || 'No users'}</Text>
-              </React.Fragment>
+              pnms.length > 0 ? null : (
+                <React.Fragment>
+                  <Text style={styles.pullToRefresh} onPress={onRefresh}>
+                    Click to Refresh
+                  </Text>
+                  <Text style={styles.errorMessage}>{getDirectoryErrorMessage || 'No users'}</Text>
+                </React.Fragment>
+              )
             }
           />
         )}
@@ -320,6 +336,14 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center'
+  },
+  pnmsLabel: {
+    marginTop: 24,
+    marginHorizontal: HORIZONTAL_PADDING,
+    fontFamily: 'OpenSans-SemiBold',
+    fontSize: 13,
+    textTransform: 'uppercase',
+    color: theme.COLORS.GRAY
   },
   pullToRefresh: {
     marginTop: '50%',

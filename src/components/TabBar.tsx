@@ -5,6 +5,7 @@ import { useSafeArea } from 'react-native-safe-area-context';
 
 import { theme } from '@constants';
 import TabBarButton from '@components/TabBarButton';
+import { isPNM } from '@services/kappaService';
 import { TRedux } from '@reducers';
 import { TabBarHeight } from '@services/utils';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
@@ -79,8 +80,8 @@ const TabBar: React.FC<BottomTabBarProps> = ({
               onTabPress={onPress}
               onTabLongPress={onLongPress}
               user={user}
-              badge={isMessages && (unreadMessages || activeSession !== null)}
-              badgeText={isMessages && activeSession !== null ? 'VOTE' : ''}
+              badge={isMessages && (unreadMessages || (!isPNM(user) && activeSession !== null))}
+              badgeText={isMessages && !isPNM(user) && activeSession !== null ? 'VOTE' : ''}
             />
           );
         })}

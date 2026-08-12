@@ -4,6 +4,7 @@ import moment from 'moment';
 
 import { TRedux } from '@reducers';
 import { _voting } from '@reducers/actions';
+import { isPNM } from '@services/kappaService';
 
 const VotingController: React.FC = () => {
   const authorized = useSelector((state: TRedux) => state.auth.authorized);
@@ -36,11 +37,16 @@ const VotingController: React.FC = () => {
 
   React.useEffect(() => {
     // Trigger a refresh loop based on the priority of the information (if there is an active session already discovered)
-    if (authorized && !isGettingActiveVotes && (votingRefreshDate === null || votingRefreshDate.isBefore(moment()))) {
+    if (
+      authorized &&
+      !isPNM(user) &&
+      !isGettingActiveVotes &&
+      (votingRefreshDate === null || votingRefreshDate.isBefore(moment()))
+    ) {
       const t = setTimeout(refreshVotes, votingRefreshDate === null ? 0 : isShowingVoting ? 5000 : 10000);
       return () => clearTimeout(t);
     }
-  }, [authorized, isGettingActiveVotes, isShowingVoting, refreshVotes, votingRefreshDate]);
+  }, [authorized, user, isGettingActiveVotes, isShowingVoting, refreshVotes, votingRefreshDate]);
 
   return <React.Fragment />;
 };
