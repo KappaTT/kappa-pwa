@@ -40,7 +40,18 @@ export const ENDPOINTS: {
   GET_EVENT_SEARCH_RESULTS: () => 'search/events',
   GET_ACTIVE_VOTES: () => 'active-candidate/votes',
   SUBMIT_VOTE: () => 'vote',
-  SUBMIT_MULTI_VOTE: () => 'multi-vote'
+  SUBMIT_MULTI_VOTE: () => 'multi-vote',
+  GET_COURSES: () => 'courses',
+  SEARCH_OFFICIAL_COURSES: () => 'courses/search',
+  ENROLL_COURSE: () => 'courses/enroll',
+  APPROVE_COURSE: (config: { _id: string }) => `courses/${encodeURIComponent(config._id)}/approve`,
+  REJECT_COURSE: (config: { _id: string }) => `courses/${encodeURIComponent(config._id)}/reject`,
+  DELETE_COURSE: (config: { _id: string }) => `courses/${encodeURIComponent(config._id)}`,
+  DELETE_ENROLLMENT: (config: { _id: string }) => `enrollments/${encodeURIComponent(config._id)}`,
+  GET_COURSE_ADVICE: (config: { courseId: string }) => `advice/course/${encodeURIComponent(config.courseId)}`,
+  CREATE_ADVICE: () => 'advice',
+  UPDATE_ADVICE: (config: { _id: string }) => `advice/${encodeURIComponent(config._id)}`,
+  DELETE_ADVICE: (config: { _id: string }) => `advice/${encodeURIComponent(config._id)}`
 };
 
 /**
@@ -68,7 +79,18 @@ export const METHODS: {
   GET_EVENT_SEARCH_RESULTS: M_POST,
   GET_ACTIVE_VOTES: M_GET,
   SUBMIT_VOTE: M_POST,
-  SUBMIT_MULTI_VOTE: M_POST
+  SUBMIT_MULTI_VOTE: M_POST,
+  GET_COURSES: M_GET,
+  SEARCH_OFFICIAL_COURSES: M_GET,
+  ENROLL_COURSE: M_POST,
+  APPROVE_COURSE: M_PATCH,
+  REJECT_COURSE: M_DELETE,
+  DELETE_COURSE: M_DELETE,
+  DELETE_ENROLLMENT: M_DELETE,
+  GET_COURSE_ADVICE: M_GET,
+  CREATE_ADVICE: M_POST,
+  UPDATE_ADVICE: M_PATCH,
+  DELETE_ADVICE: M_DELETE
 };
 
 export interface TResponse {
