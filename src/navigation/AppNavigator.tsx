@@ -4,13 +4,14 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import { theme } from '@constants';
-import { MessagesScreen, CheckInScreen, DirectoryScreen, EventsScreen, ProfileScreen } from '@screens';
+import { MessagesScreen, CheckInScreen, CoursesScreen, DirectoryScreen, EventsScreen, ProfileScreen } from '@screens';
 import { navigationRef } from '@navigation/NavigationService';
 import { TabBar, Icon } from '@components';
 
 // Create stacks
 const EventsStack = createStackNavigator();
 const DirectoryStack = createStackNavigator();
+const CoursesStack = createStackNavigator();
 const CheckInStack = createStackNavigator();
 const MessagesStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
@@ -28,6 +29,14 @@ const DirectoryStackNavigator = () => {
     <DirectoryStack.Navigator screenOptions={{ headerShown: false }}>
       <DirectoryStack.Screen name="Directory" component={DirectoryScreen} />
     </DirectoryStack.Navigator>
+  );
+};
+
+const CoursesStackNavigator = () => {
+  return (
+    <CoursesStack.Navigator screenOptions={{ headerShown: false }}>
+      <CoursesStack.Screen name="Courses" component={CoursesScreen} />
+    </CoursesStack.Navigator>
   );
 };
 
@@ -78,6 +87,8 @@ const AppNavigator = () => {
                 return <Icon name="calendar" family="Feather" color={color} size={size} />;
               case 'Directory':
                 return <Icon name="contacts" family="AntDesign" color={color} size={size} />;
+              case 'Courses':
+                return <Icon name="book-open" family="Feather" color={color} size={size} />;
               case 'Check In':
                 return <Icon name="check-square" family="Feather" color={color} size={size} />;
               case 'Messages':
@@ -94,6 +105,7 @@ const AppNavigator = () => {
       >
         <Tab.Screen name="Events" component={EventsStackNavigator} />
         <Tab.Screen name="Directory" component={DirectoryStackNavigator} />
+        <Tab.Screen name="Courses" component={CoursesStackNavigator} />
         <Tab.Screen name="Check In" component={CheckInStackNavigator} />
         <Tab.Screen name="Messages" component={MessagesStackNavigator} />
         <Tab.Screen name="Profile" component={ProfileStackNavigator} />

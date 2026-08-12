@@ -3,9 +3,9 @@ import { StyleSheet } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { TRedux } from '@reducers';
-import { _kappa, _voting } from '@reducers/actions';
+import { _courses, _kappa, _voting } from '@reducers/actions';
 import { incompleteUser } from '@backend/auth';
-import { LoginPage, OnboardingPage, VotingPage } from '@pages';
+import { AddCoursePage, EditAdvicePage, LoginPage, OnboardingPage, VotingPage } from '@pages';
 import Ghost from '@components/Ghost';
 import FullPageModal from '@components/FullPageModal';
 
@@ -16,10 +16,14 @@ const ModalController: React.FC = () => {
   const loginVisible = useSelector((state: TRedux) => state.auth.visible);
   const editingUserEmail = useSelector((state: TRedux) => state.kappa.editingUserEmail);
   const isShowingVoting = useSelector((state: TRedux) => state.voting.isShowingVoting);
+  const isAddingCourse = useSelector((state: TRedux) => state.courses.isAddingCourse);
+  const editingAdviceCourseId = useSelector((state: TRedux) => state.courses.editingAdviceCourseId);
 
   const dispatch = useDispatch();
   const dispatchCancelEditUser = React.useCallback(() => dispatch(_kappa.cancelEditUser()), [dispatch]);
   const dispatchHideVoting = React.useCallback(() => dispatch(_voting.hideVoting()), [dispatch]);
+  const dispatchHideAddCourse = React.useCallback(() => dispatch(_courses.hideAddCourse()), [dispatch]);
+  const dispatchCancelEditAdvice = React.useCallback(() => dispatch(_courses.cancelEditAdvice()), [dispatch]);
 
   const userIsIncomplete = React.useMemo(() => {
     if (!authorized || !user) return false;
@@ -40,6 +44,14 @@ const ModalController: React.FC = () => {
     <Ghost style={styles.container}>
       <FullPageModal visible={isShowingVoting} onDoneClosing={dispatchHideVoting}>
         <VotingPage onRequestClose={dispatchHideVoting} />
+      </FullPageModal>
+
+      <FullPageModal visible={isAddingCourse} onDoneClosing={dispatchHideAddCourse}>
+        <AddCoursePage onRequestClose={dispatchHideAddCourse} />
+      </FullPageModal>
+
+      <FullPageModal visible={editingAdviceCourseId !== ''} onDoneClosing={dispatchCancelEditAdvice}>
+        <EditAdvicePage onRequestClose={dispatchCancelEditAdvice} />
       </FullPageModal>
 
       <FullPageModal

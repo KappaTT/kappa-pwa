@@ -6,8 +6,9 @@ import moment from 'moment';
 
 import { TRedux } from '@reducers';
 import { TToast } from '@reducers/ui';
-import { _kappa, _ui } from '@reducers/actions';
+import { _courses, _kappa, _ui } from '@reducers/actions';
 import { isPNM, prettyPhone, shouldLoad, sortEventsByDateReverse } from '@services/kappaService';
+import { getCurrentTerm, sortCoursesByCode } from '@services/coursesService';
 import { theme } from '@constants';
 import { POINTS_SO, POINTS_JR, POINTS_SR, POINTS_PNM, getClassYear } from '@constants/Points';
 import { isEmpty, HORIZONTAL_PADDING, HeaderHeight } from '@services/utils';
@@ -33,11 +34,29 @@ const BrotherDrawer: React.FC = () => {
   const getAttendanceError = useSelector((state: TRedux) => state.kappa.getAttendanceError);
   const selectedUserEmail = useSelector((state: TRedux) => state.kappa.selectedUserEmail);
   const selectedUser = useSelector((state: TRedux) => state.kappa.selectedUser);
+  const coursesLoadHistory = useSelector((state: TRedux) => state.courses.loadHistory);
+  const courseArray = useSelector((state: TRedux) => state.courses.courseArray);
+  const isGettingCourses = useSelector((state: TRedux) => state.courses.isGettingCourses);
+  const getCoursesError = useSelector((state: TRedux) => state.courses.getCoursesError);
 
   const [refreshing, setRefreshing] = React.useState<boolean>(isGettingAttendance);
 
   const isScribe = React.useMemo(() => user.role?.toLowerCase() === 'scribe', [user.role]);
   const selectedUserIsPNM = React.useMemo(() => isPNM(selectedUser), [selectedUser]);
+
+  const currentTerm = React.useMemo(() => getCurrentTerm(), []);
+
+  const brotherClasses = React.useMemo(
+    () =>
+      courseArray
+        .filter((course) =>
+          (course.enrollments || []).some(
+            (enrollment) => enrollment.email === selectedUserEmail && enrollment.term === currentTerm
+          )
+        )
+        .sort(sortCoursesByCode),
+    [courseArray, currentTerm, selectedUserEmail]
+  );
   const classYear = React.useMemo(() => getClassYear(user.firstYear), [user.firstYear]);
   let pointsRequired = POINTS_SO;
   if (selectedUserIsPNM) {
@@ -49,6 +68,7 @@ const BrotherDrawer: React.FC = () => {
   }
 
   const dispatch = useDispatch();
+  const dispatchGetCourses = React.useCallback(() => dispatch(_courses.getCourses(user)), [dispatch, user]);
   const dispatchGetAttendance = React.useCallback(
     (overwrite: boolean = false) => dispatch(_kappa.getUserAttendance(user, selectedUserEmail, overwrite)),
     [dispatch, user, selectedUserEmail]
@@ -69,6 +89,9 @@ const BrotherDrawer: React.FC = () => {
 
   const loadData = React.useCallback(
     (force: boolean) => {
+      if (!isGettingCourses && (force || (!getCoursesError && shouldLoad(coursesLoadHistory, 'courses'))))
+        dispatchGetCourses();
+
       if (user.privileged) {
         if (
           !isGettingAttendance &&
@@ -81,6 +104,10 @@ const BrotherDrawer: React.FC = () => {
     },
     [
       user.privileged,
+      isGettingCourses,
+      getCoursesError,
+      coursesLoadHistory,
+      dispatchGetCourses,
       isGettingAttendance,
       getAttendanceError,
       loadHistory,
@@ -359,6 +386,21 @@ const BrotherDrawer: React.FC = () => {
                     </Block>
                   </Block>
 
+                  <Block>
+                    <Text style={styles.propertyHeader}>Classes ({currentTerm})</Text>
+                    {isGettingCourses && brotherClasses.length === 0 ? (
+                      <ActivityIndicator style={styles.propertyLoader} color={theme.COLORS.DARK_GRAY} />
+                    ) : (
+                      <Text style={styles.propertyValue}>
+                        {brotherClasses.length > 0
+                          ? brotherClasses.map((course) => course.code).join('  ·  ')
+                          : getCoursesError
+                          ? 'Could not load classes'
+                          : 'None this semester'}
+                      </Text>
+                    )}
+                  </Block>
+
                   {user.privileged === true && renderAdmin()}
                 </Block>
               </Block>
@@ -371,7 +413,7 @@ const BrotherDrawer: React.FC = () => {
 
   return (
     <Ghost style={styles.container}>
-      <PartialPageModal visible={visible} height={user.privileged ? '80%' : 280} onDoneClosing={onCloseEnd}>
+      <PartialPageModal visible={visible} height={user.privileged ? '80%' : 340} onDoneClosing={onCloseEnd}>
         <Header
           title="Brother Details"
           subtitle={selectedUser && `${selectedUser.familyName}, ${selectedUser.givenName}`}

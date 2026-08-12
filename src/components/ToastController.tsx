@@ -18,6 +18,9 @@ const ToastController: React.FC = () => {
   const votingGlobalErrorMessage = useSelector((state: TRedux) => state.voting.globalErrorMessage);
   const votingGlobalErrorCode = useSelector((state: TRedux) => state.voting.globalErrorCode);
   const votingGlobalErrorDate = useSelector((state: TRedux) => state.voting.globalErrorDate);
+  const coursesGlobalErrorMessage = useSelector((state: TRedux) => state.courses.globalErrorMessage);
+  const coursesGlobalErrorCode = useSelector((state: TRedux) => state.courses.globalErrorCode);
+  const coursesGlobalErrorDate = useSelector((state: TRedux) => state.courses.globalErrorDate);
   const isShowingToast = useSelector((state: TRedux) => state.ui.isShowingToast);
   const isHidingToast = useSelector((state: TRedux) => state.ui.isHidingToast);
   const toast = useSelector((state: TRedux) => state.ui.toast);
@@ -78,6 +81,20 @@ const ToastController: React.FC = () => {
     votingGlobalErrorCode,
     votingGlobalErrorDate
   ]);
+
+  React.useEffect(() => {
+    // Detect if a new courses error should be displayed
+    if (coursesGlobalErrorMessage !== '' && coursesGlobalErrorDate !== null) {
+      dispatchShowToast({
+        title: 'Error',
+        message: coursesGlobalErrorMessage,
+        allowClose: coursesGlobalErrorCode !== 401,
+        timer: coursesGlobalErrorCode !== 401 ? 3000 : -1,
+        titleColor: theme.COLORS.PRIMARY,
+        code: coursesGlobalErrorCode
+      });
+    }
+  }, [dispatchShowToast, coursesGlobalErrorMessage, coursesGlobalErrorCode, coursesGlobalErrorDate]);
 
   React.useEffect(() => {
     // Dismiss keyboard if a toast opens

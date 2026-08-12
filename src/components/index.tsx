@@ -1,3 +1,4 @@
+import AdviceItem from './AdviceItem';
 import BackButton from './BackButton';
 import Badge from './Badge';
 import Block from './Block';
@@ -6,6 +7,7 @@ import BrotherDrawer from './BrotherDrawer';
 import Checkbox from './Checkbox';
 import CheckListButton from './CheckListButton';
 import CloseButton from './CloseButton';
+import CourseItem from './CourseItem';
 import EndCapButton from './EndCapButton';
 import EndCapIconButton from './EndCapIconButton';
 import EventDrawer from './EventDrawer';
@@ -46,6 +48,7 @@ import ToastController from './ToastController';
 import VotingController from './VotingController';
 
 export {
+  AdviceItem,
   BackButton,
   Badge,
   Block,
@@ -54,6 +57,7 @@ export {
   Checkbox,
   CheckListButton,
   CloseButton,
+  CourseItem,
   EndCapButton,
   EndCapIconButton,
   EventDrawer,
