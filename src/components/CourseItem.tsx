@@ -107,10 +107,15 @@ const CourseItem: React.FC<{ course: TCourse }> = ({ course }) => {
   );
 
   const onPressExpand = React.useCallback(() => {
+    // a failed advice fetch blocks the cached load path, so expanding again forces a retry
+    if (!expanded && getAdviceError) {
+      loadData(true);
+    }
+
     setExpanded(!expanded);
     setConfirmingDelete(false);
     setConfirmingReject(false);
-  }, [expanded]);
+  }, [expanded, getAdviceError, loadData]);
 
   React.useEffect(() => {
     if (expanded) {
@@ -275,20 +280,22 @@ const CourseItem: React.FC<{ course: TCourse }> = ({ course }) => {
     <View style={styles.container}>
       <TouchableOpacity activeOpacity={0.4} onPress={onPressExpand}>
         <View style={styles.courseContainer}>
-          <View style={styles.courseHeader}>
-            <View style={styles.selectIcon}>
-              {course.approved === false && <Text style={styles.pendingLabel}>Pending approval</Text>}
-              {myEnrollment && <Text style={styles.enrolledLabel}>Enrolled</Text>}
-              <Text style={styles.takingLabel}>
-                {currentTermGroup ? `${currentTermGroup.enrollments.length} taking` : ''}
-              </Text>
-              <Icon family="MaterialIcons" name="keyboard-arrow-right" size={36} color={theme.COLORS.PRIMARY} />
-            </View>
-          </View>
-
           <View style={styles.courseNameContainer}>
             <Text style={styles.courseCode}>{course.code}</Text>
-            {course.title !== '' && <Text style={styles.courseTitle}>{course.title}</Text>}
+            {course.title !== '' && (
+              <Text style={styles.courseTitle} numberOfLines={1}>
+                {course.title}
+              </Text>
+            )}
+          </View>
+
+          <View style={styles.selectIcon}>
+            {course.approved === false && <Text style={styles.pendingLabel}>Pending approval</Text>}
+            {myEnrollment && <Text style={styles.enrolledLabel}>Enrolled</Text>}
+            <Text style={styles.takingLabel}>
+              {currentTermGroup ? `${currentTermGroup.enrollments.length} taking` : ''}
+            </Text>
+            <Icon family="MaterialIcons" name="keyboard-arrow-right" size={36} color={theme.COLORS.PRIMARY} />
           </View>
         </View>
       </TouchableOpacity>
@@ -305,25 +312,18 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1
   },
   courseContainer: {
-    height: 48
-  },
-  courseHeader: {
-    flex: 1,
+    height: 48,
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
     alignItems: 'center'
   },
   courseNameContainer: {
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    left: 0,
+    flex: 1,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    paddingRight: 4,
-    backgroundColor: theme.COLORS.WHITE
+    paddingRight: 4
   },
   courseCode: {
     fontFamily: 'OpenSans-Bold',
@@ -332,6 +332,7 @@ const styles = StyleSheet.create({
   },
   courseTitle: {
     marginLeft: 8,
+    flexShrink: 1,
     fontFamily: 'OpenSans',
     fontSize: 15,
     color: theme.COLORS.DARK_GRAY

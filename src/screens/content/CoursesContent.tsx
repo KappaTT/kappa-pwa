@@ -14,6 +14,9 @@ import { shouldLoad } from '@services/kappaService';
 import { getCurrentTerm, getUserEnrollment, groupCoursesBySubject } from '@services/coursesService';
 import { Block, Header, Text, Icon, EndCapButton, CourseItem } from '@components';
 
+// react-native-elements' SearchBar typings incorrectly require every default-provided prop
+const TypedSearchBar = (SearchBar as unknown) as React.FC<any>;
+
 const CoursesContent: React.FC<{
   navigation: NavigationProp<any, 'Courses'>;
 }> = ({ navigation }) => {
@@ -153,7 +156,7 @@ const CoursesContent: React.FC<{
       <Header
         leftButton={
           <Block style={styles.leftButton}>
-            <SearchBar
+            <TypedSearchBar
               round={true}
               autoCapitalize="none"
               autoCorrect={false}

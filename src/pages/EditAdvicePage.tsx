@@ -107,7 +107,7 @@ const EditAdvicePage: React.FC<{
   return (
     <Block flex>
       <Header
-        title={`${initialAdvice === null ? 'Add' : 'Edit'} Advice`}
+        title={`${!initialAdvice ? 'Add' : 'Edit'} Advice`}
         subtitle={course !== undefined ? course.code : ''}
         showBackButton={true}
         onPressBackButton={onRequestClose}
