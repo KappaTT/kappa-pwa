@@ -11,7 +11,13 @@ import { TCourse } from '@backend/courses';
 import { theme } from '@constants';
 import { HeaderHeight, HORIZONTAL_PADDING } from '@services/utils';
 import { shouldLoad } from '@services/kappaService';
-import { getCurrentTerm, getUserEnrollment, groupCoursesBySubject } from '@services/coursesService';
+import {
+  getCurrentTerm,
+  getUserEnrollment,
+  groupCoursesBySubject,
+  hasPastUserEnrollment,
+  hasUserEnrollment
+} from '@services/coursesService';
 import { Block, Header, Text, Icon, EndCapButton, CourseItem } from '@components';
 
 // react-native-elements' SearchBar typings incorrectly require every default-provided prop
@@ -85,7 +91,7 @@ const CoursesContent: React.FC<{
     let courses = courseArray;
 
     if (showOnlyMine) {
-      courses = courses.filter((course) => getUserEnrollment(course, user.email, currentTerm) !== undefined);
+      courses = courses.filter((course) => hasUserEnrollment(course, user.email));
     }
 
     if (searchText.trim() !== '') {
@@ -97,7 +103,7 @@ const CoursesContent: React.FC<{
     }
 
     return courses;
-  }, [courseArray, currentTerm, searchText, showOnlyMine, user.email]);
+  }, [courseArray, searchText, showOnlyMine, user.email]);
 
   const subjectGroups = React.useMemo(() => groupCoursesBySubject(visibleCourses), [visibleCourses]);
 
@@ -118,6 +124,8 @@ const CoursesContent: React.FC<{
     const enrolledInSubject = item.courses.some(
       (course) => getUserEnrollment(course, user.email, currentTerm) !== undefined
     );
+    const takenInSubject =
+      !enrolledInSubject && item.courses.some((course) => hasPastUserEnrollment(course, user.email, currentTerm));
 
     return (
       <React.Fragment>
@@ -127,6 +135,7 @@ const CoursesContent: React.FC<{
 
             <Block style={styles.subjectRight}>
               {enrolledInSubject && <Text style={styles.subjectEnrolledLabel}>Enrolled</Text>}
+              {takenInSubject && <Text style={styles.subjectTakenLabel}>Taken</Text>}
               <Text style={styles.subjectCountLabel}>
                 {item.courses.length} {item.courses.length === 1 ? 'class' : 'classes'}
               </Text>
@@ -238,7 +247,7 @@ const CoursesContent: React.FC<{
                     (searchText.trim() !== ''
                       ? 'No matching courses'
                       : showOnlyMine
-                      ? "You aren't enrolled in any classes this semester"
+                      ? "You haven't added any of your classes yet"
                       : 'No classes yet, add the first one!')}
                 </Text>
               </React.Fragment>
@@ -312,6 +321,13 @@ const styles = StyleSheet.create({
     fontFamily: 'OpenSans-Bold',
     fontSize: 13,
     color: theme.COLORS.PRIMARY_GREEN,
+    textTransform: 'uppercase'
+  },
+  subjectTakenLabel: {
+    marginRight: 12,
+    fontFamily: 'OpenSans-Bold',
+    fontSize: 13,
+    color: theme.COLORS.GRAY,
     textTransform: 'uppercase'
   },
   subjectCountLabel: {
