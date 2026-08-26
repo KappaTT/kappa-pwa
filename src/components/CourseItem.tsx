@@ -13,6 +13,7 @@ import {
   getCurrentTerm,
   getUserEnrollment,
   groupEnrollmentsByTerm,
+  hasPastUserEnrollment,
   isWebChair
 } from '@services/coursesService';
 import Icon from '@components/Icon';
@@ -27,6 +28,7 @@ const CourseItem: React.FC<{ course: TCourse }> = ({ course }) => {
   const getAdviceError = useSelector((state: TRedux) => state.courses.getAdviceError);
   const isEnrolling = useSelector((state: TRedux) => state.courses.isEnrolling);
   const isUnenrolling = useSelector((state: TRedux) => state.courses.isUnenrolling);
+  const unenrollingId = useSelector((state: TRedux) => state.courses.unenrollingId);
   const isApprovingCourse = useSelector((state: TRedux) => state.courses.isApprovingCourse);
   const isRejectingCourse = useSelector((state: TRedux) => state.courses.isRejectingCourse);
   const isDeletingCourse = useSelector((state: TRedux) => state.courses.isDeletingCourse);
@@ -36,12 +38,19 @@ const CourseItem: React.FC<{ course: TCourse }> = ({ course }) => {
   const [categoryFilter, setCategoryFilter] = React.useState<string>('ALL');
   const [confirmingDelete, setConfirmingDelete] = React.useState<boolean>(false);
   const [confirmingReject, setConfirmingReject] = React.useState<boolean>(false);
+  const [confirmingRemoveTerm, setConfirmingRemoveTerm] = React.useState<string>('');
 
   const currentTerm = React.useMemo(() => getCurrentTerm(), []);
 
   const webChair = React.useMemo(() => isWebChair(user), [user]);
 
   const myEnrollment = React.useMemo(() => getUserEnrollment(course, user.email, currentTerm), [
+    course,
+    currentTerm,
+    user.email
+  ]);
+
+  const hasPastEnrollment = React.useMemo(() => hasPastUserEnrollment(course, user.email, currentTerm), [
     course,
     currentTerm,
     user.email
@@ -90,12 +99,13 @@ const CourseItem: React.FC<{ course: TCourse }> = ({ course }) => {
     dispatch,
     user
   ]);
-  const dispatchUnenroll = React.useCallback(() => dispatch(_courses.unenroll(user, myEnrollment?._id, course._id)), [
-    course._id,
-    dispatch,
-    myEnrollment,
-    user
-  ]);
+  const dispatchUnenroll = React.useCallback(
+    (enrollmentId: string) => {
+      setConfirmingRemoveTerm('');
+      dispatch(_courses.unenroll(user, enrollmentId, course._id));
+    },
+    [course._id, dispatch, user]
+  );
   const dispatchAddAdvice = React.useCallback(() => dispatch(_courses.editAdvice(course._id)), [course._id, dispatch]);
 
   const loadData = React.useCallback(
@@ -115,6 +125,7 @@ const CourseItem: React.FC<{ course: TCourse }> = ({ course }) => {
     setExpanded(!expanded);
     setConfirmingDelete(false);
     setConfirmingReject(false);
+    setConfirmingRemoveTerm('');
   }, [expanded, getAdviceError, loadData]);
 
   React.useEffect(() => {
@@ -146,7 +157,13 @@ const CourseItem: React.FC<{ course: TCourse }> = ({ course }) => {
         )}
 
         {pastTermGroups.length > 0 && (
-          <TouchableOpacity activeOpacity={0.6} onPress={() => setShowPastTerms(!showPastTerms)}>
+          <TouchableOpacity
+            activeOpacity={0.6}
+            onPress={() => {
+              setShowPastTerms(!showPastTerms);
+              setConfirmingRemoveTerm('');
+            }}
+          >
             <Text style={styles.toggleText}>
               {showPastTerms ? 'Hide past semesters' : `Show past semesters (${pastTermGroups.length})`}
             </Text>
@@ -154,14 +171,39 @@ const CourseItem: React.FC<{ course: TCourse }> = ({ course }) => {
         )}
 
         {showPastTerms &&
-          pastTermGroups.map((group) => (
-            <React.Fragment key={group.term}>
-              <Text style={styles.sectionHeader}>{group.term}</Text>
-              <Text style={styles.rosterName}>
-                {group.enrollments.map((enrollment) => getBrotherName(enrollment.email)).join('  ·  ')}
-              </Text>
-            </React.Fragment>
-          ))}
+          pastTermGroups.map((group) => {
+            const myPastEnrollment = group.enrollments.find((enrollment) => enrollment.email === user.email);
+
+            return (
+              <React.Fragment key={group.term}>
+                <View style={styles.pastTermHeaderRow}>
+                  <Text style={styles.sectionHeader}>{group.term}</Text>
+
+                  {myPastEnrollment !== undefined &&
+                    (isUnenrolling && unenrollingId === myPastEnrollment._id ? (
+                      <ActivityIndicator style={styles.removePastSpinner} color={theme.COLORS.PRIMARY_RED} />
+                    ) : (
+                      <TouchableOpacity
+                        activeOpacity={0.6}
+                        disabled={isUnenrolling}
+                        onPress={
+                          confirmingRemoveTerm === group.term
+                            ? () => dispatchUnenroll(myPastEnrollment._id)
+                            : () => setConfirmingRemoveTerm(group.term)
+                        }
+                      >
+                        <Text style={[styles.removePastText, isUnenrolling && styles.disabledAction]}>
+                          {confirmingRemoveTerm === group.term ? 'Confirm remove' : 'Remove'}
+                        </Text>
+                      </TouchableOpacity>
+                    ))}
+                </View>
+                <Text style={styles.rosterName}>
+                  {group.enrollments.map((enrollment) => getBrotherName(enrollment.email)).join('  ·  ')}
+                </Text>
+              </React.Fragment>
+            );
+          })}
       </React.Fragment>
     );
   };
@@ -255,15 +297,23 @@ const CourseItem: React.FC<{ course: TCourse }> = ({ course }) => {
     return (
       <View style={styles.expandedContent}>
         <View style={styles.enrollRow}>
-          {isEnrolling || isUnenrolling ? (
+          {isEnrolling || (isUnenrolling && unenrollingId === myEnrollment?._id) ? (
             <ActivityIndicator color={theme.COLORS.PRIMARY} />
           ) : myEnrollment ? (
-            <TouchableOpacity activeOpacity={0.6} onPress={dispatchUnenroll}>
-              <Text style={styles.actionText}>Drop this class ({currentTerm})</Text>
+            <TouchableOpacity
+              activeOpacity={0.6}
+              disabled={isUnenrolling}
+              onPress={() => dispatchUnenroll(myEnrollment._id)}
+            >
+              <Text style={[styles.actionText, isUnenrolling && styles.disabledAction]}>
+                Drop this class ({currentTerm})
+              </Text>
             </TouchableOpacity>
           ) : (
-            <TouchableOpacity activeOpacity={0.6} onPress={dispatchEnroll}>
-              <Text style={styles.actionText}>I'm taking this class ({currentTerm})</Text>
+            <TouchableOpacity activeOpacity={0.6} disabled={isUnenrolling} onPress={dispatchEnroll}>
+              <Text style={[styles.actionText, isUnenrolling && styles.disabledAction]}>
+                I'm taking this class ({currentTerm})
+              </Text>
             </TouchableOpacity>
           )}
         </View>
@@ -292,6 +342,7 @@ const CourseItem: React.FC<{ course: TCourse }> = ({ course }) => {
           <View style={styles.selectIcon}>
             {course.approved === false && <Text style={styles.pendingLabel}>Pending approval</Text>}
             {myEnrollment && <Text style={styles.enrolledLabel}>Enrolled</Text>}
+            {!myEnrollment && hasPastEnrollment && <Text style={styles.takenLabel}>Taken</Text>}
             <Text style={styles.takingLabel}>
               {currentTermGroup ? `${currentTermGroup.enrollments.length} taking` : ''}
             </Text>
@@ -347,6 +398,13 @@ const styles = StyleSheet.create({
     fontFamily: 'OpenSans-Bold',
     fontSize: 13,
     color: theme.COLORS.PRIMARY_GREEN,
+    textTransform: 'uppercase'
+  },
+  takenLabel: {
+    marginRight: 12,
+    fontFamily: 'OpenSans-Bold',
+    fontSize: 13,
+    color: theme.COLORS.GRAY,
     textTransform: 'uppercase'
   },
   pendingLabel: {
@@ -415,6 +473,20 @@ const styles = StyleSheet.create({
     fontFamily: 'OpenSans-SemiBold',
     fontSize: 13,
     color: theme.COLORS.PRIMARY
+  },
+  pastTermHeaderRow: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'flex-end'
+  },
+  removePastText: {
+    marginLeft: 12,
+    fontFamily: 'OpenSans-SemiBold',
+    fontSize: 13,
+    color: theme.COLORS.PRIMARY_RED
+  },
+  removePastSpinner: {
+    marginLeft: 12
   },
   adviceHeaderRow: {
     display: 'flex',
