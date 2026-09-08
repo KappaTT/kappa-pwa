@@ -57,7 +57,7 @@ const BrotherDrawer: React.FC = () => {
         .sort(sortCoursesByCode),
     [courseArray, currentTerm, selectedUserEmail]
   );
-  const classYear = React.useMemo(() => getClassYear(user.firstYear), [user.firstYear]);
+  const classYear = React.useMemo(() => getClassYear(user.gradYear), [user.gradYear]);
   let pointsRequired = POINTS_SO;
   if (selectedUserIsPNM) {
     pointsRequired = POINTS_PNM;
